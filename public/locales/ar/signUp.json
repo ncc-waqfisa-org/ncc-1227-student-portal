@@ -1,0 +1,10 @@
+{
+  "studentInfo": "معلومات الطالب",
+  "parentsInfo": "معلومات الوالدين",
+  "termsAndConditions": "الشروط والأحكام",
+  "nextStep": "الخطوة التالية",
+  "register": "سجل",
+  "verify": "أكد",
+  "reSend": "أعد إرسال الرمز",
+  "verificationCode": "تم إرسال رمز التحقق إلى"
+}

@@ -1,0 +1,11 @@
+{
+  "cpr": "CPR",
+  "password": "Password",
+  "signIn": "Sign In",
+  "newUser": "New user?",
+  "sendResetEmail": "Send reset email",
+  "otp": "OTP",
+  "newPassword": "New password",
+  "verify": "Verify",
+  "forgetPassword": "Forgot password"
+}

@@ -1,0 +1,158 @@
+type Attachment @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  cprDoc: String
+  signedContractDoc: String
+  transcriptDoc: String
+  schoolCertificate: String
+}
+
+type Application @model @auth(rules: [{ allow: public }]) {
+  id: ID! @index(name: "byDateTime", sortKeyFields: ["dateTime"])
+  gpa: Float
+  status: Status
+  attachmentID: String
+  studentCPR: String! @index(name: "byCPR", sortKeyFields: ["gpa"])
+  adminLogs: [AdminLog] @hasMany
+  studentLogs: [StudentLog] @hasMany
+  attachment: Attachment @hasOne
+  programs: [ProgramChoice] @hasMany
+  student: Student @belongsTo(fields: ["studentCPR"])
+  dateTime: AWSDateTime!
+  isEmailSent: Boolean @default(value: "false")
+  schoolName: String
+  schoolType: SchoolType
+  batch: Int @index(name: "byBatch", sortKeyFields: ["status"])
+}
+
+type ProgramChoice @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  programID: ID!
+  applicationID: ID!
+  program: Program @belongsTo(fields: ["programID"])
+  application: Application @belongsTo(fields: ["applicationID"])
+  choiceOrder: Int
+  acceptanceLetterDoc: String
+}
+
+type Program @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  name: String
+  requirements: String
+  nameAr: String @default(value: "-")
+  requirementsAr: String @default(value: "-")
+  availability: Int
+  universityID: ID!
+  university: University @belongsTo(fields: ["universityID"])
+  applications: [ProgramChoice] @hasMany
+  isDeactivated: Boolean
+  isTrashed: Boolean @default(value: "false")
+}
+
+type University @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  name: String
+  nameAr: String @default(value: "-")
+  Programs: [Program] @hasMany
+  availability: Int @default(value: "0")
+  isDeactivated: Boolean
+  isTrashed: Boolean @default(value: "false")
+}
+
+type AdminLog @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  applicationID: ID!
+  adminCPR: String!
+  dateTime: AWSDateTime
+  snapshot: String
+  reason: String
+  admin: Admin @belongsTo(fields: ["adminCPR"])
+}
+
+type StudentLog @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  applicationID: ID!
+  studentCPR: String!
+  dateTime: AWSDateTime
+  snapshot: String
+  reason: String
+  student: Student @belongsTo(fields: ["studentCPR"])
+}
+
+type Admin @model @auth(rules: [{ allow: public }]) {
+  cpr: String! @primaryKey
+  fullName: String
+  email: String
+  AdminLogs: [AdminLog] @hasMany
+}
+
+enum Status {
+  APPROVED
+  ELIGIBLE
+  REVIEW
+  NOT_COMPLETED
+  REJECTED
+  WITHDRAWN
+}
+
+type ParentInfo @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  guardianFullName: String
+  relation: String
+  guardianCPR: String
+  primaryMobile: String
+  secondaryMobile: String
+  fatherFullName: String
+  fatherCPR: String
+  motherFullName: String
+  motherCPR: String
+  numberOfFamilyMembers: Int
+  address: String
+}
+
+enum Language {
+  ARABIC
+  ENGLISH
+}
+
+enum Gender {
+  FEMALE
+  MALE
+}
+
+enum SchoolType {
+  PRIVATE
+  PUBLIC
+}
+
+type Student @model @auth(rules: [{ allow: public }]) {
+  cpr: String! @primaryKey
+  cprDoc: String
+  fullName: String
+  email: String
+  phone: String
+  gender: Gender
+  nationality: String
+  schoolName: String
+  schoolType: SchoolType
+  specialization: String
+  placeOfBirth: String
+  studentOrderAmongSiblings: Int
+  householdIncome: Float
+  familyIncome: FamilyIncome
+  familyIncomeProofDoc: String
+  familyIncomeProofDocs: [String]
+  preferredLanguage: Language
+  graduationDate: AWSDate
+  address: String
+  applications: [Application] @hasMany(indexName: "byCPR", fields: ["cpr"])
+  ParentInfo: ParentInfo @hasOne(fields: ["parentInfoID"])
+  parentInfoID: ID
+  StudentLogs: [StudentLog] @hasMany
+}
+
+enum FamilyIncome {
+  LESS_THAN_500
+  BETWEEN_500_AND_700
+  BETWEEN_700_AND_1000
+  OVER_1000
+}

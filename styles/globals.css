@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.amplify-input,
+.amplify-select {
+  @apply border-blue-400 !important;
+}
+
+/* .input {
+  @apply max-w-lg px-4 py-2 text-black border border-anzac-500 rounded-xl focus:ring-anzac-600 !important;
+} */

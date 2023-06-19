@@ -1,0 +1,7 @@
+{
+  "requiredField": "Required field",
+  "passwordMustMatch": "Password must match",
+  "cprShouldBe9": "CPR should be 9 numbers",
+  "minimumGPA": "Minimum GPA is",
+  "maximumGPA": "Maximum GPA is"
+}
