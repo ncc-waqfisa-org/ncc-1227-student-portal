@@ -11,6 +11,7 @@
   "selectedPrograms": "البرامج المختارة",
   "notCompleted": "غير مكتمل",
   "uploadedAttachments": "المرفقات التي تم تحميلها",
+  "requiredAttachments": "المرفقات المطلوبة",
   "CPR": "الرقم الشخصي",
   "transcript": "كشف الدرجات",
   "acceptanceLetter": "رسالة قبول",
@@ -22,5 +23,6 @@
   "primaryProgramAcceptanceLetter": "رسالة القبول للبرنامج الأساسي",
   "secondaryProgramAcceptanceLetter": "رسالة القبول للبرنامج الثانوي",
   "familyIncomeProofDocs": "مستندات إثبات دخل الأسرة",
+  "select": "اختيار",
   "schoolCertificate": "الشهادة المدرسية"
 }

@@ -92,7 +92,8 @@ function useProviderApp() {
           (application) =>
             application.status === Status.REVIEW ||
             application.status === Status.APPROVED ||
-            application.status === Status.ELIGIBLE
+            application.status === Status.ELIGIBLE ||
+            application.status === Status.NOT_COMPLETED
         );
         setHaveActiveApplication(active !== undefined);
       });

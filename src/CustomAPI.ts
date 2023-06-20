@@ -104,11 +104,14 @@ export async function getApplicationData(
                     program {
                       id
                       name
+                      nameAr
                       requirements
+                      requirementsAr
                       availability
                       university {
                         id
                         name
+                        nameAr
                       }
                       _version
                       _deleted
@@ -182,11 +185,14 @@ export async function getStudentApplications(
             program {
               id
               name
+              nameAr
               requirements
+              requirementsAr
               availability
               university {
                 id
                 name
+                nameAr
               }
               _version
               _deleted
@@ -229,7 +235,9 @@ export async function listAllPrograms() {
       items {
         id
         name
+        nameAr
         requirements
+        requirementsAr
         universityID
         universityProgramsId
         updatedAt
@@ -244,6 +252,8 @@ export async function listAllPrograms() {
           _deleted
           _version
           name
+          nameAr
+          availability
         }
       }
     }

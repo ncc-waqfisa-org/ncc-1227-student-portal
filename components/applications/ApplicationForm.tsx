@@ -11,7 +11,6 @@ import {
   CreateProgramChoiceMutationVariables,
   CreateStudentLogMutationVariables,
   Program,
-  SchoolType,
   Student,
   UpdateApplicationMutationVariables,
   UpdateAttachmentMutationVariables,
@@ -76,7 +75,7 @@ interface Props {
 
 export const ApplicationForm: FC<Props> = (props) => {
   const { user } = useAuth();
-  const { push } = useRouter();
+  const { push, locale } = useRouter();
   const { student, syncStudentApplication } = useAppContext();
   const { t } = useTranslation("applicationPage");
   const { t: tErrors } = useTranslation("errors");
@@ -118,7 +117,6 @@ export const ApplicationForm: FC<Props> = (props) => {
     gpa: props.application?.gpa ?? undefined,
     primaryProgramID: oldPrimaryProgram?.program?.id ?? undefined,
     secondaryProgramID: oldSecondaryProgram?.program?.id ?? undefined,
-    // cprDoc: undefined,
     schoolCertificate: undefined,
     transcriptDoc: undefined,
     primaryAcceptanceDoc: undefined,
@@ -733,7 +731,12 @@ export const ApplicationForm: FC<Props> = (props) => {
             <div className="divider md:col-span-2"></div>
             {/* GPA */}
             <div className="flex flex-col justify-start w-full md:col-span-2">
-              <label className="label">{t("studentGPA")}</label>
+              <div className="flex justify-between items-center">
+                <label className="label">{t("studentGPA")}</label>
+                <label className="label-text-alt text-error">
+                  {errors.gpa && touched.gpa && errors.gpa}
+                </label>
+              </div>
               <Field
                 dir="ltr"
                 type="number"
@@ -741,15 +744,12 @@ export const ApplicationForm: FC<Props> = (props) => {
                 title="gpa"
                 placeholder="GPA (88 - 100)"
                 className={`input input-bordered input-primary ${
-                  errors.gpa && "input-error"
+                  errors.gpa && touched.gpa && "input-error"
                 }`}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.gpa ?? ""}
               />
-              <label className="label-text-alt text-error">
-                {errors.gpa && touched.gpa && errors.gpa}
-              </label>
             </div>
             <div className="divider md:col-span-2"></div>
             {/* Primary Program */}
@@ -757,15 +757,23 @@ export const ApplicationForm: FC<Props> = (props) => {
               <div className="flex flex-col justify-start w-full md:col-span-2">
                 <div className="grid items-end grid-cols-1 gap-3 md:grid-cols-2">
                   <div className="w-full">
-                    <label className="label">{t("primaryProgram")}</label>
+                    <div className="flex justify-between items-center">
+                      <label className="label">{t("primaryProgram")}</label>
+                      <label className="label-text-alt text-error">
+                        {errors.primaryProgramID &&
+                          touched.primaryProgramID &&
+                          errors.primaryProgramID}
+                      </label>
+                    </div>
                     <Field
-                      dir="ltr"
                       as="select"
                       name="primaryProgramID"
                       title="primaryProgramID"
                       placeholder="Primary Program"
-                      className={`input input-bordered w-full input-primary ${
-                        errors.primaryProgramID && "input-error"
+                      className={`select select-bordered w-full select-primary ${
+                        errors.primaryProgramID &&
+                        touched.primaryProgramID &&
+                        "select-error"
                       }`}
                       onChange={(event: any) => {
                         setPrimaryProgram(
@@ -783,7 +791,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                         disabled
                         value={undefined}
                       >
-                        Select
+                        {t("select")}
                       </option>
                       {props.programs?.map(
                         (program) =>
@@ -793,16 +801,19 @@ export const ApplicationForm: FC<Props> = (props) => {
                               value={program?.id}
                               disabled={program?.isDeactivated === true}
                             >
-                              {`${program?.name}-${program?.university?.name}`}
+                              {`${
+                                locale === "ar"
+                                  ? program?.nameAr
+                                  : program?.name
+                              }-${
+                                locale === "ar"
+                                  ? program?.university?.nameAr
+                                  : program?.university?.name
+                              }`}
                             </option>
                           )
                       )}
                     </Field>
-                    <label className="label-text-alt text-error">
-                      {errors.primaryProgramID &&
-                        touched.primaryProgramID &&
-                        errors.primaryProgramID}
-                    </label>
                   </div>
                   <div className="flex flex-col justify-start w-full">
                     <label className="label">
@@ -854,14 +865,14 @@ export const ApplicationForm: FC<Props> = (props) => {
                     </label>
                   </div>
                 </div>
-                {primaryProgram?.requirements && (
-                  <div
-                    dir="ltr"
-                    className="p-3 mt-2 border border-gray-300 rounded-md"
-                  >
-                    <div className="stat-title">Requirements</div>
+                {(primaryProgram?.requirements ||
+                  primaryProgram?.requirementsAr) && (
+                  <div className="p-3 mt-2 border border-gray-300 rounded-md">
+                    <div className="stat-title">{t("requirements")}</div>
                     <label className="whitespace-pre-wrap stat-desc">
-                      {primaryProgram?.requirements}
+                      {locale == "ar"
+                        ? primaryProgram?.requirementsAr
+                        : primaryProgram?.requirements}
                     </label>
                   </div>
                 )}
@@ -873,15 +884,23 @@ export const ApplicationForm: FC<Props> = (props) => {
               <div className="flex flex-col justify-start w-full md:col-span-2">
                 <div className="grid items-end grid-cols-1 gap-3 md:grid-cols-2">
                   <div className="">
-                    <label className="label">{t("secondaryProgram")}</label>
+                    <div className="flex justify-between items-center">
+                      <label className="label">{t("secondaryProgram")}</label>
+                      <label className="label-text-alt text-error">
+                        {errors.secondaryProgramID &&
+                          touched.secondaryProgramID &&
+                          errors.secondaryProgramID}
+                      </label>
+                    </div>
                     <Field
-                      dir="ltr"
                       as="select"
                       name="secondaryProgramID"
                       title="secondaryProgramID"
                       placeholder="Secondary Program"
-                      className={`input input-bordered w-full input-primary ${
-                        errors.secondaryProgramID && "input-error"
+                      className={`select select-bordered w-full select-primary ${
+                        errors.secondaryProgramID &&
+                        touched.secondaryProgramID &&
+                        "select-error"
                       }`}
                       onChange={(event: any) => {
                         setSecondaryProgram(
@@ -899,7 +918,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                         disabled
                         value={undefined}
                       >
-                        Select
+                        {t("select")}
                       </option>
                       {props.programs?.map(
                         (program) =>
@@ -909,16 +928,19 @@ export const ApplicationForm: FC<Props> = (props) => {
                               value={program?.id}
                               disabled={program?.isDeactivated === true}
                             >
-                              {`${program?.name}-${program?.university?.name}`}
+                              {`${
+                                locale === "ar"
+                                  ? program?.nameAr
+                                  : program?.name
+                              }-${
+                                locale === "ar"
+                                  ? program?.university?.nameAr
+                                  : program?.university?.name
+                              }`}
                             </option>
                           )
                       )}
                     </Field>
-                    <label className="label-text-alt text-error">
-                      {errors.secondaryProgramID &&
-                        touched.secondaryProgramID &&
-                        errors.secondaryProgramID}
-                    </label>
                   </div>
 
                   <div className="flex flex-col justify-start w-full">
@@ -971,14 +993,14 @@ export const ApplicationForm: FC<Props> = (props) => {
                     </label>
                   </div>
                 </div>
-                {secondaryProgram?.requirements && (
-                  <div
-                    dir="ltr"
-                    className="p-3 mt-2 border border-gray-300 rounded-md"
-                  >
-                    <div className="stat-title">Requirements</div>
+                {(secondaryProgram?.requirements ||
+                  secondaryProgram?.requirementsAr) && (
+                  <div className="p-3 mt-2 border border-gray-300 rounded-md">
+                    <div className="stat-title">{t("requirements")}</div>
                     <label className="whitespace-pre-wrap stat-desc">
-                      {secondaryProgram?.requirements}
+                      {locale == "ar"
+                        ? secondaryProgram?.requirementsAr
+                        : secondaryProgram?.requirements}
                     </label>
                   </div>
                 )}

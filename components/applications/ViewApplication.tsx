@@ -2,6 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Application, Status } from "../../src/API";
 import GetStorageLinkComponent from "../get-storage-link-component";
+import { useRouter } from "next/router";
 
 interface Props {
   application: Application;
@@ -9,6 +10,7 @@ interface Props {
 
 export default function ViewApplication({ application }: Props) {
   const { t } = useTranslation("applicationPage");
+  const { locale } = useRouter();
 
   const primaryProgram = application.programs?.items?.sort(
     (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
@@ -61,11 +63,17 @@ export default function ViewApplication({ application }: Props) {
             <td>{t("primaryProgram")}</td>
             <td className="flex flex-col gap-3">
               <div>
-                {`${primaryProgram?.program?.name}-${primaryProgram?.program?.university?.name}`}
+                {locale === "ar"
+                  ? `${primaryProgram?.program?.nameAr}-${primaryProgram?.program?.university?.nameAr}`
+                  : `${primaryProgram?.program?.name}-${primaryProgram?.program?.university?.name}`}
               </div>
               {primaryProgram?.program?.requirements && (
                 <div className="stat-desc">
-                  {`Requirements: ${primaryProgram?.program?.requirements}`}
+                  {`${t("requirements")} : ${
+                    locale === "ar"
+                      ? primaryProgram?.program?.requirementsAr
+                      : primaryProgram?.program?.requirements
+                  }`}
                 </div>
               )}
               <div className="flex items-center gap-4">
@@ -80,11 +88,17 @@ export default function ViewApplication({ application }: Props) {
             <td>{t("secondaryProgram")}</td>
             <td className="flex flex-col gap-3">
               <div>
-                {`${secondaryProgram?.program?.name}-${secondaryProgram?.program?.university?.name}`}
+                {locale === "ar"
+                  ? `${secondaryProgram?.program?.nameAr}-${secondaryProgram?.program?.university?.nameAr}`
+                  : `${secondaryProgram?.program?.name}-${secondaryProgram?.program?.university?.name}`}
               </div>
               {secondaryProgram?.program?.requirements && (
                 <div className="stat-desc">
-                  {`Requirements: ${secondaryProgram?.program?.requirements}`}
+                  {`${t("requirements")} : ${
+                    locale === "ar"
+                      ? secondaryProgram?.program?.requirementsAr
+                      : secondaryProgram?.program?.requirements
+                  }`}
                 </div>
               )}
               <div className="flex items-center gap-4">

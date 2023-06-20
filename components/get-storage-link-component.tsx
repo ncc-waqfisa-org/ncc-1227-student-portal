@@ -23,6 +23,7 @@ export default function GetStorageLinkComponent({
   }
 
   const { t } = useTranslation("common");
+  const { t: tErrors } = useTranslation("errors");
 
   function extractTextBetweenHashTags(str: string): string {
     const hashTagRegex = /#([^#]+)#/;
@@ -60,7 +61,7 @@ export default function GetStorageLinkComponent({
           </Link>
         ))}
       {!storageKey && (
-        <div className="text-error">{t("documentNotSubmitted")}</div>
+        <div className="text-error">{tErrors("documentNotSubmitted")}</div>
       )}
     </div>
   );

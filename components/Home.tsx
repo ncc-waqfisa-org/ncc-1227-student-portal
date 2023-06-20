@@ -17,7 +17,7 @@ export const HomeComponent = () => {
           {t("availableServices")}
         </h1>
 
-        <div className="grid grid-cols-1 gap-10 mx-auto md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-10 mx-auto md:grid-cols-2 w-full max-w-4xl place-items-center">
           {!haveActiveApplication && (
             <CardInfoComponent
               icon={logs}

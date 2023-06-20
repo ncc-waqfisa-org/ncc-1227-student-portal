@@ -124,19 +124,14 @@ export const VerifyEmail = ({ cpr }: Props) => {
         })}
         onSubmit={(values, actions) => {
           try {
-            toast.promise(
-              Auth.confirmSignUp(cpr, values.code).then((res) => {
-                console.log("confirmSignUp", res);
-              }),
-              {
-                loading: "Verifying...",
-                success: () => {
-                  push("/signIn");
-                  return <b>Account verified!</b>;
-                },
-                error: <b>Could not verify account.</b>,
-              }
-            );
+            toast.promise(Auth.confirmSignUp(cpr, values.code), {
+              loading: "Verifying...",
+              success: () => {
+                push("/signIn");
+                return <b>Account verified!</b>;
+              },
+              error: <b>Could not verify account.</b>,
+            });
           } catch (error) {
             toast.error("Error verifying account");
           }

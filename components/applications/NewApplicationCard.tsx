@@ -30,7 +30,7 @@ export const NewApplicationCard = () => {
           {/* Attachments */}
           <div className="p-3 border border-gray-200 rounded-xl">
             <div className="flex gap-2 mb-2 -mt-2 text-sm stat-title ">
-              {t("uploadedAttachments")}
+              {t("requiredAttachments")}
             </div>
 
             <div className="flex flex-wrap gap-2">

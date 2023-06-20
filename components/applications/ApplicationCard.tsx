@@ -73,10 +73,12 @@ export const ApplicationCard: FC<IApplicationCard> = ({
             {application.programs?.items
               .sort((a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0))
               .map((program) => (
-                <div dir="ltr" key={program?.id} className="stat-desc">
+                <div key={program?.id} className="stat-desc">
                   {program?.choiceOrder}
                   {"- "}
-                  {`${program?.program?.name}-${program?.program?.university?.name}`}
+                  {locale == "ar"
+                    ? `${program?.program?.nameAr}-${program?.program?.university?.nameAr}`
+                    : `${program?.program?.name}-${program?.program?.university?.name}`}
                 </div>
               ))}
           </div>
@@ -98,14 +100,14 @@ export const ApplicationCard: FC<IApplicationCard> = ({
 
             <div className="flex flex-wrap gap-2">
               <div
-                className={`badge  badge-ghost ${
+                className={`badge  badge-secondary ${
                   !student.cprDoc && "badge-error !badge-outline"
                 }`}
               >
                 {t("CPR")}
               </div>
               <div
-                className={`badge  badge-ghost ${
+                className={`badge  badge-secondary ${
                   (student.familyIncomeProofDocs ?? [])?.length === 0 &&
                   "badge-error !badge-outline"
                 }`}
@@ -113,7 +115,7 @@ export const ApplicationCard: FC<IApplicationCard> = ({
                 {t("familyIncomeProofDocs")}
               </div>
               <div
-                className={`badge  badge-ghost ${
+                className={`badge  badge-secondary ${
                   !application.attachment?.transcriptDoc &&
                   "badge-error !badge-outline"
                 }`}
@@ -121,7 +123,7 @@ export const ApplicationCard: FC<IApplicationCard> = ({
                 {t("transcript")}
               </div>
               <div
-                className={`badge  badge-ghost ${
+                className={`badge  badge-secondary ${
                   !application.attachment?.schoolCertificate &&
                   "badge-error !badge-outline"
                 }`}
@@ -129,7 +131,7 @@ export const ApplicationCard: FC<IApplicationCard> = ({
                 {t("schoolCertificate")}
               </div>
               <div
-                className={`badge  badge-ghost ${
+                className={`badge  badge-secondary ${
                   !primaryProgram?.acceptanceLetterDoc &&
                   "badge-error !badge-outline"
                 }`}
@@ -137,7 +139,7 @@ export const ApplicationCard: FC<IApplicationCard> = ({
                 {t("primaryProgramAcceptanceLetter")}
               </div>
               <div
-                className={`badge  badge-ghost ${
+                className={`badge  badge-secondary ${
                   !secondaryProgram?.acceptanceLetterDoc &&
                   "badge-error !badge-outline"
                 }`}

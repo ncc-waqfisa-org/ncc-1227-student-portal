@@ -39,9 +39,10 @@
   "youAlreadyHaveAnActiveApplication": "لديك طلب نشط",
   "goToApplications": "اذهب الى الطلبات",
   "transcriptNote": "يجب أن تُظهر كشوف الدرجات المعدل التراكمي للطالب في السنة الأخيرة من المدرسة الثانوية.",
-  "schoolCertificate":"الشهادة المدرسية",
-  "primaryAcceptance":"رسالة القبول للبرنامج الأساسي",
-  "secondaryAcceptance":"رسالة القبول للبرنامج الثانوي",
-  "CPRDoc":"بطاقة الهوية"
- 
+  "schoolCertificate": "الشهادة المدرسية",
+  "primaryAcceptance": "رسالة القبول للبرنامج الأساسي",
+  "secondaryAcceptance": "رسالة القبول للبرنامج الثانوي",
+  "select": "اختيار",
+  "requirements": "المتطلبات",
+  "CPRDoc": "بطاقة الهوية"
 }

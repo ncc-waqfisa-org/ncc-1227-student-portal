@@ -11,6 +11,7 @@
   "selectedPrograms": "Selected Programs",
   "notCompleted": "Not Completed",
   "uploadedAttachments": "Uploaded Attachments",
+  "requiredAttachments": "Required Attachments",
   "CPR": "CPR",
   "transcript": "Transcript",
   "acceptanceLetter": "Acceptance Letter",
@@ -23,5 +24,6 @@
   "secondaryProgramAcceptanceLetter": "Secondary Program Acceptance Letter",
   "familyIncomeProof": "Family income proof",
   "familyIncomeProofDocs": "Family income proof documents",
+  "select": "Select",
   "schoolCertificate": "School Certificate"
 }
