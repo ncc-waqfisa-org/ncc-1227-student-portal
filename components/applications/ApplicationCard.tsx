@@ -77,7 +77,9 @@ export const ApplicationCard: FC<IApplicationCard> = ({
                   {program?.choiceOrder}
                   {"- "}
                   {locale == "ar"
-                    ? `${program?.program?.nameAr}-${program?.program?.university?.nameAr}`
+                    ? `${program?.program?.nameAr ?? "-"}-${
+                        program?.program?.university?.nameAr ?? "-"
+                      }`
                     : `${program?.program?.name}-${program?.program?.university?.name}`}
                 </div>
               ))}

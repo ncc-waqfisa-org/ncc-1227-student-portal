@@ -64,7 +64,9 @@ export default function ViewApplication({ application }: Props) {
             <td className="flex flex-col gap-3">
               <div>
                 {locale === "ar"
-                  ? `${primaryProgram?.program?.nameAr}-${primaryProgram?.program?.university?.nameAr}`
+                  ? `${primaryProgram?.program?.nameAr ?? "-"}-${
+                      primaryProgram?.program?.university?.nameAr ?? "-"
+                    }`
                   : `${primaryProgram?.program?.name}-${primaryProgram?.program?.university?.name}`}
               </div>
               {primaryProgram?.program?.requirements && (
@@ -89,7 +91,9 @@ export default function ViewApplication({ application }: Props) {
             <td className="flex flex-col gap-3">
               <div>
                 {locale === "ar"
-                  ? `${secondaryProgram?.program?.nameAr}-${secondaryProgram?.program?.university?.nameAr}`
+                  ? `${secondaryProgram?.program?.nameAr ?? "-"}-${
+                      secondaryProgram?.program?.university?.nameAr ?? "-"
+                    }`
                   : `${secondaryProgram?.program?.name}-${secondaryProgram?.program?.university?.name}`}
               </div>
               {secondaryProgram?.program?.requirements && (

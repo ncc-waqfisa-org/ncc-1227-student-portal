@@ -179,7 +179,8 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
           {/* cprDoc */}
           <div className="flex flex-col justify-start w-full">
             <label className="label">
-              {t("cprDoc")} <span className="ml-1 mr-auto text-red-500">*</span>
+              {t("studentCPRdoc")}{" "}
+              <span className="ml-1 mr-auto text-red-500">*</span>
             </label>
             <Field
               dir="ltr"

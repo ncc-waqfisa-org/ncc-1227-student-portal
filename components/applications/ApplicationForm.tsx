@@ -803,11 +803,11 @@ export const ApplicationForm: FC<Props> = (props) => {
                             >
                               {`${
                                 locale === "ar"
-                                  ? program?.nameAr
+                                  ? program?.nameAr ?? "-"
                                   : program?.name
                               }-${
                                 locale === "ar"
-                                  ? program?.university?.nameAr
+                                  ? program?.university?.nameAr ?? "-"
                                   : program?.university?.name
                               }`}
                             </option>
@@ -930,11 +930,11 @@ export const ApplicationForm: FC<Props> = (props) => {
                             >
                               {`${
                                 locale === "ar"
-                                  ? program?.nameAr
+                                  ? program?.nameAr ?? "-"
                                   : program?.name
                               }-${
                                 locale === "ar"
-                                  ? program?.university?.nameAr
+                                  ? program?.university?.nameAr ?? "-"
                                   : program?.university?.name
                               }`}
                             </option>
