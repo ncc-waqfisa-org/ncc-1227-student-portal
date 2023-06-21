@@ -27,6 +27,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 import React from "react";
 
 const Home = () => {
+  const comeBack: boolean = true;
   const router = useRouter();
   const auth = useAuth();
   const { haveActiveApplication } = useAppContext();
@@ -42,31 +43,33 @@ const Home = () => {
               {t("enrollFor")} {new Date().getFullYear()}
             </h1>
             <p>{t("enrollForDescription")}</p>
-            <div className="flex flex-col gap-3 mx-auto md:flex-row md:mx-0">
-              <button
-                type="button"
-                className="w-full text-white md:w-auto btn btn-primary"
-                onClick={() => router.push("/applications")}
-              >
-                {haveActiveApplication
-                  ? t("trackApplications")
-                  : t("enrollNow")}
-              </button>
-              {!auth.isSignedIn && (
+            {!comeBack && (
+              <div className="flex flex-col gap-3 mx-auto md:flex-row md:mx-0">
                 <button
                   type="button"
-                  className="w-full md:w-auto btn btn-outline btn-primary"
-                  onClick={() => router.push("/signIn")}
+                  className="w-full text-white md:w-auto btn btn-primary"
+                  onClick={() => router.push("/applications")}
                 >
-                  {t("login")}
+                  {haveActiveApplication
+                    ? t("trackApplications")
+                    : t("enrollNow")}
                 </button>
-              )}
-            </div>
+                {!auth.isSignedIn && (
+                  <button
+                    type="button"
+                    className="w-full md:w-auto btn btn-outline btn-primary"
+                    onClick={() => router.push("/signIn")}
+                  >
+                    {t("login")}
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
       }
     >
-      <HomeComponent></HomeComponent>
+      <HomeComponent comeBack={comeBack}></HomeComponent>
     </PageComponent>
   );
 };

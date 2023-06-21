@@ -5,8 +5,13 @@ import info from "../public/svg/info.svg";
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AppContexts";
 import { useTranslation } from "react-i18next";
+import { FC } from "react";
 
-export const HomeComponent = () => {
+interface Props {
+  comeBack?: boolean;
+}
+
+export const HomeComponent: FC<Props> = ({ comeBack }) => {
   const router = useRouter();
   const { t } = useTranslation("common");
   const { haveActiveApplication } = useAppContext();
@@ -17,33 +22,50 @@ export const HomeComponent = () => {
           {t("availableServices")}
         </h1>
 
-        <div className="grid grid-cols-1 gap-10 mx-auto md:grid-cols-2 w-full max-w-4xl place-items-center">
-          {!haveActiveApplication && (
+        {comeBack && (
+          <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto md:grid-cols-2 place-items-center">
             <CardInfoComponent
-              icon={logs}
-              title={t("applyForScholarship")}
-              description={t("applyForScholarshipDescription")}
-              action={() => router.push("/applications")}
-              actionTitle={t("enrollNow") ?? "Enroll Now"}
+              icon={info}
+              title={"قريباً"}
+              description={"عد في 03/07/2023 للتسجيل"}
             ></CardInfoComponent>
-          )}
-          {haveActiveApplication && (
             <CardInfoComponent
-              icon={search}
-              title={t("trackApplication")}
-              description={t("trackApplicationDescription")}
-              action={() => router.push("/applications")}
-              actionTitle={t("track") ?? "Track"}
+              icon={info}
+              title={"Coming Soon"}
+              description={"Come back on 03/07/2023 to enroll"}
             ></CardInfoComponent>
-          )}
-          <CardInfoComponent
-            icon={info}
-            title={t("informationCenter")}
-            description={t("informationCenterDescription")}
-            action={() => router.push("/contact")}
-            actionTitle={t("getInfo") ?? "Get Info"}
-          ></CardInfoComponent>
-        </div>
+          </div>
+        )}
+
+        {!comeBack && (
+          <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto md:grid-cols-2 place-items-center">
+            {!haveActiveApplication && (
+              <CardInfoComponent
+                icon={logs}
+                title={t("applyForScholarship")}
+                description={t("applyForScholarshipDescription")}
+                action={() => router.push("/applications")}
+                actionTitle={t("enrollNow") ?? "Enroll Now"}
+              ></CardInfoComponent>
+            )}
+            {haveActiveApplication && (
+              <CardInfoComponent
+                icon={search}
+                title={t("trackApplication")}
+                description={t("trackApplicationDescription")}
+                action={() => router.push("/applications")}
+                actionTitle={t("track") ?? "Track"}
+              ></CardInfoComponent>
+            )}
+            <CardInfoComponent
+              icon={info}
+              title={t("informationCenter")}
+              description={t("informationCenterDescription")}
+              action={() => router.push("/contact")}
+              actionTitle={t("getInfo") ?? "Get Info"}
+            ></CardInfoComponent>
+          </div>
+        )}
       </div>
     </div>
   );
