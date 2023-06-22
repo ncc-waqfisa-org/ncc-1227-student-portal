@@ -23,7 +23,7 @@ interface Props {
 export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
   const { isSignedIn, user, signOut, isInitializing: init } = useAuth();
   const { student, resetContext } = useAppContext();
-  const router = useRouter();
+  const { back, locale, push } = useRouter();
   const titleTranslation = useTranslation("pageTitles");
   const footerTranslation = useTranslation("footer");
   const isInitializing = init ?? true;
@@ -35,7 +35,7 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
   }
 
   function goBack() {
-    router.back();
+    back();
   }
 
   return (
@@ -70,7 +70,7 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                   className="w-40 md:w-52 hover:cursor-pointer"
                   src={logo}
                   alt="logo"
-                  onClick={() => router.push("/")}
+                  onClick={() => push("/")}
                 />
                 {user && (
                   <div
@@ -169,36 +169,65 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                 className="w-40 md:w-52 max-h-24 hover:cursor-pointer"
                 src={logo}
                 alt="logo"
-                onClick={() => router.push("/")}
+                onClick={() => push("/")}
               />
             </div>
             <div className="flex flex-col items-center mx-auto text-base-100 md:items-start">
               <span className="opacity-100 footer-title text-primary">
                 {footerTranslation.t("quickLinks")}
               </span>
-              <a className="link link-hover">
-                {footerTranslation.t("theFund")}
-              </a>
-              <a className="link link-hover">
-                {footerTranslation.t("aboutUs")}
-              </a>
-              <a className="link link-hover">
-                {footerTranslation.t("application")}
-              </a>
-              <a className="link link-hover">
-                {footerTranslation.t("mediaCenter")}
-              </a>
-              <a
+              <Link
+                href={
+                  locale === "ar"
+                    ? "https://waqfisa.bh/ar/the-fund/"
+                    : "https://waqfisa.bh/the-fund/"
+                }
                 className="link link-hover"
-                onClick={() => router.push("/contact")}
+              >
+                {footerTranslation.t("theFund")}
+              </Link>
+              <Link
+                href={
+                  locale === "ar"
+                    ? "https://waqfisa.bh/ar/about-us/"
+                    : "https://waqfisa.bh/about-us/"
+                }
+                className="link link-hover"
+              >
+                {footerTranslation.t("aboutUs")}
+              </Link>
+              <Link
+                href={
+                  locale === "ar"
+                    ? "https://waqfisa.bh/ar/applications/"
+                    : "https://waqfisa.bh/applications/"
+                }
+                className="link link-hover"
+              >
+                {footerTranslation.t("application")}
+              </Link>
+              <Link
+                href={
+                  locale === "ar"
+                    ? "https://waqfisa.bh/ar/media-center/"
+                    : "https://waqfisa.bh/media-center/"
+                }
+                className="link link-hover"
+              >
+                {footerTranslation.t("mediaCenter")}
+              </Link>
+              <Link
+                href="/contact"
+                className="link link-hover"
+                // onClick={() => push("/contact")}
               >
                 {footerTranslation.t("contact")}
-              </a>
+              </Link>
             </div>
             {/* <div className="flex flex-col items-center mx-auto text-base-100 md:items-start">
               <span
                 className="opacity-100 footer-title text-primary"
-                onClick={() => router.push("/contact")}
+                onClick={() => push("/contact")}
               >
                 {footerTranslation.t("contactUs")}
               </span>
