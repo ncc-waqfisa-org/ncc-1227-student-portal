@@ -78,11 +78,17 @@ type StudentLog @model @auth(rules: [{ allow: public }]) {
   student: Student @belongsTo(fields: ["studentCPR"])
 }
 
+enum AdminRole {
+  ADMIN
+  SUPER_ADMIN
+}
+
 type Admin @model @auth(rules: [{ allow: public }]) {
   cpr: String! @primaryKey
   fullName: String
   email: String
   AdminLogs: [AdminLog] @hasMany
+  role: AdminRole
 }
 
 enum Status {
