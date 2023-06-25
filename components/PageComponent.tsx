@@ -23,10 +23,12 @@ interface Props {
 export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
   const { isSignedIn, user, signOut, isInitializing: init } = useAuth();
   const { student, resetContext } = useAppContext();
-  const { back, locale, push } = useRouter();
+  const { back, locale, push, pathname } = useRouter();
   const titleTranslation = useTranslation("pageTitles");
   const footerTranslation = useTranslation("footer");
   const isInitializing = init ?? true;
+
+  const isHomePage = pathname === "/";
 
   async function signUserOut() {
     await signOut().then(() => {
@@ -109,28 +111,30 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                 <div className="md:dropdown-end md:items-end md:absolute md:left-4 md:top-4">
                   <LangSwitcher></LangSwitcher>
                 </div>
-                <button
-                  dir="ltr"
-                  type="button"
-                  onClick={goBack}
-                  className="text-white btn btn-ghost md:absolute md:left-4 md:bottom-4"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    className="mr-1 feather feather-chevron-left"
+                {!isHomePage && (
+                  <button
+                    dir="ltr"
+                    type="button"
+                    onClick={goBack}
+                    className="text-white btn btn-ghost md:absolute md:left-4 md:bottom-4"
                   >
-                    <polyline points="15 18 9 12 15 6"></polyline>
-                  </svg>
-                  {titleTranslation.t("Back")}
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      className="mr-1 feather feather-chevron-left"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    {titleTranslation.t("Back")}
+                  </button>
+                )}
                 <div className="w-full mt-10 md:mt-16">{props.header}</div>
                 {!props.header && (
                   <div className="prose prose-headings:text-white">
