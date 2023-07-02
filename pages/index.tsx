@@ -27,7 +27,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 import React from "react";
 
 const Home = () => {
-  const comeBack: boolean = true;
+  const comeBack: boolean = false;
   const router = useRouter();
   const auth = useAuth();
   const { haveActiveApplication } = useAppContext();
