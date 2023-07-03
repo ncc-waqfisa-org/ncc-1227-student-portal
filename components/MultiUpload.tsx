@@ -109,11 +109,11 @@ export default function MultiUpload(props: Props) {
           dir="ltr"
           name={props.filedName}
           title={props.filedName}
-          {...getInputProps()}
           onChange={(event) => {
             props.handleChange(event);
           }}
           value={props.value}
+          {...getInputProps()}
         />
         <div className="flex justify-center mb-4 text-center ">
           {isDragActive ? (
