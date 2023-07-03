@@ -34,11 +34,11 @@ const ContactPage = () => {
             {/* <p>info@waqfisa.bh</p> */}
             <a href="mailto:info@waqfisa.bh">info@waqfisa.bh</a>
           </div>
-          <div>
+          {/* <div>
             <h4>{t("phone")}</h4>
-            {/* <p>17444444</p> */}
+            
             <a href="tel:+97317444444">17444444</a>
-          </div>
+          </div> */}
         </div>
       </PageComponent>
     </div>
