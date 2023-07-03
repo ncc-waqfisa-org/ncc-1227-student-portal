@@ -12,7 +12,7 @@ import { Auth, CognitoUser } from "@aws-amplify/auth";
 import config from "../src/aws-exports";
 import { toast } from "react-hot-toast";
 import { API, graphqlOperation } from "aws-amplify";
-import { GetStudentQuery, GetStudentQueryVariables } from "../src/API";
+import { GetStudentQuery } from "../src/API";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { useRouter } from "next/router";
 

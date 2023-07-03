@@ -25,7 +25,6 @@ import { CreateParentsForm } from "./create-parents-form";
 import { TermsAndConditions } from "./t-and-c";
 import { useTranslation } from "react-i18next";
 import { DocType, uploadFile } from "../../src/CustomAPI";
-import { values } from "lodash";
 
 export interface CreateStudentFormValues {
   student: CreateStudentMutationVariables;
@@ -136,7 +135,8 @@ export default function SignUpForm() {
         password: values.password,
         attributes: {
           email: values.student.input.email,
-          phone_number: values.student.input.phone,
+          // ! this cause problem when sign up with invalid format
+          // phone_number: values.student.input.phone,
         },
       };
       const signUpResult = await Auth.signUp(signUpPrams);
