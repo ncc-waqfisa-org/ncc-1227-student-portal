@@ -48,6 +48,8 @@ export const CreateParentsForm = (props: ICreateParentsForm) => {
 
         numberOfFamilyMembers: yup
           .number()
+          .integer()
+          .min(0, "Number should be positive")
           .required(`${tErrors("requiredField")}`),
       })}
       onSubmit={async (values, actions) => {
@@ -248,7 +250,7 @@ export const CreateParentsForm = (props: ICreateParentsForm) => {
             </div>
             <Field
               dir="ltr"
-              type="text"
+              type="number"
               name="numberOfFamilyMembers"
               title="numberOfFamilyMembers"
               // placeholder="Number Of Family Members"
