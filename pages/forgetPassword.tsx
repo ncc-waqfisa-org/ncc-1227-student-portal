@@ -8,6 +8,7 @@ import { useAuth } from "../hooks/use-auth";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { toast } from "react-hot-toast";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -65,10 +66,16 @@ const ForgetPassword: NextPage<Props> = () => {
                   .required(`${tErrors("requiredField")}`),
               })}
               onSubmit={async (values, actions) => {
-                await auth.sendForgetPassword(values.cpr).then((isSent) => {
-                  if (isSent) {
-                    setCpr(values.cpr);
-                    setShowOTP(isSent);
+                auth.checkIfCprExist(values.cpr).then(async (res) => {
+                  if (res) {
+                    await auth.sendForgetPassword(values.cpr).then((isSent) => {
+                      if (isSent) {
+                        setCpr(values.cpr);
+                        setShowOTP(isSent);
+                      }
+                    });
+                  } else {
+                    toast.error("CPR does not exist");
                   }
                 });
               }}

@@ -46,6 +46,8 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
 
   const [cprDoc, setCprDoc] = useState<File | undefined>(undefined);
 
+  const englishNumberRegex = /^[0-9]*$/;
+
   return (
     <Formik
       initialValues={{
@@ -58,6 +60,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
       validationSchema={yup.object({
         cpr: yup
           .string()
+          .matches(englishNumberRegex, "Only English Numbers are allowed")
           .min(9, `${tErrors("cprShouldBe9")}`)
           .max(9, `${tErrors("cprShouldBe9")}`)
           .required(`${tErrors("requiredField")}`),
@@ -85,9 +88,13 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
           .required(`${tErrors("requiredField")}`),
         preferredLanguage: yup.string().required(`${tErrors("requiredField")}`),
         graduationDate: yup.date().required(`${tErrors("requiredField")}`),
-        password: yup.string().required(`${tErrors("requiredField")}`),
+        password: yup
+          .string()
+          .min(8)
+          .required(`${tErrors("requiredField")}`),
         confirmPassword: yup
           .string()
+          .min(8)
           .oneOf([yup.ref("password"), null], `${tErrors("passwordMustMatch")}`)
           .required(`${tErrors("requiredField")}`),
       })}
@@ -170,7 +177,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
                       }
                     })
                     .catch((error) => {
-                      bugsnagClient.notify(error);
+                      // bugsnagClient.notify(error);
                       console.error(error);
                     });
                 }

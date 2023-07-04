@@ -369,7 +369,9 @@ export default function SignUpForm() {
                 signUpProcess(createStudentFormValues)
                   .then((val) => val)
                   .catch((error) => {
-                    bugsnagClient.notify(error);
+                    if (error.message !== "User already exists") {
+                      bugsnagClient.notify(error);
+                    }
                     throw error;
                   }),
                 {
