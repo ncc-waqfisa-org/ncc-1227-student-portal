@@ -19,6 +19,7 @@ import { getStudent } from "../src/graphql/queries";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { getStudentApplications } from "../src/CustomAPI";
 import { Crisp } from "crisp-sdk-web";
+import { bugsnagClient } from "../src/bugsnag";
 
 // interface for all the values & functions
 interface IUseAppContext {
@@ -74,14 +75,24 @@ function useProviderApp() {
     if (cpr) {
       getStudentInfo(cpr).then((info) => {
         setStudent(info);
+
+        const stu: Student | undefined = info
+          ? (info?.getStudent as Student)
+          : undefined;
         setStudentAsStudent(info?.getStudent as Student);
+        if (stu) {
+          bugsnagClient.setUser(
+            stu.cpr,
+            stu.email ?? undefined,
+            stu.fullName ?? undefined
+          );
+        }
+        Crisp.user.setEmail(`${stu?.email}`);
 
-        Crisp.user.setEmail(`${info?.getStudent?.email}`);
-
-        Crisp.user.setNickname(`${info?.getStudent?.fullName}`);
+        Crisp.user.setNickname(`${stu?.fullName}`);
 
         Crisp.session.setData({
-          cpr: info?.getStudent?.cpr,
+          cpr: stu?.cpr,
         });
       });
       getStudentApplications(cpr).then((allStudentApplications) => {

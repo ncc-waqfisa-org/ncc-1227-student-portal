@@ -40,6 +40,8 @@ import {
 import GetStorageLinkComponent from "../get-storage-link-component";
 import { useTranslation } from "react-i18next";
 
+import { bugsnagClient } from "../../src/bugsnag";
+
 export interface CreateApplicationFormValues {
   application: CreateApplicationMutationVariables;
   primaryProgram: CreateProgramChoiceMutationVariables;
@@ -231,6 +233,7 @@ export const ApplicationForm: FC<Props> = (props) => {
         push("/applications");
       })
       .catch((err) => {
+        bugsnagClient.notify(err);
         console.log("Create program choice error", err);
         toast.error("Something went wrong");
       });
@@ -303,6 +306,7 @@ export const ApplicationForm: FC<Props> = (props) => {
         push("/applications");
       })
       .catch((err) => {
+        bugsnagClient.notify(err);
         console.log("Update program choice error", err);
         toast.error("Something went wrong");
       });
@@ -391,6 +395,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                 return res;
               })
               .catch((error) => {
+                bugsnagClient.notify(error);
                 console.log("Upload error", error);
                 throw error;
               }),

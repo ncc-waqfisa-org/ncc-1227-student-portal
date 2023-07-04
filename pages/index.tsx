@@ -1,3 +1,4 @@
+import React from "react";
 import { useRouter } from "next/router";
 import { HomeComponent } from "../components/Home";
 import { PageComponent } from "../components/PageComponent";
@@ -24,14 +25,13 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   };
 };
 
-import React from "react";
-
 const Home = () => {
   const comeBack: boolean = false;
   const router = useRouter();
   const auth = useAuth();
   const { haveActiveApplication } = useAppContext();
   const { t } = useTranslation("common");
+
   return (
     <PageComponent
       title="Home"

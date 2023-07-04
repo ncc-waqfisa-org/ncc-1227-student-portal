@@ -11,6 +11,8 @@
   "dependencies": {
     "@aws-amplify/auth": "^5.0.5",
     "@aws-amplify/ui-react": "^4.1.0",
+    "@bugsnag/js": "^7.20.2",
+    "@bugsnag/plugin-react": "^7.19.0",
     "@types/lodash": "^4.14.191",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
@@ -19,6 +21,7 @@
     "aws-sdk": "^2.1377.0",
     "crisp-sdk-web": "^1.0.5",
     "daisyui": "^2.42.1",
+    "dotenv": "^16.3.1",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
     "formik": "^2.2.9",

@@ -15,6 +15,8 @@ import { useRouter } from "next/router";
 import { getStudent } from "../../src/graphql/queries";
 import { useTranslation } from "react-i18next";
 
+import { bugsnagClient } from "../../src/bugsnag";
+
 interface Props {
   cpr: string;
   // email: string;
@@ -80,11 +82,14 @@ export const VerifyEmail = ({ cpr }: Props) => {
         loading: "Sending verification code...",
         success: "Verification code has been sent",
         error: (error) => {
+          bugsnagClient.notify(error);
           return `${error.message}`;
         },
       })
       .then(() => {})
-      .catch(() => {})
+      .catch((error) => {
+        bugsnagClient.notify(error);
+      })
       .finally(() => {
         resetCountdown();
       });
@@ -133,6 +138,7 @@ export const VerifyEmail = ({ cpr }: Props) => {
               error: <b>Could not verify account.</b>,
             });
           } catch (error) {
+            bugsnagClient.notify(error as any);
             toast.error("Error verifying account");
           }
           actions.setSubmitting(false);

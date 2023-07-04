@@ -34,6 +34,8 @@ import {
   updateParentInfo,
 } from "./graphql/mutations";
 
+import { bugsnagClient } from "./bugsnag";
+
 /* -------------------------------------------------------------------------- */
 /*                                    ENUMS                                   */
 /* -------------------------------------------------------------------------- */
@@ -431,6 +433,7 @@ export async function uploadFile(
     );
     return res.key;
   } catch (error) {
+    bugsnagClient.notify(error as any);
     console.log("Error uploading file: ", error);
     return null;
   }

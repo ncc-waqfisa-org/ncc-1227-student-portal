@@ -13,6 +13,9 @@ import { useRouter } from "next/router";
 
 import NextNProgress from "nextjs-progressbar";
 
+import React from "react";
+import { bugsnagClient } from "../src/bugsnag";
+
 function App({ Component, pageProps }: AppProps) {
   Amplify.configure({ ...config, ssr: true });
   Auth.configure({ ...config, ssr: true });
@@ -22,6 +25,10 @@ function App({ Component, pageProps }: AppProps) {
   const { locale } = useRouter();
 
   const dir = locale === "ar" ? "rtl" : "ltr";
+
+  const ErrorBoundary = bugsnagClient
+    .getPlugin("react")
+    ?.createErrorBoundary(React);
 
   // useEffect(() => {
   //   Crisp.configure(`${process.env.NEXT_PUBLIC_CRISP_WEBSITE_ID}`, {
@@ -34,12 +41,23 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <div dir={dir} className={locale === "ar" ? "font-IBMArabic" : "font-IBM"}>
-      <AuthProvider>
-        <AppProvider>
-          <NextNProgress color="#BB9869" />
-          <Component {...pageProps} />
-        </AppProvider>
-      </AuthProvider>
+      {ErrorBoundary ? (
+        <ErrorBoundary>
+          <AuthProvider>
+            <AppProvider>
+              <NextNProgress color="#BB9869" />
+              <Component {...pageProps} />
+            </AppProvider>
+          </AuthProvider>
+        </ErrorBoundary>
+      ) : (
+        <AuthProvider>
+          <AppProvider>
+            <NextNProgress color="#BB9869" />
+            <Component {...pageProps} />
+          </AppProvider>
+        </AuthProvider>
+      )}
     </div>
   );
 }

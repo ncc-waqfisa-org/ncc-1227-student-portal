@@ -26,6 +26,8 @@ import { TermsAndConditions } from "./t-and-c";
 import { useTranslation } from "react-i18next";
 import { DocType, uploadFile } from "../../src/CustomAPI";
 
+import { bugsnagClient } from "../../src/bugsnag";
+
 export interface CreateStudentFormValues {
   student: CreateStudentMutationVariables;
   parentInfo: CreateParentInfoMutationVariables;
@@ -103,6 +105,7 @@ export default function SignUpForm() {
 
       return res;
     } catch (error) {
+      bugsnagClient.notify(error as any);
       console.log("createDatabaseParentInfo => error", error);
       return null;
     }
@@ -121,6 +124,7 @@ export default function SignUpForm() {
 
       return res;
     } catch (error) {
+      bugsnagClient.notify(error as any);
       console.log("createDatabaseStudent => error", error);
       return null;
     }
@@ -143,6 +147,7 @@ export default function SignUpForm() {
 
       return signUpResult;
     } catch (error) {
+      bugsnagClient.notify(error as any);
       console.log("createCognitoUser => error", error);
       return null;
     }
@@ -164,6 +169,7 @@ export default function SignUpForm() {
 
       return res;
     } catch (error) {
+      bugsnagClient.notify(error as any);
       console.log("SignUpForm => deleteParentInfo => error", error);
       return null;
     }
@@ -185,6 +191,7 @@ export default function SignUpForm() {
 
       return res;
     } catch (error) {
+      bugsnagClient.notify(error as any);
       console.log("SignUpForm => deleteCreatedUser => error", error);
       return null;
     }
@@ -362,6 +369,7 @@ export default function SignUpForm() {
                 signUpProcess(createStudentFormValues)
                   .then((val) => val)
                   .catch((error) => {
+                    bugsnagClient.notify(error);
                     throw error;
                   }),
                 {

@@ -14,6 +14,8 @@ import MultiUpload from "../MultiUpload";
 import { useAuth } from "../../hooks/use-auth";
 import { checkIfFilesAreTooBig } from "../../src/HelperFunctions";
 
+import { bugsnagClient } from "../../src/bugsnag";
+
 interface ICreateStudentForm {
   student: CreateStudentMutationVariables;
   password: string;
@@ -168,6 +170,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
                       }
                     })
                     .catch((error) => {
+                      bugsnagClient.notify(error);
                       console.error(error);
                     });
                 }
