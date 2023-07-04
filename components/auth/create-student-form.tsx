@@ -47,6 +47,8 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
   const [cprDoc, setCprDoc] = useState<File | undefined>(undefined);
 
   const englishNumberRegex = /^[0-9]*$/;
+  const passwordNoStartOrEndSpaceRegex = /^[\S]+.*[\S]+$/;
+  const passwordNoSpaceRegex = /^\S+$/;
 
   return (
     <Formik
@@ -91,10 +93,14 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
         password: yup
           .string()
           .min(8)
+          .matches(passwordNoStartOrEndSpaceRegex, "No Spaces are allowed")
+          .matches(passwordNoSpaceRegex, "No Spaces are allowed")
           .required(`${tErrors("requiredField")}`),
         confirmPassword: yup
           .string()
           .min(8)
+          .matches(passwordNoStartOrEndSpaceRegex, "No Spaces are allowed")
+          .matches(passwordNoSpaceRegex, "No Spaces are allowed")
           .oneOf([yup.ref("password"), null], `${tErrors("passwordMustMatch")}`)
           .required(`${tErrors("requiredField")}`),
       })}
