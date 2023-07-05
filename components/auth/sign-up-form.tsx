@@ -203,16 +203,16 @@ export default function SignUpForm() {
     );
 
     if (userAlreadyExists) {
-      throw new Error("User already exists");
+      throw new Error("User already exists CODE:00001");
     }
 
     const createdParentInfo = await createDatabaseParentInfo(data);
 
     if (createdParentInfo?.data == null) {
-      throw new Error("Error creating the user");
+      throw new Error("Error creating the user CODE:00002");
     }
     if (data.cprDoc == undefined) {
-      throw new Error("CprDoc is missing");
+      throw new Error("CprDoc is missing CODE:00003");
     }
 
     const cprDocStorage = await uploadFile(
@@ -271,7 +271,7 @@ export default function SignUpForm() {
 
     if (createdDatabaseUser?.data == null) {
       await deleteParentInfo(createdParentInfo.data);
-      throw new Error("Error creating the user");
+      throw new Error("Error creating the user CODE:00004");
     }
 
     const createCognitoUserResult = await createCognitoUser(temp);
@@ -284,7 +284,7 @@ export default function SignUpForm() {
       toast("email need to be verified");
     } else {
       await deleteCreatedUser(createdDatabaseUser.data);
-      throw new Error("Error creating the user");
+      throw new Error("Error creating the user CODE:00005");
     }
   }
 
@@ -369,9 +369,7 @@ export default function SignUpForm() {
                 signUpProcess(createStudentFormValues)
                   .then((val) => val)
                   .catch((error) => {
-                    if (error.message !== "User already exists") {
-                      bugsnagClient.notify(error);
-                    }
+                    bugsnagClient.notify(error);
                     throw error;
                   }),
                 {

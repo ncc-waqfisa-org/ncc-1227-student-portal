@@ -625,7 +625,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               filedName={"familyIncomeProofDocsFile"}
               title={`${t("familyIncomeProof")} ${t("document")}`}
             ></MultiUpload>
-            <label className="stat-desc">
+            <label className="whitespace-pre-wrap stat-desc">
               {t("IfYouWantToUploadMultiple")}
             </label>
           </div>
