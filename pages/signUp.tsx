@@ -36,6 +36,7 @@ interface Props {}
 const SignUpPage: NextPage<Props> = () => {
   const auth = useAuth();
   const router = useRouter();
+
   const { cpr } = router.query;
 
   const signUpEnabled = true;
