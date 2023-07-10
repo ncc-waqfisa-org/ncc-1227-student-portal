@@ -39,7 +39,7 @@ const SignUpPage: NextPage<Props> = () => {
 
   const { cpr } = router.query;
 
-  const signUpEnabled = true;
+  const signUpEnabled = false;
 
   useEffect(() => {
     if (auth.isSignedIn) {
