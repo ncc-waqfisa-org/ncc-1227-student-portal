@@ -38,7 +38,7 @@ const SignUpPage: NextPage<Props> = () => {
   const router = useRouter();
   const { cpr } = router.query;
 
-  const signUpEnabled = false;
+  const signUpEnabled = true;
 
   useEffect(() => {
     if (auth.isSignedIn) {
@@ -65,7 +65,7 @@ const SignUpPage: NextPage<Props> = () => {
         </>
       ) : (
         // if registration period is over
-        <div className="flex justify-center flex-wrap gap-10">
+        <div className="flex flex-wrap justify-center gap-10">
           <CardInfoComponent
             icon={info}
             title={"Registration"}

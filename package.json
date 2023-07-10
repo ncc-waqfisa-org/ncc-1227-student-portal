@@ -11,6 +11,7 @@
   "dependencies": {
     "@aws-amplify/auth": "^5.0.5",
     "@aws-amplify/ui-react": "^4.1.0",
+    "@aws-sdk/eventstream-marshaller": "^3.120.0",
     "@bugsnag/js": "^7.20.2",
     "@bugsnag/plugin-react": "^7.19.0",
     "@types/lodash": "^4.14.191",
