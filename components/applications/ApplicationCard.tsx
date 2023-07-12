@@ -5,7 +5,6 @@ import { Application, Status, Student } from "../../src/API";
 import { useTranslation } from "react-i18next";
 
 import cross from "../../public/svg/cross.svg";
-import check from "../../public/svg/check.svg";
 import glasses from "../../public/svg/glasses.svg";
 import { useRouter } from "next/router";
 
@@ -34,10 +33,10 @@ export const ApplicationCard: FC<IApplicationCard> = ({
         href={`../applications/${application.id}`}
         className={`pt-6 shadow card  ${
           (application.status === Status.REVIEW ||
-            application.status === Status.ELIGIBLE) &&
+            application.status === Status.ELIGIBLE ||
+            application.status === Status.APPROVED ||
+            application.status === Status.REJECTED) &&
           "bg-warning"
-        } ${application.status === Status.APPROVED && "bg-success"} ${
-          application.status === Status.REJECTED && "bg-error"
         } ${
           (application.status === Status.WITHDRAWN ||
             application.status === Status.NOT_COMPLETED) &&
@@ -51,7 +50,10 @@ export const ApplicationCard: FC<IApplicationCard> = ({
             <h3 className="text-xl font-semibold">
               {t(
                 `${
-                  application.status === Status.ELIGIBLE
+                  application.status === Status.ELIGIBLE ||
+                  application.status === Status.REVIEW ||
+                  application.status === Status.REJECTED ||
+                  application.status === Status.APPROVED
                     ? Status.REVIEW
                     : application.status
                 }`
@@ -158,10 +160,10 @@ export const ApplicationCard: FC<IApplicationCard> = ({
       <div
         className={`absolute flex items-center justify-center w-12 h-12 border-2 border-white rounded-full top-2 left-2 ${
           (application.status === Status.REVIEW ||
-            application.status === Status.ELIGIBLE) &&
+            application.status === Status.ELIGIBLE ||
+            application.status === Status.APPROVED ||
+            application.status === Status.REJECTED) &&
           "bg-warning"
-        } ${application.status === Status.APPROVED && "bg-success"} ${
-          application.status === Status.REJECTED && "bg-error"
         } ${
           (application.status === Status.WITHDRAWN ||
             application.status === Status.NOT_COMPLETED) &&
@@ -170,22 +172,16 @@ export const ApplicationCard: FC<IApplicationCard> = ({
       >
         {(application.status === Status.REVIEW ||
           application.status === Status.ELIGIBLE ||
-          application.status === Status.NOT_COMPLETED) && (
+          application.status === Status.NOT_COMPLETED ||
+          application.status === Status.REJECTED ||
+          application.status === Status.APPROVED) && (
           <Image
             className="object-contain w-5 aspect-square"
             src={glasses}
             alt="icon"
           ></Image>
         )}
-        {application.status === Status.APPROVED && (
-          <Image
-            className="object-contain w-4 aspect-square"
-            src={check}
-            alt="icon"
-          ></Image>
-        )}
-        {(application.status === Status.WITHDRAWN ||
-          application.status === Status.REJECTED) && (
+        {application.status === Status.WITHDRAWN && (
           <Image
             className="object-contain w-4 aspect-square"
             src={cross}

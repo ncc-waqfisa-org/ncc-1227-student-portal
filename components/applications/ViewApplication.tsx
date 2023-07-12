@@ -45,7 +45,10 @@ export default function ViewApplication({ application }: Props) {
               <div className="badge badge-warning">
                 {t(
                   `${
-                    application.status === Status.ELIGIBLE
+                    application.status === Status.ELIGIBLE ||
+                    application.status === Status.REVIEW ||
+                    application.status === Status.REJECTED ||
+                    application.status === Status.APPROVED
                       ? Status.REVIEW
                       : application.status
                   }`

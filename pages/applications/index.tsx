@@ -38,11 +38,12 @@ export default function ApplicationsPage() {
       app.status === Status.APPROVED ||
       app.status === Status.ELIGIBLE ||
       app.status === Status.REVIEW ||
-      app.status === Status.NOT_COMPLETED
+      app.status === Status.NOT_COMPLETED ||
+      app.status === Status.REJECTED
   );
 
   const pastApplications = appContext.applications.filter(
-    (app) => app.status === Status.REJECTED || app.status === Status.WITHDRAWN
+    (app) => app.status === Status.WITHDRAWN
   );
 
   const { t } = useTranslation("applications");

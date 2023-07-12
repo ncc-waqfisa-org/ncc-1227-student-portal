@@ -67,9 +67,9 @@ export default function SingleApplicationPage({
       <div className="max-w-3xl mx-auto">
         {(application?.status === Status.REVIEW ||
           application?.status === Status.NOT_COMPLETED ||
-          application?.status === Status.ELIGIBLE) && (
-          <div className="flex justify-end mb-3 ">
-            {editingApplicationsEnabled && (
+          application?.status === Status.ELIGIBLE) &&
+          editingApplicationsEnabled && (
+            <div className="flex justify-end mb-3 ">
               <button
                 className="btn btn-sm btn-outline btn-primary"
                 onClick={() => setIsEdit(!isEdit)}
@@ -77,9 +77,8 @@ export default function SingleApplicationPage({
               >
                 {isEdit ? t("view") : t("edit")}
               </button>
-            )}
-          </div>
-        )}
+            </div>
+          )}
       </div>
       <div className="max-w-3xl mx-auto">
         {application && !isEdit && (
