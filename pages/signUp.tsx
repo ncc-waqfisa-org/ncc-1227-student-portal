@@ -7,10 +7,11 @@ import { PageComponent } from "../components/PageComponent";
 import { useAuth } from "../hooks/use-auth";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { divide } from "lodash";
 import { CardInfoComponent } from "../components/CardInfo";
 
 import info from "../public/svg/info.svg";
+import { useAppContext } from "../contexts/AppContexts";
+import dayjs from "dayjs";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -37,9 +38,9 @@ const SignUpPage: NextPage<Props> = () => {
   const auth = useAuth();
   const router = useRouter();
 
-  const { cpr } = router.query;
+  const { signUpEnabled } = useAppContext();
 
-  const signUpEnabled = false;
+  const { cpr } = router.query;
 
   useEffect(() => {
     if (auth.isSignedIn) {

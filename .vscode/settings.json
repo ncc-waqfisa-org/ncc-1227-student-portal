@@ -12,6 +12,7 @@
     "autoload",
     "Bugsnag",
     "daisyui",
+    "eventstream",
     "formik",
     "msword",
     "nextjs",

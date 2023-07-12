@@ -10,6 +10,7 @@ import { ApplicationCard } from "../../components/applications/ApplicationCard";
 import { getStatusOrder } from "../../src/HelperFunctions";
 import { NewApplicationCard } from "../../components/applications/NewApplicationCard";
 import { Status, Student } from "../../src/API";
+import dayjs from "dayjs";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -50,11 +51,14 @@ export default function ApplicationsPage() {
     <PageComponent title={"Applications"} authRequired>
       {student && (
         <div className="container mx-auto">
-          {!appContext.haveActiveApplication && (
-            <div>
-              <p className="my-4 text-2xl stat-value">{t("newApplication")}</p>
-            </div>
-          )}
+          {!appContext.haveActiveApplication &&
+            appContext.newApplicationsEnabled && (
+              <div>
+                <p className="my-4 text-2xl stat-value">
+                  {t("newApplication")}
+                </p>
+              </div>
+            )}
           {activeApplications.length > 0 && (
             <div>
               <p className="my-4 text-2xl stat-value">
@@ -63,11 +67,12 @@ export default function ApplicationsPage() {
             </div>
           )}
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 [grid-auto-rows:1fr]">
-            {!appContext.haveActiveApplication && (
-              <Link href={"../applications/new-application"}>
-                <NewApplicationCard></NewApplicationCard>
-              </Link>
-            )}
+            {!appContext.haveActiveApplication &&
+              appContext.newApplicationsEnabled && (
+                <Link href={"../applications/new-application"}>
+                  <NewApplicationCard></NewApplicationCard>
+                </Link>
+              )}
             {appContext.haveActiveApplication &&
               activeApplications
                 .sort((a, b) => {

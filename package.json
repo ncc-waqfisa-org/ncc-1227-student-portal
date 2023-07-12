@@ -22,6 +22,7 @@
     "aws-sdk": "^2.1377.0",
     "crisp-sdk-web": "^1.0.5",
     "daisyui": "^2.42.1",
+    "dayjs": "^1.11.9",
     "dotenv": "^16.3.1",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",

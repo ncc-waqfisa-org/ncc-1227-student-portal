@@ -20,6 +20,7 @@ import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { getStudentApplications } from "../src/CustomAPI";
 import { Crisp } from "crisp-sdk-web";
 import { bugsnagClient } from "../src/bugsnag";
+import dayjs, { Dayjs } from "dayjs";
 
 // interface for all the values & functions
 interface IUseAppContext {
@@ -30,6 +31,9 @@ interface IUseAppContext {
   syncStudentApplication: () => Promise<void>;
   syncStudent: () => Promise<void>;
   resetContext: () => void;
+  signUpEnabled: boolean;
+  newApplicationsEnabled: boolean;
+  editingApplicationsEnabled: boolean;
 }
 
 // the default state for all the values & functions
@@ -41,6 +45,9 @@ const defaultState: IUseAppContext = {
   syncStudentApplication: async () => {},
   syncStudent: async () => {},
   resetContext: async () => {},
+  signUpEnabled: false,
+  newApplicationsEnabled: false,
+  editingApplicationsEnabled: false,
 };
 
 // creating the app contexts
@@ -69,6 +76,19 @@ function useProviderApp() {
   const [haveActiveApplication, setHaveActiveApplication] = useState(
     defaultState.haveActiveApplication
   );
+
+  // ---- Dates Controls -----
+  // TODO: change this date
+  const lastDateForEditingApplications = dayjs("2023-09-20T00:00:00");
+  const lastDateForNewApplications = dayjs("2023-07-13T23:00:00");
+  const lastDateForNewStudents = dayjs("2023-07-10T00:00:00");
+  // ---- Access Controls -----
+
+  const editingApplicationsEnabled = lastDateForEditingApplications.isAfter(
+    dayjs()
+  );
+  const newApplicationsEnabled = lastDateForNewApplications.isAfter(dayjs());
+  const signUpEnabled = lastDateForNewStudents.isAfter(dayjs());
 
   useEffect(() => {
     let cpr = user?.getUsername();
@@ -178,5 +198,8 @@ function useProviderApp() {
     syncStudentApplication,
     syncStudent,
     resetContext,
+    signUpEnabled,
+    newApplicationsEnabled,
+    editingApplicationsEnabled,
   };
 }

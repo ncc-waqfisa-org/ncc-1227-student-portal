@@ -8,6 +8,9 @@ import { useAppContext } from "../../contexts/AppContexts";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
+import dayjs from "dayjs";
+import { CardInfoComponent } from "../../components/CardInfo";
+import info from "public/svg/info.svg";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { locale } = ctx;
@@ -33,20 +36,37 @@ interface Props {
 }
 
 const NewApplicationPage: FC<Props> = (props) => {
-  const { haveActiveApplication } = useAppContext();
+  const { haveActiveApplication, newApplicationsEnabled } = useAppContext();
 
   const { t } = useTranslation("applicationPage");
   return (
     <PageComponent title={t("newApplication")} authRequired>
-      {!haveActiveApplication && (
-        <ApplicationForm programs={props.programs}></ApplicationForm>
-      )}
-      {haveActiveApplication && (
-        <div className="rounded-2xl bg-zinc-200 text-zinc-500 flex flex-col p-4 border border-zinc-300 text-center justify-center items-center min-h-[5rem]">
-          <div>{t("youAlreadyHaveAnActiveApplication")}</div>
-          <Link href="/applications" className="link link-primary">
-            {t("goToApplications")}
-          </Link>
+      {newApplicationsEnabled ? (
+        <div>
+          {!haveActiveApplication && (
+            <ApplicationForm programs={props.programs}></ApplicationForm>
+          )}
+          {haveActiveApplication && (
+            <div className="rounded-2xl bg-zinc-200 text-zinc-500 flex flex-col p-4 border border-zinc-300 text-center justify-center items-center min-h-[5rem]">
+              <div>{t("youAlreadyHaveAnActiveApplication")}</div>
+              <Link href="/applications" className="link link-primary">
+                {t("goToApplications")}
+              </Link>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="flex flex-wrap justify-center gap-10">
+          <CardInfoComponent
+            icon={info}
+            title={"Applying"}
+            description={"Applying period is over"}
+          ></CardInfoComponent>
+          <CardInfoComponent
+            icon={info}
+            title={"التقديم"}
+            description={"فترة التقديم إنتهت"}
+          ></CardInfoComponent>
         </div>
       )}
     </PageComponent>

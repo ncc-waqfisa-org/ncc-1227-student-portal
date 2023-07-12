@@ -58,7 +58,7 @@ export default function SingleApplicationPage({
 
   const [isEdit, setIsEdit] = useState(false);
 
-  const { student: studentData } = useAppContext();
+  const { student: studentData, editingApplicationsEnabled } = useAppContext();
 
   const student = studentData?.getStudent;
 
@@ -69,13 +69,15 @@ export default function SingleApplicationPage({
           application?.status === Status.NOT_COMPLETED ||
           application?.status === Status.ELIGIBLE) && (
           <div className="flex justify-end mb-3 ">
-            <button
-              className="btn btn-sm btn-outline btn-primary"
-              onClick={() => setIsEdit(!isEdit)}
-              type="button"
-            >
-              {isEdit ? t("view") : t("edit")}
-            </button>
+            {editingApplicationsEnabled && (
+              <button
+                className="btn btn-sm btn-outline btn-primary"
+                onClick={() => setIsEdit(!isEdit)}
+                type="button"
+              >
+                {isEdit ? t("view") : t("edit")}
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -86,7 +88,7 @@ export default function SingleApplicationPage({
       </div>
 
       <div className="max-w-3xl mx-auto">
-        {application && isEdit && (
+        {application && isEdit && editingApplicationsEnabled && (
           <ApplicationForm application={application} programs={programs} />
         )}
       </div>
