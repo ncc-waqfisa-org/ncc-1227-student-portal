@@ -78,15 +78,17 @@ function useProviderApp() {
   );
 
   // ---- Dates Controls -----
-  // TODO: change this date
+  // TODO: change this date later
   const lastDateForEditingApplications = dayjs("2023-09-20T00:00:00");
   const lastDateForNewApplications = dayjs("2023-07-13T23:00:00");
   const lastDateForNewStudents = dayjs("2023-07-10T00:00:00");
   // ---- Access Controls -----
 
-  const editingApplicationsEnabled = lastDateForEditingApplications.isAfter(
-    dayjs()
-  );
+  // TODO: change this later
+  const editingApplicationsEnabled = true;
+  // const editingApplicationsEnabled = lastDateForEditingApplications.isAfter(
+  //   dayjs()
+  // );
   const newApplicationsEnabled = lastDateForNewApplications.isAfter(dayjs());
   const signUpEnabled = lastDateForNewStudents.isAfter(dayjs());
 
