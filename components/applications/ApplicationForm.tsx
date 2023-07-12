@@ -1254,7 +1254,8 @@ export const ApplicationForm: FC<Props> = (props) => {
 
             {props.application &&
               (props.application.status === Status.REVIEW ||
-                props.application.status === Status.ELIGIBLE) && (
+                props.application.status === Status.ELIGIBLE ||
+                props.application.status === Status.NOT_COMPLETED) && (
                 <label
                   htmlFor="my-modal"
                   className="mx-auto btn btn-ghost hover:bg-error/20 btn-xs w-min text-error md:col-span-2 btn-error"

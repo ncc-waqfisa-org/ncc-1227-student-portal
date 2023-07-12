@@ -158,8 +158,19 @@ export function allDocsAreAvailable(props: IAllDocsAreAvailable): boolean {
     typeof props.cpr === "string" &&
     typeof props.transcript === "string" &&
     typeof props.schoolCertificate === "string" &&
-    typeof props.primaryProgramAcceptanceLetter === "string" &&
-    typeof props.secondaryProgramAcceptanceLetter === "string" &&
+    (typeof props.primaryProgramAcceptanceLetter === "string" ||
+      typeof props.secondaryProgramAcceptanceLetter === "string") &&
     props.familyProofs.length > 0
   );
 }
+
+// export function allDocsAreAvailable(props: IAllDocsAreAvailable): boolean {
+//   return (
+//     typeof props.cpr === "string" &&
+//     typeof props.transcript === "string" &&
+//     typeof props.schoolCertificate === "string" &&
+//     typeof props.primaryProgramAcceptanceLetter === "string" &&
+//     typeof props.secondaryProgramAcceptanceLetter === "string" &&
+//     props.familyProofs.length > 0
+//   );
+// }
