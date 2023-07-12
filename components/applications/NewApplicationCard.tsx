@@ -34,29 +34,33 @@ export const NewApplicationCard = () => {
             </div>
 
             <div className="flex flex-wrap gap-2">
-              <div className={`badge badge-ghost opacity-50 !badge-outline`}>
+              <div
+                className={`badge badge-ghost h-fit opacity-50 !badge-outline`}
+              >
                 {t("CPR")}
               </div>
-              <div className={`badge badge-ghost opacity-50 !badge-outline`}>
+              <div
+                className={`badge badge-ghost h-fit opacity-50 !badge-outline`}
+              >
                 {t("familyIncomeProofDocs")}
               </div>
               <div
-                className={`badge  badge-ghost ${" opacity-50 !badge-outline"}`}
+                className={`badge  badge-ghost h-fit ${" opacity-50 !badge-outline"}`}
               >
                 {t("transcript")}
               </div>
               <div
-                className={`badge  badge-ghost ${" opacity-50 !badge-outline"}`}
+                className={`badge  badge-ghost h-fit ${" opacity-50 !badge-outline"}`}
               >
                 {t("schoolCertificate")}
               </div>
               <div
-                className={`badge  badge-ghost ${" opacity-50 !badge-outline"}`}
+                className={`badge  badge-ghost h-fit ${" opacity-50 !badge-outline"}`}
               >
                 {t("primaryProgramAcceptanceLetter")}
               </div>
               <div
-                className={`badge  badge-ghost ${" opacity-50 !badge-outline"}`}
+                className={`badge  badge-ghost h-fit ${" opacity-50 !badge-outline"}`}
               >
                 {t("secondaryProgramAcceptanceLetter")}
               </div>

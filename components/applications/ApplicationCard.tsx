@@ -47,7 +47,7 @@ export const ApplicationCard: FC<IApplicationCard> = ({
       >
         <div className="p-4 bg-white min-h-[15rem] pt-10 card gap-4 flex flex-col justify-between">
           {/* Status */}
-          <div className="flex items-baseline justify-between">
+          <div className="flex flex-wrap items-baseline justify-between">
             <h3 className="text-xl font-semibold">
               {t(
                 `${
@@ -73,7 +73,10 @@ export const ApplicationCard: FC<IApplicationCard> = ({
             {application.programs?.items
               .sort((a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0))
               .map((program) => (
-                <div key={program?.id} className="stat-desc">
+                <div
+                  key={program?.id}
+                  className="stat-desc whitespace-pre-wrap"
+                >
                   {program?.choiceOrder}
                   {"- "}
                   {locale == "ar"
@@ -102,48 +105,48 @@ export const ApplicationCard: FC<IApplicationCard> = ({
 
             <div className="flex flex-wrap gap-2">
               <div
-                className={`badge  badge-secondary ${
-                  !student.cprDoc && "badge-error !badge-outline"
+                className={`badge  badge-ghost h-fit bg-[#e7e7e7] border-0 ${
+                  !student.cprDoc && "badge-error !badge-outline !border"
                 }`}
               >
                 {t("CPR")}
               </div>
               <div
-                className={`badge  badge-secondary ${
+                className={`badge  badge-ghost h-fit bg-[#e7e7e7] border-0 ${
                   (student.familyIncomeProofDocs ?? [])?.length === 0 &&
-                  "badge-error !badge-outline"
+                  "badge-error !badge-outline !border"
                 }`}
               >
                 {t("familyIncomeProofDocs")}
               </div>
               <div
-                className={`badge  badge-secondary ${
+                className={`badge  badge-ghost h-fit bg-[#e7e7e7] border-0 ${
                   !application.attachment?.transcriptDoc &&
-                  "badge-error !badge-outline"
+                  "badge-error !badge-outline !border"
                 }`}
               >
                 {t("transcript")}
               </div>
               <div
-                className={`badge  badge-secondary ${
+                className={`badge  badge-ghost h-fit bg-[#e7e7e7] border-0 ${
                   !application.attachment?.schoolCertificate &&
-                  "badge-error !badge-outline"
+                  "badge-error !badge-outline !border"
                 }`}
               >
                 {t("schoolCertificate")}
               </div>
               <div
-                className={`badge  badge-secondary ${
+                className={`badge  badge-ghost h-fit bg-[#e7e7e7] border-0 ${
                   !primaryProgram?.acceptanceLetterDoc &&
-                  "badge-error !badge-outline"
+                  "badge-error !badge-outline !border"
                 }`}
               >
                 {t("primaryProgramAcceptanceLetter")}
               </div>
               <div
-                className={`badge  badge-secondary ${
+                className={`badge  badge-ghost h-fit bg-[#e7e7e7] border-0 ${
                   !secondaryProgram?.acceptanceLetterDoc &&
-                  "badge-error !badge-outline"
+                  "badge-error !badge-outline !border"
                 }`}
               >
                 {t("secondaryProgramAcceptanceLetter")}

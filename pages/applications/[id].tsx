@@ -117,53 +117,59 @@ interface AccountDocs {
 function AccountDocs({ student }: AccountDocs) {
   const { t } = useTranslation("account");
   return (
-    <div className="container flex flex-col items-end gap-3 mt-8">
-      <div className="flex items-center justify-between w-full">
-        <p className="w-full text-xl stat-value">{t("accountTitle")}</p>
-        <Link
-          className="btn btn-primary btn-sm btn-outline w-fit"
-          href={"/account"}
-        >
-          {t("editAccount")}
-        </Link>
-      </div>
-      <table dir="ltr" className="table w-full">
-        <thead>
-          <tr>
-            <th>{t("field")}</th>
-            <th>{t("value")}</th>
-          </tr>
-        </thead>
-        <tbody className="">
-          <tr>
-            <td>{t("studentCPR")}</td>
-            <td className="label">
-              <GetStorageLinkComponent
-                storageKey={student.cprDoc}
-              ></GetStorageLinkComponent>
-            </td>
-          </tr>
-          <tr>
-            <td>{t("familyIncomeProofDocs")}</td>
-            <td>
-              {(student.familyIncomeProofDocs ?? [])?.length > 0 && (
-                <div className="flex flex-col p-3 mb-3 bg-gray-200 rounded-lg">
-                  <div className="flex flex-wrap items-center gap-2">
-                    {student.familyIncomeProofDocs?.map((doc, index) => (
-                      <div key={index} className="">
-                        <GetStorageLinkComponent
-                          storageKey={doc}
-                          showName
-                        ></GetStorageLinkComponent>
+    <div className="w-full">
+      <div className="container flex flex-col items-end gap-3 mt-8">
+        <div className="flex items-center justify-between w-full">
+          <p className="w-full text-xl stat-value">{t("accountTitle")}</p>
+          <Link
+            className="btn btn-primary btn-sm btn-outline w-fit"
+            href={"/account"}
+          >
+            {t("editAccount")}
+          </Link>
+        </div>
+        <div className="overflow-x-scroll w-full">
+          <table dir="ltr" className="table w-full">
+            <thead>
+              <tr>
+                <th>{t("field")}</th>
+                <th>{t("value")}</th>
+              </tr>
+            </thead>
+            <tbody className="">
+              <tr className="">
+                <td>{t("studentCPR")}</td>
+                <td className="label">
+                  <GetStorageLinkComponent
+                    storageKey={student.cprDoc}
+                  ></GetStorageLinkComponent>
+                </td>
+              </tr>
+              <tr className="">
+                <td>{t("familyIncomeProofDocs")}</td>
+                <td className="">
+                  <div className="">
+                    {(student.familyIncomeProofDocs ?? [])?.length > 0 && (
+                      <div className="flex flex-col p-3 mb-3 bg-gray-200 rounded-lg">
+                        <div className="flex  items-center gap-2">
+                          {student.familyIncomeProofDocs?.map((doc, index) => (
+                            <div key={index} className="overflow-x-scroll">
+                              <GetStorageLinkComponent
+                                storageKey={doc}
+                                showName
+                              ></GetStorageLinkComponent>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    ))}
+                    )}
                   </div>
-                </div>
-              )}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
