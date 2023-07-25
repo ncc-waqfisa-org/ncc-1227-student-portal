@@ -84,6 +84,8 @@ export const ApplicationForm: FC<Props> = (props) => {
 
   const studentData = student?.getStudent as Student;
 
+  const applicationIsEligible = props.application?.status === Status.ELIGIBLE;
+
   // const [cprDoc, setCprDoc] = useState<File | undefined>(undefined);
 
   const [primaryAcceptanceDoc, setPrimaryAcceptanceDoc] = useState<
@@ -581,7 +583,9 @@ export const ApplicationForm: FC<Props> = (props) => {
                   primaryProgramAcceptanceLetter: checkStorageKeys[2],
                   secondaryProgramAcceptanceLetter: checkStorageKeys[3],
                 })
-                  ? Status.REVIEW
+                  ? applicationIsEligible
+                    ? props.application?.status
+                    : Status.REVIEW
                   : Status.NOT_COMPLETED,
 
                 studentCPR: `${student?.getStudent?.cpr}`,
@@ -736,7 +740,7 @@ export const ApplicationForm: FC<Props> = (props) => {
             <div className="divider md:col-span-2"></div>
             {/* GPA */}
             <div className="flex flex-col justify-start w-full md:col-span-2">
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <label className="label">{t("studentGPA")}</label>
                 <label className="label-text-alt text-error">
                   {errors.gpa && touched.gpa && errors.gpa}
@@ -754,6 +758,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.gpa ?? ""}
+                disabled={applicationIsEligible}
               />
             </div>
             <div className="divider md:col-span-2"></div>
@@ -762,7 +767,7 @@ export const ApplicationForm: FC<Props> = (props) => {
               <div className="flex flex-col justify-start w-full md:col-span-2">
                 <div className="grid items-end grid-cols-1 gap-3 md:grid-cols-2">
                   <div className="w-full">
-                    <div className="flex justify-between items-center">
+                    <div className="flex items-center justify-between">
                       <label className="label">{t("primaryProgram")}</label>
                       <label className="label-text-alt text-error">
                         {errors.primaryProgramID &&
@@ -790,6 +795,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                       }}
                       onBlur={handleBlur}
                       value={values.primaryProgramID}
+                      disabled={applicationIsEligible}
                     >
                       <option
                         selected={props.application === undefined}
@@ -889,7 +895,7 @@ export const ApplicationForm: FC<Props> = (props) => {
               <div className="flex flex-col justify-start w-full md:col-span-2">
                 <div className="grid items-end grid-cols-1 gap-3 md:grid-cols-2">
                   <div className="">
-                    <div className="flex justify-between items-center">
+                    <div className="flex items-center justify-between">
                       <label className="label">{t("secondaryProgram")}</label>
                       <label className="label-text-alt text-error">
                         {errors.secondaryProgramID &&
@@ -917,6 +923,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                       }}
                       onBlur={handleBlur}
                       value={values.secondaryProgramID}
+                      disabled={applicationIsEligible}
                     >
                       <option
                         selected={props.application === undefined}
@@ -1013,47 +1020,6 @@ export const ApplicationForm: FC<Props> = (props) => {
             }
             <div className="divider md:col-span-2"></div>
 
-            {/* cprDoc */}
-            {/* <div className="flex flex-col justify-start w-full">
-              <label className="label">
-                {t("CPRDoc")}{" "}
-              {" "}
-                {props.application && (
-                  <GetStorageLinkComponent
-                    storageKey={props.application?.attachment?.cprDoc}
-                  ></GetStorageLinkComponent>
-                )}
-              </label>
-              <Field
-                dir="ltr"
-                type="file"
-                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps,application/msword"
-                id="cprDoc"
-                name="cprDoc"
-                title="cprDoc"
-                placeholder="CPR Doc"
-                className={`file-input file-input-bordered file-input-secondary bg-secondary text-secondary-content ${
-                  errors.cprDoc && "input-error"
-                }`}
-                onChange={(event: any) => {
-                  let file: File | undefined = event.currentTarget.files[0];
-
-                  let isValid = checkIfFilesAreTooBig(file);
-                  if (isValid) {
-                    setCprDoc(file);
-                    handleChange(event);
-                  } else {
-                    setFieldError("cprDoc", "File is too large");
-                  }
-                }}
-                onBlur={handleBlur}
-                value={values.cprDoc ?? ""}
-              />
-              <label className="label-text-alt text-error">
-                {errors.cprDoc && touched.cprDoc && errors.cprDoc}
-              </label>
-            </div> */}
-
             {/* schoolCertificate */}
             <div className="flex flex-col justify-start w-full">
               <label className="label">
@@ -1090,6 +1056,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                 }}
                 onBlur={handleBlur}
                 value={values.schoolCertificate ?? ""}
+                disabled={applicationIsEligible}
               />
               <label className="label-text-alt text-error">
                 {errors.schoolCertificate &&
@@ -1132,6 +1099,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                 }}
                 onBlur={handleBlur}
                 value={values.transcriptDoc ?? ""}
+                disabled={applicationIsEligible}
               />
               <p className="py-2 italic whitespace-pre-wrap stat-desc">
                 {t(`transcriptNote`)}
