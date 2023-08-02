@@ -35,13 +35,10 @@ export const ApplicationCard: FC<IApplicationCard> = ({
           (application.status === Status.REVIEW ||
             application.status === Status.ELIGIBLE ||
             application.status === Status.APPROVED ||
-            application.status === Status.REJECTED) &&
-          "bg-warning"
-        } ${
-          (application.status === Status.WITHDRAWN ||
+            application.status === Status.REJECTED ||
             application.status === Status.NOT_COMPLETED) &&
-          "bg-neutral"
-        }`}
+          "bg-warning"
+        } ${application.status === Status.WITHDRAWN && "bg-neutral"}`}
         key={application.id}
       >
         <div className="p-4 bg-white min-h-[15rem] pt-10 card gap-4 flex flex-col justify-between">
@@ -53,7 +50,8 @@ export const ApplicationCard: FC<IApplicationCard> = ({
                   application.status === Status.ELIGIBLE ||
                   application.status === Status.REVIEW ||
                   application.status === Status.REJECTED ||
-                  application.status === Status.APPROVED
+                  application.status === Status.APPROVED ||
+                  application.status === Status.NOT_COMPLETED
                     ? Status.REVIEW
                     : application.status
                 }`
@@ -77,7 +75,7 @@ export const ApplicationCard: FC<IApplicationCard> = ({
               .map((program) => (
                 <div
                   key={program?.id}
-                  className="stat-desc whitespace-pre-wrap"
+                  className="whitespace-pre-wrap stat-desc"
                 >
                   {program?.choiceOrder}
                   {"- "}
@@ -162,13 +160,10 @@ export const ApplicationCard: FC<IApplicationCard> = ({
           (application.status === Status.REVIEW ||
             application.status === Status.ELIGIBLE ||
             application.status === Status.APPROVED ||
-            application.status === Status.REJECTED) &&
-          "bg-warning"
-        } ${
-          (application.status === Status.WITHDRAWN ||
+            application.status === Status.REJECTED ||
             application.status === Status.NOT_COMPLETED) &&
-          "bg-neutral"
-        }`}
+          "bg-warning"
+        } ${application.status === Status.WITHDRAWN && "bg-neutral"}`}
       >
         {(application.status === Status.REVIEW ||
           application.status === Status.ELIGIBLE ||

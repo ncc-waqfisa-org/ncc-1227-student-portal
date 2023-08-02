@@ -85,7 +85,6 @@ function useProviderApp() {
   // ---- Access Controls -----
 
   // TODO: change this later
-  // const editingApplicationsEnabled = true;
   const editingApplicationsEnabled = lastDateForEditingApplications.isAfter(
     dayjs()
   );

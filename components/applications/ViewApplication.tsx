@@ -48,7 +48,8 @@ export default function ViewApplication({ application }: Props) {
                     application.status === Status.ELIGIBLE ||
                     application.status === Status.REVIEW ||
                     application.status === Status.REJECTED ||
-                    application.status === Status.APPROVED
+                    application.status === Status.APPROVED ||
+                    application.status === Status.NOT_COMPLETED
                       ? Status.REVIEW
                       : application.status
                   }`
