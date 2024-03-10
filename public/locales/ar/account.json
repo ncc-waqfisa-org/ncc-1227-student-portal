@@ -46,7 +46,15 @@
   "clear": "إزالة",
   "dropTheFilesHere": "...قم بوضع الملفات هناقم بوضع الملفات هنا",
   "dragDropSomeFilesHereOr": "اسحب وضع بعض الملفات هنا ، أو اضغط لتحديد الملفات",
+  "dropTheFileHere": "ضع الملف هنا ...",
+  "dragDropTheFileHereOr": "اسحب الملف وضعه هنا ، أو انقر لتحديد الملف",
   "male": "ذكر",
   "female": "أنثى",
+  "lessThan1500": "أقل من 1500 دينار بحريني",
+  "moreThan1500": "1500 دينار بحريني وما فوق",
+  "BAHRAINI": "بحريني",
+  "NON_BAHRAINI": "غير بحريني",
+  "PRIVATE": "خاصة",
+  "PUBLIC": "حكومية",
   "IfYouWantToUploadMultiple": "اذا رغبت في رفع أكثر من ملف واحد، رجاءً قم بإختيار الملفات ثم اسحبها وضعها"
 }

@@ -113,13 +113,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "studentCPR": {
-                    "name": "studentCPR",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": []
-                },
                 "adminLogs": {
                     "name": "adminLogs",
                     "isArray": true,
@@ -186,21 +179,6 @@ export const schema = {
                         ]
                     }
                 },
-                "student": {
-                    "name": "student",
-                    "isArray": false,
-                    "type": {
-                        "model": "Student"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetNames": [
-                            "studentCPR"
-                        ]
-                    }
-                },
                 "dateTime": {
                     "name": "dateTime",
                     "isArray": false,
@@ -231,10 +209,61 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "studentCPR": {
+                    "name": "studentCPR",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "student": {
+                    "name": "student",
+                    "isArray": false,
+                    "type": {
+                        "model": "Student"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetNames": [
+                            "studentCPR"
+                        ]
+                    }
+                },
+                "batchID": {
+                    "name": "batchID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "batch": {
                     "name": "batch",
                     "isArray": false,
                     "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "batchRelation": {
+                    "name": "batchRelation",
+                    "isArray": false,
+                    "type": {
+                        "model": "Batch"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetNames": [
+                            "batchID"
+                        ]
+                    }
+                },
+                "score": {
+                    "name": "score",
+                    "isArray": false,
+                    "type": "Float",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -270,6 +299,10 @@ export const schema = {
                     "properties": {}
                 },
                 {
+                    "type": "searchable",
+                    "properties": {}
+                },
+                {
                     "type": "key",
                     "properties": {
                         "name": "byDateTime",
@@ -292,9 +325,28 @@ export const schema = {
                 {
                     "type": "key",
                     "properties": {
+                        "name": "byBatchRelation",
+                        "fields": [
+                            "batchID"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
                         "name": "byBatch",
                         "fields": [
                             "batch",
+                            "status"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byScore",
+                        "fields": [
+                            "score",
                             "status"
                         ]
                     }
@@ -641,6 +693,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "isExtended": {
+                    "name": "isExtended",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "extendedTo": {
+                    "name": "extendedTo",
+                    "isArray": false,
+                    "type": "AWSDate",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "isTrashed": {
                     "name": "isTrashed",
                     "isArray": false,
@@ -670,6 +736,10 @@ export const schema = {
             "attributes": [
                 {
                     "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "searchable",
                     "properties": {}
                 },
                 {
@@ -980,6 +1050,15 @@ export const schema = {
                         ]
                     }
                 },
+                "role": {
+                    "name": "role",
+                    "isArray": false,
+                    "type": {
+                        "enum": "AdminRole"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -1206,6 +1285,15 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "nationalityCategory": {
+                    "name": "nationalityCategory",
+                    "isArray": false,
+                    "type": {
+                        "enum": "Nationality"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "nationality": {
                     "name": "nationality",
                     "isArray": false,
@@ -1410,9 +1498,134 @@ export const schema = {
                     }
                 }
             ]
+        },
+        "Batch": {
+            "name": "Batch",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "batch": {
+                    "name": "batch",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createApplicationStartDate": {
+                    "name": "createApplicationStartDate",
+                    "isArray": false,
+                    "type": "AWSDate",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createApplicationEndDate": {
+                    "name": "createApplicationEndDate",
+                    "isArray": false,
+                    "type": "AWSDate",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "updateApplicationEndDate": {
+                    "name": "updateApplicationEndDate",
+                    "isArray": false,
+                    "type": "AWSDate",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "signUpStartDate": {
+                    "name": "signUpStartDate",
+                    "isArray": false,
+                    "type": "AWSDate",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "signUpEndDate": {
+                    "name": "signUpEndDate",
+                    "isArray": false,
+                    "type": "AWSDate",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "applications": {
+                    "name": "applications",
+                    "isArray": true,
+                    "type": {
+                        "model": "Application"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "batchRelation"
+                        ]
+                    }
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Batches",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "fields": [
+                            "id"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
         }
     },
     "enums": {
+        "AdminRole": {
+            "name": "AdminRole",
+            "values": [
+                "ADMIN",
+                "SUPER_ADMIN"
+            ]
+        },
         "Status": {
             "name": "Status",
             "values": [
@@ -1445,17 +1658,26 @@ export const schema = {
                 "PUBLIC"
             ]
         },
+        "Nationality": {
+            "name": "Nationality",
+            "values": [
+                "BAHRAINI",
+                "NON_BAHRAINI"
+            ]
+        },
         "FamilyIncome": {
             "name": "FamilyIncome",
             "values": [
                 "LESS_THAN_500",
                 "BETWEEN_500_AND_700",
                 "BETWEEN_700_AND_1000",
+                "LESS_THAN_1500",
+                "MORE_THAN_1500",
                 "OVER_1000"
             ]
         }
     },
     "nonModels": {},
-    "codegenVersion": "3.4.2",
-    "version": "4785be7341fc2dc23cf4e7d9bcda7568"
+    "codegenVersion": "3.4.4",
+    "version": "e986bc2d295cc5ba816906043bf3cc14"
 };

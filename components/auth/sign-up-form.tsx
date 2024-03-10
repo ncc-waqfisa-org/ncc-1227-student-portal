@@ -50,7 +50,8 @@ export default function SignUpForm() {
         cprDoc: undefined,
         fullName: undefined,
         email: undefined,
-        phone: "+973",
+        phone: undefined,
+        // phone: "+973",
         gender: undefined,
         address: undefined,
         schoolName: undefined,
@@ -255,6 +256,7 @@ export default function SignUpForm() {
           familyIncome: data.student.input.familyIncome,
           familyIncomeProofDocs: storageKeys,
           nationality: data.student.input.nationality,
+          nationalityCategory: data.student.input.nationalityCategory,
           _version: data.student.input._version,
         },
         condition: data.student.condition,
@@ -265,6 +267,9 @@ export default function SignUpForm() {
       cprDoc: data.cprDoc,
     };
 
+    // console.log(JSON.stringify(temp));
+    // TODO: remove this in production
+    console.log(temp);
     setCreateStudentFormValues(temp);
 
     const createdDatabaseUser = await createDatabaseStudent(temp);

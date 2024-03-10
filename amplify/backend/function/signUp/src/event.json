@@ -1,0 +1,93 @@
+{
+
+  "student": {
+
+    "input": {
+
+      "cpr": "000000002",
+
+      "cprDoc": "Student000000002/000000002#CPR#1709705320924",
+
+      "fullName": "Mohamed Mukhtar Student",
+
+      "email": "mukhtar.fthm@gmail.com",
+
+      "phone": "+97366636604",
+
+      "gender": "MALE",
+
+      "schoolName": "Fathom",
+
+      "schoolType": "PUBLIC",
+
+      "specialization": "Logic master",
+
+      "placeOfBirth": "Sanabis",
+
+      "studentOrderAmongSiblings": 2,
+
+      "householdIncome": "undefined",
+
+      "preferredLanguage": "ENGLISH",
+
+      "graduationDate": "1998-06-03",
+
+      "address": "Sanabis",
+
+      "parentInfoID": "1f98b9b6-927c-42d5-9a67-7c497339c39a",
+
+      "familyIncome": "LESS_THAN_1500",
+
+      "familyIncomeProofDocs": [ "Student000000002/000000002#FAMILY_INCOME_PROOF#1709705327005" ],
+
+      "nationality": "BAHRAINI",
+
+      "nationalityCategory": "BAHRAINI",
+
+      "_version": "undefined"
+
+    },
+
+    "condition": "undefined"
+
+  },
+
+  "parentInfo": {
+
+    "input": {
+
+      "id": "undefined",
+
+      "guardianFullName": "Abdulla Mukhtar",
+
+      "relation": "dad",
+
+      "guardianCPR": "900000006",
+
+      "primaryMobile": "+97317892312",
+
+      "secondaryMobile": "+97338712364",
+
+      "fatherFullName": "Abdulla Mukhtar",
+
+      "fatherCPR": "900000004",
+
+      "motherFullName": "Mom",
+
+      "motherCPR": "900000002",
+
+      "numberOfFamilyMembers": 5,
+
+      "address": "Sanabis",
+
+      "_version": "undefined"
+
+    },
+
+    "condition": "undefined"
+
+  },
+
+  "password": "asdfghjkl!"
+
+}

@@ -1,7 +1,6 @@
 import { Formik, Form, Field } from "formik";
 import {
   CreateStudentMutationVariables,
-  FamilyIncome,
   Gender,
   Language,
   SchoolType,
@@ -13,8 +12,9 @@ import { useState } from "react";
 import MultiUpload from "../MultiUpload";
 import { useAuth } from "../../hooks/use-auth";
 import { checkIfFilesAreTooBig } from "../../src/HelperFunctions";
-
-import { bugsnagClient } from "../../src/bugsnag";
+import { Nationality, FamilyIncome } from "../../src/models";
+import { PhoneNumberInput } from "../phone";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 interface ICreateStudentForm {
   student: CreateStudentMutationVariables;
@@ -74,7 +74,11 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
           .required(`${tErrors("requiredField")}`),
         phone: yup
           .string()
-          .phone()
+          // .string()
+          .test((value) =>
+            value ? isValidPhoneNumber(value.toString()) : false
+          )
+          // .phone()
           .required(`${tErrors("requiredField")}`),
         gender: yup.string().required(`${tErrors("requiredField")}`),
         schoolName: yup.string().required(`${tErrors("requiredField")}`),
@@ -84,7 +88,10 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
         placeOfBirth: yup.string().required(`${tErrors("requiredField")}`),
         familyIncome: yup.string().required(`${tErrors("requiredField")}`),
         familyIncomeProofDocsFile: yup.array(yup.string()),
-        nationality: yup.string().required(`${tErrors("requiredField")}`),
+        nationalityCategory: yup
+          .string()
+          .required(`${tErrors("requiredField")}`),
+        // nationality: yup.string().required(`${tErrors("requiredField")}`),
         studentOrderAmongSiblings: yup
           .number()
           .required(`${tErrors("requiredField")}`),
@@ -118,7 +125,8 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               schoolType: values.schoolType,
               specialization: values.specialization,
               placeOfBirth: values.placeOfBirth,
-              nationality: values.nationality,
+              nationality: values.nationalityCategory?.toString(),
+              nationalityCategory: values.nationalityCategory,
               studentOrderAmongSiblings: values.studentOrderAmongSiblings,
               familyIncome: values.familyIncome,
               preferredLanguage: values.preferredLanguage,
@@ -145,6 +153,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
         handleBlur,
         isSubmitting,
         setFieldError,
+        setFieldValue,
         validateField,
       }) => (
         <Form className="container grid items-end max-w-3xl grid-cols-1 gap-3 mx-auto md:grid-cols-2">
@@ -282,7 +291,8 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
                 {errors.phone && touched.phone && errors.phone}
               </label>
             </div>
-            <Field
+
+            <PhoneNumberInput
               dir="ltr"
               type="phone"
               name="phone"
@@ -291,9 +301,11 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               className={`input input-bordered input-primary ${
                 errors.phone && touched.phone && "input-error"
               }`}
-              onChange={handleChange}
+              onChange={(value) =>
+                setFieldValue("phone", (value ?? "")?.toString())
+              }
               onBlur={handleBlur}
-              value={values.phone}
+              value={values.phone ?? ""}
             />
           </div>
 
@@ -400,8 +412,10 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               <option disabled selected value={undefined}>
                 {t("select")}
               </option>
-              <option value={SchoolType.PUBLIC}>{t("public")}</option>
-              <option value={SchoolType.PRIVATE}>{t("private")}</option>
+              <option value={SchoolType.PRIVATE}>
+                {t(SchoolType.PRIVATE)}
+              </option>
+              <option value={SchoolType.PUBLIC}>{t(SchoolType.PUBLIC)}</option>
             </Field>
           </div>
 
@@ -462,24 +476,36 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               <label className="label">{t("nationality")}</label>
               <label className="text-error label">*</label>{" "}
               <label className="label-text-alt text-error">
-                {errors.nationality &&
-                  touched.nationality &&
-                  errors.nationality}
+                {errors.nationalityCategory &&
+                  touched.nationalityCategory &&
+                  errors.nationalityCategory}
               </label>
             </div>
             <Field
               dir="ltr"
-              type="text"
-              name="nationality"
-              title="nationality"
-              // placeholder="Nationality"
+              as="select"
+              name="nationalityCategory"
+              title="nationalityCategory"
+              placeholder={t("nationality")}
               className={`input input-bordered input-primary ${
-                errors.nationality && touched.nationality && "input-error"
+                errors.nationalityCategory &&
+                touched.nationalityCategory &&
+                "input-error"
               }`}
               onChange={handleChange}
               onBlur={handleBlur}
-              value={values.nationality}
-            />
+              value={values.nationalityCategory}
+            >
+              <option disabled selected value={undefined}>
+                {t("select")}
+              </option>
+              <option value={Nationality.BAHRAINI}>
+                {t(Nationality.BAHRAINI)}
+              </option>
+              <option value={Nationality.NON_BAHRAINI}>
+                {t(Nationality.NON_BAHRAINI)}
+              </option>
+            </Field>
           </div>
 
           {/* Student Order Among Siblings */}
@@ -596,16 +622,11 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               <option disabled selected value={undefined}>
                 {t("select")}
               </option>
-
-              <option value={FamilyIncome.LESS_THAN_500}>
-                {t("lessThan500")}
+              <option value={FamilyIncome.LESS_THAN_1500}>
+                {t("lessThan1500")}
               </option>
-              <option value={FamilyIncome.BETWEEN_500_AND_700}>500-700</option>
-              <option value={FamilyIncome.BETWEEN_700_AND_1000}>
-                700-1000
-              </option>
-              <option value={FamilyIncome.OVER_1000}>
-                {t("moreThan1000")}
+              <option value={FamilyIncome.MORE_THAN_1500}>
+                {t("moreThan1500")}
               </option>
             </Field>
           </div>
@@ -616,6 +637,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               onFiles={(files) => {
                 setFamilyIncomeProofDocsFile(files);
               }}
+              single
               isInvalid={setFamilyIncomeProofInvalid}
               handleChange={handleChange}
               handleOnClear={() => {
@@ -625,9 +647,9 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               filedName={"familyIncomeProofDocsFile"}
               title={`${t("familyIncomeProof")} ${t("document")}`}
             ></MultiUpload>
-            <label className="whitespace-pre-wrap stat-desc">
+            {/* <label className="whitespace-pre-wrap stat-desc">
               {t("IfYouWantToUploadMultiple")}
-            </label>
+            </label> */}
           </div>
 
           {/* Password */}

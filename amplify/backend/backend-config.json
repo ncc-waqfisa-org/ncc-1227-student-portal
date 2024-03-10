@@ -43,6 +43,19 @@
       "service": "Cognito"
     }
   },
+  "function": {
+    "signUp": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "updateStudentEmail": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
   "storage": {
     "nccStorage": {
       "dependsOn": [],

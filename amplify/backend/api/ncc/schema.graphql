@@ -6,22 +6,26 @@ type Attachment @model @auth(rules: [{ allow: public }]) {
   schoolCertificate: String
 }
 
-type Application @model @auth(rules: [{ allow: public }]) {
+type Application @model @searchable @auth(rules: [{ allow: public }]) {
   id: ID! @index(name: "byDateTime", sortKeyFields: ["dateTime"])
   gpa: Float
   status: Status
   attachmentID: String
-  studentCPR: String! @index(name: "byCPR", sortKeyFields: ["gpa"])
   adminLogs: [AdminLog] @hasMany
   studentLogs: [StudentLog] @hasMany
   attachment: Attachment @hasOne
   programs: [ProgramChoice] @hasMany
-  student: Student @belongsTo(fields: ["studentCPR"])
   dateTime: AWSDateTime!
   isEmailSent: Boolean @default(value: "false")
   schoolName: String
   schoolType: SchoolType
+  studentCPR: String! @index(name: "byCPR", sortKeyFields: ["gpa"])
+  student: Student @belongsTo(fields: ["studentCPR"])
+  batchID: ID! @index(name: "byBatchRelation") @default(value: "48745538-4051-4c99-ad0f-7be0cac6cf16")
   batch: Int @index(name: "byBatch", sortKeyFields: ["status"])
+  batchRelation: Batch @belongsTo(fields: ["batchID"])
+  # add a new field to the Application model called "score" that is a Float and is indexed for sorting
+  score: Float @index(name: "byScore", sortKeyFields: ["status"])
 }
 
 type ProgramChoice @model @auth(rules: [{ allow: public }]) {
@@ -48,13 +52,16 @@ type Program @model @auth(rules: [{ allow: public }]) {
   isTrashed: Boolean @default(value: "false")
 }
 
-type University @model @auth(rules: [{ allow: public }]) {
+type University @model @searchable @auth(rules: [{ allow: public }]) {
   id: ID!
   name: String
   nameAr: String @default(value: "-")
   Programs: [Program] @hasMany
   availability: Int @default(value: "0")
   isDeactivated: Boolean
+  isExtended: Boolean @default(value: "false")
+  # extendedTo: AWSDate and nullable
+  extendedTo: AWSDate
   isTrashed: Boolean @default(value: "false")
 }
 
@@ -130,6 +137,11 @@ enum SchoolType {
   PUBLIC
 }
 
+enum Nationality {
+  BAHRAINI
+  NON_BAHRAINI
+}
+
 type Student @model @auth(rules: [{ allow: public }]) {
   cpr: String! @primaryKey
   cprDoc: String
@@ -137,6 +149,7 @@ type Student @model @auth(rules: [{ allow: public }]) {
   email: String
   phone: String
   gender: Gender
+  nationalityCategory: Nationality
   nationality: String
   schoolName: String
   schoolType: SchoolType
@@ -156,9 +169,22 @@ type Student @model @auth(rules: [{ allow: public }]) {
   StudentLogs: [StudentLog] @hasMany
 }
 
+type Batch @model @auth(rules: [{ allow: public }]) {
+  id: ID! @primaryKey
+  batch : Int
+  createApplicationStartDate: AWSDate
+  createApplicationEndDate: AWSDate
+  updateApplicationEndDate: AWSDate
+  signUpStartDate: AWSDate
+  signUpEndDate: AWSDate
+  applications: [Application] @hasMany(indexName: "byBatchRelation", fields: ["id"])
+}
+
 enum FamilyIncome {
   LESS_THAN_500
   BETWEEN_500_AND_700
   BETWEEN_700_AND_1000
+  LESS_THAN_1500
+  MORE_THAN_1500
   OVER_1000
 }

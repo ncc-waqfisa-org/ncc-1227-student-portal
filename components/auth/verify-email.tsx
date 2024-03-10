@@ -113,6 +113,24 @@ export const VerifyEmail = ({ cpr }: Props) => {
     return res.data?.getStudent?.email ?? null;
   }
 
+  /**
+   * Call an AWS Lambda function using the SDK
+   */
+  async function callLambdaFunction() {
+    try {
+      const response = await API.post(
+        "lambdaFunction",
+        "/updateStudentEmail-staging",
+        {
+          body: { cpr: "000000002", newEmail: "mukhtar.fthm@gmail.com" },
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return loading ? (
     <AppLoader></AppLoader>
   ) : (

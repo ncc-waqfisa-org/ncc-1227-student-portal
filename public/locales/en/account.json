@@ -46,7 +46,15 @@
   "clear": "Clear",
   "dropTheFilesHere": "Drop some files here...",
   "dragDropSomeFilesHereOr": "Drag & drop some files here, or click to select files",
+  "dropTheFileHere": "Drop the file here...",
+  "dragDropTheFileHereOr": "Drag & drop the files here, or click to select the file",
   "male": "Male",
   "Female": "Female",
+  "lessThan1500": "Less than 1500 BD",
+  "moreThan1500": "1500 BD and above",
+  "BAHRAINI": "Bahraini",
+  "NON_BAHRAINI": "Non Bahraini",
+  "PRIVATE": "Private",
+  "PUBLIC": "Public",
   "IfYouWantToUploadMultiple": "If you want to upload multiple files, please select multiple files then drag and drop"
 }

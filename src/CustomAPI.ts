@@ -10,6 +10,9 @@ import {
   CreateProgramChoiceMutationVariables,
   CreateStudentLogMutation,
   CreateStudentLogMutationVariables,
+  GetStudentQuery,
+  ListBatchesQuery,
+  ListBatchesQueryVariables,
   Program,
   UpdateApplicationMutation,
   UpdateApplicationMutationVariables,
@@ -35,6 +38,8 @@ import {
 } from "./graphql/mutations";
 
 import { bugsnagClient } from "./bugsnag";
+import dayjs from "dayjs";
+import { listBatches } from "./graphql/queries";
 
 /* -------------------------------------------------------------------------- */
 /*                                    ENUMS                                   */
@@ -55,6 +60,24 @@ export interface DownloadLinks {
   schoolCertificate?: string | null;
   transcriptDoc?: string | null;
   signedContractDoc?: string | null;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                               NEW CUSTOM API                               */
+/* -------------------------------------------------------------------------- */
+
+export async function getCurrentBatch() {
+  let queryInput: ListBatchesQueryVariables = {
+    filter: {
+      batch: { eq: dayjs().year() },
+    },
+  };
+
+  let res = (await API.graphql({
+    query: listBatches,
+    variables: queryInput,
+  })) as GraphQLResult<ListBatchesQuery>;
+  return res.data;
 }
 
 /* -------------------------------------------------------------------------- */

@@ -9,8 +9,13 @@ import { useTranslation } from "react-i18next";
 import { ApplicationCard } from "../../components/applications/ApplicationCard";
 import { getStatusOrder } from "../../src/HelperFunctions";
 import { NewApplicationCard } from "../../components/applications/NewApplicationCard";
-import { Status, Student } from "../../src/API";
+import { Batch, Status, Student } from "../../src/API";
 import dayjs from "dayjs";
+import { useQuery } from "@tanstack/react-query";
+import { getCurrentBatch } from "../../src/CustomAPI";
+import { API } from "aws-amplify";
+import { Button } from "@aws-amplify/ui-react";
+import { Skeleton } from "../../components/Skeleton";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -31,6 +36,28 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 export default function ApplicationsPage() {
   const appContext = useAppContext();
 
+  // const { data: batch } = useQuery<Batch | null>({
+  //   queryKey: ["currentBatch"],
+  //   queryFn: () =>
+  //     getCurrentBatch().then((value) => {
+  //       const currentBatch =
+  //         (value?.listBatches?.items ?? []).length > 0
+  //           ? (value?.listBatches?.items[0] as Batch)
+  //           : null;
+
+  //       console.log(currentBatch);
+  //       return currentBatch;
+  //     }),
+  // });
+
+  // Follow the batches rules
+
+  // const newApplicationsAllowed = !batch
+  //   ? false
+  //   : dayjs().isBefore(dayjs(batch.createApplicationEndDate)) &&
+  //     dayjs().isAfter(dayjs(batch.createApplicationStartDate));
+
+  // end of batches rules
   const student = appContext.student?.getStudent as Student;
 
   const activeApplications = appContext.applications.filter(
@@ -48,8 +75,44 @@ export default function ApplicationsPage() {
 
   const { t } = useTranslation("applications");
 
+  async function callLambdaFunction() {
+    console.log("called");
+    try {
+      // const response = await API.post(
+      //   "d8m1yp9dff",
+      //   "/updateStudentEmail-staging",
+      //   {
+      //     body: { cpr: "000000002", newEmail: "mukhtar.fthm@gmail.com" },
+      //   }
+      // )
+      const response = await fetch("/api/changeEmail", {
+        method: "POST",
+        body: JSON.stringify({
+          cpr: "000000002",
+          newEmail: "mukhtar.fthm@gmail.com",
+        }),
+      })
+        .then((val) => {
+          console.log(val);
+
+          return val.json();
+        })
+        .catch((err) => {
+          console.log(err);
+          return null;
+        });
+
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <PageComponent title={"Applications"} authRequired>
+      {/* TODO: remove this later */}
+      {/* <Button onClick={() => callLambdaFunction()}>click me</Button> */}
+
       {student && (
         <div className="container mx-auto">
           {!appContext.haveActiveApplication &&

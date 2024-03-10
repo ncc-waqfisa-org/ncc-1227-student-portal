@@ -1,8 +1,7 @@
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Accept, FileRejection, useDropzone } from "react-dropzone";
 import { checkIfFilesAreTooBig } from "../src/HelperFunctions";
 import { useTranslation } from "react-i18next";
-import { Field } from "formik";
 import GetStorageLinkComponent from "./get-storage-link-component";
 
 interface Props {
@@ -10,6 +9,8 @@ interface Props {
   isInvalid: (isInvalid: boolean) => void;
   accept?: Accept | undefined;
   maxSize?: number;
+  maxFiles?: number;
+  single?: boolean;
   handleChange: (event: any) => void;
   handleOnClear: () => void;
   value: any;
@@ -34,6 +35,8 @@ export default function MultiUpload(props: Props) {
       "application/msword": [".docx", ".doc"],
     },
     validator: maxSizeValidator,
+    multiple: !props.single ?? undefined,
+    maxFiles: props.maxFiles ?? undefined,
   });
 
   function maxSizeValidator(file: File) {
@@ -115,13 +118,23 @@ export default function MultiUpload(props: Props) {
           value={props.value}
           {...getInputProps()}
         />
-        <div className="flex justify-center mb-4 text-center ">
-          {isDragActive ? (
-            <p>{t("dropTheFilesHere")}</p>
-          ) : (
-            <p>{t("dragDropSomeFilesHereOr")}</p>
-          )}
-        </div>
+        {props.single && files.length > 0 ? (
+          <></>
+        ) : (
+          <div className="flex justify-center mb-4 text-center ">
+            {isDragActive ? (
+              <p>
+                {props.single ? t("dropTheFileHere") : t("dropTheFilesHere")}
+              </p>
+            ) : (
+              <p>
+                {props.single
+                  ? t("dragDropTheFileHereOr")
+                  : t("dragDropSomeFilesHereOr")}
+              </p>
+            )}
+          </div>
+        )}
 
         {(files || filesRejected) && (
           <div className="flex flex-wrap gap-3 text-sm text-secondary">

@@ -14,13 +14,17 @@ import {
   Application,
   Status,
   Student,
+  GetBatchQueryVariables,
+  ListBatchesQueryVariables,
+  Batch,
 } from "../src/API";
-import { getStudent } from "../src/graphql/queries";
+import { getStudent, listBatches } from "../src/graphql/queries";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
-import { getStudentApplications } from "../src/CustomAPI";
+import { getCurrentBatch, getStudentApplications } from "../src/CustomAPI";
 import { Crisp } from "crisp-sdk-web";
 import { bugsnagClient } from "../src/bugsnag";
 import dayjs, { Dayjs } from "dayjs";
+import { useQuery } from "@tanstack/react-query";
 
 // interface for all the values & functions
 interface IUseAppContext {
@@ -77,19 +81,46 @@ function useProviderApp() {
     defaultState.haveActiveApplication
   );
 
+  const { data: batch } = useQuery<Batch | null>({
+    queryKey: ["currentBatch"],
+    queryFn: () =>
+      getCurrentBatch().then((value) => {
+        const currentBatch =
+          (value?.listBatches?.items ?? []).length > 0
+            ? (value?.listBatches?.items[0] as Batch)
+            : null;
+
+        return currentBatch;
+      }),
+  });
+
+  const newApplicationsEnabled = !batch
+    ? false
+    : dayjs().isBefore(dayjs(batch.createApplicationEndDate)) &&
+      dayjs().isAfter(dayjs(batch.createApplicationStartDate));
+
+  const editingApplicationsEnabled = !batch
+    ? false
+    : dayjs().isBefore(dayjs(batch.updateApplicationEndDate));
+
+  const signUpEnabled = !batch
+    ? false
+    : dayjs().isBefore(dayjs(batch.signUpEndDate)) &&
+      dayjs().isAfter(dayjs(batch.signUpStartDate));
+
   // ---- Dates Controls -----
   // TODO: change this date later
-  const lastDateForEditingApplications = dayjs("2023-07-30T00:00:00");
-  const lastDateForNewApplications = dayjs("2023-07-13T23:00:00");
-  const lastDateForNewStudents = dayjs("2023-07-10T00:00:00");
+  // const lastDateForEditingApplications = dayjs("2024-07-30T00:00:00");
+  // const lastDateForNewApplications = dayjs("2024-07-13T23:00:00");
+  // const lastDateForNewStudents = dayjs("2024-07-10T00:00:00");
   // ---- Access Controls -----
 
   // TODO: change this later
-  const editingApplicationsEnabled = lastDateForEditingApplications.isAfter(
-    dayjs()
-  );
-  const newApplicationsEnabled = lastDateForNewApplications.isAfter(dayjs());
-  const signUpEnabled = lastDateForNewStudents.isAfter(dayjs());
+  // const editingApplicationsEnabled = lastDateForEditingApplications.isAfter(
+  //   dayjs()
+  // );
+  // const newApplicationsEnabled = lastDateForNewApplications.isAfter(dayjs());
+  // const signUpEnabled = lastDateForNewStudents.isAfter(dayjs());
 
   useEffect(() => {
     let cpr = user?.getUsername();

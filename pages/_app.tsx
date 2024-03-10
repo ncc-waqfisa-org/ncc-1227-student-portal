@@ -15,12 +15,22 @@ import NextNProgress from "nextjs-progressbar";
 
 import React from "react";
 import { bugsnagClient } from "../src/bugsnag";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function App({ Component, pageProps }: AppProps) {
   Amplify.configure({ ...config, ssr: true });
   Auth.configure({ ...config, ssr: true });
   API.configure({ ...config, ssr: true });
   Storage.configure({ ...config, ssr: true });
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 30 * 60 * 1000,
+      },
+    },
+  });
 
   const { locale } = useRouter();
 
@@ -43,12 +53,15 @@ function App({ Component, pageProps }: AppProps) {
     <div dir={dir} className={locale === "ar" ? "font-IBMArabic" : "font-IBM"}>
       {ErrorBoundary ? (
         <ErrorBoundary>
-          <AuthProvider>
-            <AppProvider>
-              <NextNProgress color="#BB9869" />
-              <Component {...pageProps} />
-            </AppProvider>
-          </AuthProvider>
+          <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+              <AppProvider>
+                <NextNProgress color="#BB9869" />
+                <Component {...pageProps} />
+              </AppProvider>
+            </AuthProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
         </ErrorBoundary>
       ) : (
         <AuthProvider>

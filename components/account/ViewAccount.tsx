@@ -2,6 +2,7 @@ import {
   FamilyIncome,
   Gender,
   Language,
+  Nationality,
   SchoolType,
   Student,
   UpdateStudentMutationVariables,
@@ -38,6 +39,7 @@ interface FormValues {
   familyIncomeProofDocsFile: File[];
 
   nationality: string | null | undefined;
+  nationalityCategory: Nationality | null | undefined;
   studentOrderAmongSiblings: number | null | undefined;
   preferredLanguage: Language | null | undefined;
   graduationDate: string | null | undefined;
@@ -69,6 +71,7 @@ export default function ViewAccount({ student }: Props) {
     familyIncomeProofDocs: student.familyIncomeProofDocs ?? [],
     familyIncomeProofDocsFile: [],
     nationality: student.nationality,
+    nationalityCategory: student.nationalityCategory,
     studentOrderAmongSiblings: student.studentOrderAmongSiblings,
     preferredLanguage: student.preferredLanguage,
     graduationDate: student.graduationDate,
@@ -106,7 +109,9 @@ export default function ViewAccount({ student }: Props) {
         familyIncome: yup.string().required(`${tErrors("requiredField")}`),
         familyIncomeProofDocs: yup.array(yup.string()),
         familyIncomeProofDocsFile: yup.array(yup.string()),
-        nationality: yup.string().required(`${tErrors("requiredField")}`),
+        nationalityCategory: yup
+          .string()
+          .required(`${tErrors("requiredField")}`),
         studentOrderAmongSiblings: yup
           .number()
           .required(`${tErrors("requiredField")}`),
@@ -158,7 +163,8 @@ export default function ViewAccount({ student }: Props) {
             schoolType: values.schoolType,
             specialization: values.specialization,
             placeOfBirth: values.placeOfBirth,
-            nationality: values.nationality,
+            nationality: values.nationalityCategory?.toString(),
+            nationalityCategory: values.nationalityCategory,
             studentOrderAmongSiblings: values.studentOrderAmongSiblings,
             familyIncome: values.familyIncome,
             familyIncomeProofDocs: storageKeys,
@@ -389,8 +395,10 @@ export default function ViewAccount({ student }: Props) {
               <option disabled selected value={undefined}>
                 Select
               </option>
-              <option value={SchoolType.PRIVATE}>Private</option>
-              <option value={SchoolType.PUBLIC}>Public</option>
+              <option value={SchoolType.PRIVATE}>
+                {t(SchoolType.PRIVATE)}
+              </option>
+              <option value={SchoolType.PUBLIC}>{t(SchoolType.PUBLIC)}</option>
             </Field>
             <label className="label-text-alt text-error">
               {errors.schoolType && touched.schoolType && errors.schoolType}
@@ -447,19 +455,46 @@ export default function ViewAccount({ student }: Props) {
             <label className="label">{t("nationality")}</label>
             <Field
               dir="ltr"
-              type="text"
-              name="nationality"
-              title="nationality"
-              placeholder="nationality"
+              as="select"
+              name="nationalityCategory"
+              title="nationalityCategory"
+              placeholder={t("nationality")}
               className={`input input-bordered input-primary ${
-                errors.nationality && "input-error"
+                errors.nationalityCategory &&
+                touched.nationalityCategory &&
+                "input-error"
               }`}
               onChange={handleChange}
               onBlur={handleBlur}
-              value={values.nationality}
-            />
+              value={values.nationalityCategory}
+            >
+              <option disabled selected value={undefined}>
+                {t("select")}
+              </option>
+              <option value={Nationality.BAHRAINI}>
+                {t(Nationality.BAHRAINI)}
+              </option>
+              <option value={Nationality.NON_BAHRAINI}>
+                {t(Nationality.NON_BAHRAINI)}
+              </option>
+            </Field>
+            {/* <Field
+              dir="ltr"
+              type="text"
+              name="nationalityCategory"
+              title="nationalityCategory"
+              placeholder="nationality"
+              className={`input input-bordered input-primary ${
+                errors.nationalityCategory && "input-error"
+              }`}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.nationalityCategory}
+            /> */}
             <label className="label-text-alt text-error">
-              {errors.nationality && touched.nationality && errors.nationality}
+              {errors.nationalityCategory &&
+                touched.nationalityCategory &&
+                errors.nationalityCategory}
             </label>
           </div>
 
@@ -496,6 +531,29 @@ export default function ViewAccount({ student }: Props) {
               title="familyIncome"
               placeholder="Preferred Language"
               className={`input input-bordered input-primary ${
+                errors.familyIncome && touched.familyIncome && "input-error"
+              }`}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.familyIncome}
+            >
+              <option disabled selected value={undefined}>
+                {t("select")}
+              </option>
+              <option value={FamilyIncome.LESS_THAN_1500}>
+                {t("lessThan1500")}
+              </option>
+              <option value={FamilyIncome.MORE_THAN_1500}>
+                {t("moreThan1500")}
+              </option>
+            </Field>
+            {/* <Field
+              dir="ltr"
+              as="select"
+              name="familyIncome"
+              title="familyIncome"
+              placeholder="Preferred Language"
+              className={`input input-bordered input-primary ${
                 errors.familyIncome && "input-error"
               }`}
               onChange={handleChange}
@@ -512,7 +570,7 @@ export default function ViewAccount({ student }: Props) {
                 700-1000
               </option>
               <option value={FamilyIncome.OVER_1000}>More than 1000</option>
-            </Field>
+            </Field> */}
             <label className="label-text-alt text-error">
               {errors.familyIncome &&
                 touched.familyIncome &&
@@ -522,6 +580,7 @@ export default function ViewAccount({ student }: Props) {
           {/* Family income proof */}
           <div className="justify-start md:col-span-2">
             <MultiUpload
+              single
               onFiles={(files) => {
                 setFamilyIncomeProofDocsFile(files);
               }}

@@ -60,7 +60,7 @@ export default function SingleApplicationPage({
 
   const { student: studentData, editingApplicationsEnabled } = useAppContext();
 
-  const student = studentData?.getStudent;
+  const student = studentData?.getStudent as Student;
 
   return (
     <PageComponent title={"Application"} authRequired>
@@ -127,7 +127,7 @@ function AccountDocs({ student }: AccountDocs) {
             {t("editAccount")}
           </Link>
         </div>
-        <div className="overflow-x-scroll w-full">
+        <div className="w-full overflow-x-scroll">
           <table dir="ltr" className="table w-full">
             <thead>
               <tr>
@@ -150,7 +150,7 @@ function AccountDocs({ student }: AccountDocs) {
                   <div className="">
                     {(student.familyIncomeProofDocs ?? [])?.length > 0 && (
                       <div className="flex flex-col p-3 mb-3 bg-gray-200 rounded-lg">
-                        <div className="flex  items-center gap-2">
+                        <div className="flex items-center gap-2">
                           {student.familyIncomeProofDocs?.map((doc, index) => (
                             <div key={index} className="overflow-x-scroll">
                               <GetStorageLinkComponent
