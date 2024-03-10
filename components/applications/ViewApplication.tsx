@@ -12,12 +12,10 @@ export default function ViewApplication({ application }: Props) {
   const { t } = useTranslation("applicationPage");
   const { locale } = useRouter();
 
-  const primaryProgram = application.programs?.items?.sort(
-    (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
-  )[0];
-  const secondaryProgram = application.programs?.items?.sort(
-    (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
-  )[1];
+  const primaryProgram = application.programs?.items[0];
+  // const secondaryProgram = application.programs?.items?.sort(
+  //   (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
+  // )[1];
 
   return (
     <div className="overflow-x-auto">
@@ -64,7 +62,7 @@ export default function ViewApplication({ application }: Props) {
           </tr>
 
           <tr>
-            <td>{t("primaryProgram")}</td>
+            <td>{t("program")}</td>
             <td className="flex flex-col gap-3">
               <div>
                 {locale === "ar"
@@ -90,7 +88,7 @@ export default function ViewApplication({ application }: Props) {
               </div>
             </td>
           </tr>
-          <tr>
+          {/* <tr>
             <td>{t("secondaryProgram")}</td>
             <td className="flex flex-col gap-3">
               <div>
@@ -116,7 +114,7 @@ export default function ViewApplication({ application }: Props) {
                 ></GetStorageLinkComponent>
               </div>
             </td>
-          </tr>
+          </tr> */}
           <tr>
             <td>
               {t("schoolCertificate")} {t("document")}

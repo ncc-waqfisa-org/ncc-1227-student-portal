@@ -57,13 +57,18 @@ export const NewApplicationCard = () => {
               <div
                 className={`badge  badge-ghost h-fit ${" opacity-50 !badge-outline"}`}
               >
+                {t("acceptanceLetter")}
+              </div>
+              {/* <div
+                className={`badge  badge-ghost h-fit ${" opacity-50 !badge-outline"}`}
+              >
                 {t("primaryProgramAcceptanceLetter")}
               </div>
               <div
                 className={`badge  badge-ghost h-fit ${" opacity-50 !badge-outline"}`}
               >
                 {t("secondaryProgramAcceptanceLetter")}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

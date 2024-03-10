@@ -16,6 +16,7 @@ import { getStudent } from "../../src/graphql/queries";
 import { useTranslation } from "react-i18next";
 
 import { bugsnagClient } from "../../src/bugsnag";
+import { Button } from "@aws-amplify/ui-react";
 
 interface Props {
   cpr: string;
@@ -117,14 +118,32 @@ export const VerifyEmail = ({ cpr }: Props) => {
    * Call an AWS Lambda function using the SDK
    */
   async function callLambdaFunction() {
+    console.log("called");
     try {
-      const response = await API.post(
-        "lambdaFunction",
-        "/updateStudentEmail-staging",
-        {
-          body: { cpr: "000000002", newEmail: "mukhtar.fthm@gmail.com" },
-        }
-      );
+      // const response = await API.post(
+      //   "d8m1yp9dff",
+      //   "/updateStudentEmail-staging",
+      //   {
+      //     body: { cpr: "000000002", newEmail: "mukhtar.fthm@gmail.com" },
+      //   }
+      // )
+      const response = await fetch("/api/changeEmail", {
+        method: "POST",
+        body: JSON.stringify({
+          cpr: "000000002",
+          newEmail: "mukhtar.fthm@gmail.com",
+        }),
+      })
+        .then((val) => {
+          console.log(val);
+
+          return val.json();
+        })
+        .catch((err) => {
+          console.log(err);
+          return null;
+        });
+
       console.log(response);
     } catch (error) {
       console.error(error);
@@ -135,6 +154,7 @@ export const VerifyEmail = ({ cpr }: Props) => {
     <AppLoader></AppLoader>
   ) : (
     <div>
+      {/* <Button onClick={() => callLambdaFunction()}>click me</Button> */}
       <h2>
         {t("verificationCode")}{" "}
         <span className="text-goblin-500">{partialEmail}</span>

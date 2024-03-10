@@ -10,7 +10,10 @@ import {
 import config from "../../src/aws-exports";
 
 type Data = {
-  output: InvokeCommandOutput;
+  output: {
+    result: string | undefined;
+    logs: string | undefined;
+  };
 };
 
 type InputData = { cpr: string; newEmail: string };
@@ -44,20 +47,19 @@ export default async function handler(
     // Qualifier: "STRING_VALUE",
   };
   const command = new InvokeCommand(input);
-  const response = await client
-    .send(command)
-    .then((v) => {
-      console.log(v);
-
-      return v;
-    })
-    .catch((error) => {
-      console.log(error);
-      return error;
-    });
-  console.log("🚀 ~ response:", response);
+  const { Payload, LogResult } = await client.send(command);
+  var result;
+  var logs;
+  if (Payload) {
+    result = Buffer.from(Payload).toString();
+    console.log("🚀 ~ result:", { result });
+  }
+  if (LogResult) {
+    logs = Buffer.from(LogResult, "base64").toString();
+    console.log("🚀 ~ logs:", { logs });
+  }
 
   res.status(200).json({
-    output: response,
+    output: { result, logs },
   });
 }

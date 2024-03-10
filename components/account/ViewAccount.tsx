@@ -19,6 +19,7 @@ import { useState } from "react";
 import MultiUpload from "../MultiUpload";
 import { checkIfFilesAreTooBig } from "../../src/HelperFunctions";
 import GetStorageLinkComponent from "../get-storage-link-component";
+import { PhoneNumberInput } from "../phone";
 
 interface Props {
   student: Student;
@@ -195,6 +196,7 @@ export default function ViewAccount({ student }: Props) {
         isSubmitting,
         isValid,
         setFieldError,
+        setFieldValue,
       }) => (
         <Form className="container grid items-end max-w-3xl grid-cols-1 gap-3 mx-auto md:grid-cols-2">
           {/* CPR */}
@@ -270,7 +272,7 @@ export default function ViewAccount({ student }: Props) {
           {/* Phone */}
           <div className="flex flex-col justify-start w-full">
             <label className="label">{t("phone")}</label>
-            <Field
+            {/* <Field
               dir="ltr"
               type="phone"
               name="phone"
@@ -282,6 +284,21 @@ export default function ViewAccount({ student }: Props) {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.phone}
+            /> */}
+            <PhoneNumberInput
+              dir="ltr"
+              type="phone"
+              name="phone"
+              title="phone"
+              placeholder={`${t("phone")} (+973)`}
+              className={`input input-bordered input-primary ${
+                errors.phone && touched.phone && "input-error"
+              }`}
+              onChange={(value) =>
+                setFieldValue("phone", (value ?? "")?.toString())
+              }
+              onBlur={handleBlur}
+              value={values.phone ?? ""}
             />
             <label className="label-text-alt text-error">
               {errors.phone && touched.phone && errors.phone}

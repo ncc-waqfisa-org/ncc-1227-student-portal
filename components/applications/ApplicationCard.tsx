@@ -20,12 +20,10 @@ export const ApplicationCard: FC<IApplicationCard> = ({
   const { locale } = useRouter();
   const { t } = useTranslation("applications");
 
-  const primaryProgram = application?.programs?.items.sort(
-    (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
-  )[0];
-  const secondaryProgram = application?.programs?.items.sort(
-    (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
-  )[1];
+  const primaryProgram = application?.programs?.items[0];
+  // const secondaryProgram = application?.programs?.items.sort(
+  //   (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
+  // )[1];
 
   return (
     <div className="relative duration-200 hover:cursor-pointer hover:scale-105">
@@ -70,22 +68,17 @@ export const ApplicationCard: FC<IApplicationCard> = ({
             <div className="mb-2 -mt-2 text-sm stat-title">
               {t("selectedPrograms")}
             </div>
-            {application.programs?.items
-              .sort((a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0))
-              .map((program) => (
-                <div
-                  key={program?.id}
-                  className="whitespace-pre-wrap stat-desc"
-                >
-                  {program?.choiceOrder}
-                  {"- "}
-                  {locale == "ar"
-                    ? `${program?.program?.nameAr ?? "-"}-${
-                        program?.program?.university?.nameAr ?? "-"
-                      }`
-                    : `${program?.program?.name}-${program?.program?.university?.name}`}
-                </div>
-              ))}
+            {application.programs?.items.map((program) => (
+              <div key={program?.id} className="whitespace-pre-wrap stat-desc">
+                {program?.choiceOrder}
+                {"- "}
+                {locale == "ar"
+                  ? `${program?.program?.nameAr ?? "-"}-${
+                      program?.program?.university?.nameAr ?? "-"
+                    }`
+                  : `${program?.program?.name}-${program?.program?.university?.name}`}
+              </div>
+            ))}
           </div>
           {/* Attachments */}
           <div className="p-3 border border-gray-200 rounded-xl">
@@ -96,8 +89,7 @@ export const ApplicationCard: FC<IApplicationCard> = ({
                 application.attachment?.transcriptDoc === (undefined || null) ||
                 application.attachment?.schoolCertificate ===
                   (undefined || null) ||
-                primaryProgram?.acceptanceLetterDoc === (undefined || null) ||
-                secondaryProgram?.acceptanceLetterDoc ===
+                primaryProgram?.acceptanceLetterDoc ===
                   (undefined || null)) && (
                 <span className="text-error">{t("notCompleted")}</span>
               )}
@@ -141,16 +133,16 @@ export const ApplicationCard: FC<IApplicationCard> = ({
                   "badge-error !badge-outline !border"
                 }`}
               >
-                {t("primaryProgramAcceptanceLetter")}
+                {t("acceptanceLetter")}
               </div>
-              <div
+              {/* <div
                 className={`badge  badge-ghost h-fit bg-[#e7e7e7] border-0 ${
                   !secondaryProgram?.acceptanceLetterDoc &&
                   "badge-error !badge-outline !border"
                 }`}
               >
                 {t("secondaryProgramAcceptanceLetter")}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

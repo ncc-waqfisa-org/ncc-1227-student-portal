@@ -8,6 +8,7 @@ import { updateParentInfoInDB } from "../../src/CustomAPI";
 import { useAppContext } from "../../contexts/AppContexts";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { PhoneNumberInput } from "../phone";
 
 interface FormValues {
   guardianFullName: string | null | undefined;
@@ -133,6 +134,7 @@ export default function ViewParentInfo({ parentInfo }: Props) {
         handleBlur,
         isSubmitting,
         isValid,
+        setFieldValue,
       }) => (
         <Form className="container grid max-w-3xl grid-cols-1 gap-3 mx-auto md:grid-cols-2">
           {/* guardianFullName */}
@@ -220,17 +222,21 @@ export default function ViewParentInfo({ parentInfo }: Props) {
           {/* primaryMobile */}
           <div className="flex flex-col justify-start w-full">
             <label className="label">{t("primaryMobileNumber")}</label>
-            <Field
+
+            <PhoneNumberInput
               dir="ltr"
               type="phone"
               name="primaryMobile"
               title="primaryMobile"
+              placeholder={`${t("phone")} (+973)`}
               className={`input input-bordered input-primary ${
-                errors.primaryMobile && "input-error"
+                errors.primaryMobile && touched.primaryMobile && "input-error"
               }`}
-              onChange={handleChange}
+              onChange={(value) =>
+                setFieldValue("primaryMobile", (value ?? "")?.toString())
+              }
               onBlur={handleBlur}
-              value={values.primaryMobile}
+              value={values.primaryMobile ?? ""}
             />
             <label className="label-text-alt text-error">
               {errors.primaryMobile &&
@@ -242,17 +248,23 @@ export default function ViewParentInfo({ parentInfo }: Props) {
           {/* secondaryMobile */}
           <div className="flex flex-col justify-start w-full">
             <label className="label">{t("secondaryMobileNumber")}</label>
-            <Field
+
+            <PhoneNumberInput
               dir="ltr"
               type="phone"
               name="secondaryMobile"
               title="secondaryMobile"
+              placeholder={`${t("phone")} (+973)`}
               className={`input input-bordered input-primary ${
-                errors.secondaryMobile && "input-error"
+                errors.secondaryMobile &&
+                touched.secondaryMobile &&
+                "input-error"
               }`}
-              onChange={handleChange}
+              onChange={(value) =>
+                setFieldValue("secondaryMobile", (value ?? "")?.toString())
+              }
               onBlur={handleBlur}
-              value={values.secondaryMobile}
+              value={values.secondaryMobile ?? ""}
             />
             <label className="label-text-alt text-error">
               {errors.secondaryMobile &&

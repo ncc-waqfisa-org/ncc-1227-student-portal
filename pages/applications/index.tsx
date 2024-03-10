@@ -75,43 +75,11 @@ export default function ApplicationsPage() {
 
   const { t } = useTranslation("applications");
 
-  async function callLambdaFunction() {
-    console.log("called");
-    try {
-      // const response = await API.post(
-      //   "d8m1yp9dff",
-      //   "/updateStudentEmail-staging",
-      //   {
-      //     body: { cpr: "000000002", newEmail: "mukhtar.fthm@gmail.com" },
-      //   }
-      // )
-      const response = await fetch("/api/changeEmail", {
-        method: "POST",
-        body: JSON.stringify({
-          cpr: "000000002",
-          newEmail: "mukhtar.fthm@gmail.com",
-        }),
-      })
-        .then((val) => {
-          console.log(val);
-
-          return val.json();
-        })
-        .catch((err) => {
-          console.log(err);
-          return null;
-        });
-
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  
 
   return (
     <PageComponent title={"Applications"} authRequired>
-      {/* TODO: remove this later */}
-      {/* <Button onClick={() => callLambdaFunction()}>click me</Button> */}
+      
 
       {student && (
         <div className="container mx-auto">

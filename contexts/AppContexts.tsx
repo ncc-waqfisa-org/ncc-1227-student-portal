@@ -38,6 +38,7 @@ interface IUseAppContext {
   signUpEnabled: boolean;
   newApplicationsEnabled: boolean;
   editingApplicationsEnabled: boolean;
+  batch: Batch | undefined;
 }
 
 // the default state for all the values & functions
@@ -52,6 +53,7 @@ const defaultState: IUseAppContext = {
   signUpEnabled: false,
   newApplicationsEnabled: false,
   editingApplicationsEnabled: false,
+  batch: undefined,
 };
 
 // creating the app contexts
@@ -234,5 +236,6 @@ function useProviderApp() {
     signUpEnabled,
     newApplicationsEnabled,
     editingApplicationsEnabled,
+    batch: batch ?? undefined,
   };
 }

@@ -44,11 +44,11 @@ export interface ApplicationSnapshotInput {
     acceptanceLetterDoc: string | undefined;
   };
 
-  secondaryProgram: {
-    id: string | undefined;
-    name: string | undefined;
-    acceptanceLetterDoc: string | undefined;
-  };
+  // secondaryProgram: {
+  //   id: string | undefined;
+  //   name: string | undefined;
+  //   acceptanceLetterDoc: string | undefined;
+  // };
 
   attachments: {
     cpr?: string | undefined;
@@ -93,18 +93,18 @@ export function getStudentApplicationSnapshot(inputData: {
         )
           ? undefined
           : `Changed ${inputData.oldApplication.primaryProgram.acceptanceLetterDoc} to ${inputData.newApplication.primaryProgram.acceptanceLetterDoc}`,
-        secondaryProgram: isEqual(
-          inputData.newApplication.secondaryProgram.id,
-          inputData.oldApplication.secondaryProgram.id
-        )
-          ? undefined
-          : `Changed ${inputData.oldApplication.secondaryProgram.name} to ${inputData.newApplication.secondaryProgram.name}`,
-        secondaryProgramAcceptanceLetter: isEqual(
-          inputData.newApplication.secondaryProgram.acceptanceLetterDoc,
-          inputData.oldApplication.secondaryProgram.acceptanceLetterDoc
-        )
-          ? undefined
-          : `Changed ${inputData.oldApplication.secondaryProgram.acceptanceLetterDoc} to ${inputData.newApplication.secondaryProgram.acceptanceLetterDoc}`,
+        // secondaryProgram: isEqual(
+        //   inputData.newApplication.secondaryProgram.id,
+        //   inputData.oldApplication.secondaryProgram.id
+        // )
+        //   ? undefined
+        //   : `Changed ${inputData.oldApplication.secondaryProgram.name} to ${inputData.newApplication.secondaryProgram.name}`,
+        // secondaryProgramAcceptanceLetter: isEqual(
+        //   inputData.newApplication.secondaryProgram.acceptanceLetterDoc,
+        //   inputData.oldApplication.secondaryProgram.acceptanceLetterDoc
+        // )
+        //   ? undefined
+        //   : `Changed ${inputData.oldApplication.secondaryProgram.acceptanceLetterDoc} to ${inputData.newApplication.secondaryProgram.acceptanceLetterDoc}`,
         attachments: isEqual(
           inputData.newApplication.attachments,
           inputData.oldApplication.attachments
@@ -131,8 +131,8 @@ export function getStudentApplicationSnapshot(inputData: {
         gpa: `Initial submit with GPA ${inputData.newApplication.gpa}`,
         primaryProgram: `Initial submit with Primary Program ${inputData.newApplication.primaryProgram.name}`,
         primaryProgramAcceptanceLetter: `Initial submit with Primary Program Acceptance letter ${inputData.newApplication.primaryProgram.acceptanceLetterDoc}`,
-        secondaryProgram: `Initial submit with Secondary Program ${inputData.newApplication.secondaryProgram.name}`,
-        secondaryProgramAcceptanceLetter: `Initial submit with Secondary Program Acceptance letter ${inputData.newApplication.secondaryProgram.acceptanceLetterDoc}`,
+        // secondaryProgram: `Initial submit with Secondary Program ${inputData.newApplication.secondaryProgram.name}`,
+        // secondaryProgramAcceptanceLetter: `Initial submit with Secondary Program Acceptance letter ${inputData.newApplication.secondaryProgram.acceptanceLetterDoc}`,
         attachments: {
           cpr: `Initial submit with CPR ${inputData.newApplication.attachments.cpr}`,
           transcript: `Initial submit with transcript ${inputData.newApplication.attachments.transcript}`,
@@ -150,7 +150,7 @@ interface IAllDocsAreAvailable {
   transcript: string | null | undefined;
   schoolCertificate: string | null | undefined;
   primaryProgramAcceptanceLetter: string | null | undefined;
-  secondaryProgramAcceptanceLetter: string | null | undefined;
+  // secondaryProgramAcceptanceLetter: string | null | undefined;
 }
 
 export function allDocsAreAvailable(props: IAllDocsAreAvailable): boolean {
@@ -158,8 +158,8 @@ export function allDocsAreAvailable(props: IAllDocsAreAvailable): boolean {
     typeof props.cpr === "string" &&
     typeof props.transcript === "string" &&
     typeof props.schoolCertificate === "string" &&
-    (typeof props.primaryProgramAcceptanceLetter === "string" ||
-      typeof props.secondaryProgramAcceptanceLetter === "string") &&
+    typeof props.primaryProgramAcceptanceLetter === "string" &&
+    // ||typeof props.secondaryProgramAcceptanceLetter === "string"
     props.familyProofs.length > 0
   );
 }
