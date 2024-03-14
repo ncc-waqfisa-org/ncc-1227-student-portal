@@ -1,6 +1,7 @@
 import { CardInfoComponent } from "./CardInfo";
 import logs from "../public/svg/logs.svg";
 import search from "../public/svg/search.svg";
+import check from "../public/svg/check-dark.svg";
 import info from "../public/svg/info.svg";
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AppContexts";
@@ -14,7 +15,7 @@ interface Props {
 export const HomeComponent: FC<Props> = ({ comeBack }) => {
   const router = useRouter();
   const { t } = useTranslation("common");
-  const { haveActiveApplication } = useAppContext();
+  const { haveActiveApplication, haveScholarships } = useAppContext();
   return (
     <div>
       <div className="flex flex-col gap-10 mx-auto">
@@ -55,6 +56,15 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
                 description={t("trackApplicationDescription")}
                 action={() => router.push("/applications")}
                 actionTitle={t("track") ?? "Track"}
+              ></CardInfoComponent>
+            )}
+            {haveScholarships && (
+              <CardInfoComponent
+                icon={check}
+                title={t("scholarships")}
+                description={t("trackApplicationDescription")}
+                action={() => router.push("/scholarship")}
+                actionTitle={t("seeMyScholarships") ?? "See My Scholarships"}
               ></CardInfoComponent>
             )}
             <CardInfoComponent

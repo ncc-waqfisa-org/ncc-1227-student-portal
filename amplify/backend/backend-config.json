@@ -44,9 +44,24 @@
     }
   },
   "function": {
+    "autoReject": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "getApplications": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "signUp": {
       "build": true,
       "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "updateGpaCsv": {
+      "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -54,6 +69,88 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_autoReject_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "autoReject"
+        }
+      ]
+    },
+    "AMPLIFY_function_autoReject_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "autoReject"
+        }
+      ]
+    },
+    "AMPLIFY_function_getApplications_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getApplications"
+        }
+      ]
+    },
+    "AMPLIFY_function_getApplications_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getApplications"
+        }
+      ]
+    },
+    "AMPLIFY_function_signUp_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "signUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_signUp_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "signUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateGpaCsv_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateGpaCsv"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateGpaCsv_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateGpaCsv"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateStudentEmail_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateStudentEmail"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateStudentEmail_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateStudentEmail"
+        }
+      ]
     }
   },
   "storage": {

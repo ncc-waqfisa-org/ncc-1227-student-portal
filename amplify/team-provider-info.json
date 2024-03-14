@@ -20,6 +20,28 @@
       },
       "api": {
         "ncc": {}
+      },
+      "function": {
+        "signUp": {
+          "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
+          "s3Key": "amplify-builds/signUp-376535376b662b574b32-build.zip"
+        },
+        "updateStudentEmail": {
+          "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
+          "s3Key": "amplify-builds/updateStudentEmail-63684241762f37366847-build.zip"
+        },
+        "updateGpaCsv": {
+          "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
+          "s3Key": "amplify-builds/updateGpaCsv-31496653766730414d6e-build.zip"
+        },
+        "autoReject": {
+          "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
+          "s3Key": "amplify-builds/autoReject-31466a4c44326f314b71-build.zip"
+        },
+        "getApplications": {
+          "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
+          "s3Key": "amplify-builds/getApplications-4c4d3277344775703862-build.zip"
+        }
       }
     }
   }

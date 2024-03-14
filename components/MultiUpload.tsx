@@ -16,6 +16,7 @@ interface Props {
   value: any;
   filedName: string;
   title: string;
+  disabled?: boolean;
   storageKeys?: (string | null)[] | null | undefined;
 }
 
@@ -101,74 +102,76 @@ export default function MultiUpload(props: Props) {
           </div>
         </div>
       )}
-      <div
-        {...getRootProps()}
-        className={`flex flex-col justify-start w-full p-4 border border-dashed rounded-lg border-secondary ${
-          filesRejected.length > 0 && "border-error"
-        }`}
-      >
-        <input
-          ref={inputRef}
-          dir="ltr"
-          name={props.filedName}
-          title={props.filedName}
-          onChange={(event) => {
-            props.handleChange(event);
-          }}
-          value={props.value}
-          {...getInputProps()}
-        />
-        {props.single && files.length > 0 ? (
-          <></>
-        ) : (
-          <div className="flex justify-center mb-4 text-center ">
-            {isDragActive ? (
-              <p>
-                {props.single ? t("dropTheFileHere") : t("dropTheFilesHere")}
-              </p>
-            ) : (
-              <p>
-                {props.single
-                  ? t("dragDropTheFileHereOr")
-                  : t("dragDropSomeFilesHereOr")}
-              </p>
-            )}
-          </div>
-        )}
-
-        {(files || filesRejected) && (
-          <div className="flex flex-wrap gap-3 text-sm text-secondary">
-            {files.map((file: File, index) => (
-              <div
-                className="flex flex-col justify-start px-3 py-2 bg-gray-200 border border-gray-300 rounded-md"
-                key={index}
-              >
-                <p>{file.name}</p>
-                <p className="text-xs">
-                  Size: {(file.size / 1024 / 1024).toFixed(1)} MB
+      {props.disabled !== true && (
+        <div
+          {...getRootProps()}
+          className={`flex flex-col justify-start w-full p-4 border border-dashed rounded-lg border-secondary ${
+            filesRejected.length > 0 && "border-error"
+          }`}
+        >
+          <input
+            ref={inputRef}
+            dir="ltr"
+            name={props.filedName}
+            title={props.filedName}
+            onChange={(event) => {
+              props.handleChange(event);
+            }}
+            value={props.value}
+            {...getInputProps()}
+          />
+          {props.single && files.length > 0 ? (
+            <></>
+          ) : (
+            <div className="flex justify-center mb-4 text-center ">
+              {isDragActive ? (
+                <p>
+                  {props.single ? t("dropTheFileHere") : t("dropTheFilesHere")}
                 </p>
-              </div>
-            ))}
+              ) : (
+                <p>
+                  {props.single
+                    ? t("dragDropTheFileHereOr")
+                    : t("dragDropSomeFilesHereOr")}
+                </p>
+              )}
+            </div>
+          )}
 
-            {filesRejected.map((file: FileRejection, index) => (
-              <div
-                className="flex flex-col gap-1 px-3 py-2 bg-red-200 border border-red-300 rounded-md text-error"
-                key={index}
-              >
-                <p>{file.file.name}</p>
-                <div className="flex flex-col gap-1">
-                  {file.errors.map((e, i) => (
-                    <p className="text-xs" key={i}>
-                      Size: {(file.file.size / 1024 / 1024).toFixed(1)} MB -{" "}
-                      {e.message}
-                    </p>
-                  ))}
+          {(files || filesRejected) && (
+            <div className="flex flex-wrap gap-3 text-sm text-secondary">
+              {files.map((file: File, index) => (
+                <div
+                  className="flex flex-col justify-start px-3 py-2 bg-gray-200 border border-gray-300 rounded-md"
+                  key={index}
+                >
+                  <p>{file.name}</p>
+                  <p className="text-xs">
+                    Size: {(file.size / 1024 / 1024).toFixed(1)} MB
+                  </p>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+
+              {filesRejected.map((file: FileRejection, index) => (
+                <div
+                  className="flex flex-col gap-1 px-3 py-2 bg-red-200 border border-red-300 rounded-md text-error"
+                  key={index}
+                >
+                  <p>{file.file.name}</p>
+                  <div className="flex flex-col gap-1">
+                    {file.errors.map((e, i) => (
+                      <p className="text-xs" key={i}>
+                        Size: {(file.file.size / 1024 / 1024).toFixed(1)} MB -{" "}
+                        {e.message}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

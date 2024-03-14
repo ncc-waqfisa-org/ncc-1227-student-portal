@@ -40,8 +40,6 @@ import {
 import GetStorageLinkComponent from "../get-storage-link-component";
 import { useTranslation } from "react-i18next";
 
-import { bugsnagClient } from "../../src/bugsnag";
-
 export interface CreateApplicationFormValues {
   application: CreateApplicationMutationVariables;
   primaryProgram: CreateProgramChoiceMutationVariables;
@@ -236,7 +234,6 @@ export const ApplicationForm: FC<Props> = (props) => {
         push("/applications");
       })
       .catch((err) => {
-        bugsnagClient.notify(err);
         console.log("Create program choice error", err);
         toast.error("Something went wrong");
       });
@@ -309,7 +306,6 @@ export const ApplicationForm: FC<Props> = (props) => {
         push("/applications");
       })
       .catch((err) => {
-        bugsnagClient.notify(err);
         console.log("Update program choice error", err);
         toast.error("Something went wrong");
       });
@@ -398,7 +394,6 @@ export const ApplicationForm: FC<Props> = (props) => {
                 return res;
               })
               .catch((error) => {
-                bugsnagClient.notify(error);
                 console.log("Upload error", error);
                 throw error;
               }),
@@ -875,6 +870,14 @@ export const ApplicationForm: FC<Props> = (props) => {
                     </label>
                   </div>
                 </div>
+                {primaryProgram?.minimumGPA && (
+                  <div className="p-3 mt-2 border border-gray-300 rounded-md">
+                    <div className="stat-title">{t("minimumGPA")}</div>
+                    <label className="whitespace-pre-wrap stat-desc">
+                      {primaryProgram.minimumGPA}
+                    </label>
+                  </div>
+                )}
                 {(primaryProgram?.requirements ||
                   primaryProgram?.requirementsAr) && (
                   <div className="p-3 mt-2 border border-gray-300 rounded-md">

@@ -29,7 +29,7 @@ interface Props {
 }
 
 export default function ViewParentInfo({ parentInfo }: Props) {
-  const { syncStudent } = useAppContext();
+  const { syncStudent, editingApplicationsEnabled } = useAppContext();
   const { t } = useTranslation("account");
   const { t: tErrors } = useTranslation("errors");
 
@@ -144,6 +144,7 @@ export default function ViewParentInfo({ parentInfo }: Props) {
               dir="ltr"
               type="text"
               name="guardianFullName"
+              disabled={!editingApplicationsEnabled}
               title="guardianFullName"
               className={`input input-bordered input-primary ${
                 errors.guardianFullName && "input-error"
@@ -166,6 +167,7 @@ export default function ViewParentInfo({ parentInfo }: Props) {
               dir="ltr"
               type="text"
               name="relation"
+              disabled={!editingApplicationsEnabled}
               title="relation"
               className={`input input-bordered input-primary ${
                 errors.relation && "input-error"
@@ -185,6 +187,7 @@ export default function ViewParentInfo({ parentInfo }: Props) {
             <Field
               dir="ltr"
               type="text"
+              disabled={!editingApplicationsEnabled}
               name="guardianCPR"
               title="guardianCPR"
               className={`input input-bordered input-primary ${
@@ -207,6 +210,7 @@ export default function ViewParentInfo({ parentInfo }: Props) {
               type="text"
               name="address"
               title="address"
+              disabled={!editingApplicationsEnabled}
               className={`input input-bordered input-primary ${
                 errors.address && "input-error"
               }`}
@@ -228,6 +232,7 @@ export default function ViewParentInfo({ parentInfo }: Props) {
               type="phone"
               name="primaryMobile"
               title="primaryMobile"
+              disabled={!editingApplicationsEnabled}
               placeholder={`${t("phone")} (+973)`}
               className={`input input-bordered input-primary ${
                 errors.primaryMobile && touched.primaryMobile && "input-error"
@@ -254,6 +259,7 @@ export default function ViewParentInfo({ parentInfo }: Props) {
               type="phone"
               name="secondaryMobile"
               title="secondaryMobile"
+              disabled={!editingApplicationsEnabled}
               placeholder={`${t("phone")} (+973)`}
               className={`input input-bordered input-primary ${
                 errors.secondaryMobile &&
@@ -281,6 +287,7 @@ export default function ViewParentInfo({ parentInfo }: Props) {
               type="text"
               name="numberOfFamilyMembers"
               title="numberOfFamilyMembers"
+              disabled={!editingApplicationsEnabled}
               className={`input input-bordered input-primary ${
                 errors.numberOfFamilyMembers && "input-error"
               }`}
@@ -305,6 +312,7 @@ export default function ViewParentInfo({ parentInfo }: Props) {
               type="text"
               name="fatherFullName"
               title="fatherFullName"
+              disabled={!editingApplicationsEnabled}
               className={`input input-bordered input-primary ${
                 errors.fatherFullName && "input-error"
               }`}
@@ -326,6 +334,7 @@ export default function ViewParentInfo({ parentInfo }: Props) {
               dir="ltr"
               type="text"
               name="fatherCPR"
+              disabled={!editingApplicationsEnabled}
               title="fatherCPR"
               className={`input input-bordered input-primary ${
                 errors.fatherCPR && "input-error"
@@ -348,6 +357,7 @@ export default function ViewParentInfo({ parentInfo }: Props) {
               dir="ltr"
               type="text"
               name="motherFullName"
+              disabled={!editingApplicationsEnabled}
               title="motherFullName"
               className={`input input-bordered input-primary ${
                 errors.motherFullName && "input-error"
@@ -370,6 +380,7 @@ export default function ViewParentInfo({ parentInfo }: Props) {
               dir="ltr"
               type="text"
               name="motherCPR"
+              disabled={!editingApplicationsEnabled}
               title="motherCPR"
               className={`input input-bordered input-primary ${
                 errors.motherCPR && "input-error"
@@ -384,15 +395,17 @@ export default function ViewParentInfo({ parentInfo }: Props) {
           </div>
 
           {/* Submit */}
-          <button
-            className={`my-3 text-white btn btn-primary md:col-span-2 ${
-              isSubmitting && "loading"
-            }`}
-            type="submit"
-            disabled={isSubmitting || !isValid}
-          >
-            {t("update")}
-          </button>
+          {editingApplicationsEnabled && (
+            <button
+              className={`my-3 text-white btn btn-primary md:col-span-2 ${
+                isSubmitting && "loading"
+              }`}
+              type="submit"
+              disabled={isSubmitting || !isValid}
+            >
+              {t("update")}
+            </button>
+          )}
         </Form>
       )}
     </Formik>

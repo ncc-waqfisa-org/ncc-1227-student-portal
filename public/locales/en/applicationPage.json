@@ -26,6 +26,7 @@
   "accessDenied": "Access denied",
   "fullName": "Full Name",
   "studentGPA": "Student GPA",
+  "minimumGPA": "Minimum GPA",
   "reasonForUpdate": "Reason For Update",
   "update": "Update",
   "withdraw": "Withdraw",

@@ -20,6 +20,8 @@ import MultiUpload from "../MultiUpload";
 import { checkIfFilesAreTooBig } from "../../src/HelperFunctions";
 import GetStorageLinkComponent from "../get-storage-link-component";
 import { PhoneNumberInput } from "../phone";
+import { useAuth } from "../../hooks/use-auth";
+import { Button } from "@aws-amplify/ui-react";
 
 interface Props {
   student: Student;
@@ -48,7 +50,7 @@ interface FormValues {
 }
 
 export default function ViewAccount({ student }: Props) {
-  const { syncStudent } = useAppContext();
+  const { syncStudent, editingApplicationsEnabled } = useAppContext();
   const { t } = useTranslation("account");
   const { t: tErrors } = useTranslation("errors");
 
@@ -223,31 +225,33 @@ export default function ViewAccount({ student }: Props) {
                 storageKey={student.cprDoc}
               ></GetStorageLinkComponent>
             </label>
-            <Field
-              dir="ltr"
-              type="file"
-              accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps,application/msword"
-              id="cprDocFile"
-              name="cprDocFile"
-              title="cprDocFile"
-              placeholder="CPR Doc"
-              className={`file-input file-input-bordered file-input-secondary bg-secondary text-secondary-content ${
-                errors.cprDocFile && "input-error"
-              }`}
-              onChange={(event: any) => {
-                let file: File | undefined = event.currentTarget.files[0];
+            {editingApplicationsEnabled && (
+              <Field
+                dir="ltr"
+                type="file"
+                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps,application/msword"
+                id="cprDocFile"
+                name="cprDocFile"
+                title="cprDocFile"
+                placeholder="CPR Doc"
+                className={`file-input file-input-bordered file-input-secondary bg-secondary text-secondary-content ${
+                  errors.cprDocFile && "input-error"
+                }`}
+                onChange={(event: any) => {
+                  let file: File | undefined = event.currentTarget.files[0];
 
-                let isValid = checkIfFilesAreTooBig(file);
-                if (isValid) {
-                  setCprDoc(file);
-                  handleChange(event);
-                } else {
-                  setFieldError("cprDoc", "File is too large");
-                }
-              }}
-              onBlur={handleBlur}
-              value={values.cprDocFile ?? ""}
-            />
+                  let isValid = checkIfFilesAreTooBig(file);
+                  if (isValid) {
+                    setCprDoc(file);
+                    handleChange(event);
+                  } else {
+                    setFieldError("cprDoc", "File is too large");
+                  }
+                }}
+                onBlur={handleBlur}
+                value={values.cprDocFile ?? ""}
+              />
+            )}
             <label className="label-text-alt text-error">
               {errors.cprDocFile && touched.cprDocFile && errors.cprDocFile}
             </label>
@@ -290,6 +294,7 @@ export default function ViewAccount({ student }: Props) {
               type="phone"
               name="phone"
               title="phone"
+              disabled={!editingApplicationsEnabled}
               placeholder={`${t("phone")} (+973)`}
               className={`input input-bordered input-primary ${
                 errors.phone && touched.phone && "input-error"
@@ -313,6 +318,7 @@ export default function ViewAccount({ student }: Props) {
               type="text"
               name="fullName"
               title="fullName"
+              disabled={!editingApplicationsEnabled}
               placeholder="Full name"
               className={`input input-bordered input-primary`}
               onChange={handleChange}
@@ -332,6 +338,7 @@ export default function ViewAccount({ student }: Props) {
               as="select"
               name="gender"
               title="gender"
+              disabled={!editingApplicationsEnabled}
               placeholder="Gender"
               className={`input input-bordered input-primary ${
                 errors.gender && "input-error"
@@ -358,6 +365,7 @@ export default function ViewAccount({ student }: Props) {
               dir="ltr"
               type="text"
               name="address"
+              disabled={!editingApplicationsEnabled}
               title="address"
               placeholder="Student Address"
               className={`input input-bordered input-primary ${
@@ -380,6 +388,7 @@ export default function ViewAccount({ student }: Props) {
               type="text"
               name="schoolName"
               title="schoolName"
+              disabled={!editingApplicationsEnabled}
               placeholder="School name"
               className={`input input-bordered input-primary ${
                 errors.schoolName && "input-error"
@@ -401,6 +410,7 @@ export default function ViewAccount({ student }: Props) {
               as="select"
               name="schoolType"
               title="schoolType"
+              disabled={!editingApplicationsEnabled}
               placeholder="Preferred Language"
               className={`input input-bordered input-primary ${
                 errors.schoolType && "input-error"
@@ -430,6 +440,7 @@ export default function ViewAccount({ student }: Props) {
               type="text"
               name="specialization"
               title="specialization"
+              disabled={!editingApplicationsEnabled}
               placeholder="Specialization"
               className={`input input-bordered input-primary ${
                 errors.specialization && "input-error"
@@ -452,6 +463,7 @@ export default function ViewAccount({ student }: Props) {
               type="text"
               name="placeOfBirth"
               title="placeOfBirth"
+              disabled={!editingApplicationsEnabled}
               placeholder="Place Of Birth"
               className={`input input-bordered input-primary ${
                 errors.placeOfBirth && "input-error"
@@ -474,6 +486,7 @@ export default function ViewAccount({ student }: Props) {
               dir="ltr"
               as="select"
               name="nationalityCategory"
+              disabled={!editingApplicationsEnabled}
               title="nationalityCategory"
               placeholder={t("nationality")}
               className={`input input-bordered input-primary ${
@@ -524,6 +537,7 @@ export default function ViewAccount({ student }: Props) {
               name="studentOrderAmongSiblings"
               title="studentOrderAmongSiblings"
               placeholder="Student Order Among Siblings"
+              disabled={!editingApplicationsEnabled}
               className={`input input-bordered input-primary ${
                 errors.studentOrderAmongSiblings && "input-error"
               }`}
@@ -546,6 +560,7 @@ export default function ViewAccount({ student }: Props) {
               as="select"
               name="familyIncome"
               title="familyIncome"
+              disabled={!editingApplicationsEnabled}
               placeholder="Preferred Language"
               className={`input input-bordered input-primary ${
                 errors.familyIncome && touched.familyIncome && "input-error"
@@ -612,6 +627,7 @@ export default function ViewAccount({ student }: Props) {
               filedName={"familyIncomeProofDocsFile"}
               title={`${t("familyIncomeProofDocs")}`}
               storageKeys={student.familyIncomeProofDocs}
+              disabled={!editingApplicationsEnabled}
             ></MultiUpload>
           </div>
 
@@ -623,6 +639,7 @@ export default function ViewAccount({ student }: Props) {
               as="select"
               name="preferredLanguage"
               title="preferredLanguage"
+              disabled={!editingApplicationsEnabled}
               placeholder="Preferred Language"
               className={`input input-bordered input-primary ${
                 errors.preferredLanguage && "input-error"
@@ -652,6 +669,7 @@ export default function ViewAccount({ student }: Props) {
               type="date"
               name="graduationDate"
               title="graduationDate"
+              disabled={!editingApplicationsEnabled}
               placeholder="Graduation Date"
               className={`input input-bordered input-primary ${
                 errors.graduationDate && "input-error"
@@ -668,19 +686,21 @@ export default function ViewAccount({ student }: Props) {
           </div>
 
           {/* Submit */}
-          <button
-            className="my-3 text-white md:col-span-2 btn btn-primary"
-            type="submit"
-            disabled={
-              isSubmitting ||
-              !isValid ||
-              familyIncomeProofInvalid ||
-              (familyIncomeProofDocsFile.length === 0 &&
-                (student.familyIncomeProofDocs ?? []).length === 0)
-            }
-          >
-            {t("update")}
-          </button>
+          {editingApplicationsEnabled && (
+            <button
+              className="my-3 text-white md:col-span-2 btn btn-primary"
+              type="submit"
+              disabled={
+                isSubmitting ||
+                !isValid ||
+                familyIncomeProofInvalid ||
+                (familyIncomeProofDocsFile.length === 0 &&
+                  (student.familyIncomeProofDocs ?? []).length === 0)
+              }
+            >
+              {t("update")}
+            </button>
+          )}
         </Form>
       )}
     </Formik>

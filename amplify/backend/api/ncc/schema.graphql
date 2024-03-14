@@ -6,7 +6,7 @@ type Attachment @model @auth(rules: [{ allow: public }]) {
   schoolCertificate: String
 }
 
-type Application @model @searchable @auth(rules: [{ allow: public }]) {
+type Application @model @auth(rules: [{ allow: public }]) {
   id: ID! @index(name: "byDateTime", sortKeyFields: ["dateTime"])
   gpa: Float
   status: Status
@@ -26,6 +26,7 @@ type Application @model @searchable @auth(rules: [{ allow: public }]) {
   batchRelation: Batch @belongsTo(fields: ["batchID"])
   # add a new field to the Application model called "score" that is a Float and is indexed for sorting
   score: Float @index(name: "byScore", sortKeyFields: ["status"])
+  adminPoints: Int
 }
 
 type ProgramChoice @model @auth(rules: [{ allow: public }]) {
@@ -41,6 +42,7 @@ type ProgramChoice @model @auth(rules: [{ allow: public }]) {
 type Program @model @auth(rules: [{ allow: public }]) {
   id: ID!
   name: String
+  minimumGPA: Float
   requirements: String
   nameAr: String @default(value: "-")
   requirementsAr: String @default(value: "-")
@@ -52,7 +54,7 @@ type Program @model @auth(rules: [{ allow: public }]) {
   isTrashed: Boolean @default(value: "false")
 }
 
-type University @model @searchable @auth(rules: [{ allow: public }]) {
+type University @model @auth(rules: [{ allow: public }]) {
   id: ID!
   name: String
   nameAr: String @default(value: "-")
@@ -178,6 +180,15 @@ type Batch @model @auth(rules: [{ allow: public }]) {
   signUpStartDate: AWSDate
   signUpEndDate: AWSDate
   applications: [Application] @hasMany(indexName: "byBatchRelation", fields: ["id"])
+}
+
+type Scholarship @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  amount: Float
+  status: Status
+  applicationID: String
+  application: Application
+  studentCPR: String
 }
 
 enum FamilyIncome {

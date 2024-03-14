@@ -8,125 +8,6 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
-export const searchApplications = /* GraphQL */ `query SearchApplications(
-  $filter: SearchableApplicationFilterInput
-  $sort: [SearchableApplicationSortInput]
-  $limit: Int
-  $nextToken: String
-  $from: Int
-  $aggregates: [SearchableApplicationAggregationInput]
-) {
-  searchApplications(
-    filter: $filter
-    sort: $sort
-    limit: $limit
-    nextToken: $nextToken
-    from: $from
-    aggregates: $aggregates
-  ) {
-    items {
-      id
-      gpa
-      status
-      attachmentID
-      dateTime
-      isEmailSent
-      schoolName
-      schoolType
-      studentCPR
-      batchID
-      batch
-      score
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      applicationAttachmentId
-      __typename
-    }
-    nextToken
-    total
-    aggregateItems {
-      name
-      result {
-        ... on SearchableAggregateScalarResult {
-          value
-        }
-        ... on SearchableAggregateBucketResult {
-          buckets {
-            key
-            doc_count
-            __typename
-          }
-        }
-      }
-      __typename
-    }
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.SearchApplicationsQueryVariables,
-  APITypes.SearchApplicationsQuery
->;
-export const searchUniversities = /* GraphQL */ `query SearchUniversities(
-  $filter: SearchableUniversityFilterInput
-  $sort: [SearchableUniversitySortInput]
-  $limit: Int
-  $nextToken: String
-  $from: Int
-  $aggregates: [SearchableUniversityAggregationInput]
-) {
-  searchUniversities(
-    filter: $filter
-    sort: $sort
-    limit: $limit
-    nextToken: $nextToken
-    from: $from
-    aggregates: $aggregates
-  ) {
-    items {
-      id
-      name
-      nameAr
-      availability
-      isDeactivated
-      isExtended
-      extendedTo
-      isTrashed
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      __typename
-    }
-    nextToken
-    total
-    aggregateItems {
-      name
-      result {
-        ... on SearchableAggregateScalarResult {
-          value
-        }
-        ... on SearchableAggregateBucketResult {
-          buckets {
-            key
-            doc_count
-            __typename
-          }
-        }
-      }
-      __typename
-    }
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.SearchUniversitiesQueryVariables,
-  APITypes.SearchUniversitiesQuery
->;
 export const getAttachment = /* GraphQL */ `query GetAttachment($id: ID!) {
   getAttachment(id: $id) {
     id
@@ -294,6 +175,7 @@ export const getApplication = /* GraphQL */ `query GetApplication($id: ID!) {
       __typename
     }
     score
+    adminPoints
     createdAt
     updatedAt
     _version
@@ -326,6 +208,7 @@ export const listApplications = /* GraphQL */ `query ListApplications(
       batchID
       batch
       score
+      adminPoints
       createdAt
       updatedAt
       _version
@@ -368,6 +251,7 @@ export const syncApplications = /* GraphQL */ `query SyncApplications(
       batchID
       batch
       score
+      adminPoints
       createdAt
       updatedAt
       _version
@@ -393,6 +277,7 @@ export const getProgramChoice = /* GraphQL */ `query GetProgramChoice($id: ID!) 
     program {
       id
       name
+      minimumGPA
       requirements
       nameAr
       requirementsAr
@@ -421,6 +306,7 @@ export const getProgramChoice = /* GraphQL */ `query GetProgramChoice($id: ID!) 
       batchID
       batch
       score
+      adminPoints
       createdAt
       updatedAt
       _version
@@ -515,6 +401,7 @@ export const getProgram = /* GraphQL */ `query GetProgram($id: ID!) {
   getProgram(id: $id) {
     id
     name
+    minimumGPA
     requirements
     nameAr
     requirementsAr
@@ -565,6 +452,7 @@ export const listPrograms = /* GraphQL */ `query ListPrograms(
     items {
       id
       name
+      minimumGPA
       requirements
       nameAr
       requirementsAr
@@ -604,6 +492,7 @@ export const syncPrograms = /* GraphQL */ `query SyncPrograms(
     items {
       id
       name
+      minimumGPA
       requirements
       nameAr
       requirementsAr
@@ -1398,6 +1287,109 @@ export const syncBatches = /* GraphQL */ `query SyncBatches(
   APITypes.SyncBatchesQueryVariables,
   APITypes.SyncBatchesQuery
 >;
+export const getScholarship = /* GraphQL */ `query GetScholarship($id: ID!) {
+  getScholarship(id: $id) {
+    id
+    amount
+    status
+    applicationID
+    application {
+      id
+      gpa
+      status
+      attachmentID
+      dateTime
+      isEmailSent
+      schoolName
+      schoolType
+      studentCPR
+      batchID
+      batch
+      score
+      adminPoints
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      applicationAttachmentId
+      __typename
+    }
+    studentCPR
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetScholarshipQueryVariables,
+  APITypes.GetScholarshipQuery
+>;
+export const listScholarships = /* GraphQL */ `query ListScholarships(
+  $filter: ModelScholarshipFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listScholarships(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      amount
+      status
+      applicationID
+      studentCPR
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListScholarshipsQueryVariables,
+  APITypes.ListScholarshipsQuery
+>;
+export const syncScholarships = /* GraphQL */ `query SyncScholarships(
+  $filter: ModelScholarshipFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncScholarships(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      amount
+      status
+      applicationID
+      studentCPR
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncScholarshipsQueryVariables,
+  APITypes.SyncScholarshipsQuery
+>;
 export const applicationsByIdAndDateTime = /* GraphQL */ `query ApplicationsByIdAndDateTime(
   $id: ID!
   $dateTime: ModelStringKeyConditionInput
@@ -1427,6 +1419,7 @@ export const applicationsByIdAndDateTime = /* GraphQL */ `query ApplicationsById
       batchID
       batch
       score
+      adminPoints
       createdAt
       updatedAt
       _version
@@ -1473,6 +1466,7 @@ export const applicationsByStudentCPRAndGpa = /* GraphQL */ `query ApplicationsB
       batchID
       batch
       score
+      adminPoints
       createdAt
       updatedAt
       _version
@@ -1517,6 +1511,7 @@ export const applicationsByBatchID = /* GraphQL */ `query ApplicationsByBatchID(
       batchID
       batch
       score
+      adminPoints
       createdAt
       updatedAt
       _version
@@ -1563,6 +1558,7 @@ export const applicationsByBatchAndStatus = /* GraphQL */ `query ApplicationsByB
       batchID
       batch
       score
+      adminPoints
       createdAt
       updatedAt
       _version
@@ -1609,6 +1605,7 @@ export const applicationsByScoreAndStatus = /* GraphQL */ `query ApplicationsByS
       batchID
       batch
       score
+      adminPoints
       createdAt
       updatedAt
       _version

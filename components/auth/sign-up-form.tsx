@@ -1,6 +1,6 @@
 import "yup-phone";
 import React, { useState } from "react";
-import { API, Auth } from "aws-amplify";
+import { API, Auth, DataStore } from "aws-amplify";
 
 import * as mutations from "../../src/graphql/mutations";
 
@@ -26,7 +26,7 @@ import { TermsAndConditions } from "./t-and-c";
 import { useTranslation } from "react-i18next";
 import { DocType, uploadFile } from "../../src/CustomAPI";
 
-import { bugsnagClient } from "../../src/bugsnag";
+import { useMutation } from "@tanstack/react-query";
 
 export interface CreateStudentFormValues {
   student: CreateStudentMutationVariables;
@@ -106,7 +106,6 @@ export default function SignUpForm() {
 
       return res;
     } catch (error) {
-      bugsnagClient.notify(error as any);
       console.log("createDatabaseParentInfo => error", error);
       return null;
     }
@@ -125,7 +124,6 @@ export default function SignUpForm() {
 
       return res;
     } catch (error) {
-      bugsnagClient.notify(error as any);
       console.log("createDatabaseStudent => error", error);
       return null;
     }
@@ -148,7 +146,6 @@ export default function SignUpForm() {
 
       return signUpResult;
     } catch (error) {
-      bugsnagClient.notify(error as any);
       console.log("createCognitoUser => error", error);
       return null;
     }
@@ -170,7 +167,6 @@ export default function SignUpForm() {
 
       return res;
     } catch (error) {
-      bugsnagClient.notify(error as any);
       console.log("SignUpForm => deleteParentInfo => error", error);
       return null;
     }
@@ -192,13 +188,48 @@ export default function SignUpForm() {
 
       return res;
     } catch (error) {
-      bugsnagClient.notify(error as any);
       console.log("SignUpForm => deleteCreatedUser => error", error);
       return null;
     }
   }
 
+  const signUpMutation = useMutation({
+    mutationFn: (values: any) => {
+      return fetch(
+        `https://ciuxdqxmol.execute-api.us-east-1.amazonaws.com/default/sign-up`,
+        {
+          method: "POST",
+          body: JSON.stringify(values),
+          headers: {
+            // "Accept-Language": locale,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    },
+    async onSuccess(data) {
+      if (data.ok) {
+        const { message } = await data.json();
+
+        toast.success(message);
+
+        router.push({
+          pathname: "/signUp",
+          query: { cpr: createStudentFormValues.student.input.cpr },
+        });
+        // toast("email need to be verified");
+      } else {
+        const { message } = await data.json();
+        toast.error(message, { duration: 6000 });
+      }
+    },
+    async onError(error) {
+      toast.error(error.message, { duration: 6000 });
+    },
+  });
+
   async function signUpProcess(data: CreateStudentFormValues) {
+    setIsLoading(true);
     let userAlreadyExists = await auth.checkIfCprExist(
       createStudentFormValues.student.input.cpr.trim()
     );
@@ -207,11 +238,11 @@ export default function SignUpForm() {
       throw new Error("User already exists CODE:00001");
     }
 
-    const createdParentInfo = await createDatabaseParentInfo(data);
+    // const createdParentInfo = await createDatabaseParentInfo(data);
 
-    if (createdParentInfo?.data == null) {
-      throw new Error("Error creating the user CODE:00002");
-    }
+    // if (createdParentInfo?.data == null) {
+    //   throw new Error("Error creating the user CODE:00002");
+    // }
     if (data.cprDoc == undefined) {
       throw new Error("CprDoc is missing CODE:00003");
     }
@@ -252,7 +283,8 @@ export default function SignUpForm() {
           preferredLanguage: data.student.input.preferredLanguage,
           graduationDate: data.student.input.graduationDate,
           address: data.student.input.address,
-          parentInfoID: createdParentInfo?.data?.createParentInfo?.id,
+          parentInfoID: data.student.input.parentInfoID,
+          // parentInfoID: createdParentInfo?.data?.createParentInfo?.id,
           familyIncome: data.student.input.familyIncome,
           familyIncomeProofDocs: storageKeys,
           nationality: data.student.input.nationality,
@@ -267,30 +299,57 @@ export default function SignUpForm() {
       cprDoc: data.cprDoc,
     };
 
-    // console.log(JSON.stringify(temp));
-    // TODO: remove this in production
-    console.log(temp);
+    const dataToLambda = {
+      student: {
+        input: {
+          cpr: data.student.input.cpr,
+          cprDoc: cprDocStorage,
+          fullName: data.student.input.fullName,
+          email: data.student.input.email,
+          phone: data.student.input.phone,
+          gender: data.student.input.gender,
+          schoolName: data.student.input.schoolName,
+          schoolType: data.student.input.schoolType,
+          specialization: data.student.input.specialization,
+          placeOfBirth: data.student.input.placeOfBirth,
+          studentOrderAmongSiblings:
+            data.student.input.studentOrderAmongSiblings,
+          preferredLanguage: data.student.input.preferredLanguage,
+          graduationDate: data.student.input.graduationDate,
+          address: data.student.input.address,
+          familyIncome: data.student.input.familyIncome,
+          familyIncomeProofDocs: storageKeys,
+          nationality: data.student.input.nationality,
+          nationalityCategory: data.student.input.nationalityCategory,
+        },
+      },
+      parentInfo: { input: data.parentInfo.input },
+      password: data.password,
+    };
+
     setCreateStudentFormValues(temp);
+    //* Call Sign up lambda
+    signUpMutation.mutate(dataToLambda);
 
-    const createdDatabaseUser = await createDatabaseStudent(temp);
+    // const createdDatabaseUser = await createDatabaseStudent(temp);
 
-    if (createdDatabaseUser?.data == null) {
-      await deleteParentInfo(createdParentInfo.data);
-      throw new Error("Error creating the user CODE:00004");
-    }
+    // if (createdDatabaseUser?.data == null) {
+    //   await deleteParentInfo(createdParentInfo.data);
+    //   throw new Error("Error creating the user CODE:00004");
+    // }
 
-    const createCognitoUserResult = await createCognitoUser(temp);
+    // const createCognitoUserResult = await createCognitoUser(temp);
 
-    if (createCognitoUserResult?.user) {
-      router.push({
-        pathname: "/signUp",
-        query: { cpr: createStudentFormValues.student.input.cpr },
-      });
-      toast("email need to be verified");
-    } else {
-      await deleteCreatedUser(createdDatabaseUser.data);
-      throw new Error("Error creating the user CODE:00005");
-    }
+    // if (createCognitoUserResult?.user) {
+    //   router.push({
+    //     pathname: "/signUp",
+    //     query: { cpr: createStudentFormValues.student.input.cpr },
+    //   });
+    //   toast("email need to be verified");
+    // } else {
+    //   await deleteCreatedUser(createdDatabaseUser.data);
+    //   throw new Error("Error creating the user CODE:00005");
+    // }
   }
 
   return (
@@ -365,30 +424,35 @@ export default function SignUpForm() {
       )}
       {steps === 3 && (
         <TermsAndConditions
-          isLoading={isLoading}
+          isLoading={signUpMutation.isPending || isLoading}
           submitTitle={t("register")}
-          onFormSubmit={async () => {
-            setIsLoading(true);
-            await toast
-              .promise(
-                signUpProcess(createStudentFormValues)
-                  .then((val) => val)
-                  .catch((error) => {
-                    bugsnagClient.notify(error);
-                    throw error;
-                  }),
-                {
-                  loading: "Creating your account...",
-                  success: "Account created successfully",
-                  error: (err) => {
-                    return `${err}`;
-                  },
-                }
-              )
-              .finally(() => {
-                setIsLoading(false);
-              });
-          }}
+          onFormSubmit={() =>
+            signUpProcess(createStudentFormValues).finally(() =>
+              setIsLoading(false)
+            )
+          }
+          // onFormSubmit={async () => {
+          //   setIsLoading(true);
+          //   await toast
+          //     .promise(
+          //       signUpProcess(createStudentFormValues)
+          //         .then((val) => val)
+          //         .catch((error) => {
+          //
+          //           throw error;
+          //         }),
+          //       {
+          //         loading: "Creating your account...",
+          //         success: "Account created successfully",
+          //         error: (err) => {
+          //           return `${err}`;
+          //         },
+          //       }
+          //     )
+          //     .finally(() => {
+          //       setIsLoading(false);
+          //     });
+          // }}
         ></TermsAndConditions>
       )}
     </div>

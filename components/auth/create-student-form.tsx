@@ -192,7 +192,6 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
                       }
                     })
                     .catch((error) => {
-                      // bugsnagClient.notify(error);
                       console.error(error);
                     });
                 }

@@ -14,8 +14,6 @@ import { GetStudentQuery } from "../src/API";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { useRouter } from "next/router";
 
-import { bugsnagClient } from "../src/bugsnag";
-
 Auth.configure({ ...config, ssr: true });
 
 interface IUseAuthContext {
@@ -99,7 +97,6 @@ function useProvideAuth() {
     try {
       return await Auth.forgotPassword(email).then(() => true);
     } catch (error) {
-      bugsnagClient.notify(error as any);
       console.log(
         "🚀 ~ file: use-auth.tsx:89 ~ sendForgetPassword ~ error:",
         error
@@ -118,7 +115,6 @@ function useProvideAuth() {
         () => true
       );
     } catch (error) {
-      bugsnagClient.notify(error as any);
       console.log(
         "🚀 ~ file: use-auth.tsx:89 ~ sendForgetPassword ~ error:",
         error

@@ -37,7 +37,6 @@ import {
   updateParentInfo,
 } from "./graphql/mutations";
 
-import { bugsnagClient } from "./bugsnag";
 import dayjs from "dayjs";
 import { listBatches } from "./graphql/queries";
 
@@ -130,6 +129,7 @@ export async function getApplicationData(
                       id
                       name
                       nameAr
+                      minimumGPA
                       requirements
                       requirementsAr
                       availability
@@ -261,6 +261,7 @@ export async function listAllPrograms() {
         id
         name
         nameAr
+        minimumGPA
         requirements
         requirementsAr
         universityID
@@ -456,7 +457,6 @@ export async function uploadFile(
     );
     return res.key;
   } catch (error) {
-    bugsnagClient.notify(error as any);
     console.log("Error uploading file: ", error);
     return null;
   }

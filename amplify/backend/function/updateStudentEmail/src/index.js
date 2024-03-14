@@ -13,18 +13,58 @@ exports.handler = async (event) => {
     console.log(event);
 
     try {
-        const {username, newEmail} = event;
+        const {username, newEmail} = JSON.parse(event.body);
+
+        const validationError = validate(username, newEmail);
+        if (validationError) {
+            return validationError;
+        }
+
         // Check if the user exists in DynamoDB
         const userExists = await getUserFromDynamoDB(username);
         if (!userExists) {
             return {
                 statusCode: 400,
-                body: JSON.stringify('User does not exist.'),
+                body: JSON.stringify({
+                    error: 'Bad Request',
+                    message: 'User does not exist'
+                }),
+                }
+        }
+
+        const token = event.headers.authorization.slice(7);
+
+        // Use cognito to validate the token
+        try {
+            const cognitoUser = await cognito.getUser({AccessToken: token}).promise();
+            console.log(cognitoUser);
+            if (cognitoUser.Username !== username) {
+                return {
+                    statusCode: 403,
+                    body: JSON.stringify({
+                        error: 'Forbidden',
+                        message: 'You are not allowed to update this user'
+                    }),
+                };
+            }
+        }
+        catch (error) {
+            console.error(error);
+            return {
+                statusCode: 401,
+                body: JSON.stringify({
+                    error: 'Unauthorized',
+                    message: 'Invalid token'
+                }),
             };
         }
 
-        // Update the user's email in Cognito user pool
+
+
+            // Update the user's email in Cognito user pool
         await updateUserEmailInCognito(username, newEmail);
+        await updateStudentEmail(username, newEmail);
+
 
         return {
             statusCode: 200,
@@ -33,16 +73,22 @@ exports.handler = async (event) => {
             //      "Access-Control-Allow-Origin": "*",
             //      "Access-Control-Allow-Headers": "*"
             //  },
-            body: JSON.stringify('User email updated successfully'),
+            body: JSON.stringify({
+                message: 'Email updated successfully',
+                newEmail: newEmail,
+            }),
         };
     }
     catch (error) {
         console.error(error);
         return {
             statusCode: 500,
-            body: JSON.stringify('Error' + error),
+            body: JSON.stringify({
+                error: 'Internal Server Error',
+                message: error.message
+            }),
+            }
         };
-    }
 };
 
 async function updateUserEmailInCognito(username, newEmail) {
@@ -68,5 +114,47 @@ async function getUserFromDynamoDB(username) {
     };
     const { Item } = await dynamoDB.get(params).promise();
     return Item !== undefined;
+}
+
+async function updateStudentEmail(username, newEmail) {
+    const currentTime = new Date().toISOString();
+
+    const params = {
+        TableName: 'Student-cw7beg2perdtnl7onnneec4jfa-staging',
+        Key: {
+            cpr: username,
+        },
+        UpdateExpression: 'set email = :e, updatedAt = :updatedAt',
+        ExpressionAttributeValues: {
+            ':e': newEmail,
+            ':updatedAt': currentTime,
+        }
+    };
+
+    return dynamoDB.update(params).promise();
+}
+
+
+function validate(username, newEmail) {
+    if(!username || !newEmail) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({
+                error: 'Bad Request',
+                message: 'Missing required fields'
+            }),
+        };
+    }
+
+    // simple email validation
+    if (!newEmail.includes('@')) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({
+                error: 'Bad Request',
+                message: 'Invalid email'
+            }),
+            }
+    }
 }
 

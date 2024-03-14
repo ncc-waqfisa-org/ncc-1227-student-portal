@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Application, Status } from "../../src/API";
 import GetStorageLinkComponent from "../get-storage-link-component";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 interface Props {
   application: Application;
@@ -39,20 +40,31 @@ export default function ViewApplication({ application }: Props) {
 
           <tr>
             <td>{t("Status")}</td>
-            <td>
+            <td className="flex items-baseline gap-4 flex-wrap">
               <div className="badge badge-warning">
                 {t(
                   `${
                     application.status === Status.ELIGIBLE ||
                     application.status === Status.REVIEW ||
-                    application.status === Status.REJECTED ||
-                    application.status === Status.APPROVED ||
-                    application.status === Status.NOT_COMPLETED
-                      ? Status.REVIEW
+                    application.status === Status.REJECTED
+                      ? // application.status === Status.APPROVED ||
+                        // application.status === Status.NOT_COMPLETED
+                        Status.REVIEW
                       : application.status
+                    // application.status
                   }`
                 )}
               </div>
+              {application.status === Status.APPROVED && (
+                <div>
+                  <Link
+                    className="btn btn-ghost btn-sm text-success brightness-75 hover:bg-success/20"
+                    href={`/scholarship`}
+                  >
+                    Go To Scholarships
+                  </Link>
+                </div>
+              )}
             </td>
           </tr>
 
@@ -71,6 +83,13 @@ export default function ViewApplication({ application }: Props) {
                     }`
                   : `${primaryProgram?.program?.name}-${primaryProgram?.program?.university?.name}`}
               </div>
+              {primaryProgram?.program?.minimumGPA && (
+                <div className="stat-desc">
+                  {`${t("minimumGPA")} : ${
+                    primaryProgram?.program?.minimumGPA
+                  }`}
+                </div>
+              )}
               {primaryProgram?.program?.requirements && (
                 <div className="stat-desc">
                   {`${t("requirements")} : ${

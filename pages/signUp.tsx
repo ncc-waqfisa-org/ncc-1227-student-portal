@@ -12,6 +12,7 @@ import { CardInfoComponent } from "../components/CardInfo";
 import info from "../public/svg/info.svg";
 import { useAppContext } from "../contexts/AppContexts";
 import dayjs from "dayjs";
+import { Skeleton } from "../components/Skeleton";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -38,7 +39,7 @@ const SignUpPage: NextPage<Props> = () => {
   const auth = useAuth();
   const router = useRouter();
 
-  const { signUpEnabled } = useAppContext();
+  const { signUpEnabled, isBatchPending } = useAppContext();
 
   const { cpr } = router.query;
 
@@ -52,33 +53,39 @@ const SignUpPage: NextPage<Props> = () => {
 
   return (
     <PageComponent title="SignUp">
-      {signUpEnabled ? (
+      {isBatchPending ? (
+        <Skeleton className="w-full h-96 bg-slate-300/80 " />
+      ) : (
         <>
-          {!cpr && (
-            <div>
-              <SignUpForm></SignUpForm>
-            </div>
-          )}
-          {cpr && (
-            <div>
-              <VerifyEmail cpr={`${cpr}`}></VerifyEmail>
+          {signUpEnabled ? (
+            <>
+              {!cpr && (
+                <div>
+                  <SignUpForm></SignUpForm>
+                </div>
+              )}
+              {cpr && (
+                <div>
+                  <VerifyEmail cpr={`${cpr}`}></VerifyEmail>
+                </div>
+              )}
+            </>
+          ) : (
+            // if registration period is over
+            <div className="flex flex-wrap justify-center gap-10">
+              <CardInfoComponent
+                icon={info}
+                title={"Registration"}
+                description={"Registration period is over"}
+              ></CardInfoComponent>
+              <CardInfoComponent
+                icon={info}
+                title={"التسجيل"}
+                description={"فترة التسجيل إنتهت"}
+              ></CardInfoComponent>
             </div>
           )}
         </>
-      ) : (
-        // if registration period is over
-        <div className="flex flex-wrap justify-center gap-10">
-          <CardInfoComponent
-            icon={info}
-            title={"Registration"}
-            description={"Registration period is over"}
-          ></CardInfoComponent>
-          <CardInfoComponent
-            icon={info}
-            title={"التسجيل"}
-            description={"فترة التسجيل إنتهت"}
-          ></CardInfoComponent>
-        </div>
       )}
     </PageComponent>
   );

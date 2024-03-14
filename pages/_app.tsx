@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import NextNProgress from "nextjs-progressbar";
 
 import React from "react";
-import { bugsnagClient } from "../src/bugsnag";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
@@ -36,10 +36,6 @@ function App({ Component, pageProps }: AppProps) {
 
   const dir = locale === "ar" ? "rtl" : "ltr";
 
-  const ErrorBoundary = bugsnagClient
-    .getPlugin("react")
-    ?.createErrorBoundary(React);
-
   // useEffect(() => {
   //   Crisp.configure(`${process.env.NEXT_PUBLIC_CRISP_WEBSITE_ID}`, {
   //     locale: locale,
@@ -51,26 +47,15 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <div dir={dir} className={locale === "ar" ? "font-IBMArabic" : "font-IBM"}>
-      {ErrorBoundary ? (
-        <ErrorBoundary>
-          <QueryClientProvider client={queryClient}>
-            <AuthProvider>
-              <AppProvider>
-                <NextNProgress color="#BB9869" />
-                <Component {...pageProps} />
-              </AppProvider>
-            </AuthProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
-          </QueryClientProvider>
-        </ErrorBoundary>
-      ) : (
+      <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <AppProvider>
             <NextNProgress color="#BB9869" />
             <Component {...pageProps} />
           </AppProvider>
         </AuthProvider>
-      )}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </div>
   );
 }

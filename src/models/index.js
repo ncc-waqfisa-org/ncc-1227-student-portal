@@ -45,7 +45,7 @@ const FamilyIncome = {
   "OVER_1000": "OVER_1000"
 };
 
-const { Attachment, Application, ProgramChoice, Program, University, AdminLog, StudentLog, Admin, ParentInfo, Student, Batch } = initSchema(schema);
+const { Attachment, Application, ProgramChoice, Program, University, AdminLog, StudentLog, Admin, ParentInfo, Student, Batch, Scholarship } = initSchema(schema);
 
 export {
   Attachment,
@@ -59,6 +59,7 @@ export {
   ParentInfo,
   Student,
   Batch,
+  Scholarship,
   AdminRole,
   Status,
   Language,
