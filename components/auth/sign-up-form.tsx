@@ -211,12 +211,19 @@ export default function SignUpForm() {
       if (data.ok) {
         const { message } = await data.json();
 
+        // TODO: set user session
+        // auth.user?.setSignInUserSession
+
         toast.success(message);
 
         router.push({
-          pathname: "/signUp",
+          pathname: "/verify-email",
           query: { cpr: createStudentFormValues.student.input.cpr },
         });
+        // router.push({
+        //   pathname: "/signUp",
+        //   query: { cpr: createStudentFormValues.student.input.cpr },
+        // });
         // toast("email need to be verified");
       } else {
         const { message } = await data.json();

@@ -174,7 +174,7 @@ function useProvideAuth() {
               console.log(error);
 
               if (error.name === "UserNotConfirmedException") {
-                push({ pathname: "/signUp", query: { cpr: cpr } });
+                push({ pathname: "/verify-email", query: { cpr: cpr } });
               }
               throw error;
             }

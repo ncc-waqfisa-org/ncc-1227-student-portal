@@ -10,56 +10,55 @@ import {
 import config from "../../src/aws-exports";
 
 type Data = {
-  output: {
-    result: string | undefined;
-    logs: string | undefined;
-  };
+  message?: string;
 };
 
-type InputData = { cpr: string; newEmail: string };
+type InputData = { cpr: string; newEmail: string; token: string };
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  if (req.method !== "PUT") {
+    res.status(405).json({ message: "Method Not Allowed" });
+  }
+
   const data: InputData = JSON.parse(req.body);
   console.log("🚀 ~ data:", data);
 
-  const lambdaConfig: LambdaClientConfig = {
-    region: config.aws_project_region,
-    credentials: {
-      accessKeyId: process.env.CONFIG_ACCESS_KEY_ID ?? "",
-      secretAccessKey: process.env.CONFIG_SECRET_ACCESS_KEY ?? "",
-    },
-  };
-  // const { LambdaClient, InvokeCommand } = require("@aws-sdk/client-lambda"); // CommonJS import
-  const client = new LambdaClient(lambdaConfig);
-  const input: InvokeCommandInput = {
-    // InvocationRequest
-    FunctionName: "updateStudentEmail-staging", // required
-    InvocationType: "RequestResponse",
-    // LogType: "None" || "Tail",
-    // ClientContext: "STRING_VALUE",
-    Payload: JSON.stringify({
-      data,
-    }),
-    // Payload: "BLOB_VALUE",
-    // Qualifier: "STRING_VALUE",
-  };
-  const command = new InvokeCommand(input);
-  const { Payload, LogResult } = await client.send(command);
-  var result;
-  var logs;
-  if (Payload) {
-    result = Buffer.from(Payload).toString();
-    console.log("🚀 ~ result:", { result });
-  }
-  if (LogResult) {
-    logs = Buffer.from(LogResult, "base64").toString();
-    console.log("🚀 ~ logs:", { logs });
-  }
+  const resultData = await fetch(
+    "https://sb87s08fch.execute-api.us-east-1.amazonaws.com/default/email",
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(data.token && { Authorization: `Bearer ${data.token}` }),
+      },
+      body: JSON.stringify({ username: data.cpr, newEmail: data.newEmail }),
+    }
+  )
+    .then(async (result) => {
+      const jsonData = await result.json();
 
-  res.status(200).json({
-    output: { result, logs },
-  });
+      console.log("🚀 ~ .then ~ jsonData:", jsonData);
+      if (result.ok) {
+        return {
+          d: jsonData,
+          isError: false,
+        };
+      } else {
+        return {
+          d: jsonData,
+          isError: true,
+        };
+      }
+    })
+    .catch((error) => {
+      return {
+        d: error.message,
+        isError: true,
+      };
+    });
+
+  res.status(resultData.isError ? 500 : 200).json(resultData.d);
 }

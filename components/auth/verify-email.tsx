@@ -16,9 +16,11 @@ import { getStudent } from "../../src/graphql/queries";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@aws-amplify/ui-react";
+import Link from "next/link";
+import { useAuth } from "../../hooks/use-auth";
 
 interface Props {
-  cpr: string;
+  // cpr: string;
   // email: string;
 }
 
@@ -26,14 +28,22 @@ interface IVerifyEmail {
   code: string;
 }
 
-export const VerifyEmail = ({ cpr }: Props) => {
+export const VerifyEmail = () => {
   const initialValues: IVerifyEmail = {
     code: "",
   };
 
   const { t } = useTranslation("signUp");
   const { t: tErrors } = useTranslation("errors");
-  const { push } = useRouter();
+  const { push, query } = useRouter();
+  const { user } = useAuth();
+
+  const { cpr: cprParam } = query;
+
+  const cpr: string | null =
+    user?.getSignInUserSession()?.getAccessToken().payload.username ??
+    cprParam ??
+    null;
 
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -57,11 +67,13 @@ export const VerifyEmail = ({ cpr }: Props) => {
   /* Get's the cpr email. */
   useEffect(() => {
     setLoading(true);
-    getUserEmail(cpr)
-      .then((userEmail) => {
-        setEmail(userEmail);
-      })
-      .finally(() => setLoading(false));
+    if (cpr) {
+      getUserEmail(cpr)
+        .then((userEmail) => {
+          setEmail(userEmail);
+        })
+        .finally(() => setLoading(false));
+    }
 
     return () => {};
   }, [cpr]);
@@ -77,19 +89,21 @@ export const VerifyEmail = ({ cpr }: Props) => {
    * It resend the verification code to the user's email address
    */
   async function resendCode() {
-    await toast
-      .promise(Auth.resendSignUp(cpr), {
-        loading: "Sending verification code...",
-        success: "Verification code has been sent",
-        error: (error) => {
-          return `${error.message}`;
-        },
-      })
-      .then(() => {})
-      .catch((error) => {})
-      .finally(() => {
-        resetCountdown();
-      });
+    if (cpr) {
+      await toast
+        .promise(Auth.resendSignUp(cpr), {
+          loading: "Sending verification code...",
+          success: "Verification code has been sent",
+          error: (error) => {
+            return `${error.message}`;
+          },
+        })
+        .then(() => {})
+        .catch((error) => {})
+        .finally(() => {
+          resetCountdown();
+        });
+    }
   }
 
   /**
@@ -149,7 +163,7 @@ export const VerifyEmail = ({ cpr }: Props) => {
   return loading ? (
     <AppLoader></AppLoader>
   ) : (
-    <div>
+    <div className="flex flex-col gap-3">
       {/* <Button onClick={() => callLambdaFunction()}>click me</Button> */}
       <h2>
         {t("verificationCode")}{" "}
@@ -162,19 +176,24 @@ export const VerifyEmail = ({ cpr }: Props) => {
           code: yup.string().required(`${tErrors("requiredField")}`),
         })}
         onSubmit={(values, actions) => {
-          try {
-            toast.promise(Auth.confirmSignUp(cpr, values.code), {
-              loading: "Verifying...",
-              success: () => {
-                push("/signIn");
-                return <b>Account verified!</b>;
-              },
-              error: <b>Could not verify account.</b>,
-            });
-          } catch (error) {
-            toast.error("Error verifying account");
+          if (cpr) {
+            try {
+              // toast.promise(
+              // Auth.verifyCurrentUserAttributeSubmit("email", values.code),
+              // {
+              toast.promise(Auth.confirmSignUp(cpr, values.code), {
+                loading: "Verifying...",
+                success: () => {
+                  push("/signIn");
+                  return <b>Account verified!</b>;
+                },
+                error: (error) => error.message,
+              });
+            } catch (error) {
+              toast.error("Error verifying account");
+            }
+            actions.setSubmitting(false);
           }
-          actions.setSubmitting(false);
         }}
       >
         {({
@@ -186,8 +205,8 @@ export const VerifyEmail = ({ cpr }: Props) => {
           isSubmitting,
           isValid,
         }) => (
-          <div dir="ltr">
-            <Form className="flex items-start gap-3 p-4">
+          <div dir="ltr" className="">
+            <Form className="flex items-start gap-3 ">
               {/* Code field */}
               <div className="flex flex-col">
                 <Field
@@ -232,6 +251,9 @@ export const VerifyEmail = ({ cpr }: Props) => {
           </div>
         )}
       </Formik>
+      <Link href={`/change-email${cpr ? `?cpr=${cpr}` : ""}`}>
+        change your email?
+      </Link>
     </div>
   );
 };

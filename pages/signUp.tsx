@@ -13,6 +13,7 @@ import info from "../public/svg/info.svg";
 import { useAppContext } from "../contexts/AppContexts";
 import dayjs from "dayjs";
 import { Skeleton } from "../components/Skeleton";
+import { ChangeEmail } from "../components/auth/ChangeEmail";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -41,8 +42,6 @@ const SignUpPage: NextPage<Props> = () => {
 
   const { signUpEnabled, isBatchPending } = useAppContext();
 
-  const { cpr } = router.query;
-
   useEffect(() => {
     if (auth.isSignedIn) {
       router.replace("/");
@@ -58,19 +57,27 @@ const SignUpPage: NextPage<Props> = () => {
       ) : (
         <>
           {signUpEnabled ? (
-            <>
-              {!cpr && (
-                <div>
-                  <SignUpForm></SignUpForm>
-                </div>
-              )}
-              {cpr && (
-                <div>
-                  <VerifyEmail cpr={`${cpr}`}></VerifyEmail>
-                </div>
-              )}
-            </>
+            <div>
+              <SignUpForm></SignUpForm>
+            </div>
           ) : (
+            // <>
+            //   {!cpr && (
+            //     <div>
+            //       <SignUpForm></SignUpForm>
+            //     </div>
+            //   )}
+            //   {cpr && action === undefined && (
+            //     <div>
+            //       <VerifyEmail cpr={`${cpr}`}></VerifyEmail>
+            //     </div>
+            //   )}
+            //   {cpr && action === "changeEmail" && (
+            //     <div>
+            //       <ChangeEmail cpr={`${cpr}`}></ChangeEmail>
+            //     </div>
+            //   )}
+            // </>
             // if registration period is over
             <div className="flex flex-wrap justify-center gap-10">
               <CardInfoComponent

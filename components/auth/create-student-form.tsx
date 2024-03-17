@@ -179,24 +179,24 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
                 errors.cpr && touched.cpr && "input-error"
               }`}
               onChange={handleChange}
-              onBlur={(event: any) => {
-                if (!errors.cpr) {
-                  checkIfCprExist(values.cpr)
-                    .then((res) => {
-                      if (res) {
-                        setFieldError("cpr", "CPR already in use");
-                        setCprAvailable(false);
-                      } else {
-                        validateField("cpr");
-                        setCprAvailable(true);
-                      }
-                    })
-                    .catch((error) => {
-                      console.error(error);
-                    });
-                }
-                handleBlur(event);
-              }}
+              // onBlur={(event: any) => {
+              //   if (!errors.cpr) {
+              //     checkIfCprExist(values.cpr)
+              //       .then((res) => {
+              //         if (res) {
+              //           setFieldError("cpr", "CPR already in use");
+              //           setCprAvailable(false);
+              //         } else {
+              //           validateField("cpr");
+              //           setCprAvailable(true);
+              //         }
+              //       })
+              //       .catch((error) => {
+              //         console.error(error);
+              //       });
+              //   }
+              //   handleBlur(event);
+              // }}
               value={values.cpr ?? ""}
             />
           </div>
@@ -281,6 +281,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               value={values.email}
             />
           </div>
+
           {/* Phone */}
           <div className="flex flex-col justify-start w-full">
             <div className="flex items-center">

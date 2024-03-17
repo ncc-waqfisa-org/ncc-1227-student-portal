@@ -8,6 +8,7 @@ import { useAuth } from "../hooks/use-auth";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { GetStaticProps } from "next";
+import { Button } from "@aws-amplify/ui-react";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
