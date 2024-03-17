@@ -9,13 +9,9 @@ import { useTranslation } from "react-i18next";
 import { ApplicationCard } from "../../components/applications/ApplicationCard";
 import { getStatusOrder } from "../../src/HelperFunctions";
 import { NewApplicationCard } from "../../components/applications/NewApplicationCard";
-import { Batch, Status, Student } from "../../src/API";
-import dayjs from "dayjs";
-import { useQuery } from "@tanstack/react-query";
-import { getCurrentBatch } from "../../src/CustomAPI";
-import { API } from "aws-amplify";
-import { Button } from "@aws-amplify/ui-react";
-import { Skeleton } from "../../components/Skeleton";
+import { Status, Student } from "../../src/API";
+import { CardInfoComponent } from "../../components/CardInfo";
+import info from "../../public/svg/info.svg";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -75,11 +71,23 @@ export default function ApplicationsPage() {
 
   const { t } = useTranslation("applications");
 
-  
-
   return (
     <PageComponent title={"Applications"} authRequired>
-      
+      {appContext.applications.length === 0 &&
+        !appContext.newApplicationsEnabled && (
+          <div className="flex flex-wrap justify-center gap-10">
+            <CardInfoComponent
+              icon={info}
+              title={"Registration"}
+              description={"Registration period is over"}
+            ></CardInfoComponent>
+            <CardInfoComponent
+              icon={info}
+              title={"التسجيل"}
+              description={"فترة التسجيل إنتهت"}
+            ></CardInfoComponent>
+          </div>
+        )}
 
       {student && (
         <div className="container mx-auto">

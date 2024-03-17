@@ -251,9 +251,9 @@ export const VerifyEmail = () => {
           </div>
         )}
       </Formik>
-      <Link href={`/change-email${cpr ? `?cpr=${cpr}` : ""}`}>
+      {/* <Link href={`/change-email${cpr ? `?cpr=${cpr}` : ""}`}>
         change your email?
-      </Link>
+      </Link> */}
     </div>
   );
 };
