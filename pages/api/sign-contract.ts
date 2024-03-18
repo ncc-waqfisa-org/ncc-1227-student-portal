@@ -8,7 +8,11 @@ type Data = {
 };
 
 // TODO: scholarship id should be added
-type InputData = { studentSignature: string; guardianSignature: string };
+type InputData = {
+  link: string;
+  studentSignature: string;
+  guardianSignature: string;
+};
 
 // Get a Uint8Array from a URL
 async function fetchPdfAsUint8Array(url: string): Promise<Uint8Array> {
@@ -18,11 +22,15 @@ async function fetchPdfAsUint8Array(url: string): Promise<Uint8Array> {
 }
 
 // TODO: get this url from the scholarship
-const pdfUrl = "https://api.printnode.com/static/test/pdf/multipage.pdf";
+// const pdfUrl = "https://api.printnode.com/static/test/pdf/multipage.pdf";
 
-async function signPDF(studentSignature: string, guardianSignature: string) {
+async function signPDF(
+  link: string,
+  studentSignature: string,
+  guardianSignature: string
+) {
   // Get the pdf buffer
-  const pdfBufferUint8Array = await fetchPdfAsUint8Array(pdfUrl);
+  const pdfBufferUint8Array = await fetchPdfAsUint8Array(link);
   // Load the pdf
   const pdfDoc = await PDFDocument.load(pdfBufferUint8Array);
 
@@ -37,9 +45,9 @@ async function signPDF(studentSignature: string, guardianSignature: string) {
   // Adjust these values based on the desired signature size and position
   const signatureWidth = 100;
   const signatureHeight = 50;
-  const xPosition = 50; // Position from the left of the page
+  const xPosition = 60; // Position from the left of the page
   // const xPosition = lastPage.getWidth() / 2 - signatureWidth / 2; //* Center horizontally
-  const yPosition = 20; // Position from the bottom of the page
+  const yPosition = 40; // Position from the bottom of the page
 
   // Put the first signature
   lastPage.drawImage(signatureImage, {
@@ -52,7 +60,7 @@ async function signPDF(studentSignature: string, guardianSignature: string) {
   // Put the second signature
   lastPage.drawImage(secondSignatureImage, {
     x: xPosition,
-    y: yPosition + 60,
+    y: yPosition + 80,
     width: signatureWidth,
     height: signatureHeight,
   });
@@ -76,7 +84,11 @@ export default async function handler(
 
   const data: InputData = req.body;
 
-  const blob = await signPDF(data.studentSignature, data.guardianSignature);
+  const blob = await signPDF(
+    data.link,
+    data.studentSignature,
+    data.guardianSignature
+  );
   const buffer = Buffer.from(await blob.arrayBuffer());
 
   res.setHeader("Content-Type", "application/pdf");
