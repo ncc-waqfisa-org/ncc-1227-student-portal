@@ -20,50 +20,73 @@ exports.handler = async (event) => {
 
     try {
         const requestBody = JSON.parse(event.body);
-        const studentData = requestBody.student.input;
-        const parentData = requestBody.parentInfo.input;
-        const username = studentData.cpr;
-        const email = studentData.email;
+        let studentData = requestBody.student.input;
+        let parentData = requestBody.parentInfo?.input;
+        const username = studentData?.cpr ? studentData.cpr : requestBody.username;
+        let email = studentData?.email;
         const password = requestBody.password;
+        const user =  await getUserFromCognito(username);
 
-        const userExists = await getUserFromDynamoDB(username) || await getUserFromCognito(username);
+        const userExists = await getUserFromDynamoDB(username) || await getUserFromCognito(username) !== undefined;
         if (userExists) {
-            return {
-                "statusCode": 400,
-                "headers": {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Headers": "*",
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-                },
-                "isBase64Encoded": false,
-                "body": JSON.stringify(
-                    {
-                    "message": "User already exists",
+
+            if(user.UserAttributes.find(attr => attr.Name === 'email_verified').Value === 'true'){
+                return {
+                    "statusCode": 400,
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Headers": "*",
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
                     },
-                ),
-            };
+                    "isBase64Encoded": false,
+                    "body": JSON.stringify(
+                        {
+                            "message": "User already exists",
+                        },
+                    ),
+                };
+            } else {
+                studentData = await getUserFromDynamoDB(username);
+                parentData = await getParentFromDynamoDB(studentData.parentInfoID);
+                email = studentData.email;
+                await deleteUserFromCognito(username);
+                await deleteUserFromDynamoDB(username);
+                await deleteParentFromDynamoDB(studentData.parentInfoID);
+
+                await signUpUserToCognito(username, email, password);
+                studentData.parentInfoID = await saveParentToDynamoDB(parentData);
+                await saveStudentToDynamoDB(studentData);
+                return {
+                    "isBase64Encoded": false,
+                    "statusCode": 201,
+                    "body": JSON.stringify(
+                        {
+                            "message": "User created successfully",
+                        },
+                    ),
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Headers": "*",
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+                    },
+                };
+            }
         }
 
-        parentData._version = 1;
-        parentData._lastChangedAt = new Date().getTime(); // Get timestamp in milliseconds
-        parentData.createdAt = new Date().toISOString(); // Get current date in ISO format
-        parentData.updatedAt = new Date().toISOString(); // Get current date in ISO format
 
         studentData.parentInfoID = await saveParentToDynamoDB(parentData);
-        studentData._version = 1;
-        studentData._lastChangedAt = new Date().getTime(); // Get timestamp in milliseconds
-        studentData.createdAt = new Date().toISOString(); // Get current date in ISO format
-        studentData.updatedAt = new Date().toISOString(); // Get current date in ISO format
 
         await saveStudentToDynamoDB(studentData);
         await signUpUserToCognito(username, email, password);
+
 
         return {
             "isBase64Encoded": false,
             "statusCode": 201,
             "body": JSON.stringify(
-{
+                {
                     "message": "User created successfully",
                     },
             ),
@@ -73,7 +96,6 @@ exports.handler = async (event) => {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
             },
-           "message": "User created successfully",
 
 
 
@@ -88,6 +110,80 @@ exports.handler = async (event) => {
     }
 };
 
+
+
+
+
+
+// 1. get functions
+async function getUserFromCognito(username) {
+    const params = {
+        UserPoolId: 'us-east-1_ovqLD9Axf',
+        Username: username,
+    };
+    try {
+        const user = await cognito.adminGetUser(params).promise();
+        return user;
+    } catch (error) {
+        return false;
+    }
+}
+
+async function getUserFromDynamoDB(username) {
+    const params = {
+        TableName: 'Student-cw7beg2perdtnl7onnneec4jfa-staging',
+        Key: {
+            cpr: username,
+        },
+    };
+    const { Item } = await dynamoDB.get(params).promise();
+    return Item;
+}
+async function getParentFromDynamoDB(parentID) {
+    const params = {
+        TableName: 'ParentInfo-cw7beg2perdtnl7onnneec4jfa-staging',
+        Key: {
+            id: parentID,
+        },
+    };
+    const { Item } = await dynamoDB.get(params).promise();
+    return Item;
+}
+
+
+
+
+
+// 2. delete functions
+async function deleteUserFromCognito(username) {
+    const params = {
+        UserPoolId: 'us-east-1_ovqLD9Axf',
+        Username: username,
+    };
+    await cognito.adminDeleteUser(params).promise();
+}
+async function deleteUserFromDynamoDB(username) {
+    const params = {
+        TableName: 'Student-cw7beg2perdtnl7onnneec4jfa-staging',
+        Key: {
+            cpr: username,
+        },
+    };
+    await dynamoDB.delete(params).promise();
+}
+async function deleteParentFromDynamoDB(parentID) {
+    const params = {
+        TableName: 'ParentInfo-cw7beg2perdtnl7onnneec4jfa-staging',
+        Key: {
+            id: parentID,
+        },
+    };
+    await dynamoDB.delete(params).promise();
+}
+
+
+
+// 3. save functions
 async function signUpUserToCognito(username, email, password) {
     console.log(username, email, password);
     const params = {
@@ -103,23 +199,14 @@ async function signUpUserToCognito(username, email, password) {
     };
     await cognito.signUp(params).promise();
 }
-
-
-async function getUserFromDynamoDB(username) {
+async function saveStudentToDynamoDB(studentData) {
+    studentData._version = 1;
+    studentData._lastChangedAt = new Date().getTime(); // Get timestamp in milliseconds
+    studentData.createdAt = new Date().toISOString(); // Get current date in ISO format
+    studentData.updatedAt = new Date().toISOString(); // Get current date in ISO format
     const params = {
         TableName: 'Student-cw7beg2perdtnl7onnneec4jfa-staging',
-        Key: {
-            cpr: username,
-        },
-    };
-    const { Item } = await dynamoDB.get(params).promise();
-    return Item !== undefined;
-}
-
-async function saveStudentToDynamoDB(StudentData) {
-    const params = {
-        TableName: 'Student-cw7beg2perdtnl7onnneec4jfa-staging',
-        Item: StudentData,
+        Item: studentData,
     };
     await dynamoDB.put(params).promise();
 }
@@ -127,6 +214,11 @@ async function saveStudentToDynamoDB(StudentData) {
 async function saveParentToDynamoDB(parentData) {
     // generate a unique id for the parent
     parentData.id = uuid.v4();
+    parentData._version = 1;
+    parentData._lastChangedAt = new Date().getTime(); // Get timestamp in milliseconds
+    parentData.createdAt = new Date().toISOString(); // Get current date in ISO format
+    parentData.updatedAt = new Date().toISOString(); // Get current date in ISO format
+
     const params = {
         TableName: 'ParentInfo-cw7beg2perdtnl7onnneec4jfa-staging',
         Item: parentData,
@@ -134,10 +226,14 @@ async function saveParentToDynamoDB(parentData) {
     let createdItem = dynamoDB.put(params).promise();
     await createdItem;
     return parentData.id;
-
 }
 
 
+
+
+
+
+// 4. rollback function
 async function rollback(username) {
     // Perform rollback operations
     // Delete the user from DynamoDB
@@ -158,19 +254,6 @@ async function rollback(username) {
             UserPoolId: 'us-east-1_ovqLD9Axf',
             Username: username,
         }).promise();
-    }
-}
-
-async function getUserFromCognito(username) {
-    const params = {
-        UserPoolId: 'us-east-1_ovqLD9Axf',
-        Username: username,
-    };
-    try {
-        const user = await cognito.adminGetUser(params).promise();
-        return user !== undefined;
-    } catch (error) {
-        return false;
     }
 }
 

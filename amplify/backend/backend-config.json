@@ -54,6 +54,11 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "getStatistics": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "signUp": {
       "build": true,
       "dependsOn": [],
@@ -101,6 +106,22 @@
         {
           "category": "function",
           "resourceName": "getApplications"
+        }
+      ]
+    },
+    "AMPLIFY_function_getStatistics_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getStatistics"
+        }
+      ]
+    },
+    "AMPLIFY_function_getStatistics_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getStatistics"
         }
       ]
     },

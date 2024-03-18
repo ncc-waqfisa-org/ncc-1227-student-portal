@@ -53,7 +53,7 @@ export const Contract: FC<TContract> = ({ application }) => {
           className="btn"
           target="_blank"
           rel="stylesheet"
-          href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+          href="https://api.printnode.com/static/test/pdf/multipage.pdf"
         >
           PDF
         </Link>
@@ -98,6 +98,40 @@ export const Contract: FC<TContract> = ({ application }) => {
       </div>
       <div
         onClick={() => {
+          const studentSignature = studentSignatureRef.current
+            ?.getTrimmedCanvas()
+            .toDataURL();
+          const guardianSignature = guardianSignatureRef.current
+            ?.getTrimmedCanvas()
+            .toDataURL();
+
+          fetch("/api/sign-contract", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              studentSignature,
+              guardianSignature,
+            }),
+          }).then(async (res) => {
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "signed_contract.pdf";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          });
+
+          // guardianSignatureRef.current?.getTrimmedCanvas().toDataURL();
+          // signPDF(
+
+          //   studentSignatureRef.current?.getTrimmedCanvas().toDataURL() ?? null,
+          //   guardianSignatureRef.current?.getTrimmedCanvas().toDataURL() ?? null
+          // );
+
           setStudentSignature(
             studentSignatureRef.current?.getTrimmedCanvas().toDataURL() ?? null
           );
@@ -119,33 +153,3 @@ export const Contract: FC<TContract> = ({ application }) => {
     </div>
   );
 };
-
-async function signPDF(
-  pdfBuffer: ArrayBuffer,
-  signaturePngBuffer: ArrayBuffer
-) {
-  const pdfDoc = await PDFDocument.load(pdfBuffer);
-  const signatureImage = await pdfDoc.embedPng(signaturePngBuffer);
-
-  const pages = pdfDoc.getPages();
-  const lastPage = pages[pages.length - 1];
-
-  // Adjust these values based on the desired signature size and position
-  const signatureWidth = 100;
-  const signatureHeight = 50;
-  const xPosition = lastPage.getWidth() / 2 - signatureWidth / 2; // Center horizontally
-  const yPosition = 10; // Position from the bottom of the page
-
-  lastPage.drawImage(signatureImage, {
-    x: xPosition,
-    y: yPosition,
-    width: signatureWidth,
-    height: signatureHeight,
-  });
-
-  const signedPdfBytes = await pdfDoc.save();
-
-  // Save the signed PDF
-  const blob = new Blob([signedPdfBytes], { type: "application/pdf" });
-  console.log(blob);
-}

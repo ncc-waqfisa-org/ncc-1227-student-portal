@@ -1,13 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import {
-  LambdaClient,
-  InvokeCommand,
-  InvokeCommandInput,
-  InvokeCommandOutput,
-  LambdaClientConfig,
-} from "@aws-sdk/client-lambda"; // ES Modules import
-import config from "../../src/aws-exports";
 
 type Data = {
   message?: string;
