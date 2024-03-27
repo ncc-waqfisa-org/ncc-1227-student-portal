@@ -49,12 +49,22 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "exportApplicationsCsv": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "getApplications": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "getStatistics": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "signScholarship": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -67,6 +77,12 @@
     },
     "updateGpaCsv": {
       "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "updateStatistics": {
+      "build": true,
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -90,6 +106,22 @@
         {
           "category": "function",
           "resourceName": "autoReject"
+        }
+      ]
+    },
+    "AMPLIFY_function_exportApplicationsCsv_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "exportApplicationsCsv"
+        }
+      ]
+    },
+    "AMPLIFY_function_exportApplicationsCsv_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "exportApplicationsCsv"
         }
       ]
     },
@@ -125,6 +157,22 @@
         }
       ]
     },
+    "AMPLIFY_function_signScholarship_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "signScholarship"
+        }
+      ]
+    },
+    "AMPLIFY_function_signScholarship_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "signScholarship"
+        }
+      ]
+    },
     "AMPLIFY_function_signUp_deploymentBucketName": {
       "usedBy": [
         {
@@ -154,6 +202,22 @@
         {
           "category": "function",
           "resourceName": "updateGpaCsv"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateStatistics_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateStatistics"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateStatistics_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateStatistics"
         }
       ]
     },

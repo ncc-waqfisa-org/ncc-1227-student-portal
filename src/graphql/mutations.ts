@@ -81,6 +81,7 @@ export const createApplication = /* GraphQL */ `mutation CreateApplication(
   createApplication(input: $input, condition: $condition) {
     id
     gpa
+    verifiedGPA
     status
     attachmentID
     adminLogs {
@@ -184,6 +185,7 @@ export const updateApplication = /* GraphQL */ `mutation UpdateApplication(
   updateApplication(input: $input, condition: $condition) {
     id
     gpa
+    verifiedGPA
     status
     attachmentID
     adminLogs {
@@ -287,6 +289,7 @@ export const deleteApplication = /* GraphQL */ `mutation DeleteApplication(
   deleteApplication(input: $input, condition: $condition) {
     id
     gpa
+    verifiedGPA
     status
     attachmentID
     adminLogs {
@@ -413,6 +416,7 @@ export const createProgramChoice = /* GraphQL */ `mutation CreateProgramChoice(
     application {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -478,6 +482,7 @@ export const updateProgramChoice = /* GraphQL */ `mutation UpdateProgramChoice(
     application {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -543,6 +548,7 @@ export const deleteProgramChoice = /* GraphQL */ `mutation DeleteProgramChoice(
     application {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1550,12 +1556,13 @@ export const createScholarship = /* GraphQL */ `mutation CreateScholarship(
 ) {
   createScholarship(input: $input, condition: $condition) {
     id
-    amount
     status
     applicationID
+    isConfirmed
     application {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1576,6 +1583,13 @@ export const createScholarship = /* GraphQL */ `mutation CreateScholarship(
       __typename
     }
     studentCPR
+    unsignedContractDoc
+    signedContractDoc
+    studentSignature
+    guardianSignature
+    bankName
+    IBAN
+    IBANLetterDoc
     createdAt
     updatedAt
     _version
@@ -1594,12 +1608,13 @@ export const updateScholarship = /* GraphQL */ `mutation UpdateScholarship(
 ) {
   updateScholarship(input: $input, condition: $condition) {
     id
-    amount
     status
     applicationID
+    isConfirmed
     application {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1620,6 +1635,13 @@ export const updateScholarship = /* GraphQL */ `mutation UpdateScholarship(
       __typename
     }
     studentCPR
+    unsignedContractDoc
+    signedContractDoc
+    studentSignature
+    guardianSignature
+    bankName
+    IBAN
+    IBANLetterDoc
     createdAt
     updatedAt
     _version
@@ -1638,12 +1660,13 @@ export const deleteScholarship = /* GraphQL */ `mutation DeleteScholarship(
 ) {
   deleteScholarship(input: $input, condition: $condition) {
     id
-    amount
     status
     applicationID
+    isConfirmed
     application {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1664,6 +1687,13 @@ export const deleteScholarship = /* GraphQL */ `mutation DeleteScholarship(
       __typename
     }
     studentCPR
+    unsignedContractDoc
+    signedContractDoc
+    studentSignature
+    guardianSignature
+    bankName
+    IBAN
+    IBANLetterDoc
     createdAt
     updatedAt
     _version
@@ -1675,4 +1705,76 @@ export const deleteScholarship = /* GraphQL */ `mutation DeleteScholarship(
 ` as GeneratedMutation<
   APITypes.DeleteScholarshipMutationVariables,
   APITypes.DeleteScholarshipMutation
+>;
+export const createStatistics = /* GraphQL */ `mutation CreateStatistics(
+  $input: CreateStatisticsInput!
+  $condition: ModelStatisticsConditionInput
+) {
+  createStatistics(input: $input, condition: $condition) {
+    id
+    batch
+    totalApplications
+    totalApplicationsPerStatus
+    scoreHistogram
+    gpaHistogram
+    totalApplicationsPerUniversity
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateStatisticsMutationVariables,
+  APITypes.CreateStatisticsMutation
+>;
+export const updateStatistics = /* GraphQL */ `mutation UpdateStatistics(
+  $input: UpdateStatisticsInput!
+  $condition: ModelStatisticsConditionInput
+) {
+  updateStatistics(input: $input, condition: $condition) {
+    id
+    batch
+    totalApplications
+    totalApplicationsPerStatus
+    scoreHistogram
+    gpaHistogram
+    totalApplicationsPerUniversity
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateStatisticsMutationVariables,
+  APITypes.UpdateStatisticsMutation
+>;
+export const deleteStatistics = /* GraphQL */ `mutation DeleteStatistics(
+  $input: DeleteStatisticsInput!
+  $condition: ModelStatisticsConditionInput
+) {
+  deleteStatistics(input: $input, condition: $condition) {
+    id
+    batch
+    totalApplications
+    totalApplicationsPerStatus
+    scoreHistogram
+    gpaHistogram
+    totalApplicationsPerUniversity
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteStatisticsMutationVariables,
+  APITypes.DeleteStatisticsMutation
 >;

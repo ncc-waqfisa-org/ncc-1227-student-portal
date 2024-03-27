@@ -9,7 +9,7 @@ type Data = {
 
 // TODO: scholarship id should be added
 type InputData = {
-  link: string;
+  link: string; //TODO this should be replaced by the id and have to be taken from the scholarship
   studentSignature: string;
   guardianSignature: string;
 };
@@ -20,9 +20,6 @@ async function fetchPdfAsUint8Array(url: string): Promise<Uint8Array> {
   const buffer = await response.arrayBuffer();
   return new Uint8Array(buffer);
 }
-
-// TODO: get this url from the scholarship
-// const pdfUrl = "https://api.printnode.com/static/test/pdf/multipage.pdf";
 
 async function signPDF(
   link: string,
@@ -45,9 +42,8 @@ async function signPDF(
   // Adjust these values based on the desired signature size and position
   const signatureWidth = 100;
   const signatureHeight = 50;
-  const xPosition = 60; // Position from the left of the page
-  // const xPosition = lastPage.getWidth() / 2 - signatureWidth / 2; //* Center horizontally
-  const yPosition = 40; // Position from the bottom of the page
+  const xPosition = 70; // Position from the left of the page
+  const yPosition = 30; // Position from the bottom of the page
 
   // Put the first signature
   lastPage.drawImage(signatureImage, {
@@ -60,7 +56,7 @@ async function signPDF(
   // Put the second signature
   lastPage.drawImage(secondSignatureImage, {
     x: xPosition,
-    y: yPosition + 80,
+    y: yPosition + 90,
     width: signatureWidth,
     height: signatureHeight,
   });
@@ -89,6 +85,7 @@ export default async function handler(
     data.studentSignature,
     data.guardianSignature
   );
+
   const buffer = Buffer.from(await blob.arrayBuffer());
 
   res.setHeader("Content-Type", "application/pdf");

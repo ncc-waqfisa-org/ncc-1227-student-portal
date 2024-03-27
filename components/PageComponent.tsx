@@ -147,7 +147,8 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
             </div>
 
             {
-              <div className="z-40 pt-20 -mt-10 bg-base-100 p-11">
+              // <div className="z-40 p-4 pt-20 -mt-10 bg-base-100 sm:p-6 md:p-11">
+              <div className="z-40 p-4 pt-20 -mt-10 md:pt-20 sm:pt-20 bg-base-100 sm:p-6 md:p-11">
                 {props.authRequired && !isSignedIn ? (
                   <div>
                     <SignInForm></SignInForm>

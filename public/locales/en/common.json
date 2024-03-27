@@ -2,6 +2,8 @@
   "enrollFor": "Enroll For",
   "getLink": "Uploaded",
   "enrollForDescription": " ",
+  "scholarships": "Scholarships",
+  "myScholarships": "My Scholarships",
   "trackApplications": "Track Applications",
   "availableServices": "Available Services",
   "trackApplication": "Track Application",
@@ -13,5 +15,7 @@
   "applyForScholarshipDescription": " ",
   "getInfo": "Get Info",
   "enrollNow": "Enroll Now",
+  "viewDocument": "View Document",
+  "loading": "Loading",
   "login": "Login"
 }

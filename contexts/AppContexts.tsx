@@ -17,14 +17,19 @@ import {
   GetBatchQueryVariables,
   ListBatchesQueryVariables,
   Batch,
+  Scholarship,
 } from "../src/API";
 import { getStudent, listBatches } from "../src/graphql/queries";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
-import { getCurrentBatch, getStudentApplications } from "../src/CustomAPI";
+import {
+  getCurrentBatch,
+  getStudentApplications,
+  getStudentScholarships,
+} from "../src/CustomAPI";
 import { Crisp } from "crisp-sdk-web";
 
 import dayjs from "dayjs";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 // interface for all the values & functions
 interface IUseAppContext {
@@ -32,7 +37,7 @@ interface IUseAppContext {
   studentAsStudent: Student | undefined;
   applications: Application[];
   haveActiveApplication: boolean;
-  haveScholarships: boolean;
+
   syncStudentApplication: () => Promise<void>;
   syncStudent: () => Promise<void>;
   resetContext: () => void;
@@ -49,7 +54,7 @@ const defaultState: IUseAppContext = {
   studentAsStudent: undefined,
   applications: [],
   haveActiveApplication: false,
-  haveScholarships: false,
+
   syncStudentApplication: async () => {},
   syncStudent: async () => {},
   resetContext: async () => {},
@@ -75,6 +80,7 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
 //NOTE: declare vars and functions here
 function useProviderApp() {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   const [student, setStudent] = useState(defaultState.student);
   const [studentAsStudent, setStudentAsStudent] = useState(
@@ -85,9 +91,6 @@ function useProviderApp() {
   );
   const [haveActiveApplication, setHaveActiveApplication] = useState(
     defaultState.haveActiveApplication
-  );
-  const [haveScholarships, setHaveScholarships] = useState(
-    defaultState.haveScholarships
   );
 
   const { data: batch, isPending: isBatchPending } = useQuery<Batch | null>({
@@ -150,6 +153,7 @@ function useProviderApp() {
           cpr: stu?.cpr,
         });
       });
+
       getStudentApplications(cpr).then((allStudentApplications) => {
         setApplications(allStudentApplications);
 
@@ -162,11 +166,8 @@ function useProviderApp() {
             application.status === Status.NOT_COMPLETED ||
             application.status === Status.REJECTED
         );
-        let scholarship = allStudentApplications.find(
-          (application) => application.status === Status.APPROVED
-        );
+
         setHaveActiveApplication(active !== undefined);
-        setHaveScholarships(scholarship !== undefined);
       });
     }
 
@@ -178,6 +179,7 @@ function useProviderApp() {
     setStudentAsStudent(undefined);
     setApplications([]);
     setHaveActiveApplication(false);
+    queryClient.invalidateQueries();
   }
 
   async function syncStudent() {
@@ -235,7 +237,7 @@ function useProviderApp() {
     studentAsStudent,
     applications,
     haveActiveApplication,
-    haveScholarships,
+
     syncStudentApplication,
     syncStudent,
     resetContext,

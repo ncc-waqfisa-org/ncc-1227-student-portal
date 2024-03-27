@@ -4,6 +4,7 @@ import { Application, Status } from "../../src/API";
 import GetStorageLinkComponent from "../get-storage-link-component";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { cn } from "../../src/lib/utils";
 
 interface Props {
   application: Application;
@@ -20,7 +21,7 @@ export default function ViewApplication({ application }: Props) {
 
   return (
     <div className="overflow-x-auto">
-      <table dir="ltr" className="table w-full">
+      <table className="table w-full">
         <thead>
           <tr>
             <th>{t("field")}</th>
@@ -31,7 +32,7 @@ export default function ViewApplication({ application }: Props) {
           <tr>
             <td>{t("submitDate")}</td>
             <td>
-              {Intl.DateTimeFormat("en", {
+              {Intl.DateTimeFormat(locale, {
                 timeStyle: "short",
                 dateStyle: "medium",
               }).format(new Date(application.createdAt))}
@@ -41,27 +42,30 @@ export default function ViewApplication({ application }: Props) {
           <tr>
             <td>{t("Status")}</td>
             <td className="flex items-baseline gap-4 flex-wrap">
-              <div className="badge badge-warning">
+              <div
+                className={cn(
+                  "badge badge-warning w-fit",
+                  application.status === Status.REJECTED &&
+                    "!badge-error text-white",
+                  application.status === Status.APPROVED && "!badge-success"
+                )}
+              >
                 {t(
                   `${
                     application.status === Status.ELIGIBLE ||
-                    application.status === Status.REVIEW ||
-                    application.status === Status.REJECTED
-                      ? // application.status === Status.APPROVED ||
-                        // application.status === Status.NOT_COMPLETED
-                        Status.REVIEW
+                    application.status === Status.REVIEW
+                      ? Status.REVIEW
                       : application.status
-                    // application.status
                   }`
                 )}
               </div>
               {application.status === Status.APPROVED && (
-                <div>
+                <div className="w-fit">
                   <Link
                     className="btn btn-ghost btn-sm text-success brightness-75 hover:bg-success/20"
                     href={`/scholarship`}
                   >
-                    Go To Scholarships
+                    {t("goToScholarship")}
                   </Link>
                 </div>
               )}
@@ -99,41 +103,14 @@ export default function ViewApplication({ application }: Props) {
                   }`}
                 </div>
               )}
-              <div className="flex items-center gap-4">
-                <p className="text-xs">{t("acceptanceLetter")}</p>
+              <div className="flex  items-center gap-4">
+                <p className="text-xs stat-desc">{t("acceptanceLetter")}</p>
                 <GetStorageLinkComponent
                   storageKey={primaryProgram?.acceptanceLetterDoc}
                 ></GetStorageLinkComponent>
               </div>
             </td>
           </tr>
-          {/* <tr>
-            <td>{t("secondaryProgram")}</td>
-            <td className="flex flex-col gap-3">
-              <div>
-                {locale === "ar"
-                  ? `${secondaryProgram?.program?.nameAr ?? "-"}-${
-                      secondaryProgram?.program?.university?.nameAr ?? "-"
-                    }`
-                  : `${secondaryProgram?.program?.name}-${secondaryProgram?.program?.university?.name}`}
-              </div>
-              {secondaryProgram?.program?.requirements && (
-                <div className="stat-desc">
-                  {`${t("requirements")} : ${
-                    locale === "ar"
-                      ? secondaryProgram?.program?.requirementsAr
-                      : secondaryProgram?.program?.requirements
-                  }`}
-                </div>
-              )}
-              <div className="flex items-center gap-4">
-                <p className="text-xs">{t("acceptanceLetter")}</p>
-                <GetStorageLinkComponent
-                  storageKey={secondaryProgram?.acceptanceLetterDoc}
-                ></GetStorageLinkComponent>
-              </div>
-            </td>
-          </tr> */}
           <tr>
             <td>
               {t("schoolCertificate")} {t("document")}

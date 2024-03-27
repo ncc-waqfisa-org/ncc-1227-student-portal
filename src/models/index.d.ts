@@ -45,6 +45,13 @@ export enum FamilyIncome {
   OVER_1000 = "OVER_1000"
 }
 
+export enum ScholarshipStatus {
+  APPROVED = "APPROVED",
+  PENDING = "PENDING",
+  REJECTED = "REJECTED",
+  WITHDRAWN = "WITHDRAWN"
+}
+
 
 
 type EagerAttachment = {
@@ -88,6 +95,7 @@ type EagerApplication = {
   };
   readonly id: string;
   readonly gpa?: number | null;
+  readonly verifiedGPA?: number | null;
   readonly status?: Status | keyof typeof Status | null;
   readonly attachmentID?: string | null;
   readonly adminLogs?: (AdminLog | null)[] | null;
@@ -117,6 +125,7 @@ type LazyApplication = {
   };
   readonly id: string;
   readonly gpa?: number | null;
+  readonly verifiedGPA?: number | null;
   readonly status?: Status | keyof typeof Status | null;
   readonly attachmentID?: string | null;
   readonly adminLogs: AsyncCollection<AdminLog>;
@@ -563,10 +572,18 @@ type EagerScholarship = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly amount?: number | null;
-  readonly status?: Status | keyof typeof Status | null;
-  readonly applicationID?: string | null;
+  readonly status?: ScholarshipStatus | keyof typeof ScholarshipStatus | null;
+  readonly applicationID: string;
+  readonly isConfirmed?: boolean | null;
+  readonly application?: Application | null;
   readonly studentCPR?: string | null;
+  readonly unsignedContractDoc?: string | null;
+  readonly signedContractDoc?: string | null;
+  readonly studentSignature?: string | null;
+  readonly guardianSignature?: string | null;
+  readonly bankName?: string | null;
+  readonly IBAN?: string | null;
+  readonly IBANLetterDoc?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -577,10 +594,18 @@ type LazyScholarship = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly amount?: number | null;
-  readonly status?: Status | keyof typeof Status | null;
-  readonly applicationID?: string | null;
+  readonly status?: ScholarshipStatus | keyof typeof ScholarshipStatus | null;
+  readonly applicationID: string;
+  readonly isConfirmed?: boolean | null;
+  readonly application: AsyncItem<Application | undefined>;
   readonly studentCPR?: string | null;
+  readonly unsignedContractDoc?: string | null;
+  readonly signedContractDoc?: string | null;
+  readonly studentSignature?: string | null;
+  readonly guardianSignature?: string | null;
+  readonly bankName?: string | null;
+  readonly IBAN?: string | null;
+  readonly IBANLetterDoc?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -589,4 +614,42 @@ export declare type Scholarship = LazyLoading extends LazyLoadingDisabled ? Eage
 
 export declare const Scholarship: (new (init: ModelInit<Scholarship>) => Scholarship) & {
   copyOf(source: Scholarship, mutator: (draft: MutableModel<Scholarship>) => MutableModel<Scholarship> | void): Scholarship;
+}
+
+type EagerStatistics = {
+  readonly [__modelMeta__]: {
+    identifier: OptionallyManagedIdentifier<Statistics, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: number;
+  readonly batch: number;
+  readonly totalApplications?: number | null;
+  readonly totalApplicationsPerStatus?: string | null;
+  readonly scoreHistogram?: string | null;
+  readonly gpaHistogram?: string | null;
+  readonly totalApplicationsPerUniversity?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyStatistics = {
+  readonly [__modelMeta__]: {
+    identifier: OptionallyManagedIdentifier<Statistics, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: number;
+  readonly batch: number;
+  readonly totalApplications?: number | null;
+  readonly totalApplicationsPerStatus?: string | null;
+  readonly scoreHistogram?: string | null;
+  readonly gpaHistogram?: string | null;
+  readonly totalApplicationsPerUniversity?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Statistics = LazyLoading extends LazyLoadingDisabled ? EagerStatistics : LazyStatistics
+
+export declare const Statistics: (new (init: ModelInit<Statistics>) => Statistics) & {
+  copyOf(source: Statistics, mutator: (draft: MutableModel<Statistics>) => MutableModel<Statistics> | void): Statistics;
 }

@@ -45,7 +45,14 @@ const FamilyIncome = {
   "OVER_1000": "OVER_1000"
 };
 
-const { Attachment, Application, ProgramChoice, Program, University, AdminLog, StudentLog, Admin, ParentInfo, Student, Batch, Scholarship } = initSchema(schema);
+const ScholarshipStatus = {
+  "APPROVED": "APPROVED",
+  "PENDING": "PENDING",
+  "REJECTED": "REJECTED",
+  "WITHDRAWN": "WITHDRAWN"
+};
+
+const { Attachment, Application, ProgramChoice, Program, University, AdminLog, StudentLog, Admin, ParentInfo, Student, Batch, Scholarship, Statistics } = initSchema(schema);
 
 export {
   Attachment,
@@ -60,11 +67,13 @@ export {
   Student,
   Batch,
   Scholarship,
+  Statistics,
   AdminRole,
   Status,
   Language,
   Gender,
   SchoolType,
   Nationality,
-  FamilyIncome
+  FamilyIncome,
+  ScholarshipStatus
 };

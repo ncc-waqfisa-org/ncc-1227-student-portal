@@ -9,6 +9,9 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { GetStaticProps } from "next";
 import { Button } from "@aws-amplify/ui-react";
+import { useQuery } from "@tanstack/react-query";
+import { Scholarship } from "../src/API";
+import { getStudentScholarships } from "../src/CustomAPI";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -17,6 +20,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     props: {
       ...(await serverSideTranslations(locale ?? "en", [
         "common",
+        "applicationPage",
         "footer",
         "pageTitles",
         "signIn",
@@ -32,6 +36,12 @@ const Home = () => {
   const auth = useAuth();
   const { haveActiveApplication } = useAppContext();
   const { t } = useTranslation("common");
+  const { t: aPT } = useTranslation("applicationPage");
+
+  const { data: scholarships } = useQuery<Scholarship[]>({
+    queryKey: ["scholarships", auth.cpr],
+    queryFn: () => (auth.cpr ? getStudentScholarships(auth.cpr) : []),
+  });
 
   return (
     <PageComponent
@@ -55,6 +65,15 @@ const Home = () => {
                     ? t("trackApplications")
                     : t("enrollNow")}
                 </button>
+                {(scholarships?.length ?? 0) > 0 && (
+                  <button
+                    type="button"
+                    className="w-full text-white md:w-auto btn btn-primary"
+                    onClick={() => router.push("/scholarship")}
+                  >
+                    {aPT("goToScholarship")}
+                  </button>
+                )}
                 {!auth.isSignedIn && (
                   <button
                     type="button"

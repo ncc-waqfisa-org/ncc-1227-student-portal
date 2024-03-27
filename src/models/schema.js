@@ -97,6 +97,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "verifiedGPA": {
+                    "name": "verifiedGPA",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "status": {
                     "name": "status",
                     "isArray": false,
@@ -1633,18 +1640,11 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "amount": {
-                    "name": "amount",
-                    "isArray": false,
-                    "type": "Float",
-                    "isRequired": false,
-                    "attributes": []
-                },
                 "status": {
                     "name": "status",
                     "isArray": false,
                     "type": {
-                        "enum": "Status"
+                        "enum": "ScholarshipStatus"
                     },
                     "isRequired": false,
                     "attributes": []
@@ -1652,12 +1652,86 @@ export const schema = {
                 "applicationID": {
                     "name": "applicationID",
                     "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "isConfirmed": {
+                    "name": "isConfirmed",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "application": {
+                    "name": "application",
+                    "isArray": false,
+                    "type": {
+                        "model": "Application"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": [
+                            "id"
+                        ],
+                        "targetNames": [
+                            "applicationID"
+                        ]
+                    }
+                },
+                "studentCPR": {
+                    "name": "studentCPR",
+                    "isArray": false,
                     "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
-                "studentCPR": {
-                    "name": "studentCPR",
+                "unsignedContractDoc": {
+                    "name": "unsignedContractDoc",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "signedContractDoc": {
+                    "name": "signedContractDoc",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "studentSignature": {
+                    "name": "studentSignature",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "guardianSignature": {
+                    "name": "guardianSignature",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "bankName": {
+                    "name": "bankName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "IBAN": {
+                    "name": "IBAN",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "IBANLetterDoc": {
+                    "name": "IBANLetterDoc",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -1686,6 +1760,128 @@ export const schema = {
                 {
                     "type": "model",
                     "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byCPR",
+                        "fields": [
+                            "studentCPR",
+                            "status"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "Statistics": {
+            "name": "Statistics",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "batch": {
+                    "name": "batch",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "totalApplications": {
+                    "name": "totalApplications",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "totalApplicationsPerStatus": {
+                    "name": "totalApplicationsPerStatus",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "scoreHistogram": {
+                    "name": "scoreHistogram",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "gpaHistogram": {
+                    "name": "gpaHistogram",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "totalApplicationsPerUniversity": {
+                    "name": "totalApplicationsPerUniversity",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Statistics",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "fields": [
+                            "id"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byBatch",
+                        "fields": [
+                            "batch",
+                            "totalApplications"
+                        ]
+                    }
                 },
                 {
                     "type": "auth",
@@ -1763,9 +1959,18 @@ export const schema = {
                 "MORE_THAN_1500",
                 "OVER_1000"
             ]
+        },
+        "ScholarshipStatus": {
+            "name": "ScholarshipStatus",
+            "values": [
+                "APPROVED",
+                "PENDING",
+                "REJECTED",
+                "WITHDRAWN"
+            ]
         }
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "bfab02f07bd6e50bb7c299de762a02bc"
+    "version": "7412c1ab53839d2b9ea52115bc907089"
 };

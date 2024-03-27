@@ -41,7 +41,7 @@ export default function GetStorageLinkComponent({
           <button
             disabled={isLoading}
             type="button"
-            className={`btn btn-ghost btn-sm text-primary hover:bg-primary/20 ${
+            className={`btn btn-ghost bg-primary/10 btn-sm text-primary hover:bg-primary/20 ${
               isLoading && "loading"
             }`}
             onClick={() => getLink(storageKey)}
@@ -56,8 +56,8 @@ export default function GetStorageLinkComponent({
           <Link className="btn btn-success btn-sm" target="_blank" href={link}>
             {showName
               ? `View ${extractTextBetweenHashTags(storageKey)}` ||
-                `${t("view")} ${t("document")}`
-              : `${t("view")} ${t("document")}`}
+                `${t("viewDocument")}`
+              : `${t("viewDocument")}`}
           </Link>
         ))}
       {!storageKey && (

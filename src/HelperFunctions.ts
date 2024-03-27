@@ -1,5 +1,5 @@
-import { isEqual } from "lodash";
-import { Application, Status } from "./API";
+import { isEqual, round } from "lodash";
+import { Application, FamilyIncome, Status } from "./API";
 
 /**
  * It checks if a file is too big
@@ -16,6 +16,23 @@ export function checkIfFilesAreTooBig(file?: File, maxSize?: number): boolean {
     }
   }
   return valid;
+}
+
+type TCalculateScore = {
+  familyIncome: FamilyIncome;
+  gpa: number;
+  adminScore?: number;
+};
+export function calculateScore({
+  familyIncome,
+  gpa,
+  adminScore = 0,
+}: TCalculateScore) {
+  let score = gpa * 0.7 + adminScore;
+  if (familyIncome === FamilyIncome.LESS_THAN_1500) {
+    score += 10;
+  }
+  return round(score, 2);
 }
 
 export function getStatusOrder(status: Status) {

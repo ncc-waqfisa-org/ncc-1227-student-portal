@@ -24,7 +24,6 @@
     "aws-sdk": "^2.1377.0",
     "clsx": "^2.1.0",
     "crisp-sdk-web": "^1.0.5",
-    "daisyui": "^2.42.1",
     "dayjs": "^1.11.9",
     "dotenv": "^16.3.1",
     "eslint": "8.28.0",
@@ -57,6 +56,7 @@
     "@types/multer": "^1.4.7",
     "@types/react-signature-canvas": "^1.0.5",
     "autoprefixer": "^10.4.13",
+    "daisyui": "^4.8.0",
     "postcss": "^8.4.19",
     "tailwindcss": "^3.2.4",
     "tailwindcss-flip": "^1.0.0"

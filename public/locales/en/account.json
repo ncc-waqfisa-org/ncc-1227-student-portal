@@ -56,5 +56,7 @@
   "NON_BAHRAINI": "Non Bahraini",
   "PRIVATE": "Private",
   "PUBLIC": "Public",
+  "value": "Value",
+  "field": "Field",
   "IfYouWantToUploadMultiple": "If you want to upload multiple files, please select multiple files then drag and drop"
 }

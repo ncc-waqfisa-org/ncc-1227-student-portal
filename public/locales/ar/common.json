@@ -7,11 +7,15 @@
   "track": "تتبع",
   "trackApplication": "تتبع طلبك",
   "trackApplications": "تتبع الطلبات",
+  "scholarships": "المنح الدراسية",
+  "myScholarships": "المنح الدراسية الخاصة بي",
   "trackApplicationDescription": " ",
   "informationCenterDescription": " ",
   "enrollForDescription": " ",
   "enrollNow": "التقديم الآن",
   "login": "تسجيل الدخول",
   "applyForScholarship": "تقدم بطلب الحصول على منحة دراسية",
+  "viewDocument": "عرض المستند",
+  "loading": "تحميل",
   "applyForScholarshipDescription": " "
 }

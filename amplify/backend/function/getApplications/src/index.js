@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
+const cognito = new AWS.CognitoIdentityServiceProvider();
 
 
 /**
@@ -7,8 +8,23 @@ const dynamoDB = new AWS.DynamoDB.DocumentClient();
  */
 exports.handler = async (event) => {
     console.log(`EVENT: ${JSON.stringify(event)}`);
+    const token = event.headers?.authorization?.slice(7);
+    if (!token) {
+        return {
+            statusCode: 401,
+            body: JSON.stringify({ message: 'Unauthorized!' })
+        };
+    }
 
-    const pageSize = parseInt(event.queryStringParameters?.pageSize) || 15;
+    const isAdmin = await checkIsAdmin(token);
+    if (!isAdmin) {
+        return {
+            statusCode: 403,
+            body: JSON.stringify({ message: 'Forbidden. You are not an admin' })
+        };
+    }
+
+    const pageSize = parseInt(event.queryStringParameters?.pageSize) || 30;
     const startKey = event.queryStringParameters?.startKey || null;
     const batch = event.queryStringParameters?.batch || 2023;
     const status = event.queryStringParameters?.status || null;
@@ -31,46 +47,105 @@ exports.handler = async (event) => {
     };
 };
 
- async function getApplications(pageSize, startKey, batch, status = null, cpr= null) {
+//  async function getApplications(pageSize, startKey, batch, status = null, cpr= null) {
+//
+//      const params = {
+//          TableName: 'Application-cw7beg2perdtnl7onnneec4jfa-staging',
+//          Limit: pageSize,
+//          ExclusiveStartKey: startKey,
+//          IndexName: 'byScore',
+//          KeyConditionExpression: '#batch = :batchValue AND score > :score',
+//          ScanIndexForward: false,
+//          ExpressionAttributeNames: {
+//              '#batch': 'batch' // Using ExpressionAttributeNames to alias the reserved keyword 'batch'
+//          },
+//          ExpressionAttributeValues: {
+//              ':batchValue': batch,
+//              ':score': 0.0
+//             }
+//      };
+//
+//      if(status) {
+//          params.FilterExpression = '#status = :status';
+//          params.ExpressionAttributeNames['#status'] = 'status';
+//          params.ExpressionAttributeValues[':status'] = status;
+//      }
+//
+//      if(cpr) {
+//             // params.FilterExpression = '#studentCPR = :cpr';
+//             // params.ExpressionAttributeNames['#studentCPR'] = 'cpr';
+//             // params.ExpressionAttributeValues[':studentCPR'] = cpr;
+//             // non exact match
+//             params.FilterExpression = 'contains(#studentCPR, :cpr)';
+//             params.ExpressionAttributeNames['#studentCPR'] = 'cpr';
+//             params.ExpressionAttributeValues[':studentCPR'] = cpr;
+//         }
+//
+//
+//      try {
+//          return await dynamoDB.query(params).promise();
+//      }
+//         catch (error) {
+//             console.error('Error getting applications', error);
+//             throw new Error('Error getting applications');
+//         }
+// }
 
-     const params = {
-         TableName: 'Application-cw7beg2perdtnl7onnneec4jfa-staging',
-         // Limit: pageSize,
-         ExclusiveStartKey: startKey,
-         IndexName: 'byScore',
-         KeyConditionExpression: '#batch = :batchValue AND score > :score',
-         ScanIndexForward: false,
-         ExpressionAttributeNames: {
-             '#batch': 'batch' // Using ExpressionAttributeNames to alias the reserved keyword 'batch'
-         },
-         ExpressionAttributeValues: {
-             ':batchValue': batch,
-             ':score': 0.0
-            }
-     };
+async function getApplications(pageSize, startKey, batch, status = null, cpr = null) {
+    const params = {
+        TableName: 'Application-cw7beg2perdtnl7onnneec4jfa-staging',
+        Limit: pageSize,
+        ExclusiveStartKey: startKey,
+        FilterExpression: '#batch = :batchValue AND score > :score',
+        ExpressionAttributeValues : {
+            ':batchValue': batch,
+            ':score': 0.0
+        },
+        ExpressionAttributeNames : {
+            '#batch': 'batch'
+        }
+    };
 
-     if(status) {
-         params.FilterExpression = '#status = :status';
-         params.ExpressionAttributeNames['#status'] = 'status';
-         params.ExpressionAttributeValues[':status'] = status;
-     }
-
-     if(cpr) {
-            // params.FilterExpression = '#studentCPR = :cpr';
-            // params.ExpressionAttributeNames['#studentCPR'] = 'cpr';
-            // params.ExpressionAttributeValues[':studentCPR'] = cpr;
-            // non exact match
-            params.FilterExpression = 'contains(#studentCPR, :cpr)';
-            params.ExpressionAttributeNames['#studentCPR'] = 'cpr';
-            params.ExpressionAttributeValues[':studentCPR'] = cpr;
+        if (status) {
+            params.FilterExpression += ' AND #status = :status';
+            params.ExpressionAttributeNames['#status'] = 'status';
+            params.ExpressionAttributeValues[':status'] = status;
         }
 
-
-     try {
-         return await dynamoDB.query(params).promise();
-     }
-        catch (error) {
-            console.error('Error getting applications', error);
-            throw new Error('Error getting applications');
+        if (cpr) {
+            // For exact match
+            // params.FilterExpression += ' AND cpr = :cpr';
+            // For non-exact match
+            params.FilterExpression += ' AND contains(cpr, :cpr)';
+            params.ExpressionAttributeValues[':cpr'] = cpr;
         }
+
+    try {
+        return await dynamoDB.scan(params).promise();
+    } catch (error) {
+        console.error('Error getting applications', error);
+        throw new Error('Error getting applications');
+    }
 }
+
+
+async function checkIsAdmin(token) {
+    // get the username from the token using cognito
+    try {
+        const cognitoUser = await cognito.getUser({AccessToken: token}).promise();
+        const username = cognitoUser.Username;
+
+        const params = {
+            TableName: 'Admin-cw7beg2perdtnl7onnneec4jfa-staging',
+            Key: {
+                cpr: username
+            }
+        };
+        const {Item} = await dynamoDB.get(params).promise();
+        return Item !== undefined;
+    } catch (error) {
+        console.error('Error checking if user is admin', error);
+        return false;
+    }
+}
+

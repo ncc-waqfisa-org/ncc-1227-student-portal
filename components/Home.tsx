@@ -7,6 +7,10 @@ import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AppContexts";
 import { useTranslation } from "react-i18next";
 import { FC } from "react";
+import { useAuth } from "../hooks/use-auth";
+import { Scholarship } from "../src/API";
+import { useQuery } from "@tanstack/react-query";
+import { getStudentScholarships } from "../src/CustomAPI";
 
 interface Props {
   comeBack?: boolean;
@@ -15,7 +19,13 @@ interface Props {
 export const HomeComponent: FC<Props> = ({ comeBack }) => {
   const router = useRouter();
   const { t } = useTranslation("common");
-  const { haveActiveApplication, haveScholarships } = useAppContext();
+  const { haveActiveApplication } = useAppContext();
+  const { cpr } = useAuth();
+  const { data: scholarships } = useQuery<Scholarship[]>({
+    queryKey: ["scholarships", cpr],
+    queryFn: () => (cpr ? getStudentScholarships(cpr) : []),
+  });
+
   return (
     <div>
       <div className="flex flex-col gap-10 mx-auto">
@@ -49,6 +59,15 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
                 actionTitle={t("enrollNow") ?? "Enroll Now"}
               ></CardInfoComponent>
             )}
+            {(scholarships?.length ?? 0) > 0 && (
+              <CardInfoComponent
+                icon={check}
+                title={t("scholarships")}
+                description={t("trackApplicationDescription")}
+                action={() => router.push("/scholarship")}
+                actionTitle={t("myScholarships") ?? "My Scholarships"}
+              ></CardInfoComponent>
+            )}
             {haveActiveApplication && (
               <CardInfoComponent
                 icon={search}
@@ -58,15 +77,7 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
                 actionTitle={t("track") ?? "Track"}
               ></CardInfoComponent>
             )}
-            {haveScholarships && (
-              <CardInfoComponent
-                icon={check}
-                title={t("scholarships")}
-                description={t("trackApplicationDescription")}
-                action={() => router.push("/scholarship")}
-                actionTitle={t("seeMyScholarships") ?? "See My Scholarships"}
-              ></CardInfoComponent>
-            )}
+
             <CardInfoComponent
               icon={info}
               title={t("informationCenter")}

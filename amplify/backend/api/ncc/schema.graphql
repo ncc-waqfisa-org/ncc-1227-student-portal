@@ -9,6 +9,7 @@ type Attachment @model @auth(rules: [{ allow: public }]) {
 type Application @model @auth(rules: [{ allow: public }]) {
   id: ID! @index(name: "byDateTime", sortKeyFields: ["dateTime"])
   gpa: Float
+  verifiedGPA: Float
   status: Status
   attachmentID: String
   adminLogs: [AdminLog] @hasMany
@@ -184,12 +185,53 @@ type Batch @model @auth(rules: [{ allow: public }]) {
 
 type Scholarship @model @auth(rules: [{ allow: public }]) {
   id: ID!
-  amount: Float
-  status: Status
-  applicationID: String
-  application: Application
-  studentCPR: String
+  status: ScholarshipStatus
+  applicationID: ID!
+  isConfirmed: Boolean
+  application: Application @hasOne(fields: ["applicationID"])
+  studentCPR: String @index(name: "byCPR", sortKeyFields: ["status"])
+  unsignedContractDoc: String
+  signedContractDoc: String
+  studentSignature: String
+  guardianSignature: String
+  bankName: String
+  IBAN: String
+  IBANLetterDoc: String
 }
+
+type Statistics @model @auth(rules: [{ allow: public }]) {
+  id: Int! @primaryKey
+  batch: Int! @index(name: "byBatch", sortKeyFields: ["totalApplications"])
+  totalApplications: Int
+  totalApplicationsPerStatus: AWSJSON
+  scoreHistogram: AWSJSON
+  gpaHistogram: AWSJSON
+  totalApplicationsPerUniversity: AWSJSON
+}
+
+#type CurrentApplication @model @auth(rules: [{ allow: public }]) {
+#  id: ID! @index(name: "byDateTime", sortKeyFields: ["dateTime"])
+#  gpa: Float
+#  status: Status
+#  attachmentID: String
+#  adminLogs: [AdminLog] @hasMany
+#  studentLogs: [StudentLog] @hasMany
+#  attachment: Attachment @hasOne
+#  programs: [ProgramChoice] @hasMany
+#  dateTime: AWSDateTime!
+#  isEmailSent: Boolean @default(value: "false")
+#  schoolName: String
+#  schoolType: SchoolType
+#  studentCPR: String! @index(name: "byCPR", sortKeyFields: ["gpa"])
+#  student: Student @belongsTo(fields: ["studentCPR"])
+#  batchID: ID! @index(name: "byBatchRelation") @default(value: "48745538-4051-4c99-ad0f-7be0cac6cf16")
+#  batch: Int @index(name: "byBatch", sortKeyFields: ["status"])
+#  batchRelation: Batch @belongsTo(fields: ["batchID"])
+#  # add a new field to the Application model called "score" that is a Float and is indexed for sorting
+#  score: Float @index(name: "byScore", sortKeyFields: ["status"])
+#  adminPoints: Int
+#}
+
 
 enum FamilyIncome {
   LESS_THAN_500
@@ -198,4 +240,11 @@ enum FamilyIncome {
   LESS_THAN_1500
   MORE_THAN_1500
   OVER_1000
+}
+
+enum ScholarshipStatus {
+  APPROVED
+  PENDING
+  REJECTED
+  WITHDRAWN
 }

@@ -1,21 +1,32 @@
 import { withSSRContext } from "aws-amplify";
 import { GetServerSideProps } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PageComponent } from "../../components/PageComponent";
-import { Application, Status, Student } from "../../src/API";
+import { Application, Scholarship, Status, Student } from "../../src/API";
 import ViewApplication from "../../components/applications/ViewApplication";
 import { CognitoUser } from "@aws-amplify/auth";
 import { ApplicationForm } from "../../components/applications/ApplicationForm";
-import { getApplicationData, listAllPrograms } from "../../src/CustomAPI";
+import {
+  getApplicationData,
+  getScholarship,
+  listAllPrograms,
+} from "../../src/CustomAPI";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "../../contexts/AppContexts";
 import GetStorageLinkComponent from "../../components/get-storage-link-component";
 import Link from "next/link";
 import { Contract } from "../../components/scholarship/Contract";
+import { ScholarshipStatus } from "../../src/models";
+import { useRouter } from "next/router";
+import { ScholarshipPreview } from "../../components/scholarship/ScholarshipPreview";
+import { BankDetails } from "../../components/scholarship/BankDetails";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "../../hooks/use-auth";
+import { Skeleton } from "../../components/Skeleton";
 
 interface Props {
-  application: Application | null;
+  scholarshipId: string | null;
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -28,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const { id } = ctx.query;
 
-  let application = await getApplicationData(`${id}`);
+  // let scholarship = await getScholarship(`${id}`);
 
   return {
     props: {
@@ -37,40 +48,85 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         "footer",
         "pageTitles",
         "applicationPage",
+        "scholarships",
         "signIn",
         "account",
         "errors",
       ])),
-      application:
-        authUser?.getUsername() === application?.studentCPR && application,
+      scholarshipId: id,
+      // authUser?.getUsername() === scholarship?.studentCPR && scholarship,
     },
   };
 };
 
-export default function ScholarshipPage({ application }: Props) {
-  const { t } = useTranslation("applicationPage");
+export default function ScholarshipPage({ scholarshipId }: Props) {
+  const { t } = useTranslation("scholarships");
+  const { cpr } = useAuth();
 
-  const { student: studentData } = useAppContext();
+  const { data: scholarship, isPending: isScholarshipPending } =
+    useQuery<Scholarship | null>({
+      queryKey: [`scholarships/${scholarshipId}`],
+      queryFn: () => (scholarshipId ? getScholarship(scholarshipId) : null),
+      select: (data) => {
+        return cpr === data?.studentCPR ? data : null;
+      },
+    });
 
-  const student = studentData?.getStudent as Student;
+  const [showContract, setShowContract] = useState(false);
+  const [showBankDetails, setShowBankDetails] = useState(false);
 
-  // TODO: Put later
-  if (application?.status !== Status.APPROVED) {
+  useEffect(() => {
+    setShowContract(!Boolean(scholarship?.signedContractDoc));
+    setShowBankDetails(
+      Boolean(scholarship?.signedContractDoc) &&
+        !Boolean(
+          scholarship?.bankName &&
+            scholarship?.IBAN &&
+            scholarship?.IBANLetterDoc
+        )
+    );
+    return () => {};
+  }, [scholarship]);
+
+  if (isScholarshipPending) {
     return (
-      <PageComponent title={"Scholarship"} authRequired>
+      <PageComponent title={"Scholarships"} authRequired>
+        <Skeleton className="bg-slate-200 rounded-md w-full max-w-3xl h-96" />
+      </PageComponent>
+    );
+  }
+
+  if (!scholarship) {
+    return (
+      <PageComponent title={"Scholarships"} authRequired>
         <div>
-          <p>This is not a Scholarship</p>
+          <p>{t("notFound")}</p>
         </div>
       </PageComponent>
     );
   }
 
   return (
-    <PageComponent title={"Scholarship"} authRequired>
-      <div className="max-w-3xl mx-auto">
-        {application && <ViewApplication application={application} />}
-      </div>
-      <Contract application={application} />
+    <PageComponent title={"Scholarships"} authRequired>
+      {scholarship && !isScholarshipPending && (
+        <div className="flex flex-col gap-10">
+          <ScholarshipPreview
+            scholarship={scholarship}
+            toggleShowContract={() => {
+              setShowContract(!showContract);
+              setShowBankDetails(false);
+            }}
+            toggleShowBankDetails={() => {
+              setShowBankDetails(!showBankDetails);
+              setShowContract(false);
+            }}
+          />
+          <div>
+            {showContract && <Contract scholarship={scholarship} />}
+            {showBankDetails && <BankDetails scholarship={scholarship} />}
+          </div>
+        </div>
+      )}
     </PageComponent>
   );
 }

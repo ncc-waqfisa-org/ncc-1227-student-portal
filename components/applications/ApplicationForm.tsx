@@ -34,6 +34,7 @@ import {
 import {
   ApplicationSnapshotInput,
   allDocsAreAvailable,
+  calculateScore,
   checkIfFilesAreTooBig,
   getStudentApplicationSnapshot,
 } from "../../src/HelperFunctions";
@@ -433,6 +434,7 @@ export const ApplicationForm: FC<Props> = (props) => {
 
           let newApplicationSnapshotInput: ApplicationSnapshotInput = {
             gpa: values.gpa,
+
             primaryProgram: {
               id: values.primaryProgramID,
               name: `${selectedPrimaryProgram?.name}-${selectedPrimaryProgram?.university?.name}`,
@@ -487,6 +489,13 @@ export const ApplicationForm: FC<Props> = (props) => {
               input: {
                 id: undefined,
                 gpa: values.gpa,
+                score:
+                  studentData.familyIncome && values.gpa
+                    ? calculateScore({
+                        familyIncome: studentData.familyIncome,
+                        gpa: values.gpa,
+                      })
+                    : 0,
                 batchID: batch?.id ?? "",
                 status: allDocsAreAvailable({
                   cpr: studentData.cprDoc,
@@ -571,6 +580,14 @@ export const ApplicationForm: FC<Props> = (props) => {
               input: {
                 id: props.application?.id ?? "",
                 gpa: values.gpa,
+                score:
+                  studentData.familyIncome && values.gpa
+                    ? calculateScore({
+                        familyIncome: studentData.familyIncome,
+                        gpa: values.gpa,
+                        adminScore: props.application?.adminPoints ?? 0,
+                      })
+                    : 0,
                 status: allDocsAreAvailable({
                   cpr: studentData.cprDoc,
                   familyProofs:
@@ -673,6 +690,8 @@ export const ApplicationForm: FC<Props> = (props) => {
               condition: undefined,
             },
           };
+
+          console.log("createValues: ", createValues);
 
           {
             props.application

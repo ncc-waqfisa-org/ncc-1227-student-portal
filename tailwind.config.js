@@ -94,6 +94,7 @@ module.exports = {
         // },
       },
     ],
+    logs: false,
   },
   plugins: [
     require("@tailwindcss/forms"),

@@ -14,6 +14,7 @@ import {
   ListBatchesQuery,
   ListBatchesQueryVariables,
   Program,
+  Scholarship,
   UpdateApplicationMutation,
   UpdateApplicationMutationVariables,
   UpdateAttachmentMutation,
@@ -22,6 +23,8 @@ import {
   UpdateParentInfoMutationVariables,
   UpdateProgramChoiceMutation,
   UpdateProgramChoiceMutationVariables,
+  UpdateScholarshipMutation,
+  UpdateScholarshipMutationVariables,
   UpdateStudentMutation,
   UpdateStudentMutationVariables,
 } from "./API";
@@ -35,6 +38,7 @@ import {
   createStudentLog,
   updateStudent,
   updateParentInfo,
+  updateScholarship,
 } from "./graphql/mutations";
 
 import dayjs from "dayjs";
@@ -52,6 +56,7 @@ export enum DocType {
   FAMILY_INCOME_PROOF,
   PRIMARY_PROGRAM_ACCEPTANCE,
   SECONDARY_PROGRAM_ACCEPTANCE,
+  BANK_LETTER,
 }
 
 export interface DownloadLinks {
@@ -172,6 +177,95 @@ export async function getApplicationData(
   return application;
 }
 
+export async function getScholarship(id: string): Promise<Scholarship | null> {
+  let q = `query GetScholarship {
+    getScholarship(id:"${id}") {
+        id
+        _version
+        createdAt
+        studentCPR
+        applicationID
+        status
+        isConfirmed
+        unsignedContractDoc
+        signedContractDoc
+        studentSignature
+        guardianSignature
+        IBAN
+        IBANLetterDoc
+        bankName
+        application {
+          gpa
+          createdAt
+          batch
+          programs {
+            items {
+              program {
+                name
+                nameAr
+                university{
+                  name
+                  nameAr
+                }
+              }
+            }
+          }
+      }
+    }
+  }`;
+
+  let res = (await API.graphql(graphqlOperation(q))) as GraphQLResult<any>;
+
+  const scholarship: Scholarship | null = res.data?.getScholarship;
+  return scholarship;
+}
+export async function getStudentScholarships(
+  cpr: string
+): Promise<Scholarship[]> {
+  let q = `query GetScholarships {
+    scholarshipsByStudentCPRAndStatus(studentCPR: "${cpr}") {
+      items{
+      id
+      _version
+      createdAt
+      studentCPR
+      applicationID
+      status
+      isConfirmed
+      unsignedContractDoc
+      signedContractDoc
+      studentSignature
+      guardianSignature
+      IBAN
+      IBANLetterDoc
+      bankName
+      application {
+        gpa
+        createdAt
+        batch
+        programs {
+          items {
+            program {
+              name
+              nameAr
+              university{
+                name
+                nameAr
+              }
+            }
+          }
+        }
+      }
+    }
+    }
+  }`;
+
+  let res = (await API.graphql(graphqlOperation(q))) as GraphQLResult<any>;
+  const scholarships = (res.data?.scholarshipsByStudentCPRAndStatus?.items ??
+    []) as Scholarship[];
+
+  return scholarships;
+}
 export async function getStudentApplications(
   cpr: string
 ): Promise<Application[]> {
@@ -378,6 +472,17 @@ export async function updateParentInfoInDB(
     query: updateParentInfo,
     variables: mutationVars,
   })) as GraphQLResult<UpdateParentInfoMutation>;
+
+  return res.data;
+}
+
+export async function updateScholarshipInDB(
+  mutationVars: UpdateScholarshipMutationVariables
+): Promise<UpdateScholarshipMutation | undefined> {
+  let res = (await API.graphql({
+    query: updateScholarship,
+    variables: mutationVars,
+  })) as GraphQLResult<UpdateScholarshipMutation>;
 
   return res.data;
 }

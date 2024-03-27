@@ -18,6 +18,8 @@ Auth.configure({ ...config, ssr: true });
 
 interface IUseAuthContext {
   user: CognitoUser | undefined;
+  token: string | undefined;
+  cpr: string | undefined;
   isSignedIn: boolean;
   isInitializing: boolean;
   signIn: (cpr: string, password: string) => Promise<CognitoUser | undefined>;
@@ -40,6 +42,8 @@ const defaultState: IUseAuthContext = {
   checkIfCprExist: async () => false,
   sendForgetPassword: async () => false,
   verifyForgetPassword: async () => false,
+  token: undefined,
+  cpr: undefined,
 };
 
 const AuthContext = createContext<IUseAuthContext>(defaultState);
@@ -61,6 +65,12 @@ function useProvideAuth() {
   );
 
   const { push } = useRouter();
+
+  const token =
+    user?.getSignInUserSession()?.getAccessToken().getJwtToken() ?? undefined;
+  const cpr =
+    user?.getSignInUserSession()?.getAccessToken().payload?.username ??
+    undefined;
 
   useEffect(() => {
     // NOTE: check for user or risk an infinite loop
@@ -217,6 +227,8 @@ function useProvideAuth() {
 
   return {
     user,
+    token,
+    cpr,
     isSignedIn,
     signIn,
     signOut,

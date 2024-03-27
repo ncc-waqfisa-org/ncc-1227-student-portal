@@ -4,6 +4,7 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { Skeleton } from "../Skeleton";
 import AppLoader from "../App-loader";
+import { useTranslation } from "react-i18next";
 
 // Set up the workerSrc for PDF.js. Adjust the version and path as necessary.
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -13,6 +14,7 @@ type PDFPreviewProps = {
 };
 
 const PDFPreview: React.FC<PDFPreviewProps> = ({ src }) => {
+  const { t } = useTranslation("scholarships");
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   // const [pdfBuffer, setPdfBuffer] = useState<Uint8Array | null>(null);
   const [isPdfFetching, setIsPdfFetching] = useState<boolean>(true);
@@ -50,19 +52,21 @@ const PDFPreview: React.FC<PDFPreviewProps> = ({ src }) => {
   return (
     <div className="">
       {!pdfUrl && !isPdfFetching && (
-        <div className="p-6 border rounded-md flex flex-col">
+        <div className="flex flex-col p-6 border rounded-md">
           <p className="text-lg font-medium">
-            Preview for the PDF is unavailable
+            {/* Preview of the PDF is unavailable */}
+            {t("previewOfThePDFIsUnavailable")}
           </p>
           <p>
-            Please click the <span className="text-secondary">View PDF</span>{" "}
-            button below to download the pdf
+            {t("pleaseClickThe")}{" "}
+            <span className="text-secondary">{t("viewPDF")}</span>
+            {t("buttonAboveToDownloadThePDF")}
           </p>
         </div>
       )}
       {isPdfFetching && (
-        <div>
-          <Skeleton className="bg-slate-300 h-96 w-full rounded-md" />
+        <div className="p-6">
+          <Skeleton className="w-full rounded-md bg-slate-300 h-96" />
         </div>
       )}
       {pdfUrl && !isPdfFetching && (
@@ -79,29 +83,28 @@ const PDFPreview: React.FC<PDFPreviewProps> = ({ src }) => {
           >
             <Page
               loading={<AppLoader />}
-              // aspect-[1/1.414]
               className={"w-full flex justify-center items-center"}
               key={`page_${pageNumber}`}
               pageNumber={pageNumber}
             />
           </Document>
-          <div className="flex flex-wrap gap-3 items-center justify-center">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <button
               className="btn btn-sm"
               disabled={pageNumber === 1}
               onClick={() => setPageNumber(pageNumber - 1)}
             >
-              Previous
+              {t("previous")}
             </button>
             <p>
-              Page {pageNumber} of {numPages}
+              {t("page")} {pageNumber} {t("of")} {numPages}
             </p>
             <button
               className="btn btn-sm"
               disabled={pageNumber === numPages}
               onClick={() => setPageNumber(pageNumber + 1)}
             >
-              Next
+              {t("next")}
             </button>
           </div>
         </div>

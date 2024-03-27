@@ -18,6 +18,7 @@ interface Props {
   title: string;
   disabled?: boolean;
   storageKeys?: (string | null)[] | null | undefined;
+  required?: boolean;
 }
 
 export default function MultiUpload(props: Props) {
@@ -62,7 +63,7 @@ export default function MultiUpload(props: Props) {
   function handleCleanFiles(): void {
     setFiles([]);
     setFilesRejected([]);
-    props.isInvalid(false);
+    props.isInvalid(props.required ?? false);
     if (inputRef.current) {
       inputRef.current.dispatchEvent(new Event("input", { bubbles: true })); // Trigger the onChange event
     }

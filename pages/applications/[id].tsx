@@ -128,7 +128,7 @@ function AccountDocs({ student }: AccountDocs) {
           </Link>
         </div>
         <div className="w-full overflow-x-scroll">
-          <table dir="ltr" className="table w-full">
+          <table className="table w-full">
             <thead>
               <tr>
                 <th>{t("field")}</th>

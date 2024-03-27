@@ -1,26 +1,37 @@
 const AWS = require('aws-sdk');
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
+const cognito = new AWS.CognitoIdentityServiceProvider();
 
 const tableName = 'Application-cw7beg2perdtnl7onnneec4jfa-staging';
+const universityTableName = 'University-cw7beg2perdtnl7onnneec4jfa-staging';
+const programChoiceTableName = 'ProgramChoice-cw7beg2perdtnl7onnneec4jfa-staging';
 
 exports.handler = async (event) => {
     console.log(`EVENT: ${JSON.stringify(event)}`);
+    const token = event.headers?.authorization?.slice(7);
+    if (!token) {
+        return {
+            statusCode: 401,
+            body: JSON.stringify({ message: 'Unauthorized!' })
+        };
+    }
 
-    const batchValue = event.queryStringParameters?.batch || 2024;
+    const isAdmin = await checkIsAdmin(token);
+    if (!isAdmin) {
+        return {
+            statusCode: 403,
+            body: JSON.stringify({ message: 'Forbidden. You are not an admin' })
+        };
+    }
+
+    const batchValue = parseInt(event.queryStringParameters?.batch) || 2024;
 
     try {
-        const countOfCurrentYearApplications = await getCountOfCurrentYearApplications(batchValue, tableName);
-        const scoreChart = await getScoreChart(batchValue, tableName);
-        const applicationsPerYearChart = await getApplicationsPerYearChart(batchValue, tableName);
-        const statusPieChart = await getStatusPieChart(tableName);
-
+        const statistics = await getStatistics(batchValue);
         return {
             statusCode: 200,
             body: JSON.stringify({
-                countOfCurrentYearApplications,
-                scoreChart,
-                applicationsPerYearChart,
-                statusPieChart
+                statistics
             })
         };
     } catch (error) {
@@ -32,77 +43,38 @@ exports.handler = async (event) => {
     }
 };
 
-async function getCountOfCurrentYearApplications(batchValue, tableName) {
-    const countParams = {
-        TableName: tableName,
-        Select: 'COUNT',
-        FilterExpression: '#batch = :batchValue',
-        ExpressionAttributeNames: {
-            '#batch': 'batch'
-        },
-        ExpressionAttributeValues: {
-            ':batchValue': batchValue
+async function getStatistics(batchValue) {
+    const params = {
+        TableName: 'Statistics-cw7beg2perdtnl7onnneec4jfa-staging',
+        Key: {
+            id: batchValue
         }
     };
-
-    const countResult = await dynamoDB.scan(countParams).promise();
-    return countResult.Count;
+    const { Item } = await dynamoDB.get(params).promise();
+    return Item;
 }
 
-async function getScoreChart(batchValue, tableName) {
-    const scoreParams = {
-        TableName: tableName,
-        ProjectionExpression: 'score',
-        FilterExpression: '#batch = :batchValue AND score BETWEEN :minScore AND :maxScore',
-        ExpressionAttributeNames: {
-            '#batch': 'batch'
-        },
-        ExpressionAttributeValues: {
-            ':batchValue': batchValue,
-            ':minScore': 70,
-            ':maxScore': 100,
-        }
-    };
+async function checkIsAdmin(token) {
+    // get the username from the token using cognito
+    try {
+        const cognitoUser = await cognito.getUser({AccessToken: token}).promise();
+        const username = cognitoUser.Username;
 
-    const scoreResult = await dynamoDB.scan(scoreParams).promise();
-    const scores = scoreResult.Items.map(item => item.score);
-    return { scores };
+        const params = {
+            TableName: 'Admin-cw7beg2perdtnl7onnneec4jfa-staging',
+            Key: {
+                cpr: username
+            }
+        };
+        const {Item} = await dynamoDB.get(params).promise();
+        return Item !== undefined;
+    } catch (error) {
+        console.error('Error checking if user is admin', error);
+        return false;
+    }
 }
 
-async function getApplicationsPerYearChart(batchValue, tableName) {
-    const applicationsPerYearParams = {
-        TableName: tableName,
-        ProjectionExpression: '#batch',
-        ExpressionAttributeNames: {
-            '#batch': 'batch'
-        }
-    };
 
-    const applicationsPerYearResult = await dynamoDB.scan(applicationsPerYearParams).promise();
-    return applicationsPerYearResult.Items.reduce((acc, item) => {
-        const batch = item.batch;
-        acc[batch] = (acc[batch] || 0) + 1;
-        return acc;
-    }, {});
-}
 
-async function getStatusPieChart(tableName, batchValue) {
-    const statusParams = {
-        TableName: tableName,
-        ProjectionExpression: '#status',
-        ExpressionAttributeNames: {
-            '#status': 'status'
-        },
-        FilterExpression: '#batch = :batchValue',
-        ExpressionAttributeValues: {
-            ':batchValue': batchValue
-        }
-    };
 
-    const statusResult = await dynamoDB.scan(statusParams).promise();
-    return statusResult.Items.reduce((acc, item) => {
-        const status = item.status;
-        acc[status] = (acc[status] || 0) + 1;
-        return acc;
-    }, {});
-}
+

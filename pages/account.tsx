@@ -33,16 +33,16 @@ export default function AccountPage() {
   return (
     <PageComponent title="Account" authRequired>
       <div className="flex flex-col justify-center">
-        <div className="mx-auto mb-6 tabs">
+        <div className="mx-auto mb-6 tabs tabs-bordered">
           <a
             onClick={() => setIsStudentInfo(true)}
-            className={`tab tab-bordered ${isStudentInfo && " tab-active"}`}
+            className={`tab  ${isStudentInfo && " tab-active"}`}
           >
             {t("studentInfo")}
           </a>
           <a
             onClick={() => setIsStudentInfo(false)}
-            className={`tab tab-bordered ${!isStudentInfo && " tab-active"}`}
+            className={`tab  ${!isStudentInfo && " tab-active"}`}
           >
             {t("parentsInfo")}
           </a>

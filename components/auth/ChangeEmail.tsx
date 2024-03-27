@@ -2,15 +2,13 @@ import { useRouter } from "next/router";
 import React, { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { GetStudentQueryVariables, GetStudentQuery } from "../../src/API";
-import { API, Auth } from "aws-amplify";
+import { API } from "aws-amplify";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import * as yup from "yup";
 import { getStudent } from "../../src/graphql/queries";
 import { Formik, Form, Field } from "formik";
 import toast from "react-hot-toast";
 import { useAuth } from "../../hooks/use-auth";
-import { Button } from "@aws-amplify/ui-react";
-import AppLoader from "../App-loader";
 import { Skeleton } from "../Skeleton";
 
 // TODO: Make a change email functionality
@@ -41,6 +39,7 @@ export const ChangeEmail: FC<TChangeEmail> = () => {
 
   function getUserToken() {
     const token = user?.getSignInUserSession()?.getAccessToken();
+    console.log("🚀 ~ getUserToken ~ token:", token);
     return token;
   }
 
@@ -141,11 +140,11 @@ export const ChangeEmail: FC<TChangeEmail> = () => {
           isValid,
         }) => (
           <div dir="ltr" className="flex flex-col gap-3">
-            <div className="flex items-center gap-1 flex-wrap">
+            <div className="flex flex-wrap items-center gap-1">
               <p>Change</p>
 
               {!cpr ? (
-                <Skeleton className="w-full max-w-xs h-6 bg-slate-300 rounded-md" />
+                <Skeleton className="w-full h-6 max-w-xs rounded-md bg-slate-300" />
               ) : (
                 <span className="text-secondary">{email}</span>
               )}

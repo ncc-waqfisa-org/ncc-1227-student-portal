@@ -93,6 +93,7 @@ export const getApplication = /* GraphQL */ `query GetApplication($id: ID!) {
   getApplication(id: $id) {
     id
     gpa
+    verifiedGPA
     status
     attachmentID
     adminLogs {
@@ -198,6 +199,7 @@ export const listApplications = /* GraphQL */ `query ListApplications(
     items {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -241,6 +243,7 @@ export const syncApplications = /* GraphQL */ `query SyncApplications(
     items {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -296,6 +299,7 @@ export const getProgramChoice = /* GraphQL */ `query GetProgramChoice($id: ID!) 
     application {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1290,12 +1294,13 @@ export const syncBatches = /* GraphQL */ `query SyncBatches(
 export const getScholarship = /* GraphQL */ `query GetScholarship($id: ID!) {
   getScholarship(id: $id) {
     id
-    amount
     status
     applicationID
+    isConfirmed
     application {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1316,6 +1321,13 @@ export const getScholarship = /* GraphQL */ `query GetScholarship($id: ID!) {
       __typename
     }
     studentCPR
+    unsignedContractDoc
+    signedContractDoc
+    studentSignature
+    guardianSignature
+    bankName
+    IBAN
+    IBANLetterDoc
     createdAt
     updatedAt
     _version
@@ -1336,10 +1348,17 @@ export const listScholarships = /* GraphQL */ `query ListScholarships(
   listScholarships(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
-      amount
       status
       applicationID
+      isConfirmed
       studentCPR
+      unsignedContractDoc
+      signedContractDoc
+      studentSignature
+      guardianSignature
+      bankName
+      IBAN
+      IBANLetterDoc
       createdAt
       updatedAt
       _version
@@ -1370,10 +1389,17 @@ export const syncScholarships = /* GraphQL */ `query SyncScholarships(
   ) {
     items {
       id
-      amount
       status
       applicationID
+      isConfirmed
       studentCPR
+      unsignedContractDoc
+      signedContractDoc
+      studentSignature
+      guardianSignature
+      bankName
+      IBAN
+      IBANLetterDoc
       createdAt
       updatedAt
       _version
@@ -1389,6 +1415,101 @@ export const syncScholarships = /* GraphQL */ `query SyncScholarships(
 ` as GeneratedQuery<
   APITypes.SyncScholarshipsQueryVariables,
   APITypes.SyncScholarshipsQuery
+>;
+export const getStatistics = /* GraphQL */ `query GetStatistics($id: Int!) {
+  getStatistics(id: $id) {
+    id
+    batch
+    totalApplications
+    totalApplicationsPerStatus
+    scoreHistogram
+    gpaHistogram
+    totalApplicationsPerUniversity
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetStatisticsQueryVariables,
+  APITypes.GetStatisticsQuery
+>;
+export const listStatistics = /* GraphQL */ `query ListStatistics(
+  $id: Int
+  $filter: ModelStatisticsFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listStatistics(
+    id: $id
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      id
+      batch
+      totalApplications
+      totalApplicationsPerStatus
+      scoreHistogram
+      gpaHistogram
+      totalApplicationsPerUniversity
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListStatisticsQueryVariables,
+  APITypes.ListStatisticsQuery
+>;
+export const syncStatistics = /* GraphQL */ `query SyncStatistics(
+  $filter: ModelStatisticsFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncStatistics(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      batch
+      totalApplications
+      totalApplicationsPerStatus
+      scoreHistogram
+      gpaHistogram
+      totalApplicationsPerUniversity
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncStatisticsQueryVariables,
+  APITypes.SyncStatisticsQuery
 >;
 export const applicationsByIdAndDateTime = /* GraphQL */ `query ApplicationsByIdAndDateTime(
   $id: ID!
@@ -1409,6 +1530,7 @@ export const applicationsByIdAndDateTime = /* GraphQL */ `query ApplicationsById
     items {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1456,6 +1578,7 @@ export const applicationsByStudentCPRAndGpa = /* GraphQL */ `query ApplicationsB
     items {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1501,6 +1624,7 @@ export const applicationsByBatchID = /* GraphQL */ `query ApplicationsByBatchID(
     items {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1548,6 +1672,7 @@ export const applicationsByBatchAndStatus = /* GraphQL */ `query ApplicationsByB
     items {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1595,6 +1720,7 @@ export const applicationsByScoreAndStatus = /* GraphQL */ `query ApplicationsByS
     items {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1622,4 +1748,89 @@ export const applicationsByScoreAndStatus = /* GraphQL */ `query ApplicationsByS
 ` as GeneratedQuery<
   APITypes.ApplicationsByScoreAndStatusQueryVariables,
   APITypes.ApplicationsByScoreAndStatusQuery
+>;
+export const scholarshipsByStudentCPRAndStatus = /* GraphQL */ `query ScholarshipsByStudentCPRAndStatus(
+  $studentCPR: String!
+  $status: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelScholarshipFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  scholarshipsByStudentCPRAndStatus(
+    studentCPR: $studentCPR
+    status: $status
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      status
+      applicationID
+      isConfirmed
+      studentCPR
+      unsignedContractDoc
+      signedContractDoc
+      studentSignature
+      guardianSignature
+      bankName
+      IBAN
+      IBANLetterDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ScholarshipsByStudentCPRAndStatusQueryVariables,
+  APITypes.ScholarshipsByStudentCPRAndStatusQuery
+>;
+export const statisticsByBatchAndTotalApplications = /* GraphQL */ `query StatisticsByBatchAndTotalApplications(
+  $batch: Int!
+  $totalApplications: ModelIntKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelStatisticsFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  statisticsByBatchAndTotalApplications(
+    batch: $batch
+    totalApplications: $totalApplications
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      batch
+      totalApplications
+      totalApplicationsPerStatus
+      scoreHistogram
+      gpaHistogram
+      totalApplicationsPerUniversity
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.StatisticsByBatchAndTotalApplicationsQueryVariables,
+  APITypes.StatisticsByBatchAndTotalApplicationsQuery
 >;

@@ -170,7 +170,6 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               </label>
             </div>
             <Field
-              dir="ltr"
               type="text"
               name="cpr"
               title="cpr"
@@ -207,7 +206,6 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               <span className="ml-1 mr-auto text-red-500">*</span>
             </label>
             <Field
-              dir="ltr"
               type="file"
               accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps,application/msword"
               id="cprDoc"
@@ -245,7 +243,6 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               </label>
             </div>
             <Field
-              dir="ltr"
               type="text"
               name="fullName"
               title="fullName"
@@ -349,7 +346,6 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               </label>
             </div>
             <Field
-              dir="ltr"
               type="text"
               name="address"
               title="address"
@@ -373,11 +369,9 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               </label>
             </div>
             <Field
-              dir="ltr"
               type="text"
               name="schoolName"
               title="schoolName"
-              // placeholder="School name"
               className={`input input-bordered input-primary ${
                 errors.schoolName && touched.schoolName && "input-error"
               }`}
@@ -391,7 +385,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
           <div className="flex flex-col justify-start w-full">
             <div className="flex items-center">
               <label className="label">{t("schoolType")}</label>
-              <label className="text-error label">*</label>{" "}
+              <label className="text-error label">*</label>
               <label className="label-text-alt text-error">
                 {errors.schoolType && touched.schoolType && errors.schoolType}
               </label>
@@ -412,10 +406,10 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               <option disabled selected value={undefined}>
                 {t("select")}
               </option>
+              <option value={SchoolType.PUBLIC}>{t(SchoolType.PUBLIC)}</option>
               <option value={SchoolType.PRIVATE}>
                 {t(SchoolType.PRIVATE)}
               </option>
-              <option value={SchoolType.PUBLIC}>{t(SchoolType.PUBLIC)}</option>
             </Field>
           </div>
 
@@ -431,7 +425,6 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               </label>
             </div>
             <Field
-              dir="ltr"
               type="text"
               name="specialization"
               title="specialization"
@@ -456,7 +449,6 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               </label>
             </div>
             <Field
-              dir="ltr"
               type="text"
               name="placeOfBirth"
               title="placeOfBirth"
@@ -520,7 +512,6 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               </label>
             </div>
             <Field
-              dir="ltr"
               type="number"
               name="studentOrderAmongSiblings"
               title="studentOrderAmongSiblings"
@@ -634,10 +625,10 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
           {/* Family income proofs */}
           <div className="justify-start md:col-span-2">
             <MultiUpload
+              single
               onFiles={(files) => {
                 setFamilyIncomeProofDocsFile(files);
               }}
-              single
               isInvalid={setFamilyIncomeProofInvalid}
               handleChange={handleChange}
               handleOnClear={() => {

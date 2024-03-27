@@ -77,6 +77,7 @@ export const onCreateApplication = /* GraphQL */ `subscription OnCreateApplicati
   onCreateApplication(filter: $filter) {
     id
     gpa
+    verifiedGPA
     status
     attachmentID
     adminLogs {
@@ -179,6 +180,7 @@ export const onUpdateApplication = /* GraphQL */ `subscription OnUpdateApplicati
   onUpdateApplication(filter: $filter) {
     id
     gpa
+    verifiedGPA
     status
     attachmentID
     adminLogs {
@@ -281,6 +283,7 @@ export const onDeleteApplication = /* GraphQL */ `subscription OnDeleteApplicati
   onDeleteApplication(filter: $filter) {
     id
     gpa
+    verifiedGPA
     status
     attachmentID
     adminLogs {
@@ -406,6 +409,7 @@ export const onCreateProgramChoice = /* GraphQL */ `subscription OnCreateProgram
     application {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -470,6 +474,7 @@ export const onUpdateProgramChoice = /* GraphQL */ `subscription OnUpdateProgram
     application {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -534,6 +539,7 @@ export const onDeleteProgramChoice = /* GraphQL */ `subscription OnDeleteProgram
     application {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1486,12 +1492,13 @@ export const onCreateScholarship = /* GraphQL */ `subscription OnCreateScholarsh
 ) {
   onCreateScholarship(filter: $filter) {
     id
-    amount
     status
     applicationID
+    isConfirmed
     application {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1512,6 +1519,13 @@ export const onCreateScholarship = /* GraphQL */ `subscription OnCreateScholarsh
       __typename
     }
     studentCPR
+    unsignedContractDoc
+    signedContractDoc
+    studentSignature
+    guardianSignature
+    bankName
+    IBAN
+    IBANLetterDoc
     createdAt
     updatedAt
     _version
@@ -1529,12 +1543,13 @@ export const onUpdateScholarship = /* GraphQL */ `subscription OnUpdateScholarsh
 ) {
   onUpdateScholarship(filter: $filter) {
     id
-    amount
     status
     applicationID
+    isConfirmed
     application {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1555,6 +1570,13 @@ export const onUpdateScholarship = /* GraphQL */ `subscription OnUpdateScholarsh
       __typename
     }
     studentCPR
+    unsignedContractDoc
+    signedContractDoc
+    studentSignature
+    guardianSignature
+    bankName
+    IBAN
+    IBANLetterDoc
     createdAt
     updatedAt
     _version
@@ -1572,12 +1594,13 @@ export const onDeleteScholarship = /* GraphQL */ `subscription OnDeleteScholarsh
 ) {
   onDeleteScholarship(filter: $filter) {
     id
-    amount
     status
     applicationID
+    isConfirmed
     application {
       id
       gpa
+      verifiedGPA
       status
       attachmentID
       dateTime
@@ -1598,6 +1621,13 @@ export const onDeleteScholarship = /* GraphQL */ `subscription OnDeleteScholarsh
       __typename
     }
     studentCPR
+    unsignedContractDoc
+    signedContractDoc
+    studentSignature
+    guardianSignature
+    bankName
+    IBAN
+    IBANLetterDoc
     createdAt
     updatedAt
     _version
@@ -1609,4 +1639,73 @@ export const onDeleteScholarship = /* GraphQL */ `subscription OnDeleteScholarsh
 ` as GeneratedSubscription<
   APITypes.OnDeleteScholarshipSubscriptionVariables,
   APITypes.OnDeleteScholarshipSubscription
+>;
+export const onCreateStatistics = /* GraphQL */ `subscription OnCreateStatistics(
+  $filter: ModelSubscriptionStatisticsFilterInput
+) {
+  onCreateStatistics(filter: $filter) {
+    id
+    batch
+    totalApplications
+    totalApplicationsPerStatus
+    scoreHistogram
+    gpaHistogram
+    totalApplicationsPerUniversity
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateStatisticsSubscriptionVariables,
+  APITypes.OnCreateStatisticsSubscription
+>;
+export const onUpdateStatistics = /* GraphQL */ `subscription OnUpdateStatistics(
+  $filter: ModelSubscriptionStatisticsFilterInput
+) {
+  onUpdateStatistics(filter: $filter) {
+    id
+    batch
+    totalApplications
+    totalApplicationsPerStatus
+    scoreHistogram
+    gpaHistogram
+    totalApplicationsPerUniversity
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateStatisticsSubscriptionVariables,
+  APITypes.OnUpdateStatisticsSubscription
+>;
+export const onDeleteStatistics = /* GraphQL */ `subscription OnDeleteStatistics(
+  $filter: ModelSubscriptionStatisticsFilterInput
+) {
+  onDeleteStatistics(filter: $filter) {
+    id
+    batch
+    totalApplications
+    totalApplicationsPerStatus
+    scoreHistogram
+    gpaHistogram
+    totalApplicationsPerUniversity
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteStatisticsSubscriptionVariables,
+  APITypes.OnDeleteStatisticsSubscription
 >;

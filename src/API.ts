@@ -100,6 +100,7 @@ export type DeleteAttachmentInput = {
 export type CreateApplicationInput = {
   id?: string | null,
   gpa?: number | null,
+  verifiedGPA?: number | null,
   status?: Status | null,
   attachmentID?: string | null,
   dateTime: string,
@@ -133,6 +134,7 @@ export enum SchoolType {
 
 export type ModelApplicationConditionInput = {
   gpa?: ModelFloatInput | null,
+  verifiedGPA?: ModelFloatInput | null,
   status?: ModelStatusInput | null,
   attachmentID?: ModelStringInput | null,
   dateTime?: ModelStringInput | null,
@@ -205,6 +207,7 @@ export type Application = {
   __typename: "Application",
   id: string,
   gpa?: number | null,
+  verifiedGPA?: number | null,
   status?: Status | null,
   attachmentID?: string | null,
   adminLogs?: ModelAdminLogConnection | null,
@@ -481,6 +484,7 @@ export type Batch = {
 export type UpdateApplicationInput = {
   id: string,
   gpa?: number | null,
+  verifiedGPA?: number | null,
   status?: Status | null,
   attachmentID?: string | null,
   dateTime?: string | null,
@@ -957,32 +961,66 @@ export type DeleteBatchInput = {
 
 export type CreateScholarshipInput = {
   id?: string | null,
-  amount?: number | null,
-  status?: Status | null,
-  applicationID?: string | null,
+  status?: ScholarshipStatus | null,
+  applicationID: string,
+  isConfirmed?: boolean | null,
   studentCPR?: string | null,
+  unsignedContractDoc?: string | null,
+  signedContractDoc?: string | null,
+  studentSignature?: string | null,
+  guardianSignature?: string | null,
+  bankName?: string | null,
+  IBAN?: string | null,
+  IBANLetterDoc?: string | null,
   _version?: number | null,
 };
 
+export enum ScholarshipStatus {
+  APPROVED = "APPROVED",
+  PENDING = "PENDING",
+  REJECTED = "REJECTED",
+  WITHDRAWN = "WITHDRAWN",
+}
+
+
 export type ModelScholarshipConditionInput = {
-  amount?: ModelFloatInput | null,
-  status?: ModelStatusInput | null,
-  applicationID?: ModelStringInput | null,
+  status?: ModelScholarshipStatusInput | null,
+  applicationID?: ModelIDInput | null,
+  isConfirmed?: ModelBooleanInput | null,
   studentCPR?: ModelStringInput | null,
+  unsignedContractDoc?: ModelStringInput | null,
+  signedContractDoc?: ModelStringInput | null,
+  studentSignature?: ModelStringInput | null,
+  guardianSignature?: ModelStringInput | null,
+  bankName?: ModelStringInput | null,
+  IBAN?: ModelStringInput | null,
+  IBANLetterDoc?: ModelStringInput | null,
   and?: Array< ModelScholarshipConditionInput | null > | null,
   or?: Array< ModelScholarshipConditionInput | null > | null,
   not?: ModelScholarshipConditionInput | null,
   _deleted?: ModelBooleanInput | null,
 };
 
+export type ModelScholarshipStatusInput = {
+  eq?: ScholarshipStatus | null,
+  ne?: ScholarshipStatus | null,
+};
+
 export type Scholarship = {
   __typename: "Scholarship",
   id: string,
-  amount?: number | null,
-  status?: Status | null,
-  applicationID?: string | null,
+  status?: ScholarshipStatus | null,
+  applicationID: string,
+  isConfirmed?: boolean | null,
   application?: Application | null,
   studentCPR?: string | null,
+  unsignedContractDoc?: string | null,
+  signedContractDoc?: string | null,
+  studentSignature?: string | null,
+  guardianSignature?: string | null,
+  bankName?: string | null,
+  IBAN?: string | null,
+  IBANLetterDoc?: string | null,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -992,15 +1030,78 @@ export type Scholarship = {
 
 export type UpdateScholarshipInput = {
   id: string,
-  amount?: number | null,
-  status?: Status | null,
+  status?: ScholarshipStatus | null,
   applicationID?: string | null,
+  isConfirmed?: boolean | null,
   studentCPR?: string | null,
+  unsignedContractDoc?: string | null,
+  signedContractDoc?: string | null,
+  studentSignature?: string | null,
+  guardianSignature?: string | null,
+  bankName?: string | null,
+  IBAN?: string | null,
+  IBANLetterDoc?: string | null,
   _version?: number | null,
 };
 
 export type DeleteScholarshipInput = {
   id: string,
+  _version?: number | null,
+};
+
+export type CreateStatisticsInput = {
+  id: number,
+  batch: number,
+  totalApplications?: number | null,
+  totalApplicationsPerStatus?: string | null,
+  scoreHistogram?: string | null,
+  gpaHistogram?: string | null,
+  totalApplicationsPerUniversity?: string | null,
+  _version?: number | null,
+};
+
+export type ModelStatisticsConditionInput = {
+  batch?: ModelIntInput | null,
+  totalApplications?: ModelIntInput | null,
+  totalApplicationsPerStatus?: ModelStringInput | null,
+  scoreHistogram?: ModelStringInput | null,
+  gpaHistogram?: ModelStringInput | null,
+  totalApplicationsPerUniversity?: ModelStringInput | null,
+  and?: Array< ModelStatisticsConditionInput | null > | null,
+  or?: Array< ModelStatisticsConditionInput | null > | null,
+  not?: ModelStatisticsConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
+};
+
+export type Statistics = {
+  __typename: "Statistics",
+  id: number,
+  batch: number,
+  totalApplications?: number | null,
+  totalApplicationsPerStatus?: string | null,
+  scoreHistogram?: string | null,
+  gpaHistogram?: string | null,
+  totalApplicationsPerUniversity?: string | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type UpdateStatisticsInput = {
+  id: number,
+  batch?: number | null,
+  totalApplications?: number | null,
+  totalApplicationsPerStatus?: string | null,
+  scoreHistogram?: string | null,
+  gpaHistogram?: string | null,
+  totalApplicationsPerUniversity?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteStatisticsInput = {
+  id: number,
   _version?: number | null,
 };
 
@@ -1026,6 +1127,7 @@ export type ModelAttachmentConnection = {
 export type ModelApplicationFilterInput = {
   id?: ModelIDInput | null,
   gpa?: ModelFloatInput | null,
+  verifiedGPA?: ModelFloatInput | null,
   status?: ModelStatusInput | null,
   attachmentID?: ModelStringInput | null,
   dateTime?: ModelStringInput | null,
@@ -1236,10 +1338,17 @@ export type ModelBatchConnection = {
 
 export type ModelScholarshipFilterInput = {
   id?: ModelIDInput | null,
-  amount?: ModelFloatInput | null,
-  status?: ModelStatusInput | null,
-  applicationID?: ModelStringInput | null,
+  status?: ModelScholarshipStatusInput | null,
+  applicationID?: ModelIDInput | null,
+  isConfirmed?: ModelBooleanInput | null,
   studentCPR?: ModelStringInput | null,
+  unsignedContractDoc?: ModelStringInput | null,
+  signedContractDoc?: ModelStringInput | null,
+  studentSignature?: ModelStringInput | null,
+  guardianSignature?: ModelStringInput | null,
+  bankName?: ModelStringInput | null,
+  IBAN?: ModelStringInput | null,
+  IBANLetterDoc?: ModelStringInput | null,
   and?: Array< ModelScholarshipFilterInput | null > | null,
   or?: Array< ModelScholarshipFilterInput | null > | null,
   not?: ModelScholarshipFilterInput | null,
@@ -1249,6 +1358,27 @@ export type ModelScholarshipFilterInput = {
 export type ModelScholarshipConnection = {
   __typename: "ModelScholarshipConnection",
   items:  Array<Scholarship | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type ModelStatisticsFilterInput = {
+  id?: ModelIntInput | null,
+  batch?: ModelIntInput | null,
+  totalApplications?: ModelIntInput | null,
+  totalApplicationsPerStatus?: ModelStringInput | null,
+  scoreHistogram?: ModelStringInput | null,
+  gpaHistogram?: ModelStringInput | null,
+  totalApplicationsPerUniversity?: ModelStringInput | null,
+  and?: Array< ModelStatisticsFilterInput | null > | null,
+  or?: Array< ModelStatisticsFilterInput | null > | null,
+  not?: ModelStatisticsFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
+};
+
+export type ModelStatisticsConnection = {
+  __typename: "ModelStatisticsConnection",
+  items:  Array<Statistics | null >,
   nextToken?: string | null,
   startedAt?: number | null,
 };
@@ -1264,6 +1394,15 @@ export type ModelStringKeyConditionInput = {
 };
 
 export type ModelFloatKeyConditionInput = {
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+};
+
+export type ModelIntKeyConditionInput = {
   eq?: number | null,
   le?: number | null,
   lt?: number | null,
@@ -1316,6 +1455,7 @@ export type ModelSubscriptionStringInput = {
 export type ModelSubscriptionApplicationFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   gpa?: ModelSubscriptionFloatInput | null,
+  verifiedGPA?: ModelSubscriptionFloatInput | null,
   status?: ModelSubscriptionStringInput | null,
   attachmentID?: ModelSubscriptionStringInput | null,
   dateTime?: ModelSubscriptionStringInput | null,
@@ -1496,12 +1636,32 @@ export type ModelSubscriptionBatchFilterInput = {
 
 export type ModelSubscriptionScholarshipFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  amount?: ModelSubscriptionFloatInput | null,
   status?: ModelSubscriptionStringInput | null,
-  applicationID?: ModelSubscriptionStringInput | null,
+  applicationID?: ModelSubscriptionIDInput | null,
+  isConfirmed?: ModelSubscriptionBooleanInput | null,
   studentCPR?: ModelSubscriptionStringInput | null,
+  unsignedContractDoc?: ModelSubscriptionStringInput | null,
+  signedContractDoc?: ModelSubscriptionStringInput | null,
+  studentSignature?: ModelSubscriptionStringInput | null,
+  guardianSignature?: ModelSubscriptionStringInput | null,
+  bankName?: ModelSubscriptionStringInput | null,
+  IBAN?: ModelSubscriptionStringInput | null,
+  IBANLetterDoc?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionScholarshipFilterInput | null > | null,
   or?: Array< ModelSubscriptionScholarshipFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
+};
+
+export type ModelSubscriptionStatisticsFilterInput = {
+  id?: ModelSubscriptionIntInput | null,
+  batch?: ModelSubscriptionIntInput | null,
+  totalApplications?: ModelSubscriptionIntInput | null,
+  totalApplicationsPerStatus?: ModelSubscriptionStringInput | null,
+  scoreHistogram?: ModelSubscriptionStringInput | null,
+  gpaHistogram?: ModelSubscriptionStringInput | null,
+  totalApplicationsPerUniversity?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionStatisticsFilterInput | null > | null,
+  or?: Array< ModelSubscriptionStatisticsFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
 };
 
@@ -1578,6 +1738,7 @@ export type CreateApplicationMutation = {
     __typename: "Application",
     id: string,
     gpa?: number | null,
+    verifiedGPA?: number | null,
     status?: Status | null,
     attachmentID?: string | null,
     adminLogs?:  {
@@ -1680,6 +1841,7 @@ export type UpdateApplicationMutation = {
     __typename: "Application",
     id: string,
     gpa?: number | null,
+    verifiedGPA?: number | null,
     status?: Status | null,
     attachmentID?: string | null,
     adminLogs?:  {
@@ -1782,6 +1944,7 @@ export type DeleteApplicationMutation = {
     __typename: "Application",
     id: string,
     gpa?: number | null,
+    verifiedGPA?: number | null,
     status?: Status | null,
     attachmentID?: string | null,
     adminLogs?:  {
@@ -1908,6 +2071,7 @@ export type CreateProgramChoiceMutation = {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -1972,6 +2136,7 @@ export type UpdateProgramChoiceMutation = {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -2036,6 +2201,7 @@ export type DeleteProgramChoiceMutation = {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -3017,13 +3183,14 @@ export type CreateScholarshipMutation = {
   createScholarship?:  {
     __typename: "Scholarship",
     id: string,
-    amount?: number | null,
-    status?: Status | null,
-    applicationID?: string | null,
+    status?: ScholarshipStatus | null,
+    applicationID: string,
+    isConfirmed?: boolean | null,
     application?:  {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -3043,6 +3210,13 @@ export type CreateScholarshipMutation = {
       applicationAttachmentId?: string | null,
     } | null,
     studentCPR?: string | null,
+    unsignedContractDoc?: string | null,
+    signedContractDoc?: string | null,
+    studentSignature?: string | null,
+    guardianSignature?: string | null,
+    bankName?: string | null,
+    IBAN?: string | null,
+    IBANLetterDoc?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3060,13 +3234,14 @@ export type UpdateScholarshipMutation = {
   updateScholarship?:  {
     __typename: "Scholarship",
     id: string,
-    amount?: number | null,
-    status?: Status | null,
-    applicationID?: string | null,
+    status?: ScholarshipStatus | null,
+    applicationID: string,
+    isConfirmed?: boolean | null,
     application?:  {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -3086,6 +3261,13 @@ export type UpdateScholarshipMutation = {
       applicationAttachmentId?: string | null,
     } | null,
     studentCPR?: string | null,
+    unsignedContractDoc?: string | null,
+    signedContractDoc?: string | null,
+    studentSignature?: string | null,
+    guardianSignature?: string | null,
+    bankName?: string | null,
+    IBAN?: string | null,
+    IBANLetterDoc?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3103,13 +3285,14 @@ export type DeleteScholarshipMutation = {
   deleteScholarship?:  {
     __typename: "Scholarship",
     id: string,
-    amount?: number | null,
-    status?: Status | null,
-    applicationID?: string | null,
+    status?: ScholarshipStatus | null,
+    applicationID: string,
+    isConfirmed?: boolean | null,
     application?:  {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -3129,6 +3312,82 @@ export type DeleteScholarshipMutation = {
       applicationAttachmentId?: string | null,
     } | null,
     studentCPR?: string | null,
+    unsignedContractDoc?: string | null,
+    signedContractDoc?: string | null,
+    studentSignature?: string | null,
+    guardianSignature?: string | null,
+    bankName?: string | null,
+    IBAN?: string | null,
+    IBANLetterDoc?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type CreateStatisticsMutationVariables = {
+  input: CreateStatisticsInput,
+  condition?: ModelStatisticsConditionInput | null,
+};
+
+export type CreateStatisticsMutation = {
+  createStatistics?:  {
+    __typename: "Statistics",
+    id: number,
+    batch: number,
+    totalApplications?: number | null,
+    totalApplicationsPerStatus?: string | null,
+    scoreHistogram?: string | null,
+    gpaHistogram?: string | null,
+    totalApplicationsPerUniversity?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateStatisticsMutationVariables = {
+  input: UpdateStatisticsInput,
+  condition?: ModelStatisticsConditionInput | null,
+};
+
+export type UpdateStatisticsMutation = {
+  updateStatistics?:  {
+    __typename: "Statistics",
+    id: number,
+    batch: number,
+    totalApplications?: number | null,
+    totalApplicationsPerStatus?: string | null,
+    scoreHistogram?: string | null,
+    gpaHistogram?: string | null,
+    totalApplicationsPerUniversity?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteStatisticsMutationVariables = {
+  input: DeleteStatisticsInput,
+  condition?: ModelStatisticsConditionInput | null,
+};
+
+export type DeleteStatisticsMutation = {
+  deleteStatistics?:  {
+    __typename: "Statistics",
+    id: number,
+    batch: number,
+    totalApplications?: number | null,
+    totalApplicationsPerStatus?: string | null,
+    scoreHistogram?: string | null,
+    gpaHistogram?: string | null,
+    totalApplicationsPerUniversity?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3221,6 +3480,7 @@ export type GetApplicationQuery = {
     __typename: "Application",
     id: string,
     gpa?: number | null,
+    verifiedGPA?: number | null,
     status?: Status | null,
     attachmentID?: string | null,
     adminLogs?:  {
@@ -3326,6 +3586,7 @@ export type ListApplicationsQuery = {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -3363,6 +3624,7 @@ export type SyncApplicationsQuery = {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -3419,6 +3681,7 @@ export type GetProgramChoiceQuery = {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -4346,13 +4609,14 @@ export type GetScholarshipQuery = {
   getScholarship?:  {
     __typename: "Scholarship",
     id: string,
-    amount?: number | null,
-    status?: Status | null,
-    applicationID?: string | null,
+    status?: ScholarshipStatus | null,
+    applicationID: string,
+    isConfirmed?: boolean | null,
     application?:  {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -4372,6 +4636,13 @@ export type GetScholarshipQuery = {
       applicationAttachmentId?: string | null,
     } | null,
     studentCPR?: string | null,
+    unsignedContractDoc?: string | null,
+    signedContractDoc?: string | null,
+    studentSignature?: string | null,
+    guardianSignature?: string | null,
+    bankName?: string | null,
+    IBAN?: string | null,
+    IBANLetterDoc?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -4392,10 +4663,17 @@ export type ListScholarshipsQuery = {
     items:  Array< {
       __typename: "Scholarship",
       id: string,
-      amount?: number | null,
-      status?: Status | null,
-      applicationID?: string | null,
+      status?: ScholarshipStatus | null,
+      applicationID: string,
+      isConfirmed?: boolean | null,
       studentCPR?: string | null,
+      unsignedContractDoc?: string | null,
+      signedContractDoc?: string | null,
+      studentSignature?: string | null,
+      guardianSignature?: string | null,
+      bankName?: string | null,
+      IBAN?: string | null,
+      IBANLetterDoc?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -4420,10 +4698,100 @@ export type SyncScholarshipsQuery = {
     items:  Array< {
       __typename: "Scholarship",
       id: string,
-      amount?: number | null,
-      status?: Status | null,
-      applicationID?: string | null,
+      status?: ScholarshipStatus | null,
+      applicationID: string,
+      isConfirmed?: boolean | null,
       studentCPR?: string | null,
+      unsignedContractDoc?: string | null,
+      signedContractDoc?: string | null,
+      studentSignature?: string | null,
+      guardianSignature?: string | null,
+      bankName?: string | null,
+      IBAN?: string | null,
+      IBANLetterDoc?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetStatisticsQueryVariables = {
+  id: number,
+};
+
+export type GetStatisticsQuery = {
+  getStatistics?:  {
+    __typename: "Statistics",
+    id: number,
+    batch: number,
+    totalApplications?: number | null,
+    totalApplicationsPerStatus?: string | null,
+    scoreHistogram?: string | null,
+    gpaHistogram?: string | null,
+    totalApplicationsPerUniversity?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListStatisticsQueryVariables = {
+  id?: number | null,
+  filter?: ModelStatisticsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListStatisticsQuery = {
+  listStatistics?:  {
+    __typename: "ModelStatisticsConnection",
+    items:  Array< {
+      __typename: "Statistics",
+      id: number,
+      batch: number,
+      totalApplications?: number | null,
+      totalApplicationsPerStatus?: string | null,
+      scoreHistogram?: string | null,
+      gpaHistogram?: string | null,
+      totalApplicationsPerUniversity?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncStatisticsQueryVariables = {
+  filter?: ModelStatisticsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncStatisticsQuery = {
+  syncStatistics?:  {
+    __typename: "ModelStatisticsConnection",
+    items:  Array< {
+      __typename: "Statistics",
+      id: number,
+      batch: number,
+      totalApplications?: number | null,
+      totalApplicationsPerStatus?: string | null,
+      scoreHistogram?: string | null,
+      gpaHistogram?: string | null,
+      totalApplicationsPerUniversity?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -4451,6 +4819,7 @@ export type ApplicationsByIdAndDateTimeQuery = {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -4490,6 +4859,7 @@ export type ApplicationsByStudentCPRAndGpaQuery = {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -4528,6 +4898,7 @@ export type ApplicationsByBatchIDQuery = {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -4567,6 +4938,7 @@ export type ApplicationsByBatchAndStatusQuery = {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -4606,6 +4978,7 @@ export type ApplicationsByScoreAndStatusQuery = {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -4623,6 +4996,75 @@ export type ApplicationsByScoreAndStatusQuery = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       applicationAttachmentId?: string | null,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type ScholarshipsByStudentCPRAndStatusQueryVariables = {
+  studentCPR: string,
+  status?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelScholarshipFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ScholarshipsByStudentCPRAndStatusQuery = {
+  scholarshipsByStudentCPRAndStatus?:  {
+    __typename: "ModelScholarshipConnection",
+    items:  Array< {
+      __typename: "Scholarship",
+      id: string,
+      status?: ScholarshipStatus | null,
+      applicationID: string,
+      isConfirmed?: boolean | null,
+      studentCPR?: string | null,
+      unsignedContractDoc?: string | null,
+      signedContractDoc?: string | null,
+      studentSignature?: string | null,
+      guardianSignature?: string | null,
+      bankName?: string | null,
+      IBAN?: string | null,
+      IBANLetterDoc?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type StatisticsByBatchAndTotalApplicationsQueryVariables = {
+  batch: number,
+  totalApplications?: ModelIntKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelStatisticsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type StatisticsByBatchAndTotalApplicationsQuery = {
+  statisticsByBatchAndTotalApplications?:  {
+    __typename: "ModelStatisticsConnection",
+    items:  Array< {
+      __typename: "Statistics",
+      id: number,
+      batch: number,
+      totalApplications?: number | null,
+      totalApplicationsPerStatus?: string | null,
+      scoreHistogram?: string | null,
+      gpaHistogram?: string | null,
+      totalApplicationsPerUniversity?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -4698,6 +5140,7 @@ export type OnCreateApplicationSubscription = {
     __typename: "Application",
     id: string,
     gpa?: number | null,
+    verifiedGPA?: number | null,
     status?: Status | null,
     attachmentID?: string | null,
     adminLogs?:  {
@@ -4799,6 +5242,7 @@ export type OnUpdateApplicationSubscription = {
     __typename: "Application",
     id: string,
     gpa?: number | null,
+    verifiedGPA?: number | null,
     status?: Status | null,
     attachmentID?: string | null,
     adminLogs?:  {
@@ -4900,6 +5344,7 @@ export type OnDeleteApplicationSubscription = {
     __typename: "Application",
     id: string,
     gpa?: number | null,
+    verifiedGPA?: number | null,
     status?: Status | null,
     attachmentID?: string | null,
     adminLogs?:  {
@@ -5025,6 +5470,7 @@ export type OnCreateProgramChoiceSubscription = {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -5088,6 +5534,7 @@ export type OnUpdateProgramChoiceSubscription = {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -5151,6 +5598,7 @@ export type OnDeleteProgramChoiceSubscription = {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -6107,13 +6555,14 @@ export type OnCreateScholarshipSubscription = {
   onCreateScholarship?:  {
     __typename: "Scholarship",
     id: string,
-    amount?: number | null,
-    status?: Status | null,
-    applicationID?: string | null,
+    status?: ScholarshipStatus | null,
+    applicationID: string,
+    isConfirmed?: boolean | null,
     application?:  {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -6133,6 +6582,13 @@ export type OnCreateScholarshipSubscription = {
       applicationAttachmentId?: string | null,
     } | null,
     studentCPR?: string | null,
+    unsignedContractDoc?: string | null,
+    signedContractDoc?: string | null,
+    studentSignature?: string | null,
+    guardianSignature?: string | null,
+    bankName?: string | null,
+    IBAN?: string | null,
+    IBANLetterDoc?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -6149,13 +6605,14 @@ export type OnUpdateScholarshipSubscription = {
   onUpdateScholarship?:  {
     __typename: "Scholarship",
     id: string,
-    amount?: number | null,
-    status?: Status | null,
-    applicationID?: string | null,
+    status?: ScholarshipStatus | null,
+    applicationID: string,
+    isConfirmed?: boolean | null,
     application?:  {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -6175,6 +6632,13 @@ export type OnUpdateScholarshipSubscription = {
       applicationAttachmentId?: string | null,
     } | null,
     studentCPR?: string | null,
+    unsignedContractDoc?: string | null,
+    signedContractDoc?: string | null,
+    studentSignature?: string | null,
+    guardianSignature?: string | null,
+    bankName?: string | null,
+    IBAN?: string | null,
+    IBANLetterDoc?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -6191,13 +6655,14 @@ export type OnDeleteScholarshipSubscription = {
   onDeleteScholarship?:  {
     __typename: "Scholarship",
     id: string,
-    amount?: number | null,
-    status?: Status | null,
-    applicationID?: string | null,
+    status?: ScholarshipStatus | null,
+    applicationID: string,
+    isConfirmed?: boolean | null,
     application?:  {
       __typename: "Application",
       id: string,
       gpa?: number | null,
+      verifiedGPA?: number | null,
       status?: Status | null,
       attachmentID?: string | null,
       dateTime: string,
@@ -6217,6 +6682,79 @@ export type OnDeleteScholarshipSubscription = {
       applicationAttachmentId?: string | null,
     } | null,
     studentCPR?: string | null,
+    unsignedContractDoc?: string | null,
+    signedContractDoc?: string | null,
+    studentSignature?: string | null,
+    guardianSignature?: string | null,
+    bankName?: string | null,
+    IBAN?: string | null,
+    IBANLetterDoc?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnCreateStatisticsSubscriptionVariables = {
+  filter?: ModelSubscriptionStatisticsFilterInput | null,
+};
+
+export type OnCreateStatisticsSubscription = {
+  onCreateStatistics?:  {
+    __typename: "Statistics",
+    id: number,
+    batch: number,
+    totalApplications?: number | null,
+    totalApplicationsPerStatus?: string | null,
+    scoreHistogram?: string | null,
+    gpaHistogram?: string | null,
+    totalApplicationsPerUniversity?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateStatisticsSubscriptionVariables = {
+  filter?: ModelSubscriptionStatisticsFilterInput | null,
+};
+
+export type OnUpdateStatisticsSubscription = {
+  onUpdateStatistics?:  {
+    __typename: "Statistics",
+    id: number,
+    batch: number,
+    totalApplications?: number | null,
+    totalApplicationsPerStatus?: string | null,
+    scoreHistogram?: string | null,
+    gpaHistogram?: string | null,
+    totalApplicationsPerUniversity?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteStatisticsSubscriptionVariables = {
+  filter?: ModelSubscriptionStatisticsFilterInput | null,
+};
+
+export type OnDeleteStatisticsSubscription = {
+  onDeleteStatistics?:  {
+    __typename: "Statistics",
+    id: number,
+    batch: number,
+    totalApplications?: number | null,
+    totalApplicationsPerStatus?: string | null,
+    scoreHistogram?: string | null,
+    gpaHistogram?: string | null,
+    totalApplicationsPerUniversity?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,

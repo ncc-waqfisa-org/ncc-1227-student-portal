@@ -26,7 +26,9 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
 const ChangeEmailPage = () => {
   return (
-    <PageComponent title="ChangeEmail">{/* <ChangeEmail /> */}</PageComponent>
+    <PageComponent title="ChangeEmail">
+      <ChangeEmail />
+    </PageComponent>
   );
 };
 
