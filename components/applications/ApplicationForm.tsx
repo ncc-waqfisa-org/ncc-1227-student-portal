@@ -40,6 +40,8 @@ import {
 } from "../../src/HelperFunctions";
 import GetStorageLinkComponent from "../get-storage-link-component";
 import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
+import { cn } from "../../src/lib/utils";
 
 export interface CreateApplicationFormValues {
   application: CreateApplicationMutationVariables;
@@ -164,6 +166,7 @@ export const ApplicationForm: FC<Props> = (props) => {
       input: {
         id: undefined,
         gpa: data.application.input.gpa,
+        score: data.application.input.score,
         status: data.application.input.status,
         studentCPR: data.application.input.studentCPR,
         attachmentID: createdAttachmentInDB.createAttachment?.id,
@@ -172,8 +175,7 @@ export const ApplicationForm: FC<Props> = (props) => {
         dateTime: new Date().toISOString(),
         schoolType: student?.getStudent?.schoolType,
         schoolName: student?.getStudent?.schoolName,
-        batch: new Date().getFullYear(),
-        batchID: batch?.id ?? "",
+        batch: dayjs().year(),
       },
     };
 
@@ -252,6 +254,7 @@ export const ApplicationForm: FC<Props> = (props) => {
       input: {
         id: data.application.input.id,
         gpa: data.application.input.gpa,
+        score: data.application.input.score,
         status: data.application.input.status,
         studentCPR: data.application.input.studentCPR,
         attachmentID: data.application.input.attachmentID,
@@ -496,8 +499,11 @@ export const ApplicationForm: FC<Props> = (props) => {
                         gpa: values.gpa,
                       })
                     : 0,
-                batchID: batch?.id ?? "",
+                batch: batch?.batch ?? 0,
                 status: allDocsAreAvailable({
+                  isException: props.programs?.find(
+                    (program) => program.id === values.primaryProgramID
+                  )?.university?.isException,
                   cpr: studentData.cprDoc,
                   familyProofs:
                     student?.getStudent?.familyIncomeProofDocs ?? [],
@@ -584,11 +590,14 @@ export const ApplicationForm: FC<Props> = (props) => {
                   studentData.familyIncome && values.gpa
                     ? calculateScore({
                         familyIncome: studentData.familyIncome,
-                        gpa: values.gpa,
+                        gpa: props.application?.verifiedGPA ?? values.gpa,
                         adminScore: props.application?.adminPoints ?? 0,
                       })
                     : 0,
                 status: allDocsAreAvailable({
+                  isException: props.programs?.find(
+                    (program) => program.id === values.primaryProgramID
+                  )?.university?.isException,
                   cpr: studentData.cprDoc,
                   familyProofs:
                     student?.getStudent?.familyIncomeProofDocs ?? [],
@@ -691,8 +700,6 @@ export const ApplicationForm: FC<Props> = (props) => {
             },
           };
 
-          console.log("createValues: ", createValues);
-
           {
             props.application
               ? await toast.promise(updateApplicationProcess(updateValues), {
@@ -725,7 +732,6 @@ export const ApplicationForm: FC<Props> = (props) => {
             <div className="flex flex-col justify-start w-full">
               <label className="label">{t("fullName")}</label>
               <Field
-                dir="ltr"
                 type="text"
                 name="fullName"
                 title="fullName"
@@ -839,60 +845,89 @@ export const ApplicationForm: FC<Props> = (props) => {
                       ))}
                     </Field>
                   </div>
-                  <div className="flex flex-col justify-start w-full">
-                    <label className="label">
-                      {t("acceptanceLetter")}{" "}
-                      {props.application && (
-                        <GetStorageLinkComponent
-                          storageKey={
-                            primaryProgram?.id ===
-                            oldPrimaryProgram?.program?.id
-                              ? oldPrimaryProgram?.acceptanceLetterDoc
-                              : undefined
-                          }
-                        ></GetStorageLinkComponent>
-                      )}
-                    </label>
-                    <Field
-                      dir="ltr"
-                      type="file"
-                      accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps,application/msword"
-                      id="primaryAcceptanceDoc"
-                      name="primaryAcceptanceDoc"
-                      title="primaryAcceptanceDoc"
-                      placeholder="CPR Doc"
-                      className={`file-input file-input-bordered file-input-secondary bg-secondary text-secondary-content ${
-                        errors.primaryAcceptanceDoc && "input-error"
-                      }`}
-                      onChange={(event: any) => {
-                        let file: File | undefined =
-                          event.currentTarget.files[0];
+                  {primaryProgram?.university?.isException === 1 && (
+                    <div className="flex flex-col items-center justify-end h-full">
+                      <p className="w-full px-4 py-3 text-center border rounded-md border-secondary">
+                        {/* Acceptance letter not required */}
+                        {t("acceptanceLetterNotRequired")}
+                      </p>
+                    </div>
+                  )}
+                  {primaryProgram?.university?.isException !== 1 && (
+                    <div className="flex flex-col justify-start w-full">
+                      <label className="label">
+                        {t("acceptanceLetter")}{" "}
+                        {props.application && (
+                          <GetStorageLinkComponent
+                            storageKey={
+                              primaryProgram?.id ===
+                              oldPrimaryProgram?.program?.id
+                                ? oldPrimaryProgram?.acceptanceLetterDoc
+                                : undefined
+                            }
+                          ></GetStorageLinkComponent>
+                        )}
+                      </label>
+                      <Field
+                        type="file"
+                        accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps,application/msword"
+                        id="primaryAcceptanceDoc"
+                        name="primaryAcceptanceDoc"
+                        title="primaryAcceptanceDoc"
+                        placeholder="CPR Doc"
+                        className={`file-input file-input-bordered file-input-secondary bg-secondary text-secondary-content ${
+                          errors.primaryAcceptanceDoc && "input-error"
+                        }`}
+                        onChange={(event: any) => {
+                          let file: File | undefined =
+                            event.currentTarget.files[0];
 
-                        let isValid = checkIfFilesAreTooBig(file);
-                        if (isValid) {
-                          setPrimaryAcceptanceDoc(file);
-                          handleChange(event);
-                        } else {
-                          setFieldError(
-                            "primaryAcceptanceDoc",
-                            "File is too large"
-                          );
-                        }
-                      }}
-                      onBlur={handleBlur}
-                      value={values.primaryAcceptanceDoc ?? ""}
-                    />
-                    <label className="label-text-alt text-error">
-                      {errors.primaryAcceptanceDoc &&
-                        touched.primaryAcceptanceDoc &&
-                        errors.primaryAcceptanceDoc}
-                    </label>
-                  </div>
+                          let isValid = checkIfFilesAreTooBig(file);
+                          if (isValid) {
+                            setPrimaryAcceptanceDoc(file);
+                            handleChange(event);
+                          } else {
+                            setFieldError(
+                              "primaryAcceptanceDoc",
+                              "File is too large"
+                            );
+                          }
+                        }}
+                        onBlur={handleBlur}
+                        value={values.primaryAcceptanceDoc ?? ""}
+                      />
+                      <label className="label-text-alt text-error">
+                        {errors.primaryAcceptanceDoc &&
+                          touched.primaryAcceptanceDoc &&
+                          errors.primaryAcceptanceDoc}
+                      </label>
+                    </div>
+                  )}
                 </div>
                 {primaryProgram?.minimumGPA && (
-                  <div className="p-3 mt-2 border border-gray-300 rounded-md">
-                    <div className="stat-title">{t("minimumGPA")}</div>
-                    <label className="whitespace-pre-wrap stat-desc">
+                  <div
+                    className={cn(
+                      "p-3 mt-2 border border-gray-300 rounded-md",
+                      primaryProgram.minimumGPA > (values.gpa ?? 0) &&
+                        "border-error"
+                    )}
+                  >
+                    <div
+                      className={cn(
+                        "stat-title",
+                        primaryProgram.minimumGPA > (values.gpa ?? 0) &&
+                          "text-error"
+                      )}
+                    >
+                      {t("minimumGPA")}
+                    </div>
+                    <label
+                      className={cn(
+                        "whitespace-pre-wrap stat-desc",
+                        primaryProgram.minimumGPA > (values.gpa ?? 0) &&
+                          "text-error"
+                      )}
+                    >
                       {primaryProgram.minimumGPA}
                     </label>
                   </div>
@@ -1054,7 +1089,6 @@ export const ApplicationForm: FC<Props> = (props) => {
                 )}
               </label>
               <Field
-                dir="ltr"
                 type="file"
                 accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps,application/msword"
                 id="schoolCertificate"
@@ -1097,7 +1131,6 @@ export const ApplicationForm: FC<Props> = (props) => {
                 )}
               </label>
               <Field
-                dir="ltr"
                 type="file"
                 accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps,application/msword"
                 id="transcriptDoc"

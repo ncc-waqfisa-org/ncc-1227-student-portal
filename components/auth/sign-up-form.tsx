@@ -434,8 +434,15 @@ export default function SignUpForm() {
           isLoading={signUpMutation.isPending || isLoading}
           submitTitle={t("register")}
           onFormSubmit={() =>
-            signUpProcess(createStudentFormValues).finally(() =>
-              setIsLoading(false)
+            toast.promise(
+              signUpProcess(createStudentFormValues).finally(() =>
+                setIsLoading(false)
+              ),
+              {
+                loading: t("processing"),
+                success: t("accountCreated"),
+                error: (error) => `${error.message}`,
+              }
             )
           }
           // onFormSubmit={async () => {

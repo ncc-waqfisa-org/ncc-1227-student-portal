@@ -15,6 +15,7 @@ export default function ViewApplication({ application }: Props) {
   const { locale } = useRouter();
 
   const primaryProgram = application.programs?.items[0];
+  console.log("🚀 ~ ViewApplication ~ primaryProgram:", primaryProgram);
   // const secondaryProgram = application.programs?.items?.sort(
   //   (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
   // )[1];
@@ -103,12 +104,14 @@ export default function ViewApplication({ application }: Props) {
                   }`}
                 </div>
               )}
-              <div className="flex  items-center gap-4">
-                <p className="text-xs stat-desc">{t("acceptanceLetter")}</p>
-                <GetStorageLinkComponent
-                  storageKey={primaryProgram?.acceptanceLetterDoc}
-                ></GetStorageLinkComponent>
-              </div>
+              {primaryProgram?.program?.university?.isException !== 1 && (
+                <div className="flex  items-center gap-4">
+                  <p className="text-xs stat-desc">{t("acceptanceLetter")}</p>
+                  <GetStorageLinkComponent
+                    storageKey={primaryProgram?.acceptanceLetterDoc}
+                  ></GetStorageLinkComponent>
+                </div>
+              )}
             </td>
           </tr>
           <tr>

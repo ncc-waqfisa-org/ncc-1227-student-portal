@@ -24,7 +24,7 @@
       "function": {
         "signUp": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
-          "s3Key": "amplify-builds/signUp-717261666a67795a7434-build.zip"
+          "s3Key": "amplify-builds/signUp-48324c75774459567378-build.zip"
         },
         "updateStudentEmail": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
@@ -40,7 +40,7 @@
         },
         "getApplications": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
-          "s3Key": "amplify-builds/getApplications-6c4774702f6639543271-build.zip"
+          "s3Key": "amplify-builds/getApplications-65677732504175683641-build.zip"
         },
         "getStatistics": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
@@ -57,6 +57,14 @@
         "signScholarship": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
           "s3Key": "amplify-builds/signScholarship-5a624935714174496f5a-build.zip"
+        },
+        "autoUpdateScore": {
+          "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
+          "s3Key": "amplify-builds/autoUpdateScore-4c396f596f6954524155-build.zip"
+        },
+        "bulkAutoReject": {
+          "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
+          "s3Key": "amplify-builds/bulkAutoReject-5a725a76525a302f6f61-build.zip"
         }
       }
     }

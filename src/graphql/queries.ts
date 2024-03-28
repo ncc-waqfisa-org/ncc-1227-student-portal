@@ -158,25 +158,10 @@ export const getApplication = /* GraphQL */ `query GetApplication($id: ID!) {
       _lastChangedAt
       __typename
     }
-    batchID
     batch
-    batchRelation {
-      id
-      batch
-      createApplicationStartDate
-      createApplicationEndDate
-      updateApplicationEndDate
-      signUpStartDate
-      signUpEndDate
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      __typename
-    }
     score
     adminPoints
+    processed
     createdAt
     updatedAt
     _version
@@ -207,10 +192,10 @@ export const listApplications = /* GraphQL */ `query ListApplications(
       schoolName
       schoolType
       studentCPR
-      batchID
       batch
       score
       adminPoints
+      processed
       createdAt
       updatedAt
       _version
@@ -251,10 +236,10 @@ export const syncApplications = /* GraphQL */ `query SyncApplications(
       schoolName
       schoolType
       studentCPR
-      batchID
       batch
       score
       adminPoints
+      processed
       createdAt
       updatedAt
       _version
@@ -307,10 +292,10 @@ export const getProgramChoice = /* GraphQL */ `query GetProgramChoice($id: ID!) 
       schoolName
       schoolType
       studentCPR
-      batchID
       batch
       score
       adminPoints
+      processed
       createdAt
       updatedAt
       _version
@@ -419,6 +404,7 @@ export const getProgram = /* GraphQL */ `query GetProgram($id: ID!) {
       isDeactivated
       isExtended
       extendedTo
+      isException
       isTrashed
       createdAt
       updatedAt
@@ -535,6 +521,7 @@ export const getUniversity = /* GraphQL */ `query GetUniversity($id: ID!) {
     isDeactivated
     isExtended
     extendedTo
+    isException
     isTrashed
     createdAt
     updatedAt
@@ -562,6 +549,7 @@ export const listUniversities = /* GraphQL */ `query ListUniversities(
       isDeactivated
       isExtended
       extendedTo
+      isException
       isTrashed
       createdAt
       updatedAt
@@ -599,6 +587,7 @@ export const syncUniversities = /* GraphQL */ `query SyncUniversities(
       isDeactivated
       isExtended
       extendedTo
+      isException
       isTrashed
       createdAt
       updatedAt
@@ -1194,20 +1183,14 @@ export const syncStudents = /* GraphQL */ `query SyncStudents(
   APITypes.SyncStudentsQueryVariables,
   APITypes.SyncStudentsQuery
 >;
-export const getBatch = /* GraphQL */ `query GetBatch($id: ID!) {
-  getBatch(id: $id) {
-    id
+export const getBatch = /* GraphQL */ `query GetBatch($batch: Int!) {
+  getBatch(batch: $batch) {
     batch
     createApplicationStartDate
     createApplicationEndDate
     updateApplicationEndDate
     signUpStartDate
     signUpEndDate
-    applications {
-      nextToken
-      startedAt
-      __typename
-    }
     createdAt
     updatedAt
     _version
@@ -1218,21 +1201,20 @@ export const getBatch = /* GraphQL */ `query GetBatch($id: ID!) {
 }
 ` as GeneratedQuery<APITypes.GetBatchQueryVariables, APITypes.GetBatchQuery>;
 export const listBatches = /* GraphQL */ `query ListBatches(
-  $id: ID
+  $batch: Int
   $filter: ModelBatchFilterInput
   $limit: Int
   $nextToken: String
   $sortDirection: ModelSortDirection
 ) {
   listBatches(
-    id: $id
+    batch: $batch
     filter: $filter
     limit: $limit
     nextToken: $nextToken
     sortDirection: $sortDirection
   ) {
     items {
-      id
       batch
       createApplicationStartDate
       createApplicationEndDate
@@ -1268,7 +1250,6 @@ export const syncBatches = /* GraphQL */ `query SyncBatches(
     lastSync: $lastSync
   ) {
     items {
-      id
       batch
       createApplicationStartDate
       createApplicationEndDate
@@ -1308,10 +1289,10 @@ export const getScholarship = /* GraphQL */ `query GetScholarship($id: ID!) {
       schoolName
       schoolType
       studentCPR
-      batchID
       batch
       score
       adminPoints
+      processed
       createdAt
       updatedAt
       _version
@@ -1538,10 +1519,10 @@ export const applicationsByIdAndDateTime = /* GraphQL */ `query ApplicationsById
       schoolName
       schoolType
       studentCPR
-      batchID
       batch
       score
       adminPoints
+      processed
       createdAt
       updatedAt
       _version
@@ -1586,10 +1567,10 @@ export const applicationsByStudentCPRAndGpa = /* GraphQL */ `query ApplicationsB
       schoolName
       schoolType
       studentCPR
-      batchID
       batch
       score
       adminPoints
+      processed
       createdAt
       updatedAt
       _version
@@ -1606,52 +1587,6 @@ export const applicationsByStudentCPRAndGpa = /* GraphQL */ `query ApplicationsB
 ` as GeneratedQuery<
   APITypes.ApplicationsByStudentCPRAndGpaQueryVariables,
   APITypes.ApplicationsByStudentCPRAndGpaQuery
->;
-export const applicationsByBatchID = /* GraphQL */ `query ApplicationsByBatchID(
-  $batchID: ID!
-  $sortDirection: ModelSortDirection
-  $filter: ModelApplicationFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  applicationsByBatchID(
-    batchID: $batchID
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      gpa
-      verifiedGPA
-      status
-      attachmentID
-      dateTime
-      isEmailSent
-      schoolName
-      schoolType
-      studentCPR
-      batchID
-      batch
-      score
-      adminPoints
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      applicationAttachmentId
-      __typename
-    }
-    nextToken
-    startedAt
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.ApplicationsByBatchIDQueryVariables,
-  APITypes.ApplicationsByBatchIDQuery
 >;
 export const applicationsByBatchAndStatus = /* GraphQL */ `query ApplicationsByBatchAndStatus(
   $batch: Int!
@@ -1680,10 +1615,10 @@ export const applicationsByBatchAndStatus = /* GraphQL */ `query ApplicationsByB
       schoolName
       schoolType
       studentCPR
-      batchID
       batch
       score
       adminPoints
+      processed
       createdAt
       updatedAt
       _version
@@ -1728,10 +1663,10 @@ export const applicationsByScoreAndStatus = /* GraphQL */ `query ApplicationsByS
       schoolName
       schoolType
       studentCPR
-      batchID
       batch
       score
       adminPoints
+      processed
       createdAt
       updatedAt
       _version
@@ -1748,6 +1683,136 @@ export const applicationsByScoreAndStatus = /* GraphQL */ `query ApplicationsByS
 ` as GeneratedQuery<
   APITypes.ApplicationsByScoreAndStatusQueryVariables,
   APITypes.ApplicationsByScoreAndStatusQuery
+>;
+export const applicationsByProcessedAndBatch = /* GraphQL */ `query ApplicationsByProcessedAndBatch(
+  $processed: Int!
+  $batch: ModelIntKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelApplicationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  applicationsByProcessedAndBatch(
+    processed: $processed
+    batch: $batch
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      gpa
+      verifiedGPA
+      status
+      attachmentID
+      dateTime
+      isEmailSent
+      schoolName
+      schoolType
+      studentCPR
+      batch
+      score
+      adminPoints
+      processed
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      applicationAttachmentId
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ApplicationsByProcessedAndBatchQueryVariables,
+  APITypes.ApplicationsByProcessedAndBatchQuery
+>;
+export const universitiesByIsExtendedAndExtendedTo = /* GraphQL */ `query UniversitiesByIsExtendedAndExtendedTo(
+  $isExtended: Int!
+  $extendedTo: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelUniversityFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  universitiesByIsExtendedAndExtendedTo(
+    isExtended: $isExtended
+    extendedTo: $extendedTo
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      nameAr
+      availability
+      isDeactivated
+      isExtended
+      extendedTo
+      isException
+      isTrashed
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.UniversitiesByIsExtendedAndExtendedToQueryVariables,
+  APITypes.UniversitiesByIsExtendedAndExtendedToQuery
+>;
+export const universitiesByIsException = /* GraphQL */ `query UniversitiesByIsException(
+  $isException: Int!
+  $sortDirection: ModelSortDirection
+  $filter: ModelUniversityFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  universitiesByIsException(
+    isException: $isException
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      nameAr
+      availability
+      isDeactivated
+      isExtended
+      extendedTo
+      isException
+      isTrashed
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.UniversitiesByIsExceptionQueryVariables,
+  APITypes.UniversitiesByIsExceptionQuery
 >;
 export const scholarshipsByStudentCPRAndStatus = /* GraphQL */ `query ScholarshipsByStudentCPRAndStatus(
   $studentCPR: String!

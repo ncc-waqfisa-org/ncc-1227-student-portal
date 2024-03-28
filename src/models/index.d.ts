@@ -108,11 +108,10 @@ type EagerApplication = {
   readonly schoolType?: SchoolType | keyof typeof SchoolType | null;
   readonly studentCPR: string;
   readonly student?: Student | null;
-  readonly batchID: string;
   readonly batch?: number | null;
-  readonly batchRelation?: Batch | null;
   readonly score?: number | null;
   readonly adminPoints?: number | null;
+  readonly processed?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly applicationAttachmentId?: string | null;
@@ -138,11 +137,10 @@ type LazyApplication = {
   readonly schoolType?: SchoolType | keyof typeof SchoolType | null;
   readonly studentCPR: string;
   readonly student: AsyncItem<Student | undefined>;
-  readonly batchID: string;
   readonly batch?: number | null;
-  readonly batchRelation: AsyncItem<Batch | undefined>;
   readonly score?: number | null;
   readonly adminPoints?: number | null;
+  readonly processed?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly applicationAttachmentId?: string | null;
@@ -257,8 +255,9 @@ type EagerUniversity = {
   readonly Programs?: (Program | null)[] | null;
   readonly availability?: number | null;
   readonly isDeactivated?: boolean | null;
-  readonly isExtended?: boolean | null;
+  readonly isExtended?: number | null;
   readonly extendedTo?: string | null;
+  readonly isException?: number | null;
   readonly isTrashed?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -275,8 +274,9 @@ type LazyUniversity = {
   readonly Programs: AsyncCollection<Program>;
   readonly availability?: number | null;
   readonly isDeactivated?: boolean | null;
-  readonly isExtended?: boolean | null;
+  readonly isExtended?: number | null;
   readonly extendedTo?: string | null;
+  readonly isException?: number | null;
   readonly isTrashed?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -528,34 +528,30 @@ export declare const Student: (new (init: ModelInit<Student>) => Student) & {
 
 type EagerBatch = {
   readonly [__modelMeta__]: {
-    identifier: OptionallyManagedIdentifier<Batch, 'id'>;
+    identifier: CustomIdentifier<Batch, 'batch'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
-  readonly id: string;
-  readonly batch?: number | null;
+  readonly batch: number;
   readonly createApplicationStartDate?: string | null;
   readonly createApplicationEndDate?: string | null;
   readonly updateApplicationEndDate?: string | null;
   readonly signUpStartDate?: string | null;
   readonly signUpEndDate?: string | null;
-  readonly applications?: (Application | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
 type LazyBatch = {
   readonly [__modelMeta__]: {
-    identifier: OptionallyManagedIdentifier<Batch, 'id'>;
+    identifier: CustomIdentifier<Batch, 'batch'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
-  readonly id: string;
-  readonly batch?: number | null;
+  readonly batch: number;
   readonly createApplicationStartDate?: string | null;
   readonly createApplicationEndDate?: string | null;
   readonly updateApplicationEndDate?: string | null;
   readonly signUpStartDate?: string | null;
   readonly signUpEndDate?: string | null;
-  readonly applications: AsyncCollection<Application>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

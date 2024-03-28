@@ -255,8 +255,9 @@ export const Contract: FC<TContract> = ({ scholarship }) => {
               {/* Submit */}
               <button
                 disabled={isSubmitting || !isValid}
-                className={cn("btn w-fit", isSubmitting && "loading")}
+                className={cn("btn w-fit")}
               >
+                {isSubmitting && <span className="loading"></span>}
                 {t("signAndContinue")}
               </button>
             </div>

@@ -162,6 +162,7 @@ export function getStudentApplicationSnapshot(inputData: {
 }
 
 interface IAllDocsAreAvailable {
+  isException?: number | null | undefined;
   cpr: string | null | undefined;
   familyProofs: (string | null)[];
   transcript: string | null | undefined;
@@ -175,7 +176,9 @@ export function allDocsAreAvailable(props: IAllDocsAreAvailable): boolean {
     typeof props.cpr === "string" &&
     typeof props.transcript === "string" &&
     typeof props.schoolCertificate === "string" &&
-    typeof props.primaryProgramAcceptanceLetter === "string" &&
+    (props.isException !== 1
+      ? typeof props.primaryProgramAcceptanceLetter === "string"
+      : true) &&
     // ||typeof props.secondaryProgramAcceptanceLetter === "string"
     props.familyProofs.length > 0
   );

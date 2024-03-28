@@ -234,12 +234,11 @@ export const MyScholarships: FC<TMyScholarships> = () => {
                                     declineDialog.current?.showModal();
                                   }
                                 }
-                                className={cn(
-                                  "btn btn-ghost",
-                                  declineScholarshipMutation.isPending &&
-                                    "loading"
-                                )}
+                                className={cn("btn btn-ghost")}
                               >
+                                {declineScholarshipMutation.isPending && (
+                                  <span className="loading"></span>
+                                )}{" "}
                                 {t("decline")}
                               </button>
                               <dialog
@@ -280,12 +279,11 @@ export const MyScholarships: FC<TMyScholarships> = () => {
                                           _version: scholarship._version,
                                         })
                                       }
-                                      className={cn(
-                                        "btn btn-primary ",
-                                        declineScholarshipMutation.isPending &&
-                                          "loading"
-                                      )}
+                                      className={cn("btn btn-primary ")}
                                     >
+                                      {declineScholarshipMutation.isPending && (
+                                        <span className="loading"></span>
+                                      )}
                                       {t("decline")}
                                     </button>
                                     <button className="btn btn-ghost bg-stone-200 ">
@@ -306,12 +304,11 @@ export const MyScholarships: FC<TMyScholarships> = () => {
                                     _version: scholarship._version,
                                   })
                                 }
-                                className={cn(
-                                  "btn btn-warning",
-                                  approveScholarshipMutation.isPending &&
-                                    "loading"
-                                )}
+                                className={cn("btn btn-warning")}
                               >
+                                {approveScholarshipMutation.isPending && (
+                                  <span className="loading"></span>
+                                )}{" "}
                                 {t("accepts")}
                               </button>
                             </div>

@@ -6,5 +6,7 @@
   "register": "Register",
   "verify": "Verify",
   "reSend": "Resend Code",
+  "processing": "Processing",
+  "accountCreated": "Account created successfully",
   "verificationCode": "Verification code has been sent to"
 }

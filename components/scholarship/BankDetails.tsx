@@ -204,11 +204,7 @@ export const BankDetails: FC<TBankDetails> = ({ scholarship }) => {
             </div>
 
             <button
-              className={cn(
-                "my-3 text-white  btn btn-primary",
-                (updateBankDetailsMutation.isPending || isSubmitting) &&
-                  "loading"
-              )}
+              className={cn("my-3 text-white  btn btn-primary")}
               type="submit"
               disabled={
                 updateBankDetailsMutation.isPending ||
@@ -216,6 +212,9 @@ export const BankDetails: FC<TBankDetails> = ({ scholarship }) => {
                 IBANLetterDocsFile.length === 0
               }
             >
+              {(updateBankDetailsMutation.isPending || isSubmitting) && (
+                <span className="loading"></span>
+              )}
               {t("submit")}
             </button>
           </Form>

@@ -22,12 +22,13 @@ type Application @model @auth(rules: [{ allow: public }]) {
   schoolType: SchoolType
   studentCPR: String! @index(name: "byCPR", sortKeyFields: ["gpa"])
   student: Student @belongsTo(fields: ["studentCPR"])
-  batchID: ID! @index(name: "byBatchRelation") @default(value: "48745538-4051-4c99-ad0f-7be0cac6cf16")
+#  batchID: ID! @index(name: "byBatchRelation") @default(value: "48745538-4051-4c99-ad0f-7be0cac6cf16")
   batch: Int @index(name: "byBatch", sortKeyFields: ["status"])
-  batchRelation: Batch @belongsTo(fields: ["batchID"])
+#  batchRelation: Batch @belongsTo(fields: ["batchID"])
   # add a new field to the Application model called "score" that is a Float and is indexed for sorting
   score: Float @index(name: "byScore", sortKeyFields: ["status"])
   adminPoints: Int
+  processed: Int @index(name: "byProcessed", sortKeyFields: ["batch"])
 }
 
 type ProgramChoice @model @auth(rules: [{ allow: public }]) {
@@ -62,9 +63,9 @@ type University @model @auth(rules: [{ allow: public }]) {
   Programs: [Program] @hasMany
   availability: Int @default(value: "0")
   isDeactivated: Boolean
-  isExtended: Boolean @default(value: "false")
-  # extendedTo: AWSDate and nullable
+  isExtended: Int @index(name: "byExtended", sortKeyFields: ["extendedTo"])
   extendedTo: AWSDate
+  isException: Int @index(name: "byException")
   isTrashed: Boolean @default(value: "false")
 }
 
@@ -173,14 +174,14 @@ type Student @model @auth(rules: [{ allow: public }]) {
 }
 
 type Batch @model @auth(rules: [{ allow: public }]) {
-  id: ID! @primaryKey
-  batch : Int
+  batch: Int! @primaryKey
   createApplicationStartDate: AWSDate
   createApplicationEndDate: AWSDate
   updateApplicationEndDate: AWSDate
   signUpStartDate: AWSDate
   signUpEndDate: AWSDate
-  applications: [Application] @hasMany(indexName: "byBatchRelation", fields: ["id"])
+#  updateExceptions: AWSJSON
+#  applications: [Application] @hasMany(indexName: "byBatchRelation", fields: ["id"])
 }
 
 type Scholarship @model @auth(rules: [{ allow: public }]) {

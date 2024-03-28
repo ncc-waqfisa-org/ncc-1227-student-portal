@@ -49,6 +49,16 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "autoUpdateScore": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "bulkAutoReject": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "exportApplicationsCsv": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -106,6 +116,38 @@
         {
           "category": "function",
           "resourceName": "autoReject"
+        }
+      ]
+    },
+    "AMPLIFY_function_autoUpdateScore_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "autoUpdateScore"
+        }
+      ]
+    },
+    "AMPLIFY_function_autoUpdateScore_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "autoUpdateScore"
+        }
+      ]
+    },
+    "AMPLIFY_function_bulkAutoReject_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "bulkAutoReject"
+        }
+      ]
+    },
+    "AMPLIFY_function_bulkAutoReject_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "bulkAutoReject"
         }
       ]
     },

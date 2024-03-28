@@ -142,25 +142,10 @@ export const onCreateApplication = /* GraphQL */ `subscription OnCreateApplicati
       _lastChangedAt
       __typename
     }
-    batchID
     batch
-    batchRelation {
-      id
-      batch
-      createApplicationStartDate
-      createApplicationEndDate
-      updateApplicationEndDate
-      signUpStartDate
-      signUpEndDate
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      __typename
-    }
     score
     adminPoints
+    processed
     createdAt
     updatedAt
     _version
@@ -245,25 +230,10 @@ export const onUpdateApplication = /* GraphQL */ `subscription OnUpdateApplicati
       _lastChangedAt
       __typename
     }
-    batchID
     batch
-    batchRelation {
-      id
-      batch
-      createApplicationStartDate
-      createApplicationEndDate
-      updateApplicationEndDate
-      signUpStartDate
-      signUpEndDate
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      __typename
-    }
     score
     adminPoints
+    processed
     createdAt
     updatedAt
     _version
@@ -348,25 +318,10 @@ export const onDeleteApplication = /* GraphQL */ `subscription OnDeleteApplicati
       _lastChangedAt
       __typename
     }
-    batchID
     batch
-    batchRelation {
-      id
-      batch
-      createApplicationStartDate
-      createApplicationEndDate
-      updateApplicationEndDate
-      signUpStartDate
-      signUpEndDate
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      __typename
-    }
     score
     adminPoints
+    processed
     createdAt
     updatedAt
     _version
@@ -417,10 +372,10 @@ export const onCreateProgramChoice = /* GraphQL */ `subscription OnCreateProgram
       schoolName
       schoolType
       studentCPR
-      batchID
       batch
       score
       adminPoints
+      processed
       createdAt
       updatedAt
       _version
@@ -482,10 +437,10 @@ export const onUpdateProgramChoice = /* GraphQL */ `subscription OnUpdateProgram
       schoolName
       schoolType
       studentCPR
-      batchID
       batch
       score
       adminPoints
+      processed
       createdAt
       updatedAt
       _version
@@ -547,10 +502,10 @@ export const onDeleteProgramChoice = /* GraphQL */ `subscription OnDeleteProgram
       schoolName
       schoolType
       studentCPR
-      batchID
       batch
       score
       adminPoints
+      processed
       createdAt
       updatedAt
       _version
@@ -593,6 +548,7 @@ export const onCreateProgram = /* GraphQL */ `subscription OnCreateProgram($filt
       isDeactivated
       isExtended
       extendedTo
+      isException
       isTrashed
       createdAt
       updatedAt
@@ -639,6 +595,7 @@ export const onUpdateProgram = /* GraphQL */ `subscription OnUpdateProgram($filt
       isDeactivated
       isExtended
       extendedTo
+      isException
       isTrashed
       createdAt
       updatedAt
@@ -685,6 +642,7 @@ export const onDeleteProgram = /* GraphQL */ `subscription OnDeleteProgram($filt
       isDeactivated
       isExtended
       extendedTo
+      isException
       isTrashed
       createdAt
       updatedAt
@@ -729,6 +687,7 @@ export const onCreateUniversity = /* GraphQL */ `subscription OnCreateUniversity
     isDeactivated
     isExtended
     extendedTo
+    isException
     isTrashed
     createdAt
     updatedAt
@@ -758,6 +717,7 @@ export const onUpdateUniversity = /* GraphQL */ `subscription OnUpdateUniversity
     isDeactivated
     isExtended
     extendedTo
+    isException
     isTrashed
     createdAt
     updatedAt
@@ -787,6 +747,7 @@ export const onDeleteUniversity = /* GraphQL */ `subscription OnDeleteUniversity
     isDeactivated
     isExtended
     extendedTo
+    isException
     isTrashed
     createdAt
     updatedAt
@@ -1411,18 +1372,12 @@ export const onDeleteStudent = /* GraphQL */ `subscription OnDeleteStudent($filt
 >;
 export const onCreateBatch = /* GraphQL */ `subscription OnCreateBatch($filter: ModelSubscriptionBatchFilterInput) {
   onCreateBatch(filter: $filter) {
-    id
     batch
     createApplicationStartDate
     createApplicationEndDate
     updateApplicationEndDate
     signUpStartDate
     signUpEndDate
-    applications {
-      nextToken
-      startedAt
-      __typename
-    }
     createdAt
     updatedAt
     _version
@@ -1437,18 +1392,12 @@ export const onCreateBatch = /* GraphQL */ `subscription OnCreateBatch($filter: 
 >;
 export const onUpdateBatch = /* GraphQL */ `subscription OnUpdateBatch($filter: ModelSubscriptionBatchFilterInput) {
   onUpdateBatch(filter: $filter) {
-    id
     batch
     createApplicationStartDate
     createApplicationEndDate
     updateApplicationEndDate
     signUpStartDate
     signUpEndDate
-    applications {
-      nextToken
-      startedAt
-      __typename
-    }
     createdAt
     updatedAt
     _version
@@ -1463,18 +1412,12 @@ export const onUpdateBatch = /* GraphQL */ `subscription OnUpdateBatch($filter: 
 >;
 export const onDeleteBatch = /* GraphQL */ `subscription OnDeleteBatch($filter: ModelSubscriptionBatchFilterInput) {
   onDeleteBatch(filter: $filter) {
-    id
     batch
     createApplicationStartDate
     createApplicationEndDate
     updateApplicationEndDate
     signUpStartDate
     signUpEndDate
-    applications {
-      nextToken
-      startedAt
-      __typename
-    }
     createdAt
     updatedAt
     _version
@@ -1506,10 +1449,10 @@ export const onCreateScholarship = /* GraphQL */ `subscription OnCreateScholarsh
       schoolName
       schoolType
       studentCPR
-      batchID
       batch
       score
       adminPoints
+      processed
       createdAt
       updatedAt
       _version
@@ -1557,10 +1500,10 @@ export const onUpdateScholarship = /* GraphQL */ `subscription OnUpdateScholarsh
       schoolName
       schoolType
       studentCPR
-      batchID
       batch
       score
       adminPoints
+      processed
       createdAt
       updatedAt
       _version
@@ -1608,10 +1551,10 @@ export const onDeleteScholarship = /* GraphQL */ `subscription OnDeleteScholarsh
       schoolName
       schoolType
       studentCPR
-      batchID
       batch
       score
       adminPoints
+      processed
       createdAt
       updatedAt
       _version

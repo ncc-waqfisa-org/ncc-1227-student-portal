@@ -10,6 +10,8 @@ import {
   CreateProgramChoiceMutationVariables,
   CreateStudentLogMutation,
   CreateStudentLogMutationVariables,
+  GetBatchQuery,
+  GetBatchQueryVariables,
   GetStudentQuery,
   ListBatchesQuery,
   ListBatchesQueryVariables,
@@ -42,7 +44,7 @@ import {
 } from "./graphql/mutations";
 
 import dayjs from "dayjs";
-import { listBatches } from "./graphql/queries";
+import { getBatch, listBatches } from "./graphql/queries";
 
 /* -------------------------------------------------------------------------- */
 /*                                    ENUMS                                   */
@@ -71,17 +73,33 @@ export interface DownloadLinks {
 /* -------------------------------------------------------------------------- */
 
 export async function getCurrentBatch() {
-  let queryInput: ListBatchesQueryVariables = {
-    filter: {
-      batch: { eq: dayjs().year() },
-    },
+  let queryInput: GetBatchQueryVariables = {
+    batch: dayjs().year(),
   };
 
-  let res = (await API.graphql({
-    query: listBatches,
-    variables: queryInput,
-  })) as GraphQLResult<ListBatchesQuery>;
-  return res.data;
+  const query = `
+  query GetCurrentBatch {
+    getBatch(batch: ${dayjs().year()}) {
+      _deleted
+      _lastChangedAt
+      _version
+      batch
+      createApplicationEndDate
+      createApplicationStartDate
+      createdAt
+      signUpEndDate
+      signUpStartDate
+      updateApplicationEndDate
+      updatedAt
+    }
+  }  
+  `;
+
+  let res = (await API.graphql(
+    graphqlOperation(query)
+  )) as GraphQLResult<GetBatchQuery>;
+
+  return res.data?.getBatch;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -142,6 +160,10 @@ export async function getApplicationData(
                         id
                         name
                         nameAr
+                        isException
+                        isExtended
+                        extendedTo
+                        isTrashed
                       }
                       _version
                       _deleted
@@ -312,6 +334,10 @@ export async function getStudentApplications(
                 id
                 name
                 nameAr
+                isException
+                isExtended
+                isDeactivated
+                isTrashed
               }
               _version
               _deleted
@@ -374,7 +400,12 @@ export async function listAllPrograms() {
           name
           nameAr
           availability
+          isException
+          isExtended
+          isDeactivated
+          isTrashed
         }
+        isTrashed
       }
     }
   }

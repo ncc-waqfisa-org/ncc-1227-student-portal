@@ -32,27 +32,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 export default function ApplicationsPage() {
   const appContext = useAppContext();
 
-  // const { data: batch } = useQuery<Batch | null>({
-  //   queryKey: ["currentBatch"],
-  //   queryFn: () =>
-  //     getCurrentBatch().then((value) => {
-  //       const currentBatch =
-  //         (value?.listBatches?.items ?? []).length > 0
-  //           ? (value?.listBatches?.items[0] as Batch)
-  //           : null;
-
-  //       console.log(currentBatch);
-  //       return currentBatch;
-  //     }),
-  // });
-
-  // Follow the batches rules
-
-  // const newApplicationsAllowed = !batch
-  //   ? false
-  //   : dayjs().isBefore(dayjs(batch.createApplicationEndDate)) &&
-  //     dayjs().isAfter(dayjs(batch.createApplicationStartDate));
-
   // end of batches rules
   const student = appContext.student?.getStudent as Student;
 

@@ -14,18 +14,11 @@ import {
   Application,
   Status,
   Student,
-  GetBatchQueryVariables,
-  ListBatchesQueryVariables,
   Batch,
-  Scholarship,
 } from "../src/API";
-import { getStudent, listBatches } from "../src/graphql/queries";
+import { getStudent } from "../src/graphql/queries";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
-import {
-  getCurrentBatch,
-  getStudentApplications,
-  getStudentScholarships,
-} from "../src/CustomAPI";
+import { getCurrentBatch, getStudentApplications } from "../src/CustomAPI";
 import { Crisp } from "crisp-sdk-web";
 
 import dayjs from "dayjs";
@@ -96,14 +89,18 @@ function useProviderApp() {
   const { data: batch, isPending: isBatchPending } = useQuery<Batch | null>({
     queryKey: ["currentBatch"],
     queryFn: () =>
-      getCurrentBatch().then((value) => {
-        const currentBatch =
-          (value?.listBatches?.items ?? []).length > 0
-            ? (value?.listBatches?.items[0] as Batch)
-            : null;
+      getCurrentBatch()
+        .then((value) => {
+          console.log("🚀 ~ getCurrentBatch ~ value:", value);
+          const currentBatch = value ? (value as Batch) : null;
 
-        return currentBatch;
-      }),
+          return currentBatch;
+        })
+        .catch((error) => {
+          console.log(error);
+
+          return null;
+        }),
   });
 
   const newApplicationsEnabled = !batch

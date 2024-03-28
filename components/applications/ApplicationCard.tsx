@@ -52,9 +52,7 @@ export const ApplicationCard: FC<IApplicationCard> = ({
                 `${
                   application.status === Status.ELIGIBLE ||
                   application.status === Status.REVIEW
-                    ? // application.status === Status.APPROVED ||
-                      // application.status === Status.NOT_COMPLETED
-                      Status.REVIEW
+                    ? Status.REVIEW
                     : application.status
                 }`
               )}
@@ -93,8 +91,9 @@ export const ApplicationCard: FC<IApplicationCard> = ({
                 application.attachment?.transcriptDoc === (undefined || null) ||
                 application.attachment?.schoolCertificate ===
                   (undefined || null) ||
-                primaryProgram?.acceptanceLetterDoc ===
-                  (undefined || null)) && (
+                (primaryProgram?.program?.university?.isException !== 1
+                  ? primaryProgram?.acceptanceLetterDoc === (undefined || null)
+                  : false)) && (
                 <span className="text-error">{t("notCompleted")}</span>
               )}
             </div>
@@ -131,14 +130,16 @@ export const ApplicationCard: FC<IApplicationCard> = ({
               >
                 {t("schoolCertificate")}
               </div>
-              <div
-                className={`badge  badge-ghost h-fit bg-[#e7e7e7] border-0 ${
-                  !primaryProgram?.acceptanceLetterDoc &&
-                  "badge-error !badge-outline !border"
-                }`}
-              >
-                {t("acceptanceLetter")}
-              </div>
+              {primaryProgram?.program?.university?.isException !== 1 && (
+                <div
+                  className={`badge  badge-ghost h-fit bg-[#e7e7e7] border-0 ${
+                    !primaryProgram?.acceptanceLetterDoc &&
+                    "badge-error !badge-outline !border"
+                  }`}
+                >
+                  {t("acceptanceLetter")}
+                </div>
+              )}
               {/* <div
                 className={`badge  badge-ghost h-fit bg-[#e7e7e7] border-0 ${
                   !secondaryProgram?.acceptanceLetterDoc &&
