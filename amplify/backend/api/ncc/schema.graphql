@@ -18,8 +18,15 @@ type Application @model @auth(rules: [{ allow: public }]) {
   programs: [ProgramChoice] @hasMany
   dateTime: AWSDateTime!
   isEmailSent: Boolean @default(value: "false")
+  nationalityCategory: Nationality @index(name: "byNationalityCategory", sortKeyFields: ["batch"])
+  familyIncome: FamilyIncome
   schoolName: String
   schoolType: SchoolType
+  studentName: String
+  programID : ID
+  program: Program @belongsTo(fields: ["programID"])
+  universityID: ID
+  university: University @belongsTo(fields: ["universityID"])
   studentCPR: String! @index(name: "byCPR", sortKeyFields: ["gpa"])
   student: Student @belongsTo(fields: ["studentCPR"])
 #  batchID: ID! @index(name: "byBatchRelation") @default(value: "48745538-4051-4c99-ad0f-7be0cac6cf16")
@@ -29,6 +36,7 @@ type Application @model @auth(rules: [{ allow: public }]) {
   score: Float @index(name: "byScore", sortKeyFields: ["status"])
   adminPoints: Int
   processed: Int @index(name: "byProcessed", sortKeyFields: ["batch"])
+  isFamilyIncomeVerified: Boolean
 }
 
 type ProgramChoice @model @auth(rules: [{ allow: public }]) {
@@ -54,6 +62,8 @@ type Program @model @auth(rules: [{ allow: public }]) {
   applications: [ProgramChoice] @hasMany
   isDeactivated: Boolean
   isTrashed: Boolean @default(value: "false")
+  application: [Application] @hasMany
+
 }
 
 type University @model @auth(rules: [{ allow: public }]) {
@@ -63,10 +73,11 @@ type University @model @auth(rules: [{ allow: public }]) {
   Programs: [Program] @hasMany
   availability: Int @default(value: "0")
   isDeactivated: Boolean
-  isExtended: Int @index(name: "byExtended", sortKeyFields: ["extendedTo"])
-  extendedTo: AWSDate
+  isExtended: Int @index(name: "byExtended", sortKeyFields: ["name"])
+  extensionDuration: Int
   isException: Int @index(name: "byException")
   isTrashed: Boolean @default(value: "false")
+  applications: [Application] @hasMany
 }
 
 type AdminLog @model @auth(rules: [{ allow: public }]) {
@@ -150,17 +161,18 @@ type Student @model @auth(rules: [{ allow: public }]) {
   cpr: String! @primaryKey
   cprDoc: String
   fullName: String
+  batch: Int
   email: String
   phone: String
   gender: Gender
-  nationalityCategory: Nationality
+  nationalityCategory: Nationality @index(name: "byNationalityCategory", sortKeyFields: ["graduationDate"])
   nationality: String
   schoolName: String
   schoolType: SchoolType
   specialization: String
   placeOfBirth: String
   studentOrderAmongSiblings: Int
-  householdIncome: Float
+#  householdIncome: Float
   familyIncome: FamilyIncome
   familyIncomeProofDoc: String
   familyIncomeProofDocs: [String]
@@ -187,7 +199,8 @@ type Batch @model @auth(rules: [{ allow: public }]) {
 type Scholarship @model @auth(rules: [{ allow: public }]) {
   id: ID!
   status: ScholarshipStatus
-  applicationID: ID!
+  applicationID: ID! @index(name: "byApplication")
+  batch: Int @index(name: "byBatch", sortKeyFields: ["status"])
   isConfirmed: Boolean
   application: Application @hasOne(fields: ["applicationID"])
   studentCPR: String @index(name: "byCPR", sortKeyFields: ["status"])
@@ -208,6 +221,8 @@ type Statistics @model @auth(rules: [{ allow: public }]) {
   scoreHistogram: AWSJSON
   gpaHistogram: AWSJSON
   totalApplicationsPerUniversity: AWSJSON
+#  topPrograms: AWSJSON
+  topUniversities: AWSJSON
 }
 
 #type CurrentApplication @model @auth(rules: [{ allow: public }]) {

@@ -47,12 +47,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "autoReject",
+            "exportEligibleCsv",
             {
               "Fn::Join": [
                 "",
                 [
-                  "autoReject",
+                  "exportEligibleCsv",
                   "-",
                   {
                     "Ref": "env"
@@ -89,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "nccLambdaRolee4cf60ca",
+            "nccLambdaRole9ada7159",
             {
               "Fn::Join": [
                 "",
                 [
-                  "nccLambdaRolee4cf60ca",
+                  "nccLambdaRole9ada7159",
                   "-",
                   {
                     "Ref": "env"

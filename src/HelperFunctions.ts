@@ -19,7 +19,7 @@ export function checkIfFilesAreTooBig(file?: File, maxSize?: number): boolean {
 }
 
 type TCalculateScore = {
-  familyIncome: FamilyIncome;
+  familyIncome: FamilyIncome | null | undefined;
   gpa: number;
   adminScore?: number;
 };
@@ -30,6 +30,8 @@ export function calculateScore({
 }: TCalculateScore) {
   let score = gpa * 0.7 + adminScore;
   if (familyIncome === FamilyIncome.LESS_THAN_1500) {
+    score += 20;
+  } else if (familyIncome === FamilyIncome.MORE_THAN_1500) {
     score += 10;
   }
   return round(score, 2);
@@ -60,12 +62,6 @@ export interface ApplicationSnapshotInput {
     name: string | undefined;
     acceptanceLetterDoc: string | undefined;
   };
-
-  // secondaryProgram: {
-  //   id: string | undefined;
-  //   name: string | undefined;
-  //   acceptanceLetterDoc: string | undefined;
-  // };
 
   attachments: {
     cpr?: string | undefined;

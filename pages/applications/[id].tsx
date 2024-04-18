@@ -22,32 +22,51 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { Auth } = withSSRContext(ctx);
   const { locale } = ctx;
 
-  let authUser = (await Auth.currentAuthenticatedUser()) as
-    | CognitoUser
-    | undefined;
+  try {
+    let authUser = (await Auth.currentAuthenticatedUser()) as
+      | CognitoUser
+      | undefined;
 
-  const { id } = ctx.query;
+    const { id } = ctx.query;
 
-  let application = await getApplicationData(`${id}`);
+    let application = await getApplicationData(`${id}`);
 
-  const programs = await listAllPrograms();
+    const programs = await listAllPrograms();
 
-  return {
-    props: {
-      ...(await serverSideTranslations(locale ?? "en", [
-        "common",
-        "footer",
-        "pageTitles",
-        "applicationPage",
-        "signIn",
-        "account",
-        "errors",
-      ])),
-      application:
-        authUser?.getUsername() === application?.studentCPR && application,
-      programs: programs,
-    },
-  };
+    return {
+      props: {
+        ...(await serverSideTranslations(locale ?? "en", [
+          "common",
+          "footer",
+          "pageTitles",
+          "applicationPage",
+          "signIn",
+          "account",
+          "errors",
+        ])),
+        application:
+          authUser?.getUsername() === application?.studentCPR && application,
+        programs: programs,
+      },
+    };
+  } catch (error) {
+    console.log("🚀 ~ getServerSideProps:GetServerSideProps= ~ error:", error);
+    return {
+      props: {
+        ...(await serverSideTranslations(locale ?? "en", [
+          "common",
+          "footer",
+          "pageTitles",
+          "applicationPage",
+          "signIn",
+          "account",
+          "errors",
+        ])),
+        application: null,
+        programs: [],
+      },
+    };
+  }
 };
 
 export default function SingleApplicationPage({

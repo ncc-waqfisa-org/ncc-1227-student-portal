@@ -10,14 +10,16 @@ exports.handler = async (event) => {
     const  today = new Date();
     const batchValue = today.getFullYear();
     const batchDetails = await getBatchDetails(batchValue);
+    console.log('batchDetails', batchDetails);
     if (!batchDetails) {
         return {
             statusCode: 404,
             body: JSON.stringify({ message: 'Batch not found' })
         };
     }
+    const updateApplicationEndDate = new Date(batchDetails.updateApplicationEndDate);
 
-    if(batchDetails.updateApplicationEndDate < today){
+    if(today < updateApplicationEndDate) {
         return {
             statusCode: 200,
             body: JSON.stringify({ message: 'Batch update period has not finished yet. Skipping auto reject' })
@@ -25,9 +27,12 @@ exports.handler = async (event) => {
     }
 
     const applications = await getApplications(batchValue);
-    const extendedUniversities = getExtendedUniversities();
-    const exceptionUniversities = getExceptionUniversities();
-    await bulkUpdateApplications(batchValue, applications, extendedUniversities, exceptionUniversities);
+    const universities = await getUniversities();
+    const programs = await getPrograms();
+    console.log('universities', universities);
+    const extendedUniversities = universities.filter(university => university.isExtended);
+    const exceptionUniversities = universities.filter(university => university.isException);
+    await bulkUpdateApplications(batchValue, applications, extendedUniversities, exceptionUniversities, universities, programs, batchDetails);
 
 
 
@@ -47,10 +52,11 @@ async function getApplications(batch) {
     const params = {
         TableName: 'Application-cw7beg2perdtnl7onnneec4jfa-staging',
         IndexName: 'byProcessed',
-        KeyConditionExpression: '#batch = :batchValue AND processed = :processedValue',
+        KeyConditionExpression: '#batch = :batchValue AND #processed = :processedValue',
         ScanIndexForward: false,
         ExpressionAttributeNames: {
-            '#batch': 'batch' // Using ExpressionAttributeNames to alias the reserved keyword 'batch'
+            '#batch': 'batch', // Using ExpressionAttributeNames to alias the reserved keyword 'batch'
+            '#processed': 'processed'
         },
         ExpressionAttributeValues: {
             ':batchValue': batch,
@@ -69,28 +75,103 @@ async function getApplications(batch) {
     return allApplications;
 }
 
-async function bulkUpdateApplications(batchValue, applications, extendedUniversities, exceptionUniversities) {
+async function bulkUpdateApplications(batchValue, applications, extendedUniversities, exceptionUniversities, universities, programs, batchDetails) {
     const updatePromises = applications.map(async application => {
-        const student = await getStudent(application.studentCPR);
+        let isProcessed = 1;
+        // const student = await getStudent(application.studentCPR);
         const params = {
             TableName: 'Application-cw7beg2perdtnl7onnneec4jfa-staging',
             Key: {
                 id: application.id
             },
-            UpdateExpression: 'set processed = :processedValue',
+            UpdateExpression: 'set #processed = :processedValue',
             ExpressionAttributeValues: {
-                ':processedValue': 1
-            }
+                ':processedValue': isProcessed
+            },
+            ExpressionAttributeNames: {}
         };
-        const isNonBahraini = student.nationalityCategory === 'NON_BAHRAINI';
-        const isNotCompleted = application.status === 'NOT_COMPLETED';
+        const universityId = application.universityID;
+        const programId = application.programID;
+        const isExtended = extendedUniversities.some(university => university.id === universityId);
+        const isException = exceptionUniversities.some(university => university.id === universityId);
+        const isNonBahraini = application.nationalityCategory === 'NON_BAHRAINI';
+        const isEligible = application.verifiedGPA? application.verifiedGPA >= programs.find(program => program.id === programId).minimumGPA || 88 : false;
 
-        if (isNonBahraini) {
-            params.UpdateExpression += ', status = :statusValue';
-            params.ExpressionAttributeValues[':statusValue'] = 'REJECTED';
-        } else {
 
+        let isNotCompleted = application.status === 'NOT_COMPLETED';
+        if(isException) {
+            isNotCompleted = false;
+        } else if(isExtended) {
+            const today = new Date();
+            const chosenUniversity = extendedUniversities.find(university => university.id === application.universityID);
+
+            const updateApplicationEndDate = batchDetails.updateApplicationEndDate;
+
+            const [year, month, day] = updateApplicationEndDate.split('-').map(Number);
+
+            let deadline = new Date(year, month - 1, day);
+
+            deadline.setDate(deadline.getDate() + chosenUniversity.extensionDuration);
+
+            console.log('Today:', today);
+            console.log('Deadline:', deadline);
+            console.log('Is today before deadline:', today <= deadline);
+
+            isNotCompleted = today <= deadline;
         }
+
+        let status;
+
+        if(isNonBahraini) {
+            status = 'REJECTED';
+            isProcessed = 1;
+        }
+        else if(application.verifiedGPA && application.verifiedGPA < 88) {
+            status = 'REJECTED';
+            isProcessed = 1;
+        }
+        else if(isNotCompleted) {
+            status = 'REJECTED';
+            isProcessed = 1;
+        }
+        else if(!isNotCompleted && !application.verifiedGPA) {
+            status = 'REVIEW';
+            isProcessed = 0;
+        }
+        else if(isEligible) {
+            status = 'ELIGIBLE';
+            isProcessed = 1;
+        }
+        else if(!isEligible && application.verifiedGPA) {
+            status = 'REJECTED';
+            isProcessed = 1;
+        }
+        else {
+            isProcessed = 0;
+        }
+        // console.log('status', status);
+        // console.log('isProcessed', isProcessed);
+        // console.log('isNonBahraini', isNonBahraini);
+        // console.log('isNotCompleted', isNotCompleted);
+        // console.log('isEligible', isEligible);
+        // console.log('isExtended', isExtended);
+        // console.log('isException', isException);
+
+        params.UpdateExpression = 'set #processed = :processedValue, ';
+
+        if(status) {
+            params.UpdateExpression += '#status = :status';
+        }
+        else{
+            // remove the last comma
+            params.UpdateExpression = params.UpdateExpression.slice(0, -2);
+        }
+
+        params.ExpressionAttributeValues[':status'] = status;
+        params.ExpressionAttributeValues[':processedValue'] = isProcessed;
+
+        params.ExpressionAttributeNames['#status'] = 'status';
+        params.ExpressionAttributeNames['#processed'] = 'processed';
 
         return dynamoDB.update(params).promise();
     });
@@ -121,24 +202,77 @@ async function getBatchDetails(batch) {
     return batchDetails.Item;
 }
 
-async function getExtendedUniversities() {
+// async function getExtendedUniversities() {
+//
+//     const params = {
+//         TableName: 'University-cw7beg2perdtnl7onnneec4jfa-staging',
+//         IndexName: 'byExtended',
+//         KeyConditionExpression: '#isExtended = :extendedValue',
+//         ExpressionAttributeNames: {
+//             '#isExtended': 'isExtended'
+//         },
+//         ExpressionAttributeValues: {
+//             ':extendedValue': 1
+//         }
+//     };
+//
+//     let allUniversities = [];
+//
+//     do {
+//         const universities = await dynamoDB.query(params).promise();
+//         allUniversities = allUniversities.concat(universities.Items);
+//         params.ExclusiveStartKey = universities.LastEvaluatedKey;
+//     } while (params.ExclusiveStartKey);
+//
+//     return allUniversities;
+// }
+//
+// async function getExceptionUniversities() {
+//
+//     const params = {
+//         TableName: 'University-cw7beg2perdtnl7onnneec4jfa-staging',
+//         IndexName: 'byException',
+//         KeyConditionExpression: '#isException = :exceptionValue',
+//         ExpressionAttributeNames: {
+//             '#isException': 'isException'
+//         },
+//         ExpressionAttributeValues: {
+//             ':exceptionValue': 1
+//         }
+//     };
+//
+//     let allUniversities = [];
+//
+//     do {
+//         const universities = await dynamoDB.query(params).promise();
+//         allUniversities = allUniversities.concat(universities.Items);
+//         params.ExclusiveStartKey = universities.LastEvaluatedKey;
+//     } while (params.ExclusiveStartKey);
+//
+//     return allUniversities;
+// }
 
+async function getUniversity(universityId) {
     const params = {
         TableName: 'University-cw7beg2perdtnl7onnneec4jfa-staging',
-        IndexName: 'byExtended',
-        KeyConditionExpression: '#isExtended = :extendedValue',
-        ExpressionAttributeNames: {
-            '#isExtended': 'isExtended'
-        },
-        ExpressionAttributeValues: {
-            ':extendedValue': 1
+        Key: {
+            id: universityId
         }
+    };
+
+    const university = await dynamoDB.get(params).promise();
+    return university.Item;
+}
+
+async function getUniversities() {
+    const params = {
+        TableName: 'University-cw7beg2perdtnl7onnneec4jfa-staging'
     };
 
     let allUniversities = [];
 
     do {
-        const universities = await dynamoDB.query(params).promise();
+        const universities = await dynamoDB.scan(params).promise();
         allUniversities = allUniversities.concat(universities.Items);
         params.ExclusiveStartKey = universities.LastEvaluatedKey;
     } while (params.ExclusiveStartKey);
@@ -146,52 +280,35 @@ async function getExtendedUniversities() {
     return allUniversities;
 }
 
-async function getExceptionUniversities() {
-
+async function getPrograms(){
     const params = {
-        TableName: 'University-cw7beg2perdtnl7onnneec4jfa-staging',
-        IndexName: 'byException',
-        KeyConditionExpression: '#isException = :exceptionValue',
-        ExpressionAttributeNames: {
-            '#isException': 'isException'
-        },
-        ExpressionAttributeValues: {
-            ':exceptionValue': 1
+        TableName: 'Program-cw7beg2perdtnl7onnneec4jfa-staging'
+    };
+
+    let allPrograms = [];
+
+    do {
+        const programs = await dynamoDB.scan(params).promise();
+        allPrograms = allPrograms.concat(programs.Items);
+        params.ExclusiveStartKey = programs.LastEvaluatedKey;
+    } while (params.ExclusiveStartKey);
+
+    return allPrograms;
+}
+async function createAdminLog(reason, snapshot, applicationId){
+    const params = {
+        TableName: 'AdminLog-cw7beg2perdtnl7onnneec4jfa-staging',
+        Item: {
+            '__typename': 'AdminLog',
+            '_version': 1,
+            'reason': reason,
+            'snapshot': snapshot,
+            'createdAt': new Date().toISOString(),
+            'updatedAt': new Date().toISOString(),
+            'dateTime': new Date().toISOString(),
+            'applicationID': applicationId
         }
     };
 
-    let allUniversities = [];
-
-    do {
-        const universities = await dynamoDB.query(params).promise();
-        allUniversities = allUniversities.concat(universities.Items);
-        params.ExclusiveStartKey = universities.LastEvaluatedKey;
-    } while (params.ExclusiveStartKey);
-
-    return allUniversities;
+    await dynamoDB.put(params).promise();
 }
-
-async function getAppliedToUniversities(studentId) {
-    const params = {
-        TableName: 'Application-cw7beg2perdtnl7onnneec4jfa-staging',
-        IndexName: 'byStudent',
-        KeyConditionExpression: '#studentId = :studentId',
-        ExpressionAttributeNames: {
-            '#studentId': 'studentId'
-        },
-        ExpressionAttributeValues: {
-            ':studentId': studentId
-        }
-    };
-
-    let allApplications = [];
-
-    do {
-        const applications = await dynamoDB.query(params).promise();
-        allApplications = allApplications.concat(applications.Items);
-        params.ExclusiveStartKey = applications.LastEvaluatedKey;
-    } while (params.ExclusiveStartKey);
-
-    return allApplications;
-}
-

@@ -200,6 +200,24 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "nationalityCategory": {
+                    "name": "nationalityCategory",
+                    "isArray": false,
+                    "type": {
+                        "enum": "Nationality"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "familyIncome": {
+                    "name": "familyIncome",
+                    "isArray": false,
+                    "type": {
+                        "enum": "FamilyIncome"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "schoolName": {
                     "name": "schoolName",
                     "isArray": false,
@@ -215,6 +233,57 @@ export const schema = {
                     },
                     "isRequired": false,
                     "attributes": []
+                },
+                "studentName": {
+                    "name": "studentName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "programID": {
+                    "name": "programID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "program": {
+                    "name": "program",
+                    "isArray": false,
+                    "type": {
+                        "model": "Program"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetNames": [
+                            "programID"
+                        ]
+                    }
+                },
+                "universityID": {
+                    "name": "universityID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "university": {
+                    "name": "university",
+                    "isArray": false,
+                    "type": {
+                        "model": "University"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetNames": [
+                            "universityID"
+                        ]
+                    }
                 },
                 "studentCPR": {
                     "name": "studentCPR",
@@ -266,6 +335,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "isFamilyIncomeVerified": {
+                    "name": "isFamilyIncomeVerified",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -288,6 +364,20 @@ export const schema = {
                     "type": "ID",
                     "isRequired": false,
                     "attributes": []
+                },
+                "programApplicationId": {
+                    "name": "programApplicationId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "universityApplicationsId": {
+                    "name": "universityApplicationsId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -304,6 +394,16 @@ export const schema = {
                         "fields": [
                             "id",
                             "dateTime"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byNationalityCategory",
+                        "fields": [
+                            "nationalityCategory",
+                            "batch"
                         ]
                     }
                 },
@@ -593,6 +693,22 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "application": {
+                    "name": "application",
+                    "isArray": true,
+                    "type": {
+                        "model": "Application"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "programApplicationId"
+                        ]
+                    }
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -703,10 +819,10 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "extendedTo": {
-                    "name": "extendedTo",
+                "extensionDuration": {
+                    "name": "extensionDuration",
                     "isArray": false,
-                    "type": "AWSDate",
+                    "type": "Int",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -723,6 +839,22 @@ export const schema = {
                     "type": "Boolean",
                     "isRequired": false,
                     "attributes": []
+                },
+                "applications": {
+                    "name": "applications",
+                    "isArray": true,
+                    "type": {
+                        "model": "Application"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "universityApplicationsId"
+                        ]
+                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -754,7 +886,7 @@ export const schema = {
                         "name": "byExtended",
                         "fields": [
                             "isExtended",
-                            "extendedTo"
+                            "name"
                         ]
                     }
                 },
@@ -1287,6 +1419,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "batch": {
+                    "name": "batch",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "email": {
                     "name": "email",
                     "isArray": false,
@@ -1360,13 +1499,6 @@ export const schema = {
                     "name": "studentOrderAmongSiblings",
                     "isArray": false,
                     "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "householdIncome": {
-                    "name": "householdIncome",
-                    "isArray": false,
-                    "type": "Float",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -1503,6 +1635,16 @@ export const schema = {
                     "properties": {
                         "fields": [
                             "cpr"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byNationalityCategory",
+                        "fields": [
+                            "nationalityCategory",
+                            "graduationDate"
                         ]
                     }
                 },
@@ -1645,6 +1787,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "batch": {
+                    "name": "batch",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "isConfirmed": {
                     "name": "isConfirmed",
                     "isArray": false,
@@ -1753,6 +1902,25 @@ export const schema = {
                 {
                     "type": "key",
                     "properties": {
+                        "name": "byApplication",
+                        "fields": [
+                            "applicationID"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byBatch",
+                        "fields": [
+                            "batch",
+                            "status"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
                         "name": "byCPR",
                         "fields": [
                             "studentCPR",
@@ -1825,6 +1993,13 @@ export const schema = {
                 },
                 "totalApplicationsPerUniversity": {
                     "name": "totalApplicationsPerUniversity",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "topUniversities": {
+                    "name": "topUniversities",
                     "isArray": false,
                     "type": "AWSJSON",
                     "isRequired": false,
@@ -1961,5 +2136,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "c45999e05a0093cdc5401dcaee7acc2f"
+    "version": "bc866a51624155a134574f23e48989c2"
 };

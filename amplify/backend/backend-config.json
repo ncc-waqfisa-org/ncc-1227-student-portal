@@ -44,23 +44,29 @@
     }
   },
   "function": {
-    "autoReject": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "autoUpdateScore": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
     "bulkAutoReject": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "dummyUpdate": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "exportApplicationPdf": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "exportApplicationsCsv": {
       "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "exportEligibleCsv": {
+      "build": true,
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -82,6 +88,11 @@
     "signUp": {
       "build": true,
       "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "syncApplications": {
+      "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -151,6 +162,38 @@
         }
       ]
     },
+    "AMPLIFY_function_dummyUpdate_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "dummyUpdate"
+        }
+      ]
+    },
+    "AMPLIFY_function_dummyUpdate_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "dummyUpdate"
+        }
+      ]
+    },
+    "AMPLIFY_function_exportApplicationPdf_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "exportApplicationPdf"
+        }
+      ]
+    },
+    "AMPLIFY_function_exportApplicationPdf_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "exportApplicationPdf"
+        }
+      ]
+    },
     "AMPLIFY_function_exportApplicationsCsv_deploymentBucketName": {
       "usedBy": [
         {
@@ -164,6 +207,22 @@
         {
           "category": "function",
           "resourceName": "exportApplicationsCsv"
+        }
+      ]
+    },
+    "AMPLIFY_function_exportEligibleCsv_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "exportEligibleCsv"
+        }
+      ]
+    },
+    "AMPLIFY_function_exportEligibleCsv_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "exportEligibleCsv"
         }
       ]
     },
@@ -228,6 +287,22 @@
         {
           "category": "function",
           "resourceName": "signUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_syncApplications_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "syncApplications"
+        }
+      ]
+    },
+    "AMPLIFY_function_syncApplications_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "syncApplications"
         }
       ]
     },

@@ -47,12 +47,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "autoUpdateScore",
+            "syncApplications",
             {
               "Fn::Join": [
                 "",
                 [
-                  "autoUpdateScore",
+                  "syncApplications",
                   "-",
                   {
                     "Ref": "env"
@@ -89,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "nccLambdaRolebb44135f",
+            "nccLambdaRole264e0cdb",
             {
               "Fn::Join": [
                 "",
                 [
-                  "nccLambdaRolebb44135f",
+                  "nccLambdaRole264e0cdb",
                   "-",
                   {
                     "Ref": "env"

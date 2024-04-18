@@ -12,9 +12,6 @@ import {
   CreateStudentLogMutationVariables,
   GetBatchQuery,
   GetBatchQueryVariables,
-  GetStudentQuery,
-  ListBatchesQuery,
-  ListBatchesQueryVariables,
   Program,
   Scholarship,
   UpdateApplicationMutation,
@@ -44,7 +41,6 @@ import {
 } from "./graphql/mutations";
 
 import dayjs from "dayjs";
-import { getBatch, listBatches } from "./graphql/queries";
 
 /* -------------------------------------------------------------------------- */
 /*                                    ENUMS                                   */
@@ -125,6 +121,9 @@ export async function getApplicationData(
                 applicationAttachmentId
                 _lastChangedAt
                 studentCPR
+
+                universityID
+                processed
                 status
                 updatedAt
                 attachment {
@@ -162,7 +161,7 @@ export async function getApplicationData(
                         nameAr
                         isException
                         isExtended
-                        extendedTo
+                        extensionDuration
                         isTrashed
                       }
                       _version

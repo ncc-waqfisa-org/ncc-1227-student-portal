@@ -74,6 +74,10 @@ async function getScoreHistograms(tableName, batchValue) {
         lastEvaluatedKey = scoreResult.LastEvaluatedKey;
     } while (lastEvaluatedKey);
 
+    // // sort the histogram by key
+    // const sortedHistogram = Object.entries(histogramJson).sort((a, b) => a[0] - b[0]);
+    // histogramJson = Object.fromEntries(sortedHistogram);
+
     return histogramJson;
 }
 
@@ -115,6 +119,120 @@ async function getGpaHistogram(tableName, batchValue) {
 
     return histogramJson;
 }
+
+async function getTopUniversities(tableName, batchValue) {
+    let universityIDsCount = {};
+    let lastEvaluatedKey = null;
+
+    // get the highest 5 universityIDs repeated in Applications table, with their count
+
+    do {
+        const params = {
+            TableName: tableName,
+            ProjectionExpression: 'universityID',
+            FilterExpression: '#batch = :batchValue',
+            ExpressionAttributeNames: {
+                '#batch': 'batch'
+            },
+            ExpressionAttributeValues: {
+                ':batchValue': batchValue
+            },
+            ExclusiveStartKey: lastEvaluatedKey
+        };
+
+        const result = await dynamoDB.scan(params).promise();
+
+        result.Items.forEach(item => {
+            const universityID = item.universityID;
+            universityIDsCount[universityID] = (universityIDsCount[universityID] || 0) + 1;
+        });
+
+        lastEvaluatedKey = result.LastEvaluatedKey;
+    }
+    while (lastEvaluatedKey);
+
+    // sort the universities by count
+    const sortedUniversities = Object.entries(universityIDsCount).sort((a, b) => b[1] - a[1]);
+    const topUniversities = sortedUniversities.slice(0, 5);
+    // get the names of the universities from the university table
+
+    const universityNames = {};
+    for (const [universityID] of topUniversities) {
+        const universityParams = {
+            TableName: 'University-cw7beg2perdtnl7onnneec4jfa-staging',
+            Key: {
+                id: universityID
+            }
+        };
+        const universityResult = await dynamoDB.get(universityParams).promise();
+        universityNames[universityID] = universityResult.Item?.name;
+    }
+
+    const topUniversitiesJson = {};
+    for (const [universityID, count] of topUniversities) {
+        topUniversitiesJson[universityNames[universityID]] = count;
+    }
+
+    return topUniversitiesJson;
+
+}
+
+// async function getTopPrograms(tableName, batchValue) {
+//     let programIDsCount = {};
+//     let lastEvaluatedKey = null;
+//
+//     // get the highest 5 programIDs repeated in Applications table, with their count
+//
+//     do {
+//         const params = {
+//             TableName: tableName,
+//             ProjectionExpression: 'programID',
+//             FilterExpression: '#batch = :batchValue',
+//             ExpressionAttributeNames: {
+//                 '#batch': 'batch'
+//             },
+//             ExpressionAttributeValues: {
+//                 ':batchValue': batchValue
+//             },
+//             ExclusiveStartKey: lastEvaluatedKey
+//         };
+//
+//         const result = await dynamoDB.scan(params).promise();
+//
+//         result.Items.forEach(item => {
+//             const programID = item.programID;
+//             programIDsCount[programID] = (programIDsCount[programID] || 0) + 1;
+//         });
+//
+//         lastEvaluatedKey = result.LastEvaluatedKey;
+//     }
+//     while (lastEvaluatedKey);
+//
+//     // sort the programs by count
+//     const sortedPrograms = Object.entries(programIDsCount).sort((a, b) => b[1] - a[1]);
+//     const topPrograms = sortedPrograms.slice(0, 5);
+//     // get the names of the programs from the program table
+//
+//     const programNames = {};
+//     for (const [programID] of topPrograms) {
+//         const programParams = {
+//             TableName: 'Program-cw7beg2perdtnl7onnneec4jfa-staging',
+//             Key: {
+//                 id: programID
+//             }
+//         };
+//         const programResult = await dynamoDB.get(programParams).promise();
+//         programNames[programID] = programResult.Item?.name;
+//     }
+//
+//     const topProgramsJson = {};
+//     for (const [programID, count] of topPrograms) {
+//         topProgramsJson[programNames[programID]] = count;
+//     }
+//
+//     return topProgramsJson;
+//
+// }
 
 
 async function getApplicationsPerYearChart(tableName, batchValue) {
@@ -213,6 +331,11 @@ async function updateStatistics(tableName, batchValue) {
     const statusPieChart = await getStatusPieChart(tableName, batchValue);
     const gpaHistogramChart = await getGpaHistogram(tableName, batchValue);
     const applicationsCount = await getTotalApplications(tableName, batchValue);
+    const topUniversities = await getTopUniversities(tableName, batchValue);
+    // const topPrograms = await getTopPrograms(tableName, batchValue);
+
+    // console.log('Top Programs:', topPrograms);
+    console.log('Top Universities:', topUniversities);
 
     const params = {
         TableName: 'Statistics-cw7beg2perdtnl7onnneec4jfa-staging',
@@ -225,6 +348,8 @@ async function updateStatistics(tableName, batchValue) {
             scoreHistogram: scoreHistogram,
             gpaHistogram:  gpaHistogramChart,
             totalApplicationsPerUniversity: {},
+            topUniversities: topUniversities,
+            // topPrograms: topPrograms
         },
     };
 

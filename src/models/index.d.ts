@@ -104,17 +104,27 @@ type EagerApplication = {
   readonly programs?: (ProgramChoice | null)[] | null;
   readonly dateTime: string;
   readonly isEmailSent?: boolean | null;
+  readonly nationalityCategory?: Nationality | keyof typeof Nationality | null;
+  readonly familyIncome?: FamilyIncome | keyof typeof FamilyIncome | null;
   readonly schoolName?: string | null;
   readonly schoolType?: SchoolType | keyof typeof SchoolType | null;
+  readonly studentName?: string | null;
+  readonly programID?: string | null;
+  readonly program?: Program | null;
+  readonly universityID?: string | null;
+  readonly university?: University | null;
   readonly studentCPR: string;
   readonly student?: Student | null;
   readonly batch?: number | null;
   readonly score?: number | null;
   readonly adminPoints?: number | null;
   readonly processed?: number | null;
+  readonly isFamilyIncomeVerified?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly applicationAttachmentId?: string | null;
+  readonly programApplicationId?: string | null;
+  readonly universityApplicationsId?: string | null;
 }
 
 type LazyApplication = {
@@ -133,17 +143,27 @@ type LazyApplication = {
   readonly programs: AsyncCollection<ProgramChoice>;
   readonly dateTime: string;
   readonly isEmailSent?: boolean | null;
+  readonly nationalityCategory?: Nationality | keyof typeof Nationality | null;
+  readonly familyIncome?: FamilyIncome | keyof typeof FamilyIncome | null;
   readonly schoolName?: string | null;
   readonly schoolType?: SchoolType | keyof typeof SchoolType | null;
+  readonly studentName?: string | null;
+  readonly programID?: string | null;
+  readonly program: AsyncItem<Program | undefined>;
+  readonly universityID?: string | null;
+  readonly university: AsyncItem<University | undefined>;
   readonly studentCPR: string;
   readonly student: AsyncItem<Student | undefined>;
   readonly batch?: number | null;
   readonly score?: number | null;
   readonly adminPoints?: number | null;
   readonly processed?: number | null;
+  readonly isFamilyIncomeVerified?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly applicationAttachmentId?: string | null;
+  readonly programApplicationId?: string | null;
+  readonly universityApplicationsId?: string | null;
 }
 
 export declare type Application = LazyLoading extends LazyLoadingDisabled ? EagerApplication : LazyApplication
@@ -211,6 +231,7 @@ type EagerProgram = {
   readonly applications?: (ProgramChoice | null)[] | null;
   readonly isDeactivated?: boolean | null;
   readonly isTrashed?: boolean | null;
+  readonly application?: (Application | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly universityProgramsId?: string | null;
@@ -233,6 +254,7 @@ type LazyProgram = {
   readonly applications: AsyncCollection<ProgramChoice>;
   readonly isDeactivated?: boolean | null;
   readonly isTrashed?: boolean | null;
+  readonly application: AsyncCollection<Application>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly universityProgramsId?: string | null;
@@ -256,9 +278,10 @@ type EagerUniversity = {
   readonly availability?: number | null;
   readonly isDeactivated?: boolean | null;
   readonly isExtended?: number | null;
-  readonly extendedTo?: string | null;
+  readonly extensionDuration?: number | null;
   readonly isException?: number | null;
   readonly isTrashed?: boolean | null;
+  readonly applications?: (Application | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -275,9 +298,10 @@ type LazyUniversity = {
   readonly availability?: number | null;
   readonly isDeactivated?: boolean | null;
   readonly isExtended?: number | null;
-  readonly extendedTo?: string | null;
+  readonly extensionDuration?: number | null;
   readonly isException?: number | null;
   readonly isTrashed?: boolean | null;
+  readonly applications: AsyncCollection<Application>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -462,6 +486,7 @@ type EagerStudent = {
   readonly cpr: string;
   readonly cprDoc?: string | null;
   readonly fullName?: string | null;
+  readonly batch?: number | null;
   readonly email?: string | null;
   readonly phone?: string | null;
   readonly gender?: Gender | keyof typeof Gender | null;
@@ -472,7 +497,6 @@ type EagerStudent = {
   readonly specialization?: string | null;
   readonly placeOfBirth?: string | null;
   readonly studentOrderAmongSiblings?: number | null;
-  readonly householdIncome?: number | null;
   readonly familyIncome?: FamilyIncome | keyof typeof FamilyIncome | null;
   readonly familyIncomeProofDoc?: string | null;
   readonly familyIncomeProofDocs?: (string | null)[] | null;
@@ -495,6 +519,7 @@ type LazyStudent = {
   readonly cpr: string;
   readonly cprDoc?: string | null;
   readonly fullName?: string | null;
+  readonly batch?: number | null;
   readonly email?: string | null;
   readonly phone?: string | null;
   readonly gender?: Gender | keyof typeof Gender | null;
@@ -505,7 +530,6 @@ type LazyStudent = {
   readonly specialization?: string | null;
   readonly placeOfBirth?: string | null;
   readonly studentOrderAmongSiblings?: number | null;
-  readonly householdIncome?: number | null;
   readonly familyIncome?: FamilyIncome | keyof typeof FamilyIncome | null;
   readonly familyIncomeProofDoc?: string | null;
   readonly familyIncomeProofDocs?: (string | null)[] | null;
@@ -570,6 +594,7 @@ type EagerScholarship = {
   readonly id: string;
   readonly status?: ScholarshipStatus | keyof typeof ScholarshipStatus | null;
   readonly applicationID: string;
+  readonly batch?: number | null;
   readonly isConfirmed?: boolean | null;
   readonly application?: Application | null;
   readonly studentCPR?: string | null;
@@ -592,6 +617,7 @@ type LazyScholarship = {
   readonly id: string;
   readonly status?: ScholarshipStatus | keyof typeof ScholarshipStatus | null;
   readonly applicationID: string;
+  readonly batch?: number | null;
   readonly isConfirmed?: boolean | null;
   readonly application: AsyncItem<Application | undefined>;
   readonly studentCPR?: string | null;
@@ -624,6 +650,7 @@ type EagerStatistics = {
   readonly scoreHistogram?: string | null;
   readonly gpaHistogram?: string | null;
   readonly totalApplicationsPerUniversity?: string | null;
+  readonly topUniversities?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -640,6 +667,7 @@ type LazyStatistics = {
   readonly scoreHistogram?: string | null;
   readonly gpaHistogram?: string | null;
   readonly totalApplicationsPerUniversity?: string | null;
+  readonly topUniversities?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

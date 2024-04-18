@@ -168,7 +168,13 @@ export const ApplicationForm: FC<Props> = (props) => {
         gpa: data.application.input.gpa,
         score: data.application.input.score,
         status: data.application.input.status,
+        nationalityCategory: data.application.input.nationalityCategory,
         studentCPR: data.application.input.studentCPR,
+        universityID: data.application.input.universityID,
+        programID: data.application.input.programID,
+        studentName: data.application.input.studentName,
+        processed: data.application.input.processed,
+        familyIncome: data.application.input.familyIncome,
         attachmentID: createdAttachmentInDB.createAttachment?.id,
         applicationAttachmentId: createdAttachmentInDB.createAttachment?.id,
         _version: undefined,
@@ -256,7 +262,13 @@ export const ApplicationForm: FC<Props> = (props) => {
         gpa: data.application.input.gpa,
         score: data.application.input.score,
         status: data.application.input.status,
+        nationalityCategory: data.application.input.nationalityCategory,
         studentCPR: data.application.input.studentCPR,
+        universityID: data.application.input.universityID,
+        programID: data.application.input.programID,
+        studentName: data.application.input.studentName,
+        processed: data.application.input.processed,
+        familyIncome: data.application.input.familyIncome,
         attachmentID: data.application.input.attachmentID,
         applicationAttachmentId: data.application.input.applicationAttachmentId,
         _version: data.application.input._version,
@@ -515,6 +527,14 @@ export const ApplicationForm: FC<Props> = (props) => {
                   ? Status.REVIEW
                   : Status.NOT_COMPLETED,
                 studentCPR: `${student?.getStudent?.cpr}`,
+                nationalityCategory: student?.getStudent?.nationalityCategory,
+                universityID: props.programs?.find(
+                  (program) => program.id === values.primaryProgramID
+                )?.university?.id,
+                programID: values.primaryProgramID,
+                processed: 0,
+                familyIncome: student?.getStudent?.familyIncome,
+                studentName: student?.getStudent?.fullName,
                 _version: null,
                 attachmentID: null,
                 applicationAttachmentId: null,
@@ -612,6 +632,16 @@ export const ApplicationForm: FC<Props> = (props) => {
                   : Status.NOT_COMPLETED,
 
                 studentCPR: `${student?.getStudent?.cpr}`,
+                universityID:
+                  props.programs?.find(
+                    (program) => program.id === values.primaryProgramID
+                  )?.university?.id ?? props.application?.universityID,
+                programID:
+                  values.primaryProgramID ?? props.application?.programID,
+                processed: props.application?.processed ?? 0,
+                familyIncome: student?.getStudent?.familyIncome,
+                nationalityCategory: student?.getStudent?.nationalityCategory,
+                studentName: student?.getStudent?.fullName,
                 _version: props.application?._version,
                 attachmentID: props.application?.attachmentID,
                 applicationAttachmentId:

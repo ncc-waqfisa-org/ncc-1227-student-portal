@@ -20,8 +20,6 @@ import MultiUpload from "../MultiUpload";
 import { checkIfFilesAreTooBig } from "../../src/HelperFunctions";
 import GetStorageLinkComponent from "../get-storage-link-component";
 import { PhoneNumberInput } from "../phone";
-import { useAuth } from "../../hooks/use-auth";
-import { Button } from "@aws-amplify/ui-react";
 
 interface Props {
   student: Student;

@@ -56,13 +56,16 @@ async function exportApplicationsCsv(tableName, batchValue, status) {
 async function getApplications(tableName, batchValue, status) {
     const params = {
         TableName: tableName,
-        FilterExpression: '#batch = :batchValue',
+        IndexName: 'byScore',
+        KeyConditionExpression: '#batch = :batchValue AND score > :score',
         ExpressionAttributeNames: {
             '#batch': 'batch'
         },
         ExpressionAttributeValues: {
-            ':batchValue': batchValue
-        }
+            ':batchValue': batchValue,
+            ':score': 0.0
+        },
+        ScanIndexForward: false,
     };
     if(status) {
         params.FilterExpression += ' AND #status = :status';
@@ -73,7 +76,7 @@ async function getApplications(tableName, batchValue, status) {
     let allApplications = [];
 
     do {
-        const applications = await dynamoDB.scan(params).promise();
+        const applications = await dynamoDB.query(params).promise();
         allApplications = allApplications.concat(applications.Items);
 
         // Check if there are more items to fetch
@@ -85,11 +88,11 @@ async function getApplications(tableName, batchValue, status) {
 
 
 function convertToCsv(applications, students) {
-    let csv = 'id,StudentCPR,Name,Gender,Nationality,Specialization,Phone,email,Batch,Status,GPA,Score,SchoolName,SchoolType\n';
+    let csv = 'id,StudentCPR,Name,Gender,Nationality,Specialization,Phone,email,Batch,Status,GPA,Score,SchoolName,SchoolType,FamilyIncome\n';
     applications.forEach(application => {
         const student = students.find(student => student.cpr === application.studentCPR);
         if(student) {
-            csv += `${application.id},${application.studentCPR},"${student?.fullName}",${student?.gender},${student?.nationalityCategory},"${student?.specialization}",${student?.phone},${student?.email},${application.batch},${application.status},${application.gpa},${application.score},"${application.schoolName}",${application.schoolType}\n`;
+            csv += `${application.id},${application.studentCPR},"${student?.fullName}",${student?.gender},${student?.nationalityCategory},"${student?.specialization}",${student?.phone},${student?.email},${application.batch},${application.status},${application.gpa},${application.score},"${application.schoolName}",${application.schoolType},${application.familyIncome}\n`;
         }
     });
     return csv;
@@ -107,20 +110,24 @@ async function uploadToS3(csv) {
 }
 
 async function getStudents(batchValue) {
-    const startDate = new Date();
-    startDate.setFullYear(batchValue);
-    startDate.setMonth(0); // September
-    startDate.setDate(1); // 1st
-    const endDate = new Date();
-    endDate.setMonth(11); // December
-    endDate.setDate(31); // 31st
+    // const startDate = new Date();
+    // startDate.setFullYear(batchValue);
+    // startDate.setMonth(0); // September
+    // startDate.setDate(1); // 1st
+    // const endDate = new Date();
+    // endDate.setMonth(11); // December
+    // endDate.setDate(31); // 31st
     const params = {
         TableName: 'Student-cw7beg2perdtnl7onnneec4jfa-staging',
         // graduationDate is contained in the batch attribute
-        FilterExpression: 'graduationDate BETWEEN :startDate AND :endDate',
+        FilterExpression: '#batch = :batchValue',
         ExpressionAttributeValues: {
-            ':startDate': startDate.toISOString(),
-            ':endDate': endDate.toISOString()
+            // ':startDate': startDate.toISOString(),
+            // ':endDate': endDate.toISOString()
+            ':batchValue': batchValue
+        },
+        ExpressionAttributeNames: {
+            '#batch': 'batch'
         }
     };
     let allStudents = [];

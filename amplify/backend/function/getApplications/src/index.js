@@ -30,7 +30,7 @@ exports.handler = async (event) => {
         startKey = JSON.parse(startKey);
     }
 
-    const batch = parseInt(event.queryStringParameters?.batch) || 2023;
+    const batch = parseInt(event.queryStringParameters?.batch) || new Date().getFullYear();
     const status = event.queryStringParameters?.status || null;
     const cpr = event.queryStringParameters?.cpr || null;
     const applications = await getApplications(pageSize, startKey, batch, status, cpr);
@@ -58,7 +58,7 @@ exports.handler = async (event) => {
          Limit: pageSize,
          ExclusiveStartKey: startKey,
          IndexName: 'byScore',
-         KeyConditionExpression: '#batch = :batchValue AND score > :score',
+         KeyConditionExpression: '#batch = :batchValue AND score >= :score',
          ScanIndexForward: false,
          ExpressionAttributeNames: {
              '#batch': 'batch' // Using ExpressionAttributeNames to alias the reserved keyword 'batch'
