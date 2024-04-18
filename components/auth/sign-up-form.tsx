@@ -59,7 +59,6 @@ export default function SignUpForm() {
         specialization: undefined,
         placeOfBirth: undefined,
         studentOrderAmongSiblings: undefined,
-        householdIncome: undefined,
         preferredLanguage: undefined,
         graduationDate: undefined,
         parentInfoID: undefined,
@@ -286,12 +285,10 @@ export default function SignUpForm() {
           placeOfBirth: data.student.input.placeOfBirth,
           studentOrderAmongSiblings:
             data.student.input.studentOrderAmongSiblings,
-          householdIncome: data.student.input.householdIncome,
           preferredLanguage: data.student.input.preferredLanguage,
           graduationDate: data.student.input.graduationDate,
           address: data.student.input.address,
           parentInfoID: data.student.input.parentInfoID,
-          // parentInfoID: createdParentInfo?.data?.createParentInfo?.id,
           familyIncome: data.student.input.familyIncome,
           familyIncomeProofDocs: storageKeys,
           nationality: data.student.input.nationality,
@@ -337,26 +334,6 @@ export default function SignUpForm() {
     setCreateStudentFormValues(temp);
     //* Call Sign up lambda
     signUpMutation.mutate(dataToLambda);
-
-    // const createdDatabaseUser = await createDatabaseStudent(temp);
-
-    // if (createdDatabaseUser?.data == null) {
-    //   await deleteParentInfo(createdParentInfo.data);
-    //   throw new Error("Error creating the user CODE:00004");
-    // }
-
-    // const createCognitoUserResult = await createCognitoUser(temp);
-
-    // if (createCognitoUserResult?.user) {
-    //   router.push({
-    //     pathname: "/signUp",
-    //     query: { cpr: createStudentFormValues.student.input.cpr },
-    //   });
-    //   toast("email need to be verified");
-    // } else {
-    //   await deleteCreatedUser(createdDatabaseUser.data);
-    //   throw new Error("Error creating the user CODE:00005");
-    // }
   }
 
   return (

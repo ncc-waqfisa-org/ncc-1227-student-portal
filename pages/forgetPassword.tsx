@@ -98,9 +98,10 @@ const ForgetPassword: NextPage<Props> = () => {
 
                   <button
                     type="submit"
-                    className={`btn btn-primary ${isSubmitting && "loading"}`}
+                    className={`btn btn-primary `}
                     disabled={isSubmitting || !isValid}
                   >
+                    {isSubmitting && <span className="loading"></span>}
                     {t("sendResetEmail")}
                   </button>
                 </Form>
@@ -178,9 +179,10 @@ const ForgetPassword: NextPage<Props> = () => {
 
                   <button
                     type="submit"
-                    className={`btn btn-primary ${isSubmitting && "loading"}`}
+                    className={`btn btn-primary `}
                     disabled={isSubmitting || !isValid}
                   >
+                    {isSubmitting && <span className="loading"></span>}
                     {t("verify")}
                   </button>
                 </Form>

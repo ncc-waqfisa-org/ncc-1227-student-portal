@@ -81,12 +81,11 @@ export const TermsAndConditions: FC<ITermsAndConditions> = ({
 
           {/* Submit */}
           <button
-            className={`my-3 text-white btn btn-primary md:col-span-2 ${
-              isLoading && "loading"
-            }`}
+            className={`my-3 text-white btn btn-primary md:col-span-2`}
             type="submit"
             disabled={isSubmitting || !isValid || isLoading}
           >
+            {isLoading && <span className="loading"></span>}
             {submitTitle}
           </button>
         </Form>

@@ -50,17 +50,15 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
       <div className="flex flex-col justify-between min-h-screen">
         {isInitializing ? (
           <div className="flex items-center justify-center w-full h-full min-h-screen bg-gray-200 animate-pulse">
-            <div
-              dir="ltr"
-              className="btn btn-ghost hover:bg-transparent loading"
-            >
+            <div dir="ltr" className="btn btn-ghost hover:bg-transparent ">
+              {<span className="loading"></span>}
               {titleTranslation.t("loading")}
             </div>
           </div>
         ) : (
-          <div className="relative bg-secondary md:m-10 rounded-b-5xl md:rounded-b-2xl md:rounded-t-2xl  ">
+          <div className="relative bg-secondary md:m-10 rounded-b-5xl md:rounded-b-2xl md:rounded-t-2xl ">
             <div
-              className="relative object-cover w-full rounded-b-5xl md:rounded-b-2xl  md:rounded-t-2xl overflow-clip"
+              className="relative object-cover w-full rounded-b-5xl md:rounded-b-2xl md:rounded-t-2xl overflow-clip"
               style={{
                 backgroundImage: `url(${background.src})`,
                 backgroundSize: "cover",
@@ -77,7 +75,7 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                 {user && (
                   <div
                     tabIndex={0}
-                    className="flex z-50 flex-col items-center p-2 rounded-lg hover:cursor-pointer dropdown dropdown-bottom md:dropdown-end md:items-end md:absolute md:right-4 md:top-4 glass"
+                    className="z-50 flex flex-col items-center p-2 rounded-lg hover:cursor-pointer dropdown dropdown-bottom md:dropdown-end md:items-end md:absolute md:right-4 md:top-4 glass"
                   >
                     <div className="flex ">
                       <Image
@@ -93,7 +91,7 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                     </div>
                     <ul
                       tabIndex={0}
-                      className="p-2 mt-2 rtl:md:-translate-x-14 shadow dropdown-content text-secondary menu bg-base-100 rounded-box w-52"
+                      className="p-2 mt-2 shadow rtl:md:-translate-x-14 dropdown-content text-secondary menu bg-base-100 rounded-box w-52"
                     >
                       <li>
                         <Link href={"/account"}>

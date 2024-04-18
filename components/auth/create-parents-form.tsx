@@ -380,12 +380,11 @@ export const CreateParentsForm = (props: ICreateParentsForm) => {
 
           {/* Submit */}
           <button
-            className={`my-3 text-white btn btn-primary md:col-span-2 ${
-              props.isLoading && "loading"
-            }`}
+            className={`my-3 text-white btn btn-primary md:col-span-2 `}
             type="submit"
             disabled={isSubmitting || !isValid || props.isLoading}
           >
+            {props.isLoading && <span className="loading"></span>}
             {props.submitTitle}
           </button>
         </Form>

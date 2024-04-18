@@ -397,12 +397,11 @@ export default function ViewParentInfo({ parentInfo }: Props) {
           {/* Submit */}
           {editingApplicationsEnabled && (
             <button
-              className={`my-3 text-white btn btn-primary md:col-span-2 ${
-                isSubmitting && "loading"
-              }`}
+              className={`my-3 text-white btn btn-primary md:col-span-2`}
               type="submit"
               disabled={isSubmitting || !isValid}
             >
+              {isSubmitting && <span className="loading"></span>}
               {t("update")}
             </button>
           )}

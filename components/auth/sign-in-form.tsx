@@ -65,9 +65,10 @@ export const SignInForm = () => {
             </div>
             <button
               type="submit"
-              className={`btn btn-primary ${isSubmitting && "loading"}`}
+              className={`btn btn-primary`}
               disabled={isSubmitting || !isValid}
             >
+              {isSubmitting && <span className="loading"></span>}
               {t("signIn")}
             </button>
           </Form>
