@@ -596,3 +596,31 @@ export async function uploadFile(
     return null;
   }
 }
+
+export async function listScholarshipsOfApplicationId({
+  applicationId,
+}: {
+  applicationId: string;
+}): Promise<Scholarship[]> {
+  let query = `query ListScholarshipsByApplicationID {
+    scholarshipsByApplicationID(applicationID: "${applicationId}") {
+      items {
+        id
+        signedContractDoc
+        IBANLetterDoc
+        isConfirmed
+      }
+    }
+  }  
+  `;
+
+  let res = (await API.graphql(graphqlOperation(query))) as GraphQLResult<any>;
+
+  if (res.data === null) {
+    throw new Error("Failed to get all scholarships");
+  }
+
+  let tempScholarshipList = res.data?.scholarshipsByApplicationID?.items;
+
+  return tempScholarshipList ?? [];
+}

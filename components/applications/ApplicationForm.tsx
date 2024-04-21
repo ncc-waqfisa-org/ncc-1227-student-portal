@@ -46,14 +46,12 @@ import { cn } from "../../src/lib/utils";
 export interface CreateApplicationFormValues {
   application: CreateApplicationMutationVariables;
   primaryProgram: CreateProgramChoiceMutationVariables;
-  // secondaryProgram: CreateProgramChoiceMutationVariables;
   attachment: CreateAttachmentMutationVariables;
   studentLog: CreateStudentLogMutationVariables;
 }
 export interface UpdateApplicationFormValues {
   application: UpdateApplicationMutationVariables;
   primaryProgram: UpdateProgramChoiceMutationVariables;
-  // secondaryProgram: UpdateProgramChoiceMutationVariables;
   attachment: UpdateAttachmentMutationVariables;
   studentLog: CreateStudentLogMutationVariables;
 }
@@ -61,12 +59,9 @@ export interface UpdateApplicationFormValues {
 interface FormValues {
   gpa: number | undefined;
   primaryProgramID: string | undefined;
-  // secondaryProgramID: string | undefined;
-  // cprDoc: File | undefined;
   schoolCertificate: File | undefined;
   transcriptDoc: File | undefined;
   primaryAcceptanceDoc: File | undefined;
-  // secondaryAcceptanceDoc: File | undefined;
 
   reasonForUpdate?: string | undefined;
 }
@@ -87,14 +82,9 @@ export const ApplicationForm: FC<Props> = (props) => {
 
   const applicationIsEligible = props.application?.status === Status.ELIGIBLE;
 
-  // const [cprDoc, setCprDoc] = useState<File | undefined>(undefined);
-
   const [primaryAcceptanceDoc, setPrimaryAcceptanceDoc] = useState<
     File | undefined
   >(undefined);
-  // const [secondaryAcceptanceDoc, setSecondaryAcceptanceDoc] = useState<
-  //   File | undefined
-  // >(undefined);
 
   const [schoolCertificate, setSchoolCertificate] = useState<File | undefined>(
     undefined
@@ -106,26 +96,20 @@ export const ApplicationForm: FC<Props> = (props) => {
   const oldPrimaryProgram = props.application?.programs?.items.sort(
     (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
   )[0];
-  // const oldSecondaryProgram = props.application?.programs?.items.sort(
-  //   (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
-  // )[1];
 
   const [primaryProgram, setPrimaryProgram] = useState<Program | undefined>(
     oldPrimaryProgram?.program ?? undefined
   );
-  // const [secondaryProgram, setSecondaryProgram] = useState<Program | undefined>(
-  //   oldSecondaryProgram?.program ?? undefined
-  // );
 
   const [withdrawing, setWithdrawing] = useState(false);
   const initialValues: FormValues = {
     gpa: props.application?.gpa ?? undefined,
     primaryProgramID: oldPrimaryProgram?.program?.id ?? undefined,
-    // secondaryProgramID: oldSecondaryProgram?.program?.id ?? undefined,
+
     schoolCertificate: undefined,
     transcriptDoc: undefined,
     primaryAcceptanceDoc: undefined,
-    // secondaryAcceptanceDoc: undefined,
+
     reasonForUpdate: undefined,
   };
 
@@ -207,19 +191,6 @@ export const ApplicationForm: FC<Props> = (props) => {
       },
     };
 
-    // let tempSecondaryProgramChoice: CreateProgramChoiceMutationVariables = {
-    //   input: {
-    //     id: undefined,
-    //     _version: undefined,
-    //     choiceOrder: data.secondaryProgram.input.choiceOrder,
-    //     acceptanceLetterDoc: data.secondaryProgram.input.acceptanceLetterDoc,
-    //     programID: data.secondaryProgram.input.programID ?? "",
-    //     programApplicationsId: data.secondaryProgram.input.programID,
-    //     applicationID: createdApplicationInDB.createApplication?.id ?? "",
-    //     applicationProgramsId: createdApplicationInDB.createApplication?.id,
-    //   },
-    // };
-
     await Promise.all([
       createProgramChoiceInDB(tempPrimaryProgramChoice),
       // createProgramChoiceInDB(tempSecondaryProgramChoice),
@@ -297,21 +268,6 @@ export const ApplicationForm: FC<Props> = (props) => {
       },
     };
 
-    // let tempSecondaryProgramChoice: UpdateProgramChoiceMutationVariables = {
-    //   input: {
-    //     id: data.secondaryProgram.input.id,
-    //     _version: data.secondaryProgram.input._version,
-    //     choiceOrder: data.secondaryProgram.input.choiceOrder,
-    //     acceptanceLetterDoc: data.secondaryProgram.input.acceptanceLetterDoc,
-    //     programID: data.secondaryProgram.input.programID,
-    //     programApplicationsId:
-    //       data.secondaryProgram.input.programApplicationsId,
-    //     applicationID: data.secondaryProgram.input.applicationID,
-    //     applicationProgramsId:
-    //       data.secondaryProgram.input.applicationProgramsId,
-    //   },
-    // };
-
     await Promise.all([
       updateProgramChoiceInDB(tempPrimaryProgramChoice),
       // updateProgramChoiceInDB(tempSecondaryProgramChoice),
@@ -342,9 +298,6 @@ export const ApplicationForm: FC<Props> = (props) => {
                 primaryProgramID: yup
                   .string()
                   .required(`${tErrors("requiredField")}`),
-                // secondaryProgramID: yup
-                //   .string()
-                //   .required(`${tErrors("requiredField")}`),
                 reasonForUpdate: yup
                   .string()
                   .required(`${tErrors("requiredField")}`),
@@ -358,9 +311,6 @@ export const ApplicationForm: FC<Props> = (props) => {
                 primaryProgramID: yup
                   .string()
                   .required(`${tErrors("requiredField")}`),
-                // secondaryProgramID: yup
-                //   .string()
-                //   .required(`${tErrors("requiredField")}`),
                 schoolCertificate: yup.mixed(),
                 transcriptDoc: yup.mixed(),
                 primaryAcceptanceDoc: yup.mixed(),
@@ -399,12 +349,6 @@ export const ApplicationForm: FC<Props> = (props) => {
                   DocType.PRIMARY_PROGRAM_ACCEPTANCE,
                   `${student?.getStudent?.cpr}`
                 )),
-              // secondaryAcceptanceDoc &&
-              //   (await uploadFile(
-              //     secondaryAcceptanceDoc,
-              //     DocType.SECONDARY_PROGRAM_ACCEPTANCE,
-              //     `${student?.getStudent?.cpr}`
-              //   )),
             ])
               .then((res) => {
                 return res;
@@ -434,18 +378,10 @@ export const ApplicationForm: FC<Props> = (props) => {
             storageKeys?.[2] !== undefined
               ? storageKeys[2]
               : checkStorageKeys[2];
-          // // Secondary program acceptance letter doc storage key
-          // checkStorageKeys[3] =
-          //   storageKeys?.[3] !== undefined
-          //     ? storageKeys[3]
-          //     : checkStorageKeys[3];
 
           const selectedPrimaryProgram = props.programs?.find(
             (p) => p.id === values.primaryProgramID
           );
-          // const selectedSecondaryProgram = props.programs?.find(
-          //   (p) => p.id === values.secondaryProgramID
-          // );
 
           let newApplicationSnapshotInput: ApplicationSnapshotInput = {
             gpa: values.gpa,
@@ -458,14 +394,6 @@ export const ApplicationForm: FC<Props> = (props) => {
                 oldPrimaryProgram?.acceptanceLetterDoc ??
                 undefined,
             },
-            // secondaryProgram: {
-            //   id: values.secondaryProgramID,
-            //   name: `${selectedSecondaryProgram?.name}-${selectedSecondaryProgram?.university?.name}`,
-            //   acceptanceLetterDoc:
-            //     storageKeys?.[3] ??
-            //     oldSecondaryProgram?.acceptanceLetterDoc ??
-            //     undefined,
-            // },
             attachments: {
               schoolCertificate: storageKeys?.[0] ?? undefined,
               transcript: storageKeys?.[1] ?? undefined,
@@ -483,12 +411,6 @@ export const ApplicationForm: FC<Props> = (props) => {
                   acceptanceLetterDoc:
                     oldPrimaryProgram?.acceptanceLetterDoc ?? undefined,
                 },
-                // secondaryProgram: {
-                //   id: oldSecondaryProgram?.program?.id ?? undefined,
-                //   name: `${oldSecondaryProgram?.program?.name}-${oldSecondaryProgram?.program?.university?.name}`,
-                //   acceptanceLetterDoc:
-                //     oldSecondaryProgram?.acceptanceLetterDoc ?? undefined,
-                // },
                 attachments: {
                   schoolCertificate:
                     props.application?.attachment?.schoolCertificate ??
@@ -555,19 +477,6 @@ export const ApplicationForm: FC<Props> = (props) => {
               },
               condition: undefined,
             },
-            // secondaryProgram: {
-            //   input: {
-            //     id: undefined,
-            //     _version: undefined,
-            //     choiceOrder: 2,
-            //     programID: values.secondaryProgramID ?? "",
-            //     applicationProgramsId: values.secondaryProgramID ?? "",
-            //     applicationID: "",
-            //     programApplicationsId: undefined,
-            //     acceptanceLetterDoc: storageKeys?.[3],
-            //   },
-            //   condition: undefined,
-            // },
             attachment: {
               input: {
                 id: undefined,
@@ -624,7 +533,6 @@ export const ApplicationForm: FC<Props> = (props) => {
                   transcript: checkStorageKeys[1],
                   schoolCertificate: checkStorageKeys[0],
                   primaryProgramAcceptanceLetter: checkStorageKeys[2],
-                  // secondaryProgramAcceptanceLetter: checkStorageKeys[3],
                 })
                   ? applicationIsEligible
                     ? props.application?.status
@@ -672,34 +580,9 @@ export const ApplicationForm: FC<Props> = (props) => {
               },
               condition: undefined,
             },
-            // secondaryProgram: {
-            //   input: {
-            //     id:
-            //       props.application?.programs?.items.sort(
-            //         (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
-            //       )[1]?.id ?? "",
-            //     _version: props.application?.programs?.items.sort(
-            //       (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
-            //     )[1]?._version,
-            //     choiceOrder: 2,
-            //     programID: values.secondaryProgramID ?? "",
-            //     applicationProgramsId: props.application?.id ?? "",
-            //     applicationID: props.application?.id ?? "",
-            //     programApplicationsId: values.secondaryProgramID ?? "",
-            //     acceptanceLetterDoc:
-            //       storageKeys?.[3] ??
-            //       (secondaryProgram?.id === oldSecondaryProgram?.program?.id
-            //         ? oldSecondaryProgram?.acceptanceLetterDoc
-            //         : null) ??
-            //       null,
-            //   },
-            //   condition: undefined,
-            // },
             attachment: {
               input: {
                 id: props.application?.attachment?.id ?? "",
-                // cprDoc:
-                //   storageKeys?.[0] ?? props.application?.attachment?.cprDoc,
                 schoolCertificate:
                   storageKeys?.[0] ??
                   props.application?.attachment?.schoolCertificate,
@@ -976,134 +859,6 @@ export const ApplicationForm: FC<Props> = (props) => {
               </div>
             }
 
-            {/* secondaryProgram */}
-            {/* {
-              <div className="flex flex-col justify-start w-full md:col-span-2">
-                <div className="grid items-end grid-cols-1 gap-3 md:grid-cols-2">
-                  <div className="">
-                    <div className="flex items-center justify-between">
-                      <label className="label">{t("secondaryProgram")}</label>
-                      <label className="label-text-alt text-error">
-                        {errors.secondaryProgramID &&
-                          touched.secondaryProgramID &&
-                          errors.secondaryProgramID}
-                      </label>
-                    </div>
-                    <Field
-                      as="select"
-                      name="secondaryProgramID"
-                      title="secondaryProgramID"
-                      placeholder="Secondary Program"
-                      className={`select select-bordered w-full select-primary ${
-                        errors.secondaryProgramID &&
-                        touched.secondaryProgramID &&
-                        "select-error"
-                      }`}
-                      onChange={(event: any) => {
-                        setSecondaryProgram(
-                          props.programs?.find(
-                            (p) => p.id === event.target.value
-                          )
-                        );
-                        handleChange(event);
-                      }}
-                      onBlur={handleBlur}
-                      value={values.secondaryProgramID}
-                      disabled={applicationIsEligible}
-                    >
-                      <option
-                        selected={props.application === undefined}
-                        disabled
-                        value={undefined}
-                      >
-                        {t("select")}
-                      </option>
-                      {props.programs?.map(
-                        (program) =>
-                          program?.id !== values.primaryProgramID && (
-                            <option
-                              key={program?.id}
-                              value={program?.id}
-                              disabled={program?.isDeactivated === true}
-                            >
-                              {`${
-                                locale === "ar"
-                                  ? program?.nameAr ?? "-"
-                                  : program?.name
-                              }-${
-                                locale === "ar"
-                                  ? program?.university?.nameAr ?? "-"
-                                  : program?.university?.name
-                              }`}
-                            </option>
-                          )
-                      )}
-                    </Field>
-                  </div>
-
-                  <div className="flex flex-col justify-start w-full">
-                    <label className="label">
-                      {t("secondaryAcceptance")}{" "}
-                      {props.application && (
-                        <GetStorageLinkComponent
-                          storageKey={
-                            secondaryProgram?.id ===
-                            oldSecondaryProgram?.program?.id
-                              ? oldSecondaryProgram?.acceptanceLetterDoc
-                              : undefined
-                          }
-                        ></GetStorageLinkComponent>
-                      )}
-                    </label>
-                    <Field
-                      dir="ltr"
-                      type="file"
-                      accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps,application/msword"
-                      id="secondaryAcceptanceDoc"
-                      name="secondaryAcceptanceDoc"
-                      title="secondaryAcceptanceDoc"
-                      placeholder="CPR Doc"
-                      className={`file-input file-input-bordered file-input-secondary bg-secondary text-secondary-content ${
-                        errors.secondaryAcceptanceDoc && "input-error"
-                      }`}
-                      onChange={(event: any) => {
-                        let file: File | undefined =
-                          event.currentTarget.files[0];
-
-                        let isValid = checkIfFilesAreTooBig(file);
-                        if (isValid) {
-                          setSecondaryAcceptanceDoc(file);
-                          handleChange(event);
-                        } else {
-                          setFieldError(
-                            "secondaryAcceptanceDoc",
-                            "File is too large"
-                          );
-                        }
-                      }}
-                      onBlur={handleBlur}
-                      value={values.secondaryAcceptanceDoc ?? ""}
-                    />
-                    <label className="label-text-alt text-error">
-                      {errors.secondaryAcceptanceDoc &&
-                        touched.secondaryAcceptanceDoc &&
-                        errors.secondaryAcceptanceDoc}
-                    </label>
-                  </div>
-                </div>
-                {(secondaryProgram?.requirements ||
-                  secondaryProgram?.requirementsAr) && (
-                  <div className="p-3 mt-2 border border-gray-300 rounded-md">
-                    <div className="stat-title">{t("requirements")}</div>
-                    <label className="whitespace-pre-wrap stat-desc">
-                      {locale == "ar"
-                        ? secondaryProgram?.requirementsAr
-                        : secondaryProgram?.requirements}
-                    </label>
-                  </div>
-                )}
-              </div>
-            } */}
             <div className="divider md:col-span-2"></div>
 
             {/* schoolCertificate */}
@@ -1195,51 +950,6 @@ export const ApplicationForm: FC<Props> = (props) => {
               </label>
             </div>
 
-            {/* signedContractDoc */}
-            {/* <div className="flex flex-col justify-start w-full">
-              <label className="label">
-                {t("signedContract")} {t("document")}
-                {props.application && (
-                  <GetStorageLinkComponent
-                    storageKey={
-                      props.application?.attachment?.signedContractDoc
-                    }
-                  ></GetStorageLinkComponent>
-                )}
-              </label>
-
-              <Field
-                dir="ltr"
-                type="file"
-                accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps,application/msword"
-                id="signedContractDoc"
-                name="signedContractDoc"
-                title="signedContractDoc"
-                placeholder="Signed Contract Doc"
-                className={`file-input file-input-bordered file-input-secondary bg-secondary text-secondary-content ${
-                  errors.signedContractDoc && "input-error"
-                }`}
-                onChange={(event: any) => {
-                  let file: File | undefined = event.currentTarget.files[0];
-
-                  let isValid = checkIfFilesAreTooBig(file);
-                  if (isValid) {
-                    setSignedContractDoc(file);
-                    handleChange(event);
-                  } else {
-                    setFieldError("signedContractDoc", "File is too large");
-                  }
-                }}
-                onBlur={handleBlur}
-                value={values.signedContractDoc ?? ""}
-              />
-              <label className="label-text-alt text-error">
-                {errors.signedContractDoc &&
-                  touched.signedContractDoc &&
-                  errors.signedContractDoc}
-              </label>
-            </div> */}
-
             {/* Reason */}
             {props.application && (
               <div className="flex flex-col justify-start w-full md:col-span-2">
@@ -1280,9 +990,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                 <p className="py-4">{t("confirmWithdrawMessage")}</p>
                 <div className="gap-3 modal-action">
                   <button
-                    className={`btn btn-error btn-sm ${
-                      withdrawing && "loading"
-                    }`}
+                    className={`btn btn-error btn-sm`}
                     type="button"
                     disabled={withdrawing}
                     onClick={() => {
@@ -1295,6 +1003,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                       });
                     }}
                   >
+                    {withdrawing && <span className="loading"></span>}
                     {t("withdraw")}
                   </button>
                   <label htmlFor="my-modal" className="btn btn-sm">

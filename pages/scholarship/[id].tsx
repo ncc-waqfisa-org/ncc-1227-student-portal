@@ -2,23 +2,11 @@ import { withSSRContext } from "aws-amplify";
 import { GetServerSideProps } from "next";
 import React, { useEffect, useState } from "react";
 import { PageComponent } from "../../components/PageComponent";
-import { Application, Scholarship, Status, Student } from "../../src/API";
-import ViewApplication from "../../components/applications/ViewApplication";
-import { CognitoUser } from "@aws-amplify/auth";
-import { ApplicationForm } from "../../components/applications/ApplicationForm";
-import {
-  getApplicationData,
-  getScholarship,
-  listAllPrograms,
-} from "../../src/CustomAPI";
+import { Scholarship } from "../../src/API";
+import { getScholarship } from "../../src/CustomAPI";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
-import { useAppContext } from "../../contexts/AppContexts";
-import GetStorageLinkComponent from "../../components/get-storage-link-component";
-import Link from "next/link";
 import { Contract } from "../../components/scholarship/Contract";
-import { ScholarshipStatus } from "../../src/models";
-import { useRouter } from "next/router";
 import { ScholarshipPreview } from "../../components/scholarship/ScholarshipPreview";
 import { BankDetails } from "../../components/scholarship/BankDetails";
 import { useQuery } from "@tanstack/react-query";
@@ -30,16 +18,9 @@ interface Props {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { Auth } = withSSRContext(ctx);
   const { locale } = ctx;
 
-  let authUser = (await Auth.currentAuthenticatedUser()) as
-    | CognitoUser
-    | undefined;
-
   const { id } = ctx.query;
-
-  // let scholarship = await getScholarship(`${id}`);
 
   return {
     props: {
@@ -54,7 +35,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         "errors",
       ])),
       scholarshipId: id,
-      // authUser?.getUsername() === scholarship?.studentCPR && scholarship,
     },
   };
 };

@@ -6,7 +6,11 @@ import { Application, Status, Student } from "../../src/API";
 import ViewApplication from "../../components/applications/ViewApplication";
 import { CognitoUser } from "@aws-amplify/auth";
 import { ApplicationForm } from "../../components/applications/ApplicationForm";
-import { getApplicationData, listAllPrograms } from "../../src/CustomAPI";
+import {
+  getApplicationData,
+  listAllPrograms,
+  listScholarshipsOfApplicationId,
+} from "../../src/CustomAPI";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "../../contexts/AppContexts";
@@ -16,6 +20,7 @@ import Link from "next/link";
 interface Props {
   application: Application | null;
   programs: any;
+  haveScholarship: boolean;
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -29,9 +34,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
     const { id } = ctx.query;
 
-    let application = await getApplicationData(`${id}`);
+    // const application = await getApplicationData(`${id}`);
+    // const programs = await listAllPrograms();
+    // const haveScholarship = await listScholarshipsOfApplicationId({
+    //   applicationId: `${id}`,
+    // }).then((scholarships) => scholarships.length > 0 );
 
-    const programs = await listAllPrograms();
+    const [application, programs, scholarships] = await Promise.all([
+      getApplicationData(`${id}`),
+      listAllPrograms(),
+      listScholarshipsOfApplicationId({ applicationId: `${id}` }),
+    ]);
+
+    const haveScholarship = scholarships.length > 0;
 
     return {
       props: {
@@ -47,6 +62,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         application:
           authUser?.getUsername() === application?.studentCPR && application,
         programs: programs,
+        haveScholarship,
       },
     };
   } catch (error) {
@@ -64,6 +80,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         ])),
         application: null,
         programs: [],
+        haveScholarship: false,
       },
     };
   }
@@ -72,6 +89,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 export default function SingleApplicationPage({
   application,
   programs,
+  haveScholarship,
 }: Props) {
   const { t } = useTranslation("applicationPage");
 
@@ -101,7 +119,10 @@ export default function SingleApplicationPage({
       </div>
       <div className="max-w-3xl mx-auto">
         {application && !isEdit && (
-          <ViewApplication application={application} />
+          <ViewApplication
+            application={application}
+            haveScholarship={haveScholarship}
+          />
         )}
       </div>
 

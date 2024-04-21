@@ -8,17 +8,17 @@ import { cn } from "../../src/lib/utils";
 
 interface Props {
   application: Application;
+  haveScholarship: boolean;
 }
 
-export default function ViewApplication({ application }: Props) {
+export default function ViewApplication({
+  application,
+  haveScholarship,
+}: Props) {
   const { t } = useTranslation("applicationPage");
   const { locale } = useRouter();
 
   const primaryProgram = application.programs?.items[0];
-  console.log("🚀 ~ ViewApplication ~ primaryProgram:", primaryProgram);
-  // const secondaryProgram = application.programs?.items?.sort(
-  //   (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
-  // )[1];
 
   return (
     <div className="overflow-x-auto">
@@ -60,7 +60,8 @@ export default function ViewApplication({ application }: Props) {
                   }`
                 )}
               </div>
-              {application.status === Status.APPROVED && (
+              {/* only show when there is a scholarship */}
+              {haveScholarship && (
                 <div className="w-fit">
                   <Link
                     className="btn btn-ghost btn-sm text-success brightness-75 hover:bg-success/20"
