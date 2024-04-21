@@ -206,7 +206,7 @@ export const VerifyEmail = () => {
           isValid,
         }) => (
           <div dir="ltr" className="">
-            <Form className="flex items-start gap-3 ">
+            <Form className="flex flex-wrap items-start gap-3 ">
               {/* Code field */}
               <div className="flex flex-col">
                 <Field
@@ -251,9 +251,6 @@ export const VerifyEmail = () => {
           </div>
         )}
       </Formik>
-      {/* <Link href={`/change-email${cpr ? `?cpr=${cpr}` : ""}`}>
-        change your email?
-      </Link> */}
     </div>
   );
 };

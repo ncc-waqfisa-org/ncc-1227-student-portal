@@ -104,7 +104,6 @@ export const CreateParentsForm = (props: ICreateParentsForm) => {
               </label>
             </div>
             <Field
-              dir="ltr"
               type="text"
               name="guardianFullName"
               title="guardianFullName"
@@ -128,7 +127,6 @@ export const CreateParentsForm = (props: ICreateParentsForm) => {
               </label>
             </div>
             <Field
-              dir="ltr"
               type="text"
               name="relation"
               title="relation"
@@ -178,7 +176,6 @@ export const CreateParentsForm = (props: ICreateParentsForm) => {
               </label>
             </div>
             <Field
-              dir="ltr"
               type="text"
               name="address"
               title="address"
@@ -290,7 +287,6 @@ export const CreateParentsForm = (props: ICreateParentsForm) => {
               </label>
             </div>
             <Field
-              dir="ltr"
               type="text"
               name="fatherFullName"
               title="fatherFullName"
@@ -340,7 +336,6 @@ export const CreateParentsForm = (props: ICreateParentsForm) => {
               </label>
             </div>
             <Field
-              dir="ltr"
               type="text"
               name="motherFullName"
               title="motherFullName"
