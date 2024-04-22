@@ -21,21 +21,53 @@ import { useAuth } from "../../hooks/use-auth";
 
 interface Props {
   id: string | null;
+  data: {
+    application: Application | null;
+    programs: Program[];
+    haveScholarship: boolean;
+  };
   // application: Application | null;
   // programs: any;
   // haveScholarship: boolean;
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  // const { Auth } = withSSRContext(ctx);
+  const { Auth } = withSSRContext(ctx);
   const { locale } = ctx;
 
   try {
-    // let authUser = (await Auth.currentAuthenticatedUser()) as
-    //   | CognitoUser
-    //   | undefined;
+    let authUser = (await Auth.currentAuthenticatedUser()) as
+      | CognitoUser
+      | undefined;
 
     const { id } = ctx.query;
+
+    const token = authUser
+      ?.getSignInUserSession()
+      ?.getAccessToken()
+      .getJwtToken();
+
+    const host = ctx.req.headers.host; // may be undefined if no host header is present
+    const protocol = ctx.req.headers["x-forwarded-proto"] || "http"; // Check if the request is forwarded securely
+
+    // Build the origin using the protocol and host
+    const origin = `${protocol}://${host}`;
+
+    const data = await fetch(
+      `${origin}/api/get-student-application?id=${id}&token=${token}`
+    )
+      .then((resData) => resData.json())
+      .catch((error) => {
+        console.log(
+          "🚀 ~ getServerSideProps:GetServerSideProps= ~ error:",
+          error
+        );
+        return {
+          application: null,
+          haveScholarship: false,
+          programs: [],
+        };
+      });
 
     // const [application, programs, scholarships] = await Promise.all([
     //   getApplicationData(`${id}`),
@@ -57,6 +89,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
           "errors",
         ])),
         id,
+        data,
         // application:
         //   authUser?.getUsername() === application?.studentCPR && application,
         // programs: programs,
@@ -87,6 +120,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 export default function SingleApplicationPage({
   id,
+  data,
 }: // application,
 // programs,
 // haveScholarship,
@@ -123,30 +157,31 @@ Props) {
   //         sc ? sc.length > 0 : false
   //       ),
   //   });
-  const { data, isPending } = useQuery<{
-    application: Application | null;
-    programs: Program[];
-    haveScholarship: boolean;
-  }>({
-    queryKey: ["applicationData", token, id],
-    queryFn: () =>
-      fetch(`/api/get-student-application?id=${id}&token=${token}`).then(
-        (resData) => resData.json()
-      ),
-  });
+  // const { data, isPending } = useQuery<{
+  //   application: Application | null;
+  //   programs: Program[];
+  //   haveScholarship: boolean;
+  // }>({
+  //   queryKey: ["applicationData", token, id],
+  //   queryFn: () =>
+  //     fetch(`/api/get-student-application?id=${id}&token=${token}`).then(
+  //       (resData) => resData.json()
+  //     ),
+  //   staleTime: 60 * 1000,
+  // });
 
-  if (isPending) {
-    return (
-      <PageComponent title={"Application"} authRequired>
-        <div className="flex flex-col justify-center items-center">
-          <p className="items-center flex gap-2">
-            <span className="loading"></span>
-            {t("loading")}
-          </p>
-        </div>
-      </PageComponent>
-    );
-  }
+  // if (isPending) {
+  //   return (
+  //     <PageComponent title={"Application"} authRequired>
+  //       <div className="flex flex-col justify-center items-center">
+  //         <p className="items-center flex gap-2">
+  //           <span className="loading"></span>
+  //           {t("loading")}
+  //         </p>
+  //       </div>
+  //     </PageComponent>
+  //   );
+  // }
 
   return (
     <PageComponent title={"Application"} authRequired>
