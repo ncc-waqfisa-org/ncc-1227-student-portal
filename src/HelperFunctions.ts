@@ -190,3 +190,18 @@ export function allDocsAreAvailable(props: IAllDocsAreAvailable): boolean {
 //     props.familyProofs.length > 0
 //   );
 // }
+
+export async function getCprFromToken(token: string | null): Promise<{
+  isAdmin?: boolean;
+  username: string;
+}> {
+  return fetch(
+    "https://g7niieicpa.execute-api.us-east-1.amazonaws.com/default/cpr",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    }
+  ).then((data) => data.json());
+}

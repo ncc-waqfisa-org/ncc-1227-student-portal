@@ -2,7 +2,7 @@ import { withSSRContext } from "aws-amplify";
 import { GetServerSideProps } from "next";
 import React, { useState } from "react";
 import { PageComponent } from "../../components/PageComponent";
-import { Application, Status, Student } from "../../src/API";
+import { Application, Program, Status, Student } from "../../src/API";
 import ViewApplication from "../../components/applications/ViewApplication";
 import { CognitoUser } from "@aws-amplify/auth";
 import { ApplicationForm } from "../../components/applications/ApplicationForm";
@@ -16,37 +16,34 @@ import { useTranslation } from "react-i18next";
 import { useAppContext } from "../../contexts/AppContexts";
 import GetStorageLinkComponent from "../../components/get-storage-link-component";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "../../hooks/use-auth";
 
 interface Props {
-  application: Application | null;
-  programs: any;
-  haveScholarship: boolean;
+  id: string | null;
+  // application: Application | null;
+  // programs: any;
+  // haveScholarship: boolean;
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { Auth } = withSSRContext(ctx);
+  // const { Auth } = withSSRContext(ctx);
   const { locale } = ctx;
 
   try {
-    let authUser = (await Auth.currentAuthenticatedUser()) as
-      | CognitoUser
-      | undefined;
+    // let authUser = (await Auth.currentAuthenticatedUser()) as
+    //   | CognitoUser
+    //   | undefined;
 
     const { id } = ctx.query;
 
-    // const application = await getApplicationData(`${id}`);
-    // const programs = await listAllPrograms();
-    // const haveScholarship = await listScholarshipsOfApplicationId({
-    //   applicationId: `${id}`,
-    // }).then((scholarships) => scholarships.length > 0 );
+    // const [application, programs, scholarships] = await Promise.all([
+    //   getApplicationData(`${id}`),
+    //   listAllPrograms(),
+    //   listScholarshipsOfApplicationId({ applicationId: `${id}` }),
+    // ]);
 
-    const [application, programs, scholarships] = await Promise.all([
-      getApplicationData(`${id}`),
-      listAllPrograms(),
-      listScholarshipsOfApplicationId({ applicationId: `${id}` }),
-    ]);
-
-    const haveScholarship = scholarships.length > 0;
+    // const haveScholarship = scholarships.length > 0;
 
     return {
       props: {
@@ -59,10 +56,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
           "account",
           "errors",
         ])),
-        application:
-          authUser?.getUsername() === application?.studentCPR && application,
-        programs: programs,
-        haveScholarship,
+        id,
+        // application:
+        //   authUser?.getUsername() === application?.studentCPR && application,
+        // programs: programs,
+        // haveScholarship,
       },
     };
   } catch (error) {
@@ -78,33 +76,84 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
           "account",
           "errors",
         ])),
-        application: null,
-        programs: [],
-        haveScholarship: false,
+        id: null,
+        // application: null,
+        // programs: [],
+        // haveScholarship: false,
       },
     };
   }
 };
 
 export default function SingleApplicationPage({
-  application,
-  programs,
-  haveScholarship,
-}: Props) {
+  id,
+}: // application,
+// programs,
+// haveScholarship,
+Props) {
   const { t } = useTranslation("applicationPage");
-
   const [isEdit, setIsEdit] = useState(false);
-
   const { student: studentData, editingApplicationsEnabled } = useAppContext();
-
   const student = studentData?.getStudent as Student;
+
+  const { token } = useAuth();
+
+  // const { data: application, isPending: isPendingApplication } =
+  //   useQuery<Application | null>({
+  //     queryKey: ["application", id, cpr],
+  //     queryFn: () => {
+  //       // Return null immediately if either `id` or `cpr` is not provided.
+  //       if (!id || !cpr) return null;
+
+  //       // Fetch application data and check for CPR match.
+  //       return getApplicationData(id).then((app) =>
+  //         app && app.studentCPR === cpr ? app : null
+  //       );
+  //     },
+  //   });
+  // const { data: programs, isPending: isPendingPrograms } = useQuery<Program[]>({
+  //   queryKey: ["programs"],
+  //   queryFn: () => listAllPrograms(),
+  // });
+  // const { data: haveScholarship, isPending: isPendingHaveScholarship } =
+  //   useQuery<boolean>({
+  //     queryKey: ["haveScholarship", cpr, id],
+  //     queryFn: () =>
+  //       listScholarshipsOfApplicationId({ applicationId: `${id}` }).then((sc) =>
+  //         sc ? sc.length > 0 : false
+  //       ),
+  //   });
+  const { data, isPending } = useQuery<{
+    application: Application | null;
+    programs: Program[];
+    haveScholarship: boolean;
+  }>({
+    queryKey: ["applicationData", token, id],
+    queryFn: () =>
+      fetch(`/api/get-student-application?id=${id}&token=${token}`).then(
+        (resData) => resData.json()
+      ),
+  });
+
+  if (isPending) {
+    return (
+      <PageComponent title={"Application"} authRequired>
+        <div className="flex flex-col justify-center items-center">
+          <p className="items-center flex gap-2">
+            <span className="loading"></span>
+            {t("loading")}
+          </p>
+        </div>
+      </PageComponent>
+    );
+  }
 
   return (
     <PageComponent title={"Application"} authRequired>
       <div className="max-w-3xl mx-auto">
-        {(application?.status === Status.REVIEW ||
-          application?.status === Status.NOT_COMPLETED ||
-          application?.status === Status.ELIGIBLE) &&
+        {(data?.application?.status === Status.REVIEW ||
+          data?.application?.status === Status.NOT_COMPLETED ||
+          data?.application?.status === Status.ELIGIBLE) &&
           editingApplicationsEnabled && (
             <div className="flex justify-end mb-3 ">
               <button
@@ -118,27 +167,30 @@ export default function SingleApplicationPage({
           )}
       </div>
       <div className="max-w-3xl mx-auto">
-        {application && !isEdit && (
+        {data?.application && !isEdit && (
           <ViewApplication
-            application={application}
-            haveScholarship={haveScholarship}
+            application={data?.application}
+            haveScholarship={data?.haveScholarship ?? false}
           />
         )}
       </div>
 
       <div className="max-w-3xl mx-auto">
-        {application && isEdit && editingApplicationsEnabled && (
-          <ApplicationForm application={application} programs={programs} />
+        {data?.application && isEdit && editingApplicationsEnabled && (
+          <ApplicationForm
+            application={data?.application}
+            programs={data?.programs}
+          />
         )}
       </div>
 
       <div className="max-w-3xl mx-auto">
-        {application && student && (
+        {data?.application && student && (
           <AccountDocs student={student}></AccountDocs>
         )}
       </div>
 
-      {!application && (
+      {!data?.application && (
         <div className="flex flex-col items-center justify-center">
           <div className="prose">
             <h1 className="text-error">{t("accessDenied")}</h1>

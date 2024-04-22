@@ -1,13 +1,9 @@
-import { API, Auth, graphqlOperation } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 import { Field, Form, Formik } from "formik";
 import toast from "react-hot-toast";
 
 import * as yup from "yup";
-import {
-  GetStudentQuery,
-  GetStudentQueryVariables,
-  ListStudentsQuery,
-} from "../../src/API";
+import { GetStudentQuery, GetStudentQueryVariables } from "../../src/API";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { useEffect, useState } from "react";
 import AppLoader from "./../App-loader";
@@ -15,8 +11,6 @@ import { useRouter } from "next/router";
 import { getStudent } from "../../src/graphql/queries";
 import { useTranslation } from "react-i18next";
 
-import { Button } from "@aws-amplify/ui-react";
-import Link from "next/link";
 import { useAuth } from "../../hooks/use-auth";
 
 interface Props {
