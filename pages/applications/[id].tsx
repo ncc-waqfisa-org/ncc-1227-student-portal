@@ -1,6 +1,6 @@
 import { withSSRContext } from "aws-amplify";
 import { GetServerSideProps } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PageComponent } from "../../components/PageComponent";
 import { Application, Program, Status, Student } from "../../src/API";
 import ViewApplication from "../../components/applications/ViewApplication";
@@ -21,61 +21,17 @@ import { useAuth } from "../../hooks/use-auth";
 
 interface Props {
   id: string | null;
-  data: {
-    application: Application | null;
-    programs: Program[];
-    haveScholarship: boolean;
-  };
   // application: Application | null;
   // programs: any;
   // haveScholarship: boolean;
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { Auth } = withSSRContext(ctx);
+  // const { Auth } = withSSRContext(ctx);
   const { locale } = ctx;
 
   try {
-    let authUser = (await Auth.currentAuthenticatedUser()) as
-      | CognitoUser
-      | undefined;
-
     const { id } = ctx.query;
-
-    const token = authUser
-      ?.getSignInUserSession()
-      ?.getAccessToken()
-      .getJwtToken();
-
-    const host = ctx.req.headers.host; // may be undefined if no host header is present
-    const protocol = ctx.req.headers["x-forwarded-proto"] || "http"; // Check if the request is forwarded securely
-
-    // Build the origin using the protocol and host
-    const origin = `${protocol}://${host}`;
-
-    const data = await fetch(
-      `${origin}/api/get-student-application?id=${id}&token=${token}`
-    )
-      .then((resData) => resData.json())
-      .catch((error) => {
-        console.log(
-          "🚀 ~ getServerSideProps:GetServerSideProps= ~ error:",
-          error
-        );
-        return {
-          application: null,
-          haveScholarship: false,
-          programs: [],
-        };
-      });
-
-    // const [application, programs, scholarships] = await Promise.all([
-    //   getApplicationData(`${id}`),
-    //   listAllPrograms(),
-    //   listScholarshipsOfApplicationId({ applicationId: `${id}` }),
-    // ]);
-
-    // const haveScholarship = scholarships.length > 0;
 
     return {
       props: {
@@ -89,11 +45,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
           "errors",
         ])),
         id,
-        data,
-        // application:
-        //   authUser?.getUsername() === application?.studentCPR && application,
-        // programs: programs,
-        // haveScholarship,
       },
     };
   } catch (error) {
@@ -110,53 +61,29 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
           "errors",
         ])),
         id: null,
-        // application: null,
-        // programs: [],
-        // haveScholarship: false,
       },
     };
   }
 };
 
-export default function SingleApplicationPage({
-  id,
-  data,
-}: // application,
-// programs,
-// haveScholarship,
-Props) {
+export default function SingleApplicationPage({ id }: Props) {
   const { t } = useTranslation("applicationPage");
   const [isEdit, setIsEdit] = useState(false);
   const { student: studentData, editingApplicationsEnabled } = useAppContext();
   const student = studentData?.getStudent as Student;
 
   const { token } = useAuth();
+  const [isPending, setIsPending] = useState(false);
+  const [data, setData] = useState<{
+    application: Application | null;
+    programs: Program[];
+    haveScholarship: boolean;
+  }>({
+    application: null,
+    programs: [],
+    haveScholarship: false,
+  });
 
-  // const { data: application, isPending: isPendingApplication } =
-  //   useQuery<Application | null>({
-  //     queryKey: ["application", id, cpr],
-  //     queryFn: () => {
-  //       // Return null immediately if either `id` or `cpr` is not provided.
-  //       if (!id || !cpr) return null;
-
-  //       // Fetch application data and check for CPR match.
-  //       return getApplicationData(id).then((app) =>
-  //         app && app.studentCPR === cpr ? app : null
-  //       );
-  //     },
-  //   });
-  // const { data: programs, isPending: isPendingPrograms } = useQuery<Program[]>({
-  //   queryKey: ["programs"],
-  //   queryFn: () => listAllPrograms(),
-  // });
-  // const { data: haveScholarship, isPending: isPendingHaveScholarship } =
-  //   useQuery<boolean>({
-  //     queryKey: ["haveScholarship", cpr, id],
-  //     queryFn: () =>
-  //       listScholarshipsOfApplicationId({ applicationId: `${id}` }).then((sc) =>
-  //         sc ? sc.length > 0 : false
-  //       ),
-  //   });
   // const { data, isPending } = useQuery<{
   //   application: Application | null;
   //   programs: Program[];
@@ -167,21 +94,37 @@ Props) {
   //     fetch(`/api/get-student-application?id=${id}&token=${token}`).then(
   //       (resData) => resData.json()
   //     ),
-  //   staleTime: 60 * 1000,
   // });
 
-  // if (isPending) {
-  //   return (
-  //     <PageComponent title={"Application"} authRequired>
-  //       <div className="flex flex-col justify-center items-center">
-  //         <p className="items-center flex gap-2">
-  //           <span className="loading"></span>
-  //           {t("loading")}
-  //         </p>
-  //       </div>
-  //     </PageComponent>
-  //   );
-  // }
+  useEffect(() => {
+    if (id && token) {
+      fetchData();
+    }
+    async function fetchData() {
+      setIsPending(true);
+      await fetch(`/api/get-student-application?id=${id}&token=${token}`)
+        .then((resData) => resData.json())
+        .then((d) => {
+          setData(d);
+        })
+        .finally(() => setIsPending(false));
+    }
+
+    return () => {};
+  }, [id, token]);
+
+  if (isPending) {
+    return (
+      <PageComponent title={"Application"} authRequired>
+        <div className="flex flex-col justify-center items-center">
+          <p className="items-center flex gap-2">
+            <span className="loading"></span>
+            {t("loading")}
+          </p>
+        </div>
+      </PageComponent>
+    );
+  }
 
   return (
     <PageComponent title={"Application"} authRequired>
