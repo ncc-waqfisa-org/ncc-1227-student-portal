@@ -7,6 +7,8 @@ import {
   listScholarshipsOfApplicationId,
 } from "../../src/CustomAPI";
 import { getCprFromToken } from "../../src/HelperFunctions";
+import { API } from "aws-amplify";
+import config from "../../src/aws-exports";
 
 // Define the structure of the data returned by this API endpoint.
 type Data = {
@@ -20,6 +22,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  API.configure({ ...config, ssr: true });
   const { id, token } = req.query;
 
   // Immediately respond with an error if the necessary parameters are not provided.

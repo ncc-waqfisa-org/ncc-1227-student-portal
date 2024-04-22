@@ -8,7 +8,7 @@ import { useAppContext } from "../../contexts/AppContexts";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
-import dayjs from "dayjs";
+
 import { CardInfoComponent } from "../../components/CardInfo";
 import info from "public/svg/info.svg";
 

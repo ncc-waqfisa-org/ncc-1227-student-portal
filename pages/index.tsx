@@ -8,7 +8,6 @@ import { useAuth } from "../hooks/use-auth";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { GetStaticProps } from "next";
-import { Button } from "@aws-amplify/ui-react";
 import { useQuery } from "@tanstack/react-query";
 import { Scholarship } from "../src/API";
 import { getStudentScholarships } from "../src/CustomAPI";

@@ -73,45 +73,45 @@ export default function SingleApplicationPage({ id }: Props) {
   const student = studentData?.getStudent as Student;
 
   const { token } = useAuth();
-  const [isPending, setIsPending] = useState(false);
-  const [data, setData] = useState<{
-    application: Application | null;
-    programs: Program[];
-    haveScholarship: boolean;
-  }>({
-    application: null,
-    programs: [],
-    haveScholarship: false,
-  });
-
-  // const { data, isPending } = useQuery<{
+  // const [isPending, setIsPending] = useState(false);
+  // const [data, setData] = useState<{
   //   application: Application | null;
   //   programs: Program[];
   //   haveScholarship: boolean;
   // }>({
-  //   queryKey: ["applicationData", token, id],
-  //   queryFn: () =>
-  //     fetch(`/api/get-student-application?id=${id}&token=${token}`).then(
-  //       (resData) => resData.json()
-  //     ),
+  //   application: null,
+  //   programs: [],
+  //   haveScholarship: false,
   // });
 
-  useEffect(() => {
-    if (id && token) {
-      fetchData();
-    }
-    async function fetchData() {
-      setIsPending(true);
-      await fetch(`/api/get-student-application?id=${id}&token=${token}`)
-        .then((resData) => resData.json())
-        .then((d) => {
-          setData(d);
-        })
-        .finally(() => setIsPending(false));
-    }
+  const { data, isPending } = useQuery<{
+    application: Application | null;
+    programs: Program[];
+    haveScholarship: boolean;
+  }>({
+    queryKey: ["applicationData", token, id],
+    queryFn: () =>
+      fetch(`/api/get-student-application?id=${id}&token=${token}`).then(
+        (resData) => resData.json()
+      ),
+  });
 
-    return () => {};
-  }, [id, token]);
+  // useEffect(() => {
+  //   if (id && token) {
+  //     fetchData();
+  //   }
+  //   async function fetchData() {
+  //     setIsPending(true);
+  //     await fetch(`/api/get-student-application?id=${id}&token=${token}`)
+  //       .then((resData) => resData.json())
+  //       .then((d) => {
+  //         setData(d);
+  //       })
+  //       .finally(() => setIsPending(false));
+  //   }
+
+  //   return () => {};
+  // }, [id, token]);
 
   if (isPending) {
     return (
