@@ -2,7 +2,7 @@
   "Status": "Status",
   "APPROVED": "APPROVED",
   "REJECTED": "UNSUCCESSFUL",
-  "REVIEW": "SUBMITTED",
+  "REVIEW": "COMPLETED",
   "WITHDRAWN": "WITHDRAWN",
   "ELIGIBLE": "ELIGIBLE",
   "NOT_COMPLETED": "NOT COMPLETED",
@@ -47,6 +47,8 @@
   "primaryAcceptance": "Acceptance Letter for the primary program",
   "secondaryAcceptance": "Acceptance Letter for the secondary program",
   "select": "Select",
+  "reason": "Why I deserve this scholarship?",
+  "reasonD": "Tell us why you deserve this scholarship. (100 words max)",
   "requirements": "Requirements",
   "CPRDoc": "CPR"
 }

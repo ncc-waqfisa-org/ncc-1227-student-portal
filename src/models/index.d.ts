@@ -120,6 +120,7 @@ type EagerApplication = {
   readonly adminPoints?: number | null;
   readonly processed?: number | null;
   readonly isFamilyIncomeVerified?: boolean | null;
+  readonly reason?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly applicationAttachmentId?: string | null;
@@ -159,6 +160,7 @@ type LazyApplication = {
   readonly adminPoints?: number | null;
   readonly processed?: number | null;
   readonly isFamilyIncomeVerified?: boolean | null;
+  readonly reason?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly applicationAttachmentId?: string | null;

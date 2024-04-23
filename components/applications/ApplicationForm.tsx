@@ -42,6 +42,8 @@ import GetStorageLinkComponent from "../get-storage-link-component";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { cn } from "../../src/lib/utils";
+import { Textarea } from "../Textarea";
+import WordCounter from "../word-counter";
 
 export interface CreateApplicationFormValues {
   application: CreateApplicationMutationVariables;
@@ -62,7 +64,7 @@ interface FormValues {
   schoolCertificate: File | undefined;
   transcriptDoc: File | undefined;
   primaryAcceptanceDoc: File | undefined;
-
+  reason: string | undefined;
   reasonForUpdate?: string | undefined;
 }
 
@@ -104,12 +106,11 @@ export const ApplicationForm: FC<Props> = (props) => {
   const [withdrawing, setWithdrawing] = useState(false);
   const initialValues: FormValues = {
     gpa: props.application?.gpa ?? undefined,
+    reason: props.application?.reason ?? undefined,
     primaryProgramID: oldPrimaryProgram?.program?.id ?? undefined,
-
     schoolCertificate: undefined,
     transcriptDoc: undefined,
     primaryAcceptanceDoc: undefined,
-
     reasonForUpdate: undefined,
   };
 
@@ -150,6 +151,7 @@ export const ApplicationForm: FC<Props> = (props) => {
       input: {
         id: undefined,
         gpa: data.application.input.gpa,
+        reason: data.application.input.reason,
         score: data.application.input.score,
         status: data.application.input.status,
         nationalityCategory: data.application.input.nationalityCategory,
@@ -232,6 +234,7 @@ export const ApplicationForm: FC<Props> = (props) => {
         id: data.application.input.id,
         gpa: data.application.input.gpa,
         score: data.application.input.score,
+        reason: data.application.input.reason,
         status: data.application.input.status,
         nationalityCategory: data.application.input.nationalityCategory,
         studentCPR: data.application.input.studentCPR,
@@ -301,6 +304,14 @@ export const ApplicationForm: FC<Props> = (props) => {
                 reasonForUpdate: yup
                   .string()
                   .required(`${tErrors("requiredField")}`),
+                reason: yup
+                  .string()
+                  .optional()
+                  .test(
+                    "max100words",
+                    (value) =>
+                      (value || "").split(/\s+/).filter(Boolean).length <= 100
+                  ),
               })
             : yup.object({
                 gpa: yup
@@ -315,6 +326,13 @@ export const ApplicationForm: FC<Props> = (props) => {
                 transcriptDoc: yup.mixed(),
                 primaryAcceptanceDoc: yup.mixed(),
                 secondaryAcceptanceDoc: yup.mixed(),
+                reason: yup
+                  .string()
+                  .test(
+                    "max100words",
+                    (value) =>
+                      (value || "").split(/\s+/).filter(Boolean).length <= 100
+                  ),
               })
         }
         onSubmit={async (values, actions) => {
@@ -385,7 +403,7 @@ export const ApplicationForm: FC<Props> = (props) => {
 
           let newApplicationSnapshotInput: ApplicationSnapshotInput = {
             gpa: values.gpa,
-
+            reason: values.reason,
             primaryProgram: {
               id: values.primaryProgramID,
               name: `${selectedPrimaryProgram?.name}-${selectedPrimaryProgram?.university?.name}`,
@@ -405,6 +423,7 @@ export const ApplicationForm: FC<Props> = (props) => {
             | undefined = props.application
             ? {
                 gpa: props.application.gpa ?? undefined,
+                reason: props.application.reason ?? undefined,
                 primaryProgram: {
                   id: oldPrimaryProgram?.program?.id ?? undefined,
                   name: `${oldPrimaryProgram?.program?.name}-${oldPrimaryProgram?.program?.university?.name}`,
@@ -426,6 +445,7 @@ export const ApplicationForm: FC<Props> = (props) => {
               input: {
                 id: undefined,
                 gpa: values.gpa,
+                reason: values.reason,
                 score:
                   studentData.familyIncome && values.gpa
                     ? calculateScore({
@@ -515,6 +535,7 @@ export const ApplicationForm: FC<Props> = (props) => {
               input: {
                 id: props.application?.id ?? "",
                 gpa: values.gpa,
+                reason: values.reason,
                 score:
                   studentData.familyIncome && values.gpa
                     ? calculateScore({
@@ -638,6 +659,7 @@ export const ApplicationForm: FC<Props> = (props) => {
           handleBlur,
           isSubmitting,
           isValid,
+          setFieldValue,
           setFieldError,
         }) => (
           <Form className="container grid max-w-3xl grid-cols-1 gap-3 mx-auto md:grid-cols-2 ">
@@ -695,6 +717,24 @@ export const ApplicationForm: FC<Props> = (props) => {
                 value={values.gpa ?? ""}
                 disabled={applicationIsEligible}
               />
+            </div>
+            <div className="flex flex-col justify-start w-full md:col-span-2">
+              <label className="label">{t("reason")}</label>
+              <Textarea
+                name="reason"
+                title="reason"
+                placeholder={t("reasonD") ?? ""}
+                className={`input-bordered input-primary textarea min-h-[10rem] max-h-96`}
+                onChange={(e) => setFieldValue("reason", e.target.value)}
+                onBlur={handleBlur}
+                value={values.reason ?? ""}
+              />
+              <WordCounter
+                className="pt-2"
+                value={values.reason}
+                maxWords={100}
+              />
+              <p className="pt-3 text-sm text-gray-400">{t("reasonD")}</p>
             </div>
             <div className="divider md:col-span-2"></div>
             {/* Primary Program */}

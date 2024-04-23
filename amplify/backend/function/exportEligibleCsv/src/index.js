@@ -12,6 +12,15 @@ const s3 = new AWS.S3();
 
 
 exports.handler = async (event) => {
+    const token = event.headers?.authorization?.slice(7);
+    const isAdmin = await checkIsAdmin(token);
+    if (!isAdmin) {
+        return {
+            statusCode: 403,
+            body: JSON.stringify({ message: 'Forbidden. You are not an admin' })
+        };
+    }
+
     const batchValue = parseInt(event.queryStringParameters?.batch) || new Date().getFullYear();
     const exceptionUniversities = await getExceptionUniversities();
     const extendedUniversities = await getExtendedUniversities();
@@ -103,8 +112,10 @@ async function getApplications(tableName, batchValue, exceptionUniversities, ext
         return true;
     });
 
+
     return allApplications;
 }
+
 
 async function convertToCsv(applications) {
     // TODO: REMOVE THE Status, UniversityID, ProgramID from the CSV
@@ -223,3 +234,25 @@ async function getBatchDetails(batch) {
 //     const university = await dynamoDB.get(params).promise();
 //     return university.Item;
 // }
+
+
+async function checkIsAdmin(token) {
+    // get the username from the token using cognito
+    try {
+        const cognitoUser = await cognito.getUser({AccessToken: token}).promise();
+        const username = cognitoUser.Username;
+
+        const params = {
+            TableName: 'Admin-cw7beg2perdtnl7onnneec4jfa-staging',
+            Key: {
+                cpr: username
+            }
+        };
+        const {Item} = await dynamoDB.get(params).promise();
+        return Item !== undefined;
+    } catch (error) {
+        console.error('Error checking if user is admin', error);
+        return false;
+    }
+}
+

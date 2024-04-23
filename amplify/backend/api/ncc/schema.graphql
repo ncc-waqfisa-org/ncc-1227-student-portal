@@ -37,6 +37,7 @@ type Application @model @auth(rules: [{ allow: public }]) {
   adminPoints: Int
   processed: Int @index(name: "byProcessed", sortKeyFields: ["batch"])
   isFamilyIncomeVerified: Boolean
+  reason: String
 }
 
 type ProgramChoice @model @auth(rules: [{ allow: public }]) {
@@ -121,6 +122,7 @@ enum Status {
   REJECTED
   WITHDRAWN
 }
+
 
 type ParentInfo @model @auth(rules: [{ allow: public }]) {
   id: ID!

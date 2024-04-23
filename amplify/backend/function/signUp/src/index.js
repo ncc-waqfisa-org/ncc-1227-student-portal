@@ -203,6 +203,8 @@ async function saveStudentToDynamoDB(studentData) {
     studentData._lastChangedAt = new Date().getTime(); // Get timestamp in milliseconds
     studentData.createdAt = new Date().toISOString(); // Get current date in ISO format
     studentData.updatedAt = new Date().toISOString(); // Get current date in ISO format
+
+    studentData.batch = new Date().getFullYear();
     const params = {
         TableName: 'Student-cw7beg2perdtnl7onnneec4jfa-staging',
         Item: studentData,
@@ -226,10 +228,6 @@ async function saveParentToDynamoDB(parentData) {
     await createdItem;
     return parentData.id;
 }
-
-
-
-
 
 
 // 4. rollback function

@@ -204,6 +204,7 @@ export const getApplication = /* GraphQL */ `query GetApplication($id: ID!) {
     adminPoints
     processed
     isFamilyIncomeVerified
+    reason
     createdAt
     updatedAt
     _version
@@ -246,6 +247,7 @@ export const listApplications = /* GraphQL */ `query ListApplications(
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -298,6 +300,7 @@ export const syncApplications = /* GraphQL */ `query SyncApplications(
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -362,6 +365,7 @@ export const getProgramChoice = /* GraphQL */ `query GetProgramChoice($id: ID!) 
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -1378,6 +1382,7 @@ export const getScholarship = /* GraphQL */ `query GetScholarship($id: ID!) {
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -1621,6 +1626,7 @@ export const applicationsByIdAndDateTime = /* GraphQL */ `query ApplicationsById
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -1677,6 +1683,7 @@ export const applicationsByNationalityCategoryAndBatch = /* GraphQL */ `query Ap
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -1733,6 +1740,7 @@ export const applicationsByStudentCPRAndGpa = /* GraphQL */ `query ApplicationsB
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -1789,6 +1797,7 @@ export const applicationsByBatchAndStatus = /* GraphQL */ `query ApplicationsByB
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -1845,6 +1854,7 @@ export const applicationsByScoreAndStatus = /* GraphQL */ `query ApplicationsByS
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -1901,6 +1911,7 @@ export const applicationsByProcessedAndBatch = /* GraphQL */ `query Applications
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version

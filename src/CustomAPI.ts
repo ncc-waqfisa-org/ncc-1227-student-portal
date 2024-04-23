@@ -116,12 +116,12 @@ export async function getApplicationData(
                 _version
                 _deleted
                 gpa
+                reason
                 createdAt
                 attachmentID
                 applicationAttachmentId
                 _lastChangedAt
                 studentCPR
-
                 universityID
                 processed
                 status

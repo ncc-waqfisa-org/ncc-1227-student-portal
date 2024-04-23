@@ -192,6 +192,7 @@ export const createApplication = /* GraphQL */ `mutation CreateApplication(
     adminPoints
     processed
     isFamilyIncomeVerified
+    reason
     createdAt
     updatedAt
     _version
@@ -325,6 +326,7 @@ export const updateApplication = /* GraphQL */ `mutation UpdateApplication(
     adminPoints
     processed
     isFamilyIncomeVerified
+    reason
     createdAt
     updatedAt
     _version
@@ -458,6 +460,7 @@ export const deleteApplication = /* GraphQL */ `mutation DeleteApplication(
     adminPoints
     processed
     isFamilyIncomeVerified
+    reason
     createdAt
     updatedAt
     _version
@@ -521,6 +524,7 @@ export const createProgramChoice = /* GraphQL */ `mutation CreateProgramChoice(
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -595,6 +599,7 @@ export const updateProgramChoice = /* GraphQL */ `mutation UpdateProgramChoice(
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -669,6 +674,7 @@ export const deleteProgramChoice = /* GraphQL */ `mutation DeleteProgramChoice(
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -1710,6 +1716,7 @@ export const createScholarship = /* GraphQL */ `mutation CreateScholarship(
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -1771,6 +1778,7 @@ export const updateScholarship = /* GraphQL */ `mutation UpdateScholarship(
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -1832,6 +1840,7 @@ export const deleteScholarship = /* GraphQL */ `mutation DeleteScholarship(
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version

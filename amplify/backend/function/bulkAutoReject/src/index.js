@@ -1,6 +1,8 @@
 const AWS = require('aws-sdk');
+const uuid = require('uuid');
+
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
-const cognito = new AWS.CognitoIdentityServiceProvider();
+
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
@@ -90,12 +92,16 @@ async function bulkUpdateApplications(batchValue, applications, extendedUniversi
             },
             ExpressionAttributeNames: {}
         };
+        const minimumGPA = programs.find(program => program.id === application.programID).minimumGPA || 88;
         const universityId = application.universityID;
-        const programId = application.programID;
         const isExtended = extendedUniversities.some(university => university.id === universityId);
         const isException = exceptionUniversities.some(university => university.id === universityId);
         const isNonBahraini = application.nationalityCategory === 'NON_BAHRAINI';
-        const isEligible = application.verifiedGPA? application.verifiedGPA >= programs.find(program => program.id === programId).minimumGPA || 88 : false;
+        const isEligible = application.verifiedGPA? application.verifiedGPA >= minimumGPA : false;
+        const isGpaVerified = !!application.verifiedGPA;
+        console.log('isEligible', isEligible);
+        console.log('Program minimum GPA:', minimumGPA);
+        console.log('Application verified GPA:', application.verifiedGPA);
 
 
         let isNotCompleted = application.status === 'NOT_COMPLETED';
@@ -121,18 +127,26 @@ async function bulkUpdateApplications(batchValue, applications, extendedUniversi
         }
 
         let status;
+        let reason = "Processed by system"
+        let snapshot = "";
 
         if(isNonBahraini) {
             status = 'REJECTED';
             isProcessed = 1;
+            reason = "Student is not Bahraini";
+            snapshot = "Changed from " + application.status + " to " + status;
         }
         else if(application.verifiedGPA && application.verifiedGPA < 88) {
             status = 'REJECTED';
             isProcessed = 1;
+            reason = "GPA is less than 88";
+            snapshot = "Changed from " + application.status + " to " + status;
         }
         else if(isNotCompleted) {
             status = 'REJECTED';
             isProcessed = 1;
+            reason = "Application is not completed";
+            snapshot = "Changed from " + application.status + " to " + status;
         }
         else if(!isNotCompleted && !application.verifiedGPA) {
             status = 'REVIEW';
@@ -145,6 +159,8 @@ async function bulkUpdateApplications(batchValue, applications, extendedUniversi
         else if(!isEligible && application.verifiedGPA) {
             status = 'REJECTED';
             isProcessed = 1;
+            reason = "GPA is less than program minimum GPA";
+            snapshot = "Changed from " + application.status + " to " + status;
         }
         else {
             isProcessed = 0;
@@ -162,10 +178,12 @@ async function bulkUpdateApplications(batchValue, applications, extendedUniversi
         if(status) {
             params.UpdateExpression += '#status = :status';
         }
-        else{
+        else {
             // remove the last comma
             params.UpdateExpression = params.UpdateExpression.slice(0, -2);
         }
+
+        console.log('UpdateExpression:', params.UpdateExpression);
 
         params.ExpressionAttributeValues[':status'] = status;
         params.ExpressionAttributeValues[':processedValue'] = isProcessed;
@@ -173,7 +191,8 @@ async function bulkUpdateApplications(batchValue, applications, extendedUniversi
         params.ExpressionAttributeNames['#status'] = 'status';
         params.ExpressionAttributeNames['#processed'] = 'processed';
 
-        return dynamoDB.update(params).promise();
+        await dynamoDB.update(params).promise();
+        await createAdminLog(reason, snapshot, application.id);
     });
     return Promise.all(updatePromises);
     }
@@ -296,17 +315,22 @@ async function getPrograms(){
     return allPrograms;
 }
 async function createAdminLog(reason, snapshot, applicationId){
+    const id = uuid.v4();
     const params = {
         TableName: 'AdminLog-cw7beg2perdtnl7onnneec4jfa-staging',
         Item: {
-            '__typename': 'AdminLog',
-            '_version': 1,
-            'reason': reason,
-            'snapshot': snapshot,
-            'createdAt': new Date().toISOString(),
-            'updatedAt': new Date().toISOString(),
-            'dateTime': new Date().toISOString(),
-            'applicationID': applicationId
+            id: id,
+            __typename: 'AdminLog',
+            _version: 1,
+            reason: reason,
+            snapshot: snapshot,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            dateTime: new Date().toISOString(),
+            applicationID: applicationId,
+            applicationAdminLogsId: applicationId,
+            adminCPR: '999999999',
+            _lastChangedAt: new Date().getTime(),
         }
     };
 

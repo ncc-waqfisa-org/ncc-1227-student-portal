@@ -188,6 +188,7 @@ export const onCreateApplication = /* GraphQL */ `subscription OnCreateApplicati
     adminPoints
     processed
     isFamilyIncomeVerified
+    reason
     createdAt
     updatedAt
     _version
@@ -320,6 +321,7 @@ export const onUpdateApplication = /* GraphQL */ `subscription OnUpdateApplicati
     adminPoints
     processed
     isFamilyIncomeVerified
+    reason
     createdAt
     updatedAt
     _version
@@ -452,6 +454,7 @@ export const onDeleteApplication = /* GraphQL */ `subscription OnDeleteApplicati
     adminPoints
     processed
     isFamilyIncomeVerified
+    reason
     createdAt
     updatedAt
     _version
@@ -514,6 +517,7 @@ export const onCreateProgramChoice = /* GraphQL */ `subscription OnCreateProgram
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -587,6 +591,7 @@ export const onUpdateProgramChoice = /* GraphQL */ `subscription OnUpdateProgram
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -660,6 +665,7 @@ export const onDeleteProgramChoice = /* GraphQL */ `subscription OnDeleteProgram
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -1646,6 +1652,7 @@ export const onCreateScholarship = /* GraphQL */ `subscription OnCreateScholarsh
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -1706,6 +1713,7 @@ export const onUpdateScholarship = /* GraphQL */ `subscription OnUpdateScholarsh
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version
@@ -1766,6 +1774,7 @@ export const onDeleteScholarship = /* GraphQL */ `subscription OnDeleteScholarsh
       adminPoints
       processed
       isFamilyIncomeVerified
+      reason
       createdAt
       updatedAt
       _version

@@ -21,14 +21,11 @@ exports.handler = async (event) => {
             };
         }
 
-        const applicationId = application.id;
-        console.log("applicationId", applicationId);
 
         console.log("oldStudent", oldStudent);
         console.log("student", student);
-        console.log(applicationId);
 
-        await updateApplication(applicationId, oldStudent, student);
+        await updateApplication(application, oldStudent, student);
         console.log('Lambda executed successfully');
 
         return {
@@ -53,13 +50,13 @@ exports.handler = async (event) => {
     }
 };
 
-async function updateApplication(applicationId, oldStudent, student) {
+async function updateApplication(application, oldStudent, student) {
     // update studentName, nationalityCategory, familyIncome
 
 const params = {
     TableName: 'Application-cw7beg2perdtnl7onnneec4jfa-staging',
     Key: {
-        id: applicationId
+        id: application.id
     },
     UpdateExpression: 'SET ',
     ExpressionAttributeValues: {}
@@ -76,7 +73,8 @@ if (student.nationalityCategory.S !== oldStudent.nationalityCategory.S) {
 }
 
 if (student.familyIncome.S !== oldStudent.familyIncome.S) {
-    const score = calculateScore(student.familyIncome.S, student.verifiedGPA?.N, student.adminPoints?.N);
+    const score = calculateScore(student.familyIncome.S, application.verifiedGPA,application.gpa ,application.adminPoints);
+    console.log('Score:', score, student.familyIncome.S, application.verifiedGPA,application.gpa ,application.adminPoints);
     params.UpdateExpression += 'familyIncome = :familyIncome, score = :score, ';
     params.ExpressionAttributeValues[':familyIncome'] = student.familyIncome.S;
     params.ExpressionAttributeValues[':score'] = score;
@@ -104,11 +102,8 @@ async function getApplication(studentCPR) {
     return application.Items[0];
 }
 
-function calculateScore(familyIncome, verifiedGPA, adminPoints) {
-    if(!verifiedGPA) {
-        return 0;
-    }
-    let score = verifiedGPA * 0.7;
+function calculateScore(familyIncome, verifiedGPA, gpa, adminPoints) {
+    let score = verifiedGPA? verifiedGPA * 0.7 : gpa * 0.7;
     if (familyIncome === "LESS_THAN_1500") {
         score += 20;
     }

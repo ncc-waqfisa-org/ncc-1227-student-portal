@@ -42,7 +42,7 @@ export default function ViewApplication({
 
           <tr>
             <td>{t("Status")}</td>
-            <td className="flex items-baseline gap-4 flex-wrap">
+            <td className="flex flex-wrap items-baseline gap-4">
               <div
                 className={cn(
                   "badge badge-warning w-fit",
@@ -106,7 +106,7 @@ export default function ViewApplication({
                 </div>
               )}
               {primaryProgram?.program?.university?.isException !== 1 && (
-                <div className="flex  items-center gap-4">
+                <div className="flex items-center gap-4">
                   <p className="text-xs stat-desc">{t("acceptanceLetter")}</p>
                   <GetStorageLinkComponent
                     storageKey={primaryProgram?.acceptanceLetterDoc}
@@ -134,6 +134,10 @@ export default function ViewApplication({
                 storageKey={application.attachment?.transcriptDoc}
               ></GetStorageLinkComponent>
             </td>
+          </tr>
+          <tr>
+            <td>{t("reason")}</td>
+            <td>{application.reason}</td>
           </tr>
         </tbody>
       </table>

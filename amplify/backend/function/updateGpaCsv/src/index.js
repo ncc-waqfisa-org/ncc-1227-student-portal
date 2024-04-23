@@ -42,6 +42,14 @@ exports.handler = async (event) => {
     const dataStream = processCsv(csvData, applications);
     try {
         await bulkUpdateApplications(tableName, batchValue, dataStream);
+        // invoke the autoReject lambda function
+        const params = {
+            FunctionName: 'bulkAutoReject-staging',
+            InvocationType: 'Event',
+            Payload: JSON.stringify({batch: batchValue})
+        };
+        await lambda.invoke(params).promise();
+
         return {
             statusCode: 200,
             //  Uncomment below to enable CORS requests
@@ -58,7 +66,6 @@ exports.handler = async (event) => {
             body: JSON.stringify({ message: 'Error updating applications' })
         };
     }
-
 
 };
 

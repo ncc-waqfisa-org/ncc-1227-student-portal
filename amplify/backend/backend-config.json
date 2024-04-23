@@ -75,7 +75,17 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "getCprFromToken": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "getStatistics": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "sendSubmissionEmail": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -242,6 +252,22 @@
         }
       ]
     },
+    "AMPLIFY_function_getCprFromToken_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getCprFromToken"
+        }
+      ]
+    },
+    "AMPLIFY_function_getCprFromToken_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getCprFromToken"
+        }
+      ]
+    },
     "AMPLIFY_function_getStatistics_deploymentBucketName": {
       "usedBy": [
         {
@@ -255,6 +281,22 @@
         {
           "category": "function",
           "resourceName": "getStatistics"
+        }
+      ]
+    },
+    "AMPLIFY_function_sendSubmissionEmail_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "sendSubmissionEmail"
+        }
+      ]
+    },
+    "AMPLIFY_function_sendSubmissionEmail_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "sendSubmissionEmail"
         }
       ]
     },

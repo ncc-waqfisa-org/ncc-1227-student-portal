@@ -3,7 +3,7 @@
   "APPROVED": "مقبول",
   "ELIGIBLE": "مؤهل",
   "REJECTED": "مرفوض",
-  "REVIEW": "مُقَدَّم",
+  "REVIEW": "مكتمل",
   "WITHDRAWN": "منسحب",
   "NOT_COMPLETED": "غير مكتمل",
   "Application": "الطلب",
@@ -48,5 +48,7 @@
   "secondaryAcceptance": "رسالة القبول للبرنامج الثانوي",
   "select": "اختيار",
   "requirements": "المتطلبات",
+  "reason": "لماذا أستحق هذه المنحة؟",
+  "reasonD": "أخبرنا لماذا تستحق هذه المنحة. (100 كلمة كحد أقصى)",
   "CPRDoc": "بطاقة الهوية"
 }

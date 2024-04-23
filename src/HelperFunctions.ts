@@ -56,7 +56,7 @@ export function getStatusOrder(status: Status) {
 
 export interface ApplicationSnapshotInput {
   gpa: number | undefined;
-
+  reason: string | undefined;
   primaryProgram: {
     id: string | undefined;
     name: string | undefined;
@@ -73,6 +73,7 @@ export interface ApplicationSnapshotInput {
 
 export interface ApplicationSnapshot {
   gpa?: string;
+  reason?: string;
   primaryProgram?: string;
   primaryProgramAcceptanceLetter?: string;
   secondaryProgram?: string;
