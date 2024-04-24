@@ -137,7 +137,7 @@ export default function ViewApplication({
           </tr>
           <tr>
             <td>{t("reason")}</td>
-            <td>{application.reason}</td>
+            <td>{application.reason ?? t("empty")}</td>
           </tr>
         </tbody>
       </table>

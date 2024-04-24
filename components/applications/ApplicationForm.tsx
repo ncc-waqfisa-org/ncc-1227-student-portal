@@ -306,7 +306,6 @@ export const ApplicationForm: FC<Props> = (props) => {
                   .required(`${tErrors("requiredField")}`),
                 reason: yup
                   .string()
-                  .optional()
                   .test(
                     "max100words",
                     (value) =>
@@ -328,6 +327,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                 secondaryAcceptanceDoc: yup.mixed(),
                 reason: yup
                   .string()
+                  .required()
                   .test(
                     "max100words",
                     (value) =>
@@ -719,12 +719,20 @@ export const ApplicationForm: FC<Props> = (props) => {
               />
             </div>
             <div className="flex flex-col justify-start w-full md:col-span-2">
-              <label className="label">{t("reason")}</label>
+              <div className="flex items-center justify-between">
+                <label className="label">{t("reason")}</label>
+                <label className="label-text-alt text-error">
+                  {errors.reason && touched.reason && errors.reason}
+                </label>
+              </div>
               <Textarea
                 name="reason"
                 title="reason"
                 placeholder={t("reasonD") ?? ""}
-                className={`input-bordered input-primary textarea min-h-[10rem] max-h-96`}
+                className={cn(
+                  `input-bordered input-primary textarea min-h-[10rem] max-h-96`,
+                  errors.reason && touched.reason && "input-error"
+                )}
                 onChange={(e) => setFieldValue("reason", e.target.value)}
                 onBlur={handleBlur}
                 value={values.reason ?? ""}

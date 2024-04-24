@@ -50,5 +50,6 @@
   "reason": "Why I deserve this scholarship?",
   "reasonD": "Tell us why you deserve this scholarship. (100 words max)",
   "requirements": "Requirements",
+  "empty": "Empty",
   "CPRDoc": "CPR"
 }
