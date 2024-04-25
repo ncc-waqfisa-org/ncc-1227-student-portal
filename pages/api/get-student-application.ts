@@ -22,8 +22,17 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      application: null,
+      haveScholarship: false,
+      programs: [],
+    });
+  }
+
   API.configure({ ...config, ssr: true });
-  const { id, token } = req.query;
+  const { id, token } = JSON.parse(req.body);
+  // const { id, token } = req.query;/
 
   // Immediately respond with an error if the necessary parameters are not provided.
   if (!id || !token) {
@@ -46,9 +55,9 @@ export default async function handler(
 
   // Use Promise.all to execute multiple asynchronous operations in parallel.
   const [applicationData, scholarships, programs] = await Promise.all([
-    getApplicationData(`${id}`).then((app) =>
-      app ? (app.studentCPR === cpr ? app : null) : null
-    ),
+    getApplicationData(`${id}`).then((app) => {
+      return app ? (app.studentCPR === cpr ? app : null) : null;
+    }),
     listScholarshipsOfApplicationId({ applicationId: `${id}` }),
     listAllPrograms(),
   ]);

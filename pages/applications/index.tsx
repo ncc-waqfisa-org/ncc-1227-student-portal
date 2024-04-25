@@ -1,6 +1,6 @@
 import { PageComponent } from "../../components/PageComponent";
 
-import React from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
 import { useAppContext } from "../../contexts/AppContexts";
 import { GetStaticProps } from "next";
@@ -12,6 +12,10 @@ import { NewApplicationCard } from "../../components/applications/NewApplication
 import { Status, Student } from "../../src/API";
 import { CardInfoComponent } from "../../components/CardInfo";
 import info from "../../public/svg/info.svg";
+import { RegPeriod } from "../../components/reg-period";
+import { Card } from "@aws-amplify/ui-react";
+import dayjs from "dayjs";
+import { FiAlertCircle } from "react-icons/fi";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -31,6 +35,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
 export default function ApplicationsPage() {
   const appContext = useAppContext();
+  // const regDialog = useRef<HTMLDialogElement>(null);
 
   // end of batches rules
   const student = appContext.student?.getStudent as Student;
@@ -67,6 +72,45 @@ export default function ApplicationsPage() {
             ></CardInfoComponent>
           </div>
         )}
+      {/* <div className="container mx-auto">
+        <div className="max-w-xl">
+          <RegPeriod />
+        </div>
+      </div> */}
+
+      {/* {appContext.batch && (
+        <div>
+          <button
+            className="btn btn-ghost"
+            onClick={() => regDialog.current?.showModal()}
+          >
+            {`${getUpcomingBatchDate(appContext.batch).title}:
+            ${getUpcomingBatchDate(appContext.batch).date}`}{" "}
+            <span>
+              {" "}
+              <FiAlertCircle />{" "}
+            </span>
+          </button>
+          <dialog ref={regDialog} className="modal">
+            <div className="modal-box">
+              <div className="flex flex-col gap-4">
+                <h3 className="text-lg font-bold">Registration period</h3>
+                <RegPeriod />
+              </div>
+              <div className="modal-action">
+                <form method="dialog">
+                  <button className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2">
+                    ✕
+                  </button>
+                </form>
+              </div>
+            </div>
+            <form method="dialog" className="modal-backdrop">
+              <button>close</button>
+            </form>
+          </dialog>
+        </div>
+      )} */}
 
       {student && (
         <div className="container mx-auto">

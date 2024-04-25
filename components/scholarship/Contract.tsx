@@ -51,7 +51,7 @@ export const Contract: FC<TContract> = ({ scholarship }) => {
   // The URL for the PDF file from the public folder
   if (isLinkPending) {
     return (
-      <div className="mx-auto  max-w-3xl">
+      <div className="max-w-3xl mx-auto">
         <Skeleton className="w-full h-96 bg-slate-300/80" />
       </div>
     );
@@ -73,13 +73,14 @@ export const Contract: FC<TContract> = ({ scholarship }) => {
         )}
       </div>
 
-      {link && (
+      {/* {link && (
         <div className="py-4 border-t max-sm:hidden">
           <PDFPreview src={link} />
         </div>
-      )}
+      )} */}
       {link && (
-        <div className="py-4 border-t sm:hidden">
+        <div className="py-4 border-t ">
+          {/* <div className="py-4 border-t sm:hidden"> */}
           <Link
             className="flex flex-col items-center gap-3 p-6 mx-auto font-mono duration-200 border rounded-md hover:bg-secondary/10 w-fit"
             href={link}

@@ -21,9 +21,6 @@ export const ApplicationCard: FC<IApplicationCard> = ({
   const { t } = useTranslation("applications");
 
   const primaryProgram = application?.programs?.items[0];
-  // const secondaryProgram = application?.programs?.items.sort(
-  //   (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
-  // )[1];
 
   return (
     <div className="relative duration-200 hover:cursor-pointer hover:scale-105">
@@ -32,8 +29,6 @@ export const ApplicationCard: FC<IApplicationCard> = ({
         className={`pt-6 shadow card  ${
           (application.status === Status.REVIEW ||
             application.status === Status.ELIGIBLE) &&
-          // application.status === Status.APPROVED ||
-          // application.status === Status.NOT_COMPLETED
           "bg-warning"
         } ${application.status === Status.REJECTED && "bg-error"} ${
           application.status === Status.APPROVED && "bg-success"
@@ -140,14 +135,6 @@ export const ApplicationCard: FC<IApplicationCard> = ({
                   {t("acceptanceLetter")}
                 </div>
               )}
-              {/* <div
-                className={`badge  badge-ghost h-fit bg-[#e7e7e7] border-0 ${
-                  !secondaryProgram?.acceptanceLetterDoc &&
-                  "badge-error !badge-outline !border"
-                }`}
-              >
-                {t("secondaryProgramAcceptanceLetter")}
-              </div> */}
             </div>
           </div>
         </div>
@@ -156,8 +143,6 @@ export const ApplicationCard: FC<IApplicationCard> = ({
         className={`absolute flex items-center justify-center w-12 h-12 border-2 border-white rounded-full top-2 left-2 ${
           (application.status === Status.REVIEW ||
             application.status === Status.ELIGIBLE) &&
-          // application.status === Status.APPROVED ||
-          // application.status === Status.NOT_COMPLETED
           "bg-warning"
         } ${application.status === Status.REJECTED && "bg-error"} ${
           (application.status === Status.WITHDRAWN ||

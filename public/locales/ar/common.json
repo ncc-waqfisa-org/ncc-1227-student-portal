@@ -18,5 +18,15 @@
   "viewDocument": "عرض المستند",
   "loading": "تحميل",
   "words": "كلمات",
+  "registrationPeriod": "فترة التسجيل",
+  "creatingNewAccount": "فترة إنشاء حساب جديد",
+  "creatingNewAccountStart": "بدء فترة إنشاء حساب جديد في",
+  "creatingNewAccountEnds": "انتهاء فترة إنشاء حساب جديد في",
+  "upcomingDate": "التاريخ القادم",
+  "creatingNewApplication": "فترة إنشاء تطبيق جديد",
+  "creatingNewApplicationEndDate": "تاريخ انتهاء فترة إنشاء تطبيق جديد",
+  "lastDayToUpdateApplications": "آخر يوم لتحديث التطبيقات",
+  "createApplicationStartsIn": "بدء فترة إنشاء التطبيق في",
+  "days": "أيام",
   "applyForScholarshipDescription": " "
 }

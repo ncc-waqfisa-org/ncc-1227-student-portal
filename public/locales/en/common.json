@@ -18,5 +18,15 @@
   "viewDocument": "View Document",
   "loading": "Loading",
   "words": "words",
+  "registrationPeriod": "Registration Period",
+  "creatingNewAccount": "Creating a new account period",
+  "creatingNewAccountStart": "Creating a new account starts in",
+  "creatingNewAccountEnds": "Creating a new account ends in",
+  "upcomingDate": "Upcoming date",
+  "creatingNewApplication": "Creating a new application period",
+  "creatingNewApplicationEndDate": "Creating a new application end date",
+  "lastDayToUpdateApplications": "Last day to update applications",
+  "createApplicationStartsIn": "Create application starts in",
+  "days": "days",
   "login": "Login"
 }

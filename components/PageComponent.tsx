@@ -13,6 +13,7 @@ import Image from "next/image";
 import { useAppContext } from "../contexts/AppContexts";
 import { useTranslation } from "react-i18next";
 import { LangSwitcher } from "./langSwitcher";
+import { RegPeriod, RegPeriodDialog } from "./reg-period";
 
 interface Props {
   title: string;
@@ -106,9 +107,11 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                     </ul>
                   </div>
                 )}
+
                 <div className="md:dropdown-end md:items-end md:absolute md:left-4 md:top-4">
                   <LangSwitcher></LangSwitcher>
                 </div>
+
                 {!isHomePage && (
                   <button
                     dir="ltr"
@@ -133,6 +136,7 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                     {titleTranslation.t("Back")}
                   </button>
                 )}
+
                 <div className="w-full mt-10 md:mt-16">{props.header}</div>
                 {!props.header && (
                   <div className="prose prose-headings:text-white">
@@ -141,6 +145,7 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                     </h1>
                   </div>
                 )}
+                <RegPeriodDialog className="text-white btn-outline hover:bg-white/10 hover:border-white" />
               </div>
             </div>
 

@@ -1,16 +1,9 @@
-import { withSSRContext } from "aws-amplify";
 import { GetServerSideProps } from "next";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { PageComponent } from "../../components/PageComponent";
 import { Application, Program, Status, Student } from "../../src/API";
 import ViewApplication from "../../components/applications/ViewApplication";
-import { CognitoUser } from "@aws-amplify/auth";
 import { ApplicationForm } from "../../components/applications/ApplicationForm";
-import {
-  getApplicationData,
-  listAllPrograms,
-  listScholarshipsOfApplicationId,
-} from "../../src/CustomAPI";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "../../contexts/AppContexts";
@@ -91,9 +84,13 @@ export default function SingleApplicationPage({ id }: Props) {
   }>({
     queryKey: ["applicationData", token, id],
     queryFn: () =>
-      fetch(`/api/get-student-application?id=${id}&token=${token}`).then(
-        (resData) => resData.json()
-      ),
+      fetch(`/api/get-student-application`, {
+        method: "POST",
+        body: JSON.stringify({
+          id: id,
+          token: token,
+        }),
+      }).then((resData) => resData.json()),
   });
 
   // useEffect(() => {
@@ -116,8 +113,8 @@ export default function SingleApplicationPage({ id }: Props) {
   if (isPending) {
     return (
       <PageComponent title={"Application"} authRequired>
-        <div className="flex flex-col justify-center items-center">
-          <p className="items-center flex gap-2">
+        <div className="flex flex-col items-center justify-center">
+          <p className="flex items-center gap-2">
             <span className="loading"></span>
             {t("loading")}
           </p>
