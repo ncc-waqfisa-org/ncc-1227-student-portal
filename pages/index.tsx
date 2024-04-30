@@ -26,7 +26,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 };
 
 const Home = () => {
-  const comeBack: boolean = false;
+  const comeBack: boolean = true;
   const router = useRouter();
   const auth = useAuth();
   const { haveActiveApplication } = useAppContext();
@@ -38,7 +38,7 @@ const Home = () => {
       header={
         <div className="mx-auto prose md:mx-0 md:mr-auto prose-p:text-white prose-headings:text-white">
           <div className="flex flex-col text-center md:text-start">
-            <h1 className="mb-1 font-semibold rtl:md:border-r-8 ltr:md:border-l-8 md:pl-4 ">
+            <h1 className="mb-1 font-semibold rtl:md:border-r-8 ltr:md:border-l-8 md:pl-4">
               {/* Enroll for 2023 */}
               {t("enrollFor")} {new Date().getFullYear()}
             </h1>

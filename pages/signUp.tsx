@@ -67,18 +67,30 @@ const SignUpPage: NextPage<Props> = () => {
         </>
       ) : (
         // if registration period is over
-        <div className="flex flex-wrap justify-center gap-10">
+        <div className="flex flex-wrap gap-10 justify-center">
           <CardInfoComponent
             icon={info}
             title={"Registration"}
-            description={"Registration period is over"}
+            description={"Registration will open in June 2024"}
           ></CardInfoComponent>
           <CardInfoComponent
             icon={info}
             title={"التسجيل"}
-            description={"فترة التسجيل إنتهت"}
+            description={"سيتم فتح التسجيل في يونيو 2024"}
           ></CardInfoComponent>
         </div>
+        // <div className="flex flex-wrap gap-10 justify-center">
+        //   <CardInfoComponent
+        //     icon={info}
+        //     title={"Registration"}
+        //     description={"Registration period is over"}
+        //   ></CardInfoComponent>
+        //   <CardInfoComponent
+        //     icon={info}
+        //    title={"قريباً"}
+        //       description={"عد في يونيو للتسجيل"}
+        //   ></CardInfoComponent>
+        // </div>
       )}
     </PageComponent>
   );

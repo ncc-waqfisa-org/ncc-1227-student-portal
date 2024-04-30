@@ -18,27 +18,27 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
   return (
     <div>
       <div className="flex flex-col gap-10 mx-auto">
-        <h1 className="text-3xl font-semibold text-center text-gray-900 ">
+        <h1 className="text-3xl font-semibold text-center text-gray-900">
           {t("availableServices")}
         </h1>
 
         {comeBack && (
-          <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto md:grid-cols-2 place-items-center">
+          <div className="grid grid-cols-1 gap-10 place-items-center mx-auto w-full max-w-4xl md:grid-cols-2">
             <CardInfoComponent
               icon={info}
-              title={"قريباً"}
-              description={"عد في 03/07/2023 للتسجيل"}
+              title={"التسجيل"}
+              description={"سيتم فتح التسجيل في يونيو 2024"}
             ></CardInfoComponent>
             <CardInfoComponent
               icon={info}
-              title={"Coming Soon"}
-              description={"Come back on 03/07/2023 to enroll"}
+              title={"Registration"}
+              description={"Registration will open in June 2024"}
             ></CardInfoComponent>
           </div>
         )}
 
         {!comeBack && (
-          <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto md:grid-cols-2 place-items-center">
+          <div className="grid grid-cols-1 gap-10 place-items-center mx-auto w-full max-w-4xl md:grid-cols-2">
             {!haveActiveApplication && (
               <CardInfoComponent
                 icon={logs}
