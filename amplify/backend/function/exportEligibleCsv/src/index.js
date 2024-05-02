@@ -6,6 +6,7 @@ Amplify Params - DO NOT EDIT */
 const AWS = require('aws-sdk');
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const s3 = new AWS.S3();
+const cognito = new AWS.CognitoIdentityServiceProvider();
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
@@ -13,6 +14,15 @@ const s3 = new AWS.S3();
 
 exports.handler = async (event) => {
     const token = event.headers?.authorization?.slice(7);
+    const isUserLoggedIn = await isLoggedIn(token);
+    if (!isUserLoggedIn) {
+        return {
+            statusCode: 401,
+            body: JSON.stringify({ message: 'Unauthorized. Please log in' })
+        };
+    }
+
+
     const isAdmin = await checkIsAdmin(token);
     if (!isAdmin) {
         return {
@@ -120,11 +130,11 @@ async function getApplications(tableName, batchValue, exceptionUniversities, ext
 async function convertToCsv(applications) {
     // TODO: REMOVE THE Status, UniversityID, ProgramID from the CSV
     // let csv = 'StudentCPR,GPA,verifiedGPA,Status,University\n';
-    let csv = 'StudentCPR,GPA,verifiedGPA\n';
+    let csv = 'StudentCPR,verifiedGPA\n';
     for (const application of applications) {
         // let university = application.universityID? await getUniversity(application.universityID): {name: 'UNKNOWN'};
         // csv += `=""${application.studentCPR}"",${application.gpa},PLEASE VERIFY,${application.status},${university?.name}\n`;
-        csv += `=""${application.studentCPR}"",${application.gpa},PLEASE VERIFY\n`;
+        csv += `=""${application.studentCPR}"",PLEASE VERIFY\n`;
 
     }
     return csv;
@@ -252,6 +262,16 @@ async function checkIsAdmin(token) {
         return Item !== undefined;
     } catch (error) {
         console.error('Error checking if user is admin', error);
+        return false;
+    }
+}
+
+async function isLoggedIn(token) {
+    try {
+        await cognito.getUser({AccessToken: token}).promise();
+        return true;
+    } catch (error) {
+        console.error('Error checking if user is logged in', error);
         return false;
     }
 }

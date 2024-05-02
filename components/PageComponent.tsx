@@ -145,6 +145,7 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                     </h1>
                   </div>
                 )}
+
                 <RegPeriodDialog className="text-white btn-outline hover:bg-white/10 hover:border-white" />
               </div>
             </div>

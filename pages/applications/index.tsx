@@ -72,45 +72,6 @@ export default function ApplicationsPage() {
             ></CardInfoComponent>
           </div>
         )}
-      {/* <div className="container mx-auto">
-        <div className="max-w-xl">
-          <RegPeriod />
-        </div>
-      </div> */}
-
-      {/* {appContext.batch && (
-        <div>
-          <button
-            className="btn btn-ghost"
-            onClick={() => regDialog.current?.showModal()}
-          >
-            {`${getUpcomingBatchDate(appContext.batch).title}:
-            ${getUpcomingBatchDate(appContext.batch).date}`}{" "}
-            <span>
-              {" "}
-              <FiAlertCircle />{" "}
-            </span>
-          </button>
-          <dialog ref={regDialog} className="modal">
-            <div className="modal-box">
-              <div className="flex flex-col gap-4">
-                <h3 className="text-lg font-bold">Registration period</h3>
-                <RegPeriod />
-              </div>
-              <div className="modal-action">
-                <form method="dialog">
-                  <button className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2">
-                    ✕
-                  </button>
-                </form>
-              </div>
-            </div>
-            <form method="dialog" className="modal-backdrop">
-              <button>close</button>
-            </form>
-          </dialog>
-        </div>
-      )} */}
 
       {student && (
         <div className="container mx-auto">

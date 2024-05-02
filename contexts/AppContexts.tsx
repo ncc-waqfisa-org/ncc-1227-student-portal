@@ -91,7 +91,6 @@ function useProviderApp() {
     queryFn: () =>
       getCurrentBatch()
         .then((value) => {
-          console.log("🚀 ~ getCurrentBatch ~ value:", value);
           const currentBatch = value ? (value as Batch) : null;
 
           return currentBatch;
@@ -105,17 +104,17 @@ function useProviderApp() {
 
   const newApplicationsEnabled = !batch
     ? false
-    : dayjs().isBefore(dayjs(batch.createApplicationEndDate)) &&
-      dayjs().isAfter(dayjs(batch.createApplicationStartDate));
+    : dayjs().isBefore(dayjs(batch.createApplicationEndDate).endOf("day")) &&
+      dayjs().isAfter(dayjs(batch.createApplicationStartDate).startOf("day"));
 
   const editingApplicationsEnabled = !batch
     ? false
-    : dayjs().isBefore(dayjs(batch.updateApplicationEndDate));
+    : dayjs().isBefore(dayjs(batch.updateApplicationEndDate).endOf("day"));
 
   const signUpEnabled = !batch
     ? false
-    : dayjs().isBefore(dayjs(batch.signUpEndDate)) &&
-      dayjs().isAfter(dayjs(batch.signUpStartDate));
+    : dayjs().isBefore(dayjs(batch.signUpEndDate).endOf("day")) &&
+      dayjs().isAfter(dayjs(batch.signUpStartDate).startOf("day"));
 
   // ---- Dates Controls -----
   // TODO: change this date later

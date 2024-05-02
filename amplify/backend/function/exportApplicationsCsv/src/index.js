@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const s3 = new AWS.S3();
+const cognito = new AWS.CognitoIdentityServiceProvider();
 
 const tableName = 'Application-cw7beg2perdtnl7onnneec4jfa-staging';
 
@@ -12,6 +13,7 @@ exports.handler = async (event) => {
     console.log(`EVENT: ${JSON.stringify(event)}`);
     try {
         const token = event.headers?.authorization?.slice(7);
+
         const isAdmin = await checkIsAdmin(token);
         if (!isAdmin) {
             return {
@@ -20,7 +22,13 @@ exports.handler = async (event) => {
             };
         }
         const batchValue = parseInt(event.queryStringParameters?.batch) || new Date().getFullYear();
-        const selectedApplications = JSON.parse(event.body).ids || null;
+        const selectedApplications = JSON.parse(event.body)?.ids || null;
+        if(selectedApplications && !Array.isArray(selectedApplications)) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ message: 'Invalid selected applications. Must be an array of application IDs' })
+            };
+        }
 
         const status = event.queryStringParameters?.status || null;
         if(status && !['APPROVED', 'WITHDRAWN', 'REJECTED', 'ELIGIBLE', 'NOT_COMPLETED'].includes(status)) {
@@ -56,7 +64,7 @@ exports.handler = async (event) => {
 };
 
 async function exportApplicationsCsv(tableName, batchValue, status, selectedApplications) {
-    const applications = selectedApplications? await getSelectedApplications(tableName, batchValue, status) :  await getApplications(tableName, batchValue, status);
+    const applications = selectedApplications? await getSelectedApplications(tableName, selectedApplications) :  await getApplications(tableName, batchValue, status);
     const students = await getStudents(batchValue);
     const csv = convertToCsv(applications, students);
     return uploadToS3(csv);
@@ -153,33 +161,27 @@ async function getStudents(batchValue) {
 }
 
 
-async function getSelectedApplications(tableName, batchValue, selectedApplications) {
+async function getSelectedApplications(tableName, selectedApplications) {
+    console.log('Selected applications:', selectedApplications);
+    console.log('Processed applications:', selectedApplications.map(id => ({id})));
     const params = {
-        TableName: tableName,
-       IndexName: 'batch-id-index',
-         KeyConditionExpression: '#batch = :batchValue AND id IN (:ids)',
-            ExpressionAttributeNames: {
-                '#batch': 'batch'
-            },
-            ExpressionAttributeValues: {
-                ':batchValue': batchValue,
-                ':ids': selectedApplications
+        // IndexName: 'byId',
+        RequestItems: {
+            [tableName]: {
+                Keys: selectedApplications.map(id => ({id}))
             }
-        };
+        }
+    };
 
-    let allApplications = [];
-
-    do {
-            const applications = await dynamoDB.query(params).promise();
-            allApplications = allApplications.concat(applications.Items);
-
-            // Check if there are more items to fetch
-            params.ExclusiveStartKey = applications.LastEvaluatedKey;
-        } while (params.ExclusiveStartKey);
-
-        return allApplications;
-
+    try {
+        const data = await dynamoDB.batchGet(params).promise();
+        return data.Responses[tableName];
+    } catch (err) {
+        console.error('Error getting selected applications', err);
+        return []; // or handle the error appropriately
+    }
 }
+
 
 async function checkIsAdmin(token) {
     // get the username from the token using cognito

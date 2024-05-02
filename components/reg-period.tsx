@@ -29,6 +29,7 @@ export const RegPeriod = () => {
             <FiArrowRight />
           </span>
           {dayjs(batch?.signUpEndDate)
+            .endOf("day")
             .locale(locale === "ar" ? arLocale : enLocale)
             .format("MMM DD, YYYY")}
         </div>
@@ -43,6 +44,7 @@ export const RegPeriod = () => {
             <FiArrowRight />
           </span>
           {dayjs(batch?.createApplicationEndDate)
+            .endOf("day")
             .locale(locale === "ar" ? arLocale : enLocale)
             .format("MMM DD, YYYY")}
         </div>
@@ -53,6 +55,7 @@ export const RegPeriod = () => {
         </div>
         <div className="text-sm text-current opacity-80 ">
           {dayjs(batch?.updateApplicationEndDate)
+            .endOf("day")
             .locale(locale === "ar" ? arLocale : enLocale)
             .format("MMM DD, YYYY")}
         </div>
@@ -62,7 +65,7 @@ export const RegPeriod = () => {
 };
 
 export const RegPeriodDialog = ({ className }: { className?: string }) => {
-  const { batch } = useAppContext();
+  const { batch, signUpEnabled } = useAppContext();
   const regDialog = useRef<HTMLDialogElement>(null);
   const { t } = useTranslation("common");
   const { locale } = useRouter();
@@ -135,7 +138,9 @@ export const RegPeriodDialog = ({ className }: { className?: string }) => {
   function getTitle(key: string, date: Dayjs): string {
     const now = dayjs();
     if (key === "createApplicationStartDate") {
-      return `${t("createApplicationStartsIn")} ${date.diff(now, "day")} days`;
+      return `${t("createApplicationStartsIn")} ${date.diff(now, "day")} ${t(
+        "days"
+      )}`;
     } else if (key === "createApplicationEndDate") {
       return t("creatingNewApplicationEndDate");
     } else if (key === "updateApplicationEndDate") {
@@ -151,16 +156,15 @@ export const RegPeriodDialog = ({ className }: { className?: string }) => {
 
   return (
     <div>
-      {batch && (
+      {batch && signUpEnabled && (
         <button
           className={cn("btn btn-ghost", className)}
           onClick={() => regDialog.current?.showModal()}
         >
           {`${getUpcomingBatchDate(batch, locale).title}:
-            ${getUpcomingBatchDate(batch, locale).date}`}{" "}
+            ${getUpcomingBatchDate(batch, locale).date}`}
           <span>
-            {" "}
-            <FiAlertCircle />{" "}
+            <FiAlertCircle />
           </span>
         </button>
       )}
