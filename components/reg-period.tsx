@@ -71,8 +71,10 @@ export const RegPeriodDialog = ({ className }: { className?: string }) => {
   const { locale } = useRouter();
 
   interface DateInfo {
-    date: string;
-    title: string;
+    upcoming: {
+      date: string;
+      title: string;
+    } | null;
   }
 
   function getUpcomingBatchDate(
@@ -106,7 +108,7 @@ export const RegPeriodDialog = ({ className }: { className?: string }) => {
 
     // If there are no valid dates, return 'Registration period'
     if (validDates.length === 0) {
-      return { date: "", title: t("registrationPeriod") };
+      return { upcoming: null };
     }
 
     // Find the nearest upcoming date
@@ -123,16 +125,17 @@ export const RegPeriodDialog = ({ className }: { className?: string }) => {
       null
     );
 
+    if (upcomingDate === null) {
+      return { upcoming: null };
+    }
+
     // Format the date and return
-    const formattedDate = upcomingDate
-      ? upcomingDate.value
-          .locale(locale === "ar" ? arLocale : enLocale)
-          .format("MMM DD, YYYY")
-      : t("registrationPeriod");
-    const title = upcomingDate
-      ? getTitle(upcomingDate.key, upcomingDate.value)
-      : t("registrationPeriod");
-    return { date: formattedDate, title };
+    const formattedDate = upcomingDate.value
+      .locale(locale === "ar" ? arLocale : enLocale)
+      .format("MMM DD, YYYY");
+    const title = getTitle(upcomingDate.key, upcomingDate.value);
+
+    return { upcoming: { date: formattedDate, title } };
   }
 
   function getTitle(key: string, date: Dayjs): string {
@@ -161,8 +164,10 @@ export const RegPeriodDialog = ({ className }: { className?: string }) => {
           className={cn("btn btn-ghost", className)}
           onClick={() => regDialog.current?.showModal()}
         >
-          {`${getUpcomingBatchDate(batch, locale).title}:
-            ${getUpcomingBatchDate(batch, locale).date}`}
+          {getUpcomingBatchDate(batch, locale).upcoming
+            ? `${getUpcomingBatchDate(batch, locale).upcoming?.title}:
+            ${getUpcomingBatchDate(batch, locale).upcoming?.date}`
+            : t("registrationPeriod")}
           <span>
             <FiAlertCircle />
           </span>

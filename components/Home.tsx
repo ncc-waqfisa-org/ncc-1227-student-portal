@@ -11,6 +11,9 @@ import { useAuth } from "../hooks/use-auth";
 import { Scholarship } from "../src/API";
 import { useQuery } from "@tanstack/react-query";
 import { getStudentScholarships } from "../src/CustomAPI";
+import dayjs from "dayjs";
+import arLocale from "dayjs/locale/ar";
+import enLocale from "dayjs/locale/en";
 
 interface Props {
   comeBack?: boolean;
@@ -19,7 +22,14 @@ interface Props {
 export const HomeComponent: FC<Props> = ({ comeBack }) => {
   const router = useRouter();
   const { t } = useTranslation("common");
-  const { haveActiveApplication } = useAppContext();
+  const {
+    haveActiveApplication,
+    batch,
+    signUpEnabled,
+    newApplicationsEnabled,
+    editingApplicationsEnabled,
+  } = useAppContext();
+
   const { cpr } = useAuth();
   const { data: scholarships } = useQuery<Scholarship[]>({
     queryKey: ["scholarships", cpr],
@@ -33,23 +43,75 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
           {t("availableServices")}
         </h1>
 
-        {comeBack && (
-          <div className="grid grid-cols-1 gap-10 place-items-center mx-auto w-full max-w-4xl md:grid-cols-2">
-            <CardInfoComponent
-              icon={info}
-              title={"التسجيل"}
-              description={"سيتم فتح التسجيل في يونيو 2024"}
-            ></CardInfoComponent>
-            <CardInfoComponent
-              icon={info}
-              title={"Registration"}
-              description={"Registration will open in June 2024"}
-            ></CardInfoComponent>
-          </div>
-        )}
+        {
+          !(
+            signUpEnabled ||
+            newApplicationsEnabled ||
+            (haveActiveApplication && editingApplicationsEnabled) ||
+            haveActiveApplication ||
+            (scholarships?.length ?? 0) > 0
+          ) &&
+            (dayjs().isAfter(dayjs(batch?.signUpEndDate).endOf("day")) ? (
+              <div className="flex flex-wrap justify-center gap-10">
+                <CardInfoComponent
+                  icon={info}
+                  title={"Registration"}
+                  description={"Registration period is over"}
+                ></CardInfoComponent>
+                <CardInfoComponent
+                  icon={info}
+                  title={"التسجيل"}
+                  description={"فترة التسجيل إنتهت"}
+                ></CardInfoComponent>
+              </div>
+            ) : (
+              <div className="flex flex-wrap justify-center gap-10">
+                <CardInfoComponent
+                  icon={info}
+                  title={"التسجيل"}
+                  description={`سيتم فتح التسجيل في ${dayjs(
+                    batch?.signUpStartDate
+                  )
+                    .locale(arLocale)
+                    .format("MMM DD, YYYY")}`}
+                ></CardInfoComponent>
+                <CardInfoComponent
+                  icon={info}
+                  title={"Registration"}
+                  description={`Registration will open in ${dayjs(
+                    batch?.signUpStartDate
+                  )
+                    .locale(enLocale)
+                    .format("MMM DD, YYYY")}`}
+                ></CardInfoComponent>
+              </div>
+            ))
+          // <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto place-items-center md:grid-cols-2">
+          //   <CardInfoComponent
+          //     icon={info}
+          //     title={"التسجيل"}
+          //     description={`سيتم فتح التسجيل في ${dayjs(batch?.signUpStartDate)
+          //       .locale(arLocale)
+          //       .format("MMM DD, YYYY")}`}
+          //   ></CardInfoComponent>
+          //   <CardInfoComponent
+          //     icon={info}
+          //     title={"Registration"}
+          //     description={`Registration will open in ${dayjs(
+          //       batch?.signUpStartDate
+          //     )
+          //       .locale(enLocale)
+          //       .format("MMM DD, YYYY")}`}
+          //   ></CardInfoComponent>
+          // </div>
+        }
 
-        {!comeBack && (
-          <div className="grid grid-cols-1 gap-10 place-items-center mx-auto w-full max-w-4xl md:grid-cols-2">
+        {(signUpEnabled ||
+          newApplicationsEnabled ||
+          (haveActiveApplication && editingApplicationsEnabled) ||
+          haveActiveApplication ||
+          (scholarships?.length ?? 0) > 0) && (
+          <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto place-items-center md:grid-cols-2">
             {!haveActiveApplication && (
               <CardInfoComponent
                 icon={logs}

@@ -8,9 +8,12 @@ import { useAppContext } from "../../contexts/AppContexts";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
+import arLocale from "dayjs/locale/ar";
+import enLocale from "dayjs/locale/en";
 
 import { CardInfoComponent } from "../../components/CardInfo";
 import info from "public/svg/info.svg";
+import dayjs from "dayjs";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { locale } = ctx;
@@ -36,7 +39,8 @@ interface Props {
 }
 
 const NewApplicationPage: FC<Props> = (props) => {
-  const { haveActiveApplication, newApplicationsEnabled } = useAppContext();
+  const { haveActiveApplication, newApplicationsEnabled, batch } =
+    useAppContext();
 
   const { t } = useTranslation("applicationPage");
   return (
@@ -55,7 +59,9 @@ const NewApplicationPage: FC<Props> = (props) => {
             </div>
           )}
         </div>
-      ) : (
+      ) : dayjs().isAfter(
+          dayjs(batch?.createApplicationEndDate).endOf("day")
+        ) ? (
         <div className="flex flex-wrap justify-center gap-10">
           <CardInfoComponent
             icon={info}
@@ -66,6 +72,27 @@ const NewApplicationPage: FC<Props> = (props) => {
             icon={info}
             title={"التقديم"}
             description={"فترة التقديم إنتهت"}
+          ></CardInfoComponent>
+        </div>
+      ) : (
+        <div className="flex flex-wrap justify-center gap-10">
+          <CardInfoComponent
+            icon={info}
+            title={"التقديم"}
+            description={`سيتم فتح التقديم في ${dayjs(
+              batch?.createApplicationStartDate
+            )
+              .locale(arLocale)
+              .format("MMM DD, YYYY")}`}
+          ></CardInfoComponent>
+          <CardInfoComponent
+            icon={info}
+            title={"Applying"}
+            description={`Applying will open in ${dayjs(
+              batch?.createApplicationStartDate
+            )
+              .locale(enLocale)
+              .format("MMM DD, YYYY")}`}
           ></CardInfoComponent>
         </div>
       )}

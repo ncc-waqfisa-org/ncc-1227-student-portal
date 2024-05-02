@@ -1,6 +1,6 @@
 import { PageComponent } from "../../components/PageComponent";
 
-import React, { useRef } from "react";
+import React from "react";
 import Link from "next/link";
 import { useAppContext } from "../../contexts/AppContexts";
 import { GetStaticProps } from "next";
@@ -12,10 +12,9 @@ import { NewApplicationCard } from "../../components/applications/NewApplication
 import { Status, Student } from "../../src/API";
 import { CardInfoComponent } from "../../components/CardInfo";
 import info from "../../public/svg/info.svg";
-import { RegPeriod } from "../../components/reg-period";
-import { Card } from "@aws-amplify/ui-react";
 import dayjs from "dayjs";
-import { FiAlertCircle } from "react-icons/fi";
+import arLocale from "dayjs/locale/ar";
+import enLocale from "dayjs/locale/en";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -60,7 +59,7 @@ export default function ApplicationsPage() {
       {appContext.applications.length === 0 &&
         !appContext.newApplicationsEnabled && (
           <div className="flex flex-wrap justify-center gap-10">
-            <CardInfoComponent
+            {/* <CardInfoComponent
               icon={info}
               title={"Registration"}
               description={"Registration period is over"}
@@ -68,7 +67,25 @@ export default function ApplicationsPage() {
             <CardInfoComponent
               icon={info}
               title={"التسجيل"}
-              description={"فترة التسجيل إنتهت"}
+              description={"سيتم فتح التسجيل في يونيو 2024"}
+            ></CardInfoComponent> */}
+            <CardInfoComponent
+              icon={info}
+              title={"الطلبات الجديدة"}
+              description={`سيتم فتح التسجيل ${dayjs(
+                appContext.batch?.createApplicationStartDate
+              )
+                .locale(arLocale)
+                .format("MMM DD, YYYY")}`}
+            ></CardInfoComponent>
+            <CardInfoComponent
+              icon={info}
+              title={"New applications"}
+              description={`Registration will open in ${dayjs(
+                appContext.batch?.createApplicationStartDate
+              )
+                .locale(enLocale)
+                .format("MMM DD, YYYY")}`}
             ></CardInfoComponent>
           </div>
         )}

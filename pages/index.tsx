@@ -11,6 +11,7 @@ import { GetStaticProps } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { Scholarship } from "../src/API";
 import { getStudentScholarships } from "../src/CustomAPI";
+import dayjs from "dayjs";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -30,10 +31,15 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 };
 
 const Home = () => {
-  const comeBack: boolean = true;
+  const comeBack: boolean = false;
   const router = useRouter();
   const auth = useAuth();
-  const { haveActiveApplication } = useAppContext();
+  const {
+    haveActiveApplication,
+    signUpEnabled,
+    newApplicationsEnabled,
+    editingApplicationsEnabled,
+  } = useAppContext();
   const { t } = useTranslation("common");
   const { t: aPT } = useTranslation("applicationPage");
 
@@ -50,10 +56,14 @@ const Home = () => {
           <div className="flex flex-col text-center md:text-start">
             <h1 className="mb-1 font-semibold rtl:md:border-r-8 ltr:md:border-l-8 md:pl-4">
               {/* Enroll for 2023 */}
-              {t("enrollFor")} {new Date().getFullYear()}
+              {t("enrollFor")} {dayjs().year()}
             </h1>
             <p>{t("enrollForDescription")}</p>
-            {!comeBack && (
+            {(signUpEnabled ||
+              newApplicationsEnabled ||
+              editingApplicationsEnabled ||
+              haveActiveApplication ||
+              (scholarships?.length ?? 0) > 0) && (
               <div className="flex flex-col gap-3 mx-auto md:flex-row md:mx-0">
                 <button
                   type="button"

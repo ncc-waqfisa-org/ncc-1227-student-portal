@@ -2,7 +2,6 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import SignUpForm from "../components/auth/sign-up-form";
-import { VerifyEmail } from "../components/auth/verify-email";
 import { PageComponent } from "../components/PageComponent";
 import { useAuth } from "../hooks/use-auth";
 import { GetStaticProps } from "next";
@@ -11,9 +10,10 @@ import { CardInfoComponent } from "../components/CardInfo";
 
 import info from "../public/svg/info.svg";
 import { useAppContext } from "../contexts/AppContexts";
-import dayjs from "dayjs";
 import { Skeleton } from "../components/Skeleton";
-import { ChangeEmail } from "../components/auth/ChangeEmail";
+import dayjs from "dayjs";
+import arLocale from "dayjs/locale/ar";
+import enLocale from "dayjs/locale/en";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -40,7 +40,7 @@ const SignUpPage: NextPage<Props> = () => {
   const auth = useAuth();
   const router = useRouter();
 
-  const { signUpEnabled, isBatchPending } = useAppContext();
+  const { signUpEnabled, isBatchPending, batch } = useAppContext();
 
   useEffect(() => {
     if (auth.isSignedIn) {
@@ -56,69 +56,61 @@ const SignUpPage: NextPage<Props> = () => {
         <Skeleton className="w-full h-96 bg-slate-300/80 " />
       ) : (
         <>
-          {signUpEnabled ? (
-            <div>
-              <SignUpForm></SignUpForm>
-            </div>
-          ) : (
-            // <>
-            //   {!cpr && (
-            //     <div>
-            //       <SignUpForm></SignUpForm>
-            //     </div>
-            //   )}
-            //   {cpr && action === undefined && (
-            //     <div>
-            //       <VerifyEmail cpr={`${cpr}`}></VerifyEmail>
-            //     </div>
-            //   )}
-            //   {cpr && action === "changeEmail" && (
-            //     <div>
-            //       <ChangeEmail cpr={`${cpr}`}></ChangeEmail>
-            //     </div>
-            //   )}
-            // </>
-            // if registration period is over
-            <div className="flex flex-wrap justify-center gap-10">
-              <CardInfoComponent
-                icon={info}
-                title={"Registration"}
-                description={"Registration period is over"}
-              ></CardInfoComponent>
-              <CardInfoComponent
-                icon={info}
-                title={"التسجيل"}
-                description={"فترة التسجيل إنتهت"}
-              ></CardInfoComponent>
-            </div>
-          )}
+          {
+            signUpEnabled ? (
+              <div>
+                <SignUpForm></SignUpForm>
+              </div>
+            ) : // if registration period is over
+            dayjs().isAfter(dayjs(batch?.signUpEndDate).endOf("day")) ? (
+              <div className="flex flex-wrap justify-center gap-10">
+                <CardInfoComponent
+                  icon={info}
+                  title={"Registration"}
+                  description={"Registration period is over"}
+                ></CardInfoComponent>
+                <CardInfoComponent
+                  icon={info}
+                  title={"التسجيل"}
+                  description={"فترة التسجيل إنتهت"}
+                ></CardInfoComponent>
+              </div>
+            ) : (
+              <div className="flex flex-wrap justify-center gap-10">
+                <CardInfoComponent
+                  icon={info}
+                  title={"التسجيل"}
+                  description={`سيتم فتح التسجيل في ${dayjs(
+                    batch?.signUpStartDate
+                  )
+                    .locale(arLocale)
+                    .format("MMM DD, YYYY")}`}
+                ></CardInfoComponent>
+                <CardInfoComponent
+                  icon={info}
+                  title={"Registration"}
+                  description={`Registration will open in ${dayjs(
+                    batch?.signUpStartDate
+                  )
+                    .locale(enLocale)
+                    .format("MMM DD, YYYY")}`}
+                ></CardInfoComponent>
+              </div>
+            )
+            // <div className="flex flex-wrap justify-center gap-10">
+            //   <CardInfoComponent
+            //     icon={info}
+            //     title={"Registration"}
+            //     description={"Registration will open in June 2024"}
+            //   ></CardInfoComponent>
+            //   <CardInfoComponent
+            //     icon={info}
+            //     title={"التسجيل"}
+            //     description={"سيتم فتح التسجيل في يونيو 2024"}
+            //   ></CardInfoComponent>
+            // </div>
+          }
         </>
-      ) : (
-        // if registration period is over
-        <div className="flex flex-wrap gap-10 justify-center">
-          <CardInfoComponent
-            icon={info}
-            title={"Registration"}
-            description={"Registration will open in June 2024"}
-          ></CardInfoComponent>
-          <CardInfoComponent
-            icon={info}
-            title={"التسجيل"}
-            description={"سيتم فتح التسجيل في يونيو 2024"}
-          ></CardInfoComponent>
-        </div>
-        // <div className="flex flex-wrap gap-10 justify-center">
-        //   <CardInfoComponent
-        //     icon={info}
-        //     title={"Registration"}
-        //     description={"Registration period is over"}
-        //   ></CardInfoComponent>
-        //   <CardInfoComponent
-        //     icon={info}
-        //    title={"قريباً"}
-        //       description={"عد في يونيو للتسجيل"}
-        //   ></CardInfoComponent>
-        // </div>
       )}
     </PageComponent>
   );
