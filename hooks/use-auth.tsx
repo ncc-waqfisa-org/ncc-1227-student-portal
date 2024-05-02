@@ -177,32 +177,38 @@ function useProvideAuth() {
     password: string
   ): Promise<CognitoUser | undefined> =>
     toast.promise(
-      checkIfCprExist(cpr).then(async (cprExist) => {
-        if (cprExist) {
-          const cognitoUser = await Auth.signIn(cpr, password).catch(
-            (error) => {
-              console.log(error);
+      checkIfCprExist(cpr)
+        .then(async (cprExist) => {
+          if (cprExist) {
+            const cognitoUser = await Auth.signIn(cpr, password).catch(
+              (error) => {
+                console.log("signIn error", error);
 
               if (error.name === "UserNotConfirmedException") {
                 push({ pathname: "/verify-email", query: { cpr: cpr } });
               }
-              throw error;
-            }
-          );
-          setIsSignedIn(true);
-          setUser(cognitoUser);
-          return cognitoUser;
-        } else {
-          throw new Error("CPR does not exist");
-        }
-      }),
+            );
+            setIsSignedIn(true);
+            setUser(cognitoUser);
+            return cognitoUser;
+          } else {
+            throw new Error("CPR does not exist");
+          }
+        })
+        .catch((e) => {
+          if (e.errors && e.errors[0]) {
+            throw e.errors[0];
+          } else {
+            throw e;
+          }
+        }),
       {
         loading: "Signing in...",
         success: (authUser) => {
           return `${authUser?.getUsername()} Successfully signed in`;
         },
         error: (error) => {
-          return `${error?.message}`;
+          return `${error ? error.message : "Error signing in"}`;
         },
       }
     );
