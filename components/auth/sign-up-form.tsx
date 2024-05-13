@@ -128,69 +128,69 @@ export default function SignUpForm() {
     }
   }
 
-  async function createCognitoUser(
-    values: CreateStudentFormValues
-  ): Promise<ISignUpResult | null> {
-    try {
-      const signUpPrams: SignUpParams = {
-        username: values.student.input.cpr,
-        password: values.password,
-        attributes: {
-          email: values.student.input.email,
-          // ! this cause problem when sign up with invalid format
-          // phone_number: values.student.input.phone,
-        },
-      };
-      const signUpResult = await Auth.signUp(signUpPrams);
+  // async function createCognitoUser(
+  //   values: CreateStudentFormValues
+  // ): Promise<ISignUpResult | null> {
+  //   try {
+  //     const signUpPrams: SignUpParams = {
+  //       username: values.student.input.cpr,
+  //       password: values.password,
+  //       attributes: {
+  //         email: values.student.input.email,
+  //         // ! this cause problem when sign up with invalid format
+  //         // phone_number: values.student.input.phone,
+  //       },
+  //     };
+  //     const signUpResult = await Auth.signUp(signUpPrams);
 
-      return signUpResult;
-    } catch (error) {
-      console.log("createCognitoUser => error", error);
-      return null;
-    }
-  }
+  //     return signUpResult;
+  //   } catch (error) {
+  //     console.log("createCognitoUser => error", error);
+  //     return null;
+  //   }
+  // }
 
-  async function deleteParentInfo(createdParentInfo: CreateParentInfoMutation) {
-    let mutationInputs: DeleteParentInfoMutationVariables = {
-      input: {
-        id: `${createdParentInfo.createParentInfo?.id}`,
-        _version: createdParentInfo.createParentInfo?._version,
-      },
-    };
+  // async function deleteParentInfo(createdParentInfo: CreateParentInfoMutation) {
+  //   let mutationInputs: DeleteParentInfoMutationVariables = {
+  //     input: {
+  //       id: `${createdParentInfo.createParentInfo?.id}`,
+  //       _version: createdParentInfo.createParentInfo?._version,
+  //     },
+  //   };
 
-    try {
-      let res = (await API.graphql({
-        query: mutations.deleteParentInfo,
-        variables: mutationInputs,
-      })) as GraphQLResult<DeleteParentInfoMutation>;
+  //   try {
+  //     let res = (await API.graphql({
+  //       query: mutations.deleteParentInfo,
+  //       variables: mutationInputs,
+  //     })) as GraphQLResult<DeleteParentInfoMutation>;
 
-      return res;
-    } catch (error) {
-      console.log("SignUpForm => deleteParentInfo => error", error);
-      return null;
-    }
-  }
+  //     return res;
+  //   } catch (error) {
+  //     console.log("SignUpForm => deleteParentInfo => error", error);
+  //     return null;
+  //   }
+  // }
 
-  async function deleteCreatedUser(createdDatabaseUser: CreateStudentMutation) {
-    let mutationInputs: DeleteStudentMutationVariables = {
-      input: {
-        cpr: `${createdDatabaseUser.createStudent?.cpr}`,
-        _version: createdDatabaseUser.createStudent?._version,
-      },
-    };
+  // async function deleteCreatedUser(createdDatabaseUser: CreateStudentMutation) {
+  //   let mutationInputs: DeleteStudentMutationVariables = {
+  //     input: {
+  //       cpr: `${createdDatabaseUser.createStudent?.cpr}`,
+  //       _version: createdDatabaseUser.createStudent?._version,
+  //     },
+  //   };
 
-    try {
-      let res = (await API.graphql({
-        query: mutations.deleteStudent,
-        variables: mutationInputs,
-      })) as GraphQLResult<DeleteStudentMutation>;
+  //   try {
+  //     let res = (await API.graphql({
+  //       query: mutations.deleteStudent,
+  //       variables: mutationInputs,
+  //     })) as GraphQLResult<DeleteStudentMutation>;
 
-      return res;
-    } catch (error) {
-      console.log("SignUpForm => deleteCreatedUser => error", error);
-      return null;
-    }
-  }
+  //     return res;
+  //   } catch (error) {
+  //     console.log("SignUpForm => deleteCreatedUser => error", error);
+  //     return null;
+  //   }
+  // }
 
   const signUpMutation = useMutation({
     mutationFn: (values: any) => {
@@ -236,13 +236,13 @@ export default function SignUpForm() {
 
   async function signUpProcess(data: CreateStudentFormValues) {
     setIsLoading(true);
-    let userAlreadyExists = await auth.checkIfCprExist(
-      createStudentFormValues.student.input.cpr.trim()
-    );
+    // let userAlreadyExists = await auth.checkIfCprExist(
+    //   createStudentFormValues.student.input.cpr.trim()
+    // );
 
-    if (userAlreadyExists) {
-      throw new Error("User already exists CODE:00001");
-    }
+    // if (userAlreadyExists) {
+    //   throw new Error("User already exists CODE:00001");
+    // }
 
     // const createdParentInfo = await createDatabaseParentInfo(data);
 
