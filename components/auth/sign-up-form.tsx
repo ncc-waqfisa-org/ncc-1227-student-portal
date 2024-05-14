@@ -92,41 +92,41 @@ export default function SignUpForm() {
   const [createStudentFormValues, setCreateStudentFormValues] =
     useState<CreateStudentFormValues>(initialValues);
 
-  async function createDatabaseParentInfo(
-    values: CreateStudentFormValues
-  ): Promise<GraphQLResult<CreateParentInfoMutation> | null> {
-    let mutationInput: CreateParentInfoMutationVariables = values.parentInfo;
+  // async function createDatabaseParentInfo(
+  //   values: CreateStudentFormValues
+  // ): Promise<GraphQLResult<CreateParentInfoMutation> | null> {
+  //   let mutationInput: CreateParentInfoMutationVariables = values.parentInfo;
 
-    try {
-      const res: GraphQLResult<CreateParentInfoMutation> = (await API.graphql({
-        query: mutations.createParentInfo,
-        variables: mutationInput,
-      })) as GraphQLResult<CreateParentInfoMutation>;
+  //   try {
+  //     const res: GraphQLResult<CreateParentInfoMutation> = (await API.graphql({
+  //       query: mutations.createParentInfo,
+  //       variables: mutationInput,
+  //     })) as GraphQLResult<CreateParentInfoMutation>;
 
-      return res;
-    } catch (error) {
-      console.log("createDatabaseParentInfo => error", error);
-      return null;
-    }
-  }
+  //     return res;
+  //   } catch (error) {
+  //     console.log("createDatabaseParentInfo => error", error);
+  //     return null;
+  //   }
+  // }
 
-  async function createDatabaseStudent(
-    values: CreateStudentFormValues
-  ): Promise<GraphQLResult<CreateStudentMutation> | null> {
-    let mutationInput: CreateStudentMutationVariables = values.student;
+  // async function createDatabaseStudent(
+  //   values: CreateStudentFormValues
+  // ): Promise<GraphQLResult<CreateStudentMutation> | null> {
+  //   let mutationInput: CreateStudentMutationVariables = values.student;
 
-    try {
-      const res: GraphQLResult<CreateStudentMutation> = (await API.graphql({
-        query: mutations.createStudent,
-        variables: mutationInput,
-      })) as GraphQLResult<CreateStudentMutation>;
+  //   try {
+  //     const res: GraphQLResult<CreateStudentMutation> = (await API.graphql({
+  //       query: mutations.createStudent,
+  //       variables: mutationInput,
+  //     })) as GraphQLResult<CreateStudentMutation>;
 
-      return res;
-    } catch (error) {
-      console.log("createDatabaseStudent => error", error);
-      return null;
-    }
-  }
+  //     return res;
+  //   } catch (error) {
+  //     console.log("createDatabaseStudent => error", error);
+  //     return null;
+  //   }
+  // }
 
   // async function createCognitoUser(
   //   values: CreateStudentFormValues
@@ -219,6 +219,7 @@ export default function SignUpForm() {
           pathname: "/verify-email",
           query: { cpr: createStudentFormValues.student.input.cpr },
         });
+
         // router.push({
         //   pathname: "/signUp",
         //   query: { cpr: createStudentFormValues.student.input.cpr },
@@ -226,11 +227,15 @@ export default function SignUpForm() {
         // toast("email need to be verified");
       } else {
         const { message } = await data.json();
-        toast.error(message, { duration: 6000 });
+        throw new Error(message);
+
+        // toast.error(message, { duration: 6000 });
       }
     },
     async onError(error) {
-      toast.error(error.message, { duration: 6000 });
+      throw new Error(error.message);
+
+      // toast.error(error.message, { duration: 6000 });
     },
   });
 
@@ -333,7 +338,14 @@ export default function SignUpForm() {
 
     setCreateStudentFormValues(temp);
     //* Call Sign up lambda
-    signUpMutation.mutate(dataToLambda);
+    await signUpMutation.mutateAsync(dataToLambda);
+    // const message =;
+
+    // const res = {
+    //   ok: signUpMutation.data?.ok,
+    //   message: await signUpMutation.data?.json().then((ddd) => ddd.message),
+    // };
+    // return res;
   }
 
   return (
@@ -373,9 +385,7 @@ export default function SignUpForm() {
           onFormSubmit={(values) => {
             let temp: CreateStudentFormValues = {
               student: values.student,
-
               parentInfo: createStudentFormValues.parentInfo,
-
               password: values.password,
               familyIncomeProofDocsFile: values.familyIncomeProofDocsFile,
               cprDoc: values.cprDoc,
@@ -417,7 +427,8 @@ export default function SignUpForm() {
               ),
               {
                 loading: t("processing"),
-                success: t("accountCreated"),
+                // success: t("accountCreated"),
+                success: (res) => t("processComplete"),
                 error: (error) => `${error.message}`,
               }
             )

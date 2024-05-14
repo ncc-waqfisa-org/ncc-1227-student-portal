@@ -14,6 +14,8 @@
   "CPR": "الرقم الشخصي",
   "transcript": "كشف الدرجات",
   "acceptanceLetter": "رسالة القبول",
+  "processing": "جاري المعالجة",
+  "processComplete": "اكتملت العملية",
   "signedContract": "عقد موقع",
   "program": "البرنامج",
   "primaryProgram": "البرنامج الأساسي",

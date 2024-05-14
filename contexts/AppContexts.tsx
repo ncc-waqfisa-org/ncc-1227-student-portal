@@ -160,7 +160,8 @@ function useProviderApp() {
             application.status === Status.APPROVED ||
             application.status === Status.ELIGIBLE ||
             application.status === Status.NOT_COMPLETED ||
-            application.status === Status.REJECTED
+            application.status === Status.REJECTED ||
+            application.status === Status.WITHDRAWN
         );
 
         setHaveActiveApplication(active !== undefined);
@@ -202,7 +203,8 @@ function useProviderApp() {
             application.status === Status.REVIEW ||
             application.status === Status.APPROVED ||
             application.status === Status.ELIGIBLE ||
-            application.status === Status.NOT_COMPLETED
+            application.status === Status.NOT_COMPLETED ||
+            application.status === Status.WITHDRAWN
         );
         setHaveActiveApplication(active !== undefined);
       });

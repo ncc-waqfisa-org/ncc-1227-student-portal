@@ -19,6 +19,8 @@
   "primaryProgram": "Primary Program",
   "secondaryProgram": "Secondary Program",
   "GPA": "GPA",
+  "processing": "Processing",
+  "processComplete": "Process complete",
   "document": "Document",
   "field": "Field",
   "value": "Value",

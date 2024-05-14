@@ -31,7 +31,7 @@ interface ICreateStudentForm {
 export const CreateStudentForm = (props: ICreateStudentForm) => {
   const { t } = useTranslation("account");
   const { t: tErrors } = useTranslation("errors");
-  const { checkIfCprExist } = useAuth();
+  // const { checkIfCprExist } = useAuth();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [cprAvailable, setCprAvailable] = useState<boolean>(false);
@@ -201,10 +201,15 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
           </div>
           {/* cprDoc */}
           <div className="flex flex-col justify-start w-full">
-            <label className="label">
-              {t("studentCPRdoc")}{" "}
-              <span className="ml-1 mr-auto text-red-500">*</span>
-            </label>
+            <div className="flex items-center">
+              <label className="label">
+                {t("studentCPRdoc")}{" "}
+                <span className="ml-1 mr-auto text-red-500">*</span>
+              </label>
+              <label className="label-text-alt text-error">
+                {errors.cprDoc && errors.cprDoc}
+              </label>
+            </div>
             <Field
               type="file"
               accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps,application/msword"
@@ -213,7 +218,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               title="cprDoc"
               placeholder="CPR Doc"
               className={`file-input file-input-bordered file-input-secondary bg-secondary text-secondary-content ${
-                errors.cprDoc && touched.cprDoc && "input-error"
+                errors.cprDoc && "input-error"
               }`}
               onChange={(event: any) => {
                 let file: File | undefined = event.currentTarget.files[0];
@@ -229,9 +234,6 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               onBlur={handleBlur}
               value={values.cprDoc ?? ""}
             />
-            <label className="label-text-alt text-error">
-              {errors.cprDoc && touched.cprDoc && errors.cprDoc}
-            </label>
           </div>
           {/* FullName */}
           <div className="flex flex-col justify-start w-full">
@@ -515,6 +517,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               type="number"
               name="studentOrderAmongSiblings"
               title="studentOrderAmongSiblings"
+              min={0}
               // placeholder={t("studentOrderAmongSiblings")}
               className={`input input-bordered input-primary ${
                 errors.studentOrderAmongSiblings &&
@@ -592,11 +595,10 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               <label className="label">{t("familyIncome")}</label>
               <label className="text-error label">*</label>{" "}
               <label className="label-text-alt text-error">
-                {errors.familyIncome &&
-                  touched.familyIncome &&
-                  errors.familyIncome}
+                {errors.familyIncome && errors.familyIncome}
               </label>
             </div>
+
             <Field
               dir="ltr"
               as="select"
@@ -604,7 +606,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               title="familyIncome"
               placeholder="Preferred Language"
               className={`input input-bordered input-primary ${
-                errors.familyIncome && touched.familyIncome && "input-error"
+                errors.familyIncome && "input-error"
               }`}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -770,6 +772,12 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
             disabled={
               isSubmitting ||
               familyIncomeProofInvalid ||
+              ((cprDoc?.length === 0 ||
+                cprDoc === undefined ||
+                cprDoc === null) &&
+                (props.student.input.cpr === null ||
+                  props.student.input.cpr === undefined ||
+                  props.student.input.cpr === "")) ||
               (familyIncomeProofDocsFile.length === 0 &&
                 (props.student.input.familyIncomeProofDocs ?? []).length === 0)
             }

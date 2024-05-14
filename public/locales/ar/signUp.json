@@ -6,7 +6,8 @@
   "register": "سجل",
   "verify": "أكد",
   "reSend": "أعد إرسال الرمز",
-  "processing": "جاري المعالجة",
   "accountCreated": "تم إنشاء الحساب بنجاح",
-  "verificationCode": "تم إرسال رمز التحقق إلى"
+  "verificationCode": "تم إرسال رمز التحقق إلى",
+  "processing": "جاري المعالجة",
+  "processComplete": "اكتملت العملية"
 }

@@ -182,9 +182,9 @@ function useProvideAuth() {
           if (cprExist) {
             const cognitoUser = await Auth.signIn(cpr, password).catch(
               (error) => {
-                console.log("signIn error", error);
+                // console.log("signIn error", error);
 
-                if (error.name === "UserNotConfirmedException") {
+                if (error.code === "UserNotConfirmedException") {
                   push({ pathname: "/verify-email", query: { cpr: cpr } });
                 }
               }

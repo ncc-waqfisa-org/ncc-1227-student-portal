@@ -1,4 +1,4 @@
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FormikHelpers } from "formik";
 import { FC, useState } from "react";
 import * as yup from "yup";
 import { useAppContext } from "../../contexts/AppContexts";
@@ -286,6 +286,345 @@ export const ApplicationForm: FC<Props> = (props) => {
       });
   }
 
+  async function handleSubmit({
+    values,
+    actions,
+  }: {
+    values: FormValues;
+    actions: FormikHelpers<FormValues>;
+  }) {
+    let checkStorageKeys: (string | null | undefined)[] = [
+      props.application
+        ? props.application.attachment?.schoolCertificate
+        : undefined,
+      props.application
+        ? props.application.attachment?.transcriptDoc
+        : undefined,
+      oldPrimaryProgram?.acceptanceLetterDoc ?? undefined,
+      // oldSecondaryProgram?.acceptanceLetterDoc ?? undefined,
+    ];
+
+    let storageKeys = await Promise.all([
+      schoolCertificate &&
+        uploadFile(
+          schoolCertificate,
+          DocType.SCHOOL_CERTIFICATE,
+          `${student?.getStudent?.cpr}`
+        ),
+      transcriptDoc &&
+        uploadFile(
+          transcriptDoc,
+          DocType.TRANSCRIPT,
+          `${student?.getStudent?.cpr}`
+        ),
+      primaryAcceptanceDoc &&
+        (await uploadFile(
+          primaryAcceptanceDoc,
+          DocType.PRIMARY_PROGRAM_ACCEPTANCE,
+          `${student?.getStudent?.cpr}`
+        )),
+    ])
+      .then((res) => {
+        return res;
+      })
+      .catch((error) => {
+        console.log("Upload error", error);
+        throw error;
+      });
+    // let storageKeys = await toast.promise(
+    //   Promise.all([
+    //     schoolCertificate &&
+    //       uploadFile(
+    //         schoolCertificate,
+    //         DocType.SCHOOL_CERTIFICATE,
+    //         `${student?.getStudent?.cpr}`
+    //       ),
+    //     transcriptDoc &&
+    //       uploadFile(
+    //         transcriptDoc,
+    //         DocType.TRANSCRIPT,
+    //         `${student?.getStudent?.cpr}`
+    //       ),
+    //     primaryAcceptanceDoc &&
+    //       (await uploadFile(
+    //         primaryAcceptanceDoc,
+    //         DocType.PRIMARY_PROGRAM_ACCEPTANCE,
+    //         `${student?.getStudent?.cpr}`
+    //       )),
+    //   ])
+    //     .then((res) => {
+    //       return res;
+    //     })
+    //     .catch((error) => {
+    //       console.log("Upload error", error);
+    //       throw error;
+    //     }),
+    //   {
+    //     loading: "Uploading documents...",
+    //     success: "Documents uploaded successfully",
+    //     error: "Uploading documents failed",
+    //   }
+    // );
+    // School certificate doc storage key
+    checkStorageKeys[0] =
+      storageKeys?.[0] !== undefined ? storageKeys[0] : checkStorageKeys[0];
+    // Transcript doc storage key
+    checkStorageKeys[1] =
+      storageKeys?.[1] !== undefined ? storageKeys[1] : checkStorageKeys[1];
+    // Primary program acceptance letter doc storage key
+    checkStorageKeys[2] =
+      storageKeys?.[2] !== undefined ? storageKeys[2] : checkStorageKeys[2];
+
+    const selectedPrimaryProgram = props.programs?.find(
+      (p) => p.id === values.primaryProgramID
+    );
+
+    let newApplicationSnapshotInput: ApplicationSnapshotInput = {
+      gpa: values.gpa,
+      reason: values.reason,
+      primaryProgram: {
+        id: values.primaryProgramID,
+        name: `${selectedPrimaryProgram?.name}-${selectedPrimaryProgram?.university?.name}`,
+        acceptanceLetterDoc:
+          storageKeys?.[2] ??
+          oldPrimaryProgram?.acceptanceLetterDoc ??
+          undefined,
+      },
+      attachments: {
+        schoolCertificate: storageKeys?.[0] ?? undefined,
+        transcript: storageKeys?.[1] ?? undefined,
+      },
+    };
+
+    let oldApplicationSnapshotInput: ApplicationSnapshotInput | undefined =
+      props.application
+        ? {
+            gpa: props.application.gpa ?? undefined,
+            reason: props.application.reason ?? undefined,
+            primaryProgram: {
+              id: oldPrimaryProgram?.program?.id ?? undefined,
+              name: `${oldPrimaryProgram?.program?.name}-${oldPrimaryProgram?.program?.university?.name}`,
+              acceptanceLetterDoc:
+                oldPrimaryProgram?.acceptanceLetterDoc ?? undefined,
+            },
+            attachments: {
+              schoolCertificate:
+                props.application?.attachment?.schoolCertificate ?? undefined,
+              transcript:
+                props.application?.attachment?.transcriptDoc ?? undefined,
+            },
+          }
+        : undefined;
+
+    const createValues: CreateApplicationFormValues = {
+      application: {
+        input: {
+          id: undefined,
+          gpa: values.gpa,
+          reason: values.reason,
+          score:
+            studentData.familyIncome && values.gpa
+              ? calculateScore({
+                  familyIncome: studentData.familyIncome,
+                  gpa: values.gpa,
+                })
+              : 0,
+          batch: batch?.batch ?? 0,
+          status: allDocsAreAvailable({
+            isException: props.programs?.find(
+              (program) => program.id === values.primaryProgramID
+            )?.university?.isException,
+            cpr: studentData.cprDoc,
+            familyProofs: student?.getStudent?.familyIncomeProofDocs ?? [],
+            transcript: checkStorageKeys[1],
+            schoolCertificate: checkStorageKeys[0],
+            primaryProgramAcceptanceLetter: checkStorageKeys[2],
+            // secondaryProgramAcceptanceLetter: checkStorageKeys[3],
+          })
+            ? Status.REVIEW
+            : Status.NOT_COMPLETED,
+          studentCPR: `${student?.getStudent?.cpr}`,
+          nationalityCategory: student?.getStudent?.nationalityCategory,
+          universityID: props.programs?.find(
+            (program) => program.id === values.primaryProgramID
+          )?.university?.id,
+          programID: values.primaryProgramID,
+          processed: 0,
+          familyIncome: student?.getStudent?.familyIncome,
+          studentName: student?.getStudent?.fullName,
+          _version: null,
+          attachmentID: null,
+          applicationAttachmentId: null,
+          dateTime: new Date().toISOString(),
+        },
+        condition: undefined,
+      },
+      primaryProgram: {
+        input: {
+          id: undefined,
+          applicationID: "",
+          choiceOrder: 1,
+          _version: undefined,
+          programID: values.primaryProgramID ?? "",
+          applicationProgramsId: values.primaryProgramID ?? "",
+          programApplicationsId: undefined,
+          acceptanceLetterDoc: storageKeys?.[2],
+        },
+        condition: undefined,
+      },
+      attachment: {
+        input: {
+          id: undefined,
+          schoolCertificate: storageKeys?.[0],
+          transcriptDoc: storageKeys?.[1],
+          _version: undefined,
+        },
+        condition: undefined,
+      },
+      studentLog: {
+        input: {
+          id: undefined,
+          applicationID: "",
+          studentCPR: user?.getUsername() ?? "",
+          dateTime: new Date().toISOString(),
+
+          snapshot: getStudentApplicationSnapshot({
+            newApplication: newApplicationSnapshotInput,
+            oldApplication: oldApplicationSnapshotInput,
+          }),
+
+          reason: "Initial Submit",
+          _version: undefined,
+          applicationStudentLogsId: "",
+        },
+        condition: undefined,
+      },
+    };
+
+    /* -------------------------------------------------------------------------- */
+    /*                                   UPDATE                                   */
+    /* -------------------------------------------------------------------------- */
+
+    let updateValues: UpdateApplicationFormValues = {
+      application: {
+        input: {
+          id: props.application?.id ?? "",
+          gpa: values.gpa,
+          reason: values.reason,
+          score:
+            studentData.familyIncome && values.gpa
+              ? calculateScore({
+                  familyIncome: studentData.familyIncome,
+                  gpa: props.application?.verifiedGPA ?? values.gpa,
+                  adminScore: props.application?.adminPoints ?? 0,
+                })
+              : 0,
+          status: allDocsAreAvailable({
+            isException: props.programs?.find(
+              (program) => program.id === values.primaryProgramID
+            )?.university?.isException,
+            cpr: studentData.cprDoc,
+            familyProofs: student?.getStudent?.familyIncomeProofDocs ?? [],
+            transcript: checkStorageKeys[1],
+            schoolCertificate: checkStorageKeys[0],
+            primaryProgramAcceptanceLetter: checkStorageKeys[2],
+          })
+            ? applicationIsEligible
+              ? props.application?.status
+              : Status.REVIEW
+            : Status.NOT_COMPLETED,
+
+          studentCPR: `${student?.getStudent?.cpr}`,
+          universityID:
+            props.programs?.find(
+              (program) => program.id === values.primaryProgramID
+            )?.university?.id ?? props.application?.universityID,
+          programID: values.primaryProgramID ?? props.application?.programID,
+          processed: props.application?.processed ?? 0,
+          familyIncome: student?.getStudent?.familyIncome,
+          nationalityCategory: student?.getStudent?.nationalityCategory,
+          studentName: student?.getStudent?.fullName,
+          _version: props.application?._version,
+          attachmentID: props.application?.attachmentID,
+          applicationAttachmentId: props.application?.applicationAttachmentId,
+        },
+        condition: undefined,
+      },
+      primaryProgram: {
+        input: {
+          id:
+            props.application?.programs?.items.sort(
+              (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
+            )[0]?.id ?? "",
+          applicationID: props.application?.id ?? "",
+          choiceOrder: 1,
+          _version: props.application?.programs?.items.sort(
+            (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
+          )[0]?._version,
+          programID: values.primaryProgramID ?? "",
+          applicationProgramsId: props.application?.id ?? "",
+          programApplicationsId: values.primaryProgramID ?? "",
+          acceptanceLetterDoc:
+            storageKeys?.[2] ??
+            (primaryProgram?.id === oldPrimaryProgram?.program?.id
+              ? oldPrimaryProgram?.acceptanceLetterDoc
+              : null) ??
+            null,
+        },
+        condition: undefined,
+      },
+      attachment: {
+        input: {
+          id: props.application?.attachment?.id ?? "",
+          schoolCertificate:
+            storageKeys?.[0] ??
+            props.application?.attachment?.schoolCertificate,
+          transcriptDoc:
+            storageKeys?.[1] ?? props.application?.attachment?.transcriptDoc,
+          _version: props.application?.attachment?._version,
+        },
+        condition: undefined,
+      },
+      studentLog: {
+        input: {
+          id: undefined,
+          applicationID: props.application?.id ?? "",
+          studentCPR: user?.getUsername() ?? "",
+          dateTime: new Date().toISOString(),
+
+          snapshot: getStudentApplicationSnapshot({
+            newApplication: newApplicationSnapshotInput,
+            oldApplication: oldApplicationSnapshotInput,
+          }),
+
+          reason: values.reasonForUpdate,
+          _version: undefined,
+          applicationStudentLogsId: props.application?.id ?? "",
+        },
+        condition: undefined,
+      },
+    };
+
+    {
+      props.application
+        ? await updateApplicationProcess(updateValues)
+        : await createApplicationProcess(createValues);
+      // props.application
+      //   ? await toast.promise(updateApplicationProcess(updateValues), {
+      //       loading: "Updating application...",
+      //       success: "Application updated successfully",
+      //       error: "Application update failed",
+      //     })
+      //   : await toast.promise(createApplicationProcess(createValues), {
+      //       loading: "Creating application...",
+      //       success: "Application created successfully",
+      //       error: "Application creation failed",
+      //     });
+    }
+
+    actions.setSubmitting(false);
+  }
+
   return (
     <div>
       <Formik
@@ -310,7 +649,8 @@ export const ApplicationForm: FC<Props> = (props) => {
                     "max100words",
                     (value) =>
                       (value || "").split(/\s+/).filter(Boolean).length <= 100
-                  ),
+                  )
+                  .required(`${tErrors("requiredField")}`),
               })
             : yup.object({
                 gpa: yup
@@ -327,7 +667,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                 secondaryAcceptanceDoc: yup.mixed(),
                 reason: yup
                   .string()
-                  .required()
+                  .required(`${tErrors("requiredField")}`)
                   .test(
                     "max100words",
                     (value) =>
@@ -336,319 +676,11 @@ export const ApplicationForm: FC<Props> = (props) => {
               })
         }
         onSubmit={async (values, actions) => {
-          let checkStorageKeys: (string | null | undefined)[] = [
-            props.application
-              ? props.application.attachment?.schoolCertificate
-              : undefined,
-            props.application
-              ? props.application.attachment?.transcriptDoc
-              : undefined,
-            oldPrimaryProgram?.acceptanceLetterDoc ?? undefined,
-            // oldSecondaryProgram?.acceptanceLetterDoc ?? undefined,
-          ];
-
-          let storageKeys = await toast.promise(
-            Promise.all([
-              schoolCertificate &&
-                uploadFile(
-                  schoolCertificate,
-                  DocType.SCHOOL_CERTIFICATE,
-                  `${student?.getStudent?.cpr}`
-                ),
-              transcriptDoc &&
-                uploadFile(
-                  transcriptDoc,
-                  DocType.TRANSCRIPT,
-                  `${student?.getStudent?.cpr}`
-                ),
-              primaryAcceptanceDoc &&
-                (await uploadFile(
-                  primaryAcceptanceDoc,
-                  DocType.PRIMARY_PROGRAM_ACCEPTANCE,
-                  `${student?.getStudent?.cpr}`
-                )),
-            ])
-              .then((res) => {
-                return res;
-              })
-              .catch((error) => {
-                console.log("Upload error", error);
-                throw error;
-              }),
-            {
-              loading: "Uploading documents...",
-              success: "Documents uploaded successfully",
-              error: "Uploading documents failed",
-            }
-          );
-          // School certificate doc storage key
-          checkStorageKeys[0] =
-            storageKeys?.[0] !== undefined
-              ? storageKeys[0]
-              : checkStorageKeys[0];
-          // Transcript doc storage key
-          checkStorageKeys[1] =
-            storageKeys?.[1] !== undefined
-              ? storageKeys[1]
-              : checkStorageKeys[1];
-          // Primary program acceptance letter doc storage key
-          checkStorageKeys[2] =
-            storageKeys?.[2] !== undefined
-              ? storageKeys[2]
-              : checkStorageKeys[2];
-
-          const selectedPrimaryProgram = props.programs?.find(
-            (p) => p.id === values.primaryProgramID
-          );
-
-          let newApplicationSnapshotInput: ApplicationSnapshotInput = {
-            gpa: values.gpa,
-            reason: values.reason,
-            primaryProgram: {
-              id: values.primaryProgramID,
-              name: `${selectedPrimaryProgram?.name}-${selectedPrimaryProgram?.university?.name}`,
-              acceptanceLetterDoc:
-                storageKeys?.[2] ??
-                oldPrimaryProgram?.acceptanceLetterDoc ??
-                undefined,
-            },
-            attachments: {
-              schoolCertificate: storageKeys?.[0] ?? undefined,
-              transcript: storageKeys?.[1] ?? undefined,
-            },
-          };
-
-          let oldApplicationSnapshotInput:
-            | ApplicationSnapshotInput
-            | undefined = props.application
-            ? {
-                gpa: props.application.gpa ?? undefined,
-                reason: props.application.reason ?? undefined,
-                primaryProgram: {
-                  id: oldPrimaryProgram?.program?.id ?? undefined,
-                  name: `${oldPrimaryProgram?.program?.name}-${oldPrimaryProgram?.program?.university?.name}`,
-                  acceptanceLetterDoc:
-                    oldPrimaryProgram?.acceptanceLetterDoc ?? undefined,
-                },
-                attachments: {
-                  schoolCertificate:
-                    props.application?.attachment?.schoolCertificate ??
-                    undefined,
-                  transcript:
-                    props.application?.attachment?.transcriptDoc ?? undefined,
-                },
-              }
-            : undefined;
-
-          const createValues: CreateApplicationFormValues = {
-            application: {
-              input: {
-                id: undefined,
-                gpa: values.gpa,
-                reason: values.reason,
-                score:
-                  studentData.familyIncome && values.gpa
-                    ? calculateScore({
-                        familyIncome: studentData.familyIncome,
-                        gpa: values.gpa,
-                      })
-                    : 0,
-                batch: batch?.batch ?? 0,
-                status: allDocsAreAvailable({
-                  isException: props.programs?.find(
-                    (program) => program.id === values.primaryProgramID
-                  )?.university?.isException,
-                  cpr: studentData.cprDoc,
-                  familyProofs:
-                    student?.getStudent?.familyIncomeProofDocs ?? [],
-                  transcript: checkStorageKeys[1],
-                  schoolCertificate: checkStorageKeys[0],
-                  primaryProgramAcceptanceLetter: checkStorageKeys[2],
-                  // secondaryProgramAcceptanceLetter: checkStorageKeys[3],
-                })
-                  ? Status.REVIEW
-                  : Status.NOT_COMPLETED,
-                studentCPR: `${student?.getStudent?.cpr}`,
-                nationalityCategory: student?.getStudent?.nationalityCategory,
-                universityID: props.programs?.find(
-                  (program) => program.id === values.primaryProgramID
-                )?.university?.id,
-                programID: values.primaryProgramID,
-                processed: 0,
-                familyIncome: student?.getStudent?.familyIncome,
-                studentName: student?.getStudent?.fullName,
-                _version: null,
-                attachmentID: null,
-                applicationAttachmentId: null,
-                dateTime: new Date().toISOString(),
-              },
-              condition: undefined,
-            },
-            primaryProgram: {
-              input: {
-                id: undefined,
-                applicationID: "",
-                choiceOrder: 1,
-                _version: undefined,
-                programID: values.primaryProgramID ?? "",
-                applicationProgramsId: values.primaryProgramID ?? "",
-                programApplicationsId: undefined,
-                acceptanceLetterDoc: storageKeys?.[2],
-              },
-              condition: undefined,
-            },
-            attachment: {
-              input: {
-                id: undefined,
-                schoolCertificate: storageKeys?.[0],
-                transcriptDoc: storageKeys?.[1],
-                _version: undefined,
-              },
-              condition: undefined,
-            },
-            studentLog: {
-              input: {
-                id: undefined,
-                applicationID: "",
-                studentCPR: user?.getUsername() ?? "",
-                dateTime: new Date().toISOString(),
-
-                snapshot: getStudentApplicationSnapshot({
-                  newApplication: newApplicationSnapshotInput,
-                  oldApplication: oldApplicationSnapshotInput,
-                }),
-
-                reason: "Initial Submit",
-                _version: undefined,
-                applicationStudentLogsId: "",
-              },
-              condition: undefined,
-            },
-          };
-
-          /* -------------------------------------------------------------------------- */
-          /*                                   UPDATE                                   */
-          /* -------------------------------------------------------------------------- */
-
-          let updateValues: UpdateApplicationFormValues = {
-            application: {
-              input: {
-                id: props.application?.id ?? "",
-                gpa: values.gpa,
-                reason: values.reason,
-                score:
-                  studentData.familyIncome && values.gpa
-                    ? calculateScore({
-                        familyIncome: studentData.familyIncome,
-                        gpa: props.application?.verifiedGPA ?? values.gpa,
-                        adminScore: props.application?.adminPoints ?? 0,
-                      })
-                    : 0,
-                status: allDocsAreAvailable({
-                  isException: props.programs?.find(
-                    (program) => program.id === values.primaryProgramID
-                  )?.university?.isException,
-                  cpr: studentData.cprDoc,
-                  familyProofs:
-                    student?.getStudent?.familyIncomeProofDocs ?? [],
-                  transcript: checkStorageKeys[1],
-                  schoolCertificate: checkStorageKeys[0],
-                  primaryProgramAcceptanceLetter: checkStorageKeys[2],
-                })
-                  ? applicationIsEligible
-                    ? props.application?.status
-                    : Status.REVIEW
-                  : Status.NOT_COMPLETED,
-
-                studentCPR: `${student?.getStudent?.cpr}`,
-                universityID:
-                  props.programs?.find(
-                    (program) => program.id === values.primaryProgramID
-                  )?.university?.id ?? props.application?.universityID,
-                programID:
-                  values.primaryProgramID ?? props.application?.programID,
-                processed: props.application?.processed ?? 0,
-                familyIncome: student?.getStudent?.familyIncome,
-                nationalityCategory: student?.getStudent?.nationalityCategory,
-                studentName: student?.getStudent?.fullName,
-                _version: props.application?._version,
-                attachmentID: props.application?.attachmentID,
-                applicationAttachmentId:
-                  props.application?.applicationAttachmentId,
-              },
-              condition: undefined,
-            },
-            primaryProgram: {
-              input: {
-                id:
-                  props.application?.programs?.items.sort(
-                    (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
-                  )[0]?.id ?? "",
-                applicationID: props.application?.id ?? "",
-                choiceOrder: 1,
-                _version: props.application?.programs?.items.sort(
-                  (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
-                )[0]?._version,
-                programID: values.primaryProgramID ?? "",
-                applicationProgramsId: props.application?.id ?? "",
-                programApplicationsId: values.primaryProgramID ?? "",
-                acceptanceLetterDoc:
-                  storageKeys?.[2] ??
-                  (primaryProgram?.id === oldPrimaryProgram?.program?.id
-                    ? oldPrimaryProgram?.acceptanceLetterDoc
-                    : null) ??
-                  null,
-              },
-              condition: undefined,
-            },
-            attachment: {
-              input: {
-                id: props.application?.attachment?.id ?? "",
-                schoolCertificate:
-                  storageKeys?.[0] ??
-                  props.application?.attachment?.schoolCertificate,
-                transcriptDoc:
-                  storageKeys?.[1] ??
-                  props.application?.attachment?.transcriptDoc,
-                _version: props.application?.attachment?._version,
-              },
-              condition: undefined,
-            },
-            studentLog: {
-              input: {
-                id: undefined,
-                applicationID: props.application?.id ?? "",
-                studentCPR: user?.getUsername() ?? "",
-                dateTime: new Date().toISOString(),
-
-                snapshot: getStudentApplicationSnapshot({
-                  newApplication: newApplicationSnapshotInput,
-                  oldApplication: oldApplicationSnapshotInput,
-                }),
-
-                reason: values.reasonForUpdate,
-                _version: undefined,
-                applicationStudentLogsId: props.application?.id ?? "",
-              },
-              condition: undefined,
-            },
-          };
-
-          {
-            props.application
-              ? await toast.promise(updateApplicationProcess(updateValues), {
-                  loading: "Updating application...",
-                  success: "Application updated successfully",
-                  error: "Application update failed",
-                })
-              : await toast.promise(createApplicationProcess(createValues), {
-                  loading: "Creating application...",
-                  success: "Application created successfully",
-                  error: "Application creation failed",
-                });
-          }
-
-          actions.setSubmitting(false);
+          await toast.promise(handleSubmit({ values, actions }), {
+            loading: t("processing"),
+            success: t("proccessComplete"),
+            error: tErrors("somethingWentWrong"),
+          });
         }}
       >
         {({
@@ -708,6 +740,8 @@ export const ApplicationForm: FC<Props> = (props) => {
                 type="number"
                 name="gpa"
                 title="gpa"
+                min={88}
+                max={100}
                 placeholder="GPA (88 - 100)"
                 className={`input input-bordered input-primary ${
                   errors.gpa && touched.gpa && "input-error"
@@ -758,6 +792,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                           errors.primaryProgramID}
                       </label>
                     </div>
+
                     <Field
                       as="select"
                       name="primaryProgramID"
@@ -787,23 +822,29 @@ export const ApplicationForm: FC<Props> = (props) => {
                       >
                         {t("select")}
                       </option>
-                      {props.programs?.map((program) => (
-                        <option
-                          key={program?.id}
-                          value={program?.id}
-                          disabled={program?.isDeactivated === true}
-                        >
-                          {`${
-                            locale === "ar"
-                              ? program?.nameAr ?? "-"
-                              : program?.name
-                          }-${
-                            locale === "ar"
-                              ? program?.university?.nameAr ?? "-"
-                              : program?.university?.name
-                          }`}
-                        </option>
-                      ))}
+                      {props.programs
+                        ?.filter(
+                          (p) =>
+                            p.isDeactivated !== true ||
+                            p.id === oldPrimaryProgram?.program?.id
+                        )
+                        ?.map((program) => (
+                          <option
+                            key={program?.id}
+                            value={program?.id}
+                            disabled={program?.isDeactivated === true}
+                          >
+                            {`${
+                              locale === "ar"
+                                ? program?.nameAr ?? "-"
+                                : program?.name
+                            }-${
+                              locale === "ar"
+                                ? program?.university?.nameAr ?? "-"
+                                : program?.university?.name
+                            }`}
+                          </option>
+                        ))}
                     </Field>
                   </div>
                   {primaryProgram?.university?.isException === 1 && (

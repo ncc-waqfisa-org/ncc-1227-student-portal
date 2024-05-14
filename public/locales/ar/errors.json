@@ -1,5 +1,6 @@
 {
   "requiredField": "الحقل مطلوب",
+  "somethingWentWrong": "هناك خطأ ما",
   "passwordMustMatch": "كلمة المرور يجب ان تتطابق",
   "cprShouldBe9": "الرقم الشخصي يجب ان يكون ٩ ارقام",
   "minimumGPA": "الحد الأدنى للمعدل التراكمي هو",
