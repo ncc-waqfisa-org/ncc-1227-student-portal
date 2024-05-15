@@ -5,7 +5,7 @@ import SignatureCanvas from "react-signature-canvas";
 import { Scholarship } from "../../src/API";
 import { Skeleton } from "../Skeleton";
 import Link from "next/link";
-import PDFPreview from "./PDFViewer";
+// import PDFPreview from "./PDFViewer";
 import { Form, Formik } from "formik";
 
 import * as yup from "yup";
@@ -14,6 +14,7 @@ import { cn } from "../../src/lib/utils";
 
 import { useAuth } from "../../hooks/use-auth";
 import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 type TContract = {
   scholarship: Scholarship;
@@ -42,6 +43,7 @@ export const Contract: FC<TContract> = ({ scholarship }) => {
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const token = user?.getSignInUserSession()?.getAccessToken().getJwtToken();
+  const { locale } = useRouter();
 
   const { data: link, isPending: isLinkPending } = useQuery<string | null>({
     queryKey: [`applicationLink`],
@@ -51,15 +53,15 @@ export const Contract: FC<TContract> = ({ scholarship }) => {
   // The URL for the PDF file from the public folder
   if (isLinkPending) {
     return (
-      <div className="max-w-3xl mx-auto">
+      <div className="mx-auto max-w-3xl">
         <Skeleton className="w-full h-96 bg-slate-300/80" />
       </div>
     );
   }
 
   return (
-    <div className="container flex flex-col max-w-3xl gap-0 mx-auto bg-white border rounded-lg">
-      <div className="flex items-center justify-between p-4">
+    <div className="container flex flex-col gap-0 mx-auto max-w-3xl bg-white rounded-lg border">
+      <div className="flex justify-between items-center p-4">
         <p className="text-lg font-semibold">{t("reviewAndSign")}</p>
         {link && (
           <Link
@@ -79,10 +81,10 @@ export const Contract: FC<TContract> = ({ scholarship }) => {
         </div>
       )} */}
       {link && (
-        <div className="py-4 border-t ">
+        <div className="py-4 border-t">
           {/* <div className="py-4 border-t sm:hidden"> */}
           <Link
-            className="flex flex-col items-center gap-3 p-6 mx-auto font-mono duration-200 border rounded-md hover:bg-secondary/10 w-fit"
+            className="flex flex-col gap-3 items-center p-6 mx-auto font-mono rounded-md border duration-200 hover:bg-secondary/10 w-fit"
             href={link}
             target="_blank"
           >
@@ -118,6 +120,7 @@ export const Contract: FC<TContract> = ({ scholarship }) => {
                   {
                     method: "POST",
                     headers: {
+                      ...(locale && { "Accept-Language": locale }),
                       "Content-Type": "application/json",
                       ...(token && { Authorization: `Bearer ${token}` }),
                     },
@@ -152,17 +155,17 @@ export const Contract: FC<TContract> = ({ scholarship }) => {
           isSubmitting,
           isValid,
         }) => (
-          <Form className="flex flex-col items-start gap-3">
-            <div className="flex flex-wrap justify-center w-full gap-6 p-4 border-t sm:justify-between">
+          <Form className="flex flex-col gap-3 items-start">
+            <div className="flex flex-wrap gap-6 justify-center p-4 w-full border-t sm:justify-between">
               <div className="flex flex-col gap-3 w-fit">
-                <div className="flex items-center justify-between gap-1">
+                <div className="flex gap-1 justify-between items-center">
                   <p>{t("studentSignature")}</p>
                   <div
                     onClick={() => {
                       setFieldValue("studentSignature", "");
                       studentSignatureRef.current?.clear();
                     }}
-                    className="flex items-center gap-1 btn hover:bg-warning/30 btn-ghost btn-xs"
+                    className="flex gap-1 items-center btn hover:bg-warning/30 btn-ghost btn-xs"
                   >
                     <XIcon size={18} /> <p>{t("clear")}</p>
                   </div>
@@ -195,14 +198,14 @@ export const Contract: FC<TContract> = ({ scholarship }) => {
                 </div>
               </div>
               <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between gap-1">
+                <div className="flex gap-1 justify-between items-center">
                   <p>{t("guardianSignature")}</p>
                   <div
                     onClick={() => {
                       setFieldValue("guardianSignature", "");
                       guardianSignatureRef.current?.clear();
                     }}
-                    className="flex items-center gap-1 btn hover:bg-warning/30 btn-ghost btn-xs"
+                    className="flex gap-1 items-center btn hover:bg-warning/30 btn-ghost btn-xs"
                   >
                     <XIcon size={18} /> <p>{t("clear")}</p>
                   </div>

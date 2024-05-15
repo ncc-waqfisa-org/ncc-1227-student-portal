@@ -42,19 +42,20 @@ export default function ViewApplication({
 
           <tr>
             <td>{t("Status")}</td>
-            <td className="flex flex-wrap items-baseline gap-4">
+            <td className="flex flex-wrap gap-4 items-baseline">
               <div
                 className={cn(
                   "badge badge-warning w-fit",
-                  application.status === Status.REJECTED &&
-                    "!badge-error text-white",
+                  // application.status === Status.REJECTED &&
+                  //   "!badge-error text-white",
                   application.status === Status.APPROVED && "!badge-success"
                 )}
               >
                 {t(
                   `${
                     application.status === Status.ELIGIBLE ||
-                    application.status === Status.REVIEW
+                    application.status === Status.REVIEW ||
+                    application.status === Status.REJECTED
                       ? Status.REVIEW
                       : application.status
                   }`
@@ -64,7 +65,7 @@ export default function ViewApplication({
               {haveScholarship && (
                 <div className="w-fit">
                   <Link
-                    className="btn btn-ghost btn-sm text-success brightness-75 hover:bg-success/20"
+                    className="brightness-75 btn btn-ghost btn-sm text-success hover:bg-success/20"
                     href={`/scholarship`}
                   >
                     {t("goToScholarship")}
@@ -106,7 +107,7 @@ export default function ViewApplication({
                 </div>
               )}
               {primaryProgram?.program?.university?.isException !== 1 && (
-                <div className="flex items-center gap-4">
+                <div className="flex gap-4 items-center">
                   <p className="text-xs stat-desc">{t("acceptanceLetter")}</p>
                   <GetStorageLinkComponent
                     storageKey={primaryProgram?.acceptanceLetterDoc}

@@ -1,24 +1,11 @@
 import "yup-phone";
 import React, { useState } from "react";
-import { API, Auth, DataStore } from "aws-amplify";
-
-import * as mutations from "../../src/graphql/mutations";
 
 import {
-  CreateParentInfoMutation,
   CreateParentInfoMutationVariables,
-  CreateStudentMutation,
   CreateStudentMutationVariables,
-  DeleteParentInfoMutation,
-  DeleteParentInfoMutationVariables,
-  DeleteStudentMutation,
-  DeleteStudentMutationVariables,
 } from "../../src/API";
-import { GraphQLResult } from "@aws-amplify/api-graphql";
-import { SignUpParams } from "@aws-amplify/auth";
-import { ISignUpResult } from "amazon-cognito-identity-js";
 import toast from "react-hot-toast";
-import { useAuth } from "../../hooks/use-auth";
 import { useRouter } from "next/router";
 import { CreateStudentForm } from "./create-student-form";
 import { CreateParentsForm } from "./create-parents-form";
@@ -37,9 +24,9 @@ export interface CreateStudentFormValues {
 }
 
 export default function SignUpForm() {
-  const auth = useAuth();
   const router = useRouter();
   const { t } = useTranslation("signUp");
+  const { t: tToast } = useTranslation("toast");
   const [steps, setSteps] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -51,7 +38,6 @@ export default function SignUpForm() {
         fullName: undefined,
         email: undefined,
         phone: undefined,
-        // phone: "+973",
         gender: undefined,
         address: undefined,
         schoolName: undefined,
@@ -92,106 +78,6 @@ export default function SignUpForm() {
   const [createStudentFormValues, setCreateStudentFormValues] =
     useState<CreateStudentFormValues>(initialValues);
 
-  // async function createDatabaseParentInfo(
-  //   values: CreateStudentFormValues
-  // ): Promise<GraphQLResult<CreateParentInfoMutation> | null> {
-  //   let mutationInput: CreateParentInfoMutationVariables = values.parentInfo;
-
-  //   try {
-  //     const res: GraphQLResult<CreateParentInfoMutation> = (await API.graphql({
-  //       query: mutations.createParentInfo,
-  //       variables: mutationInput,
-  //     })) as GraphQLResult<CreateParentInfoMutation>;
-
-  //     return res;
-  //   } catch (error) {
-  //     console.log("createDatabaseParentInfo => error", error);
-  //     return null;
-  //   }
-  // }
-
-  // async function createDatabaseStudent(
-  //   values: CreateStudentFormValues
-  // ): Promise<GraphQLResult<CreateStudentMutation> | null> {
-  //   let mutationInput: CreateStudentMutationVariables = values.student;
-
-  //   try {
-  //     const res: GraphQLResult<CreateStudentMutation> = (await API.graphql({
-  //       query: mutations.createStudent,
-  //       variables: mutationInput,
-  //     })) as GraphQLResult<CreateStudentMutation>;
-
-  //     return res;
-  //   } catch (error) {
-  //     console.log("createDatabaseStudent => error", error);
-  //     return null;
-  //   }
-  // }
-
-  // async function createCognitoUser(
-  //   values: CreateStudentFormValues
-  // ): Promise<ISignUpResult | null> {
-  //   try {
-  //     const signUpPrams: SignUpParams = {
-  //       username: values.student.input.cpr,
-  //       password: values.password,
-  //       attributes: {
-  //         email: values.student.input.email,
-  //         // ! this cause problem when sign up with invalid format
-  //         // phone_number: values.student.input.phone,
-  //       },
-  //     };
-  //     const signUpResult = await Auth.signUp(signUpPrams);
-
-  //     return signUpResult;
-  //   } catch (error) {
-  //     console.log("createCognitoUser => error", error);
-  //     return null;
-  //   }
-  // }
-
-  // async function deleteParentInfo(createdParentInfo: CreateParentInfoMutation) {
-  //   let mutationInputs: DeleteParentInfoMutationVariables = {
-  //     input: {
-  //       id: `${createdParentInfo.createParentInfo?.id}`,
-  //       _version: createdParentInfo.createParentInfo?._version,
-  //     },
-  //   };
-
-  //   try {
-  //     let res = (await API.graphql({
-  //       query: mutations.deleteParentInfo,
-  //       variables: mutationInputs,
-  //     })) as GraphQLResult<DeleteParentInfoMutation>;
-
-  //     return res;
-  //   } catch (error) {
-  //     console.log("SignUpForm => deleteParentInfo => error", error);
-  //     return null;
-  //   }
-  // }
-
-  // async function deleteCreatedUser(createdDatabaseUser: CreateStudentMutation) {
-  //   let mutationInputs: DeleteStudentMutationVariables = {
-  //     input: {
-  //       cpr: `${createdDatabaseUser.createStudent?.cpr}`,
-  //       _version: createdDatabaseUser.createStudent?._version,
-  //     },
-  //   };
-
-  //   try {
-  //     let res = (await API.graphql({
-  //       query: mutations.deleteStudent,
-  //       variables: mutationInputs,
-  //     })) as GraphQLResult<DeleteStudentMutation>;
-
-  //     return res;
-  //   } catch (error) {
-  //     console.log("SignUpForm => deleteCreatedUser => error", error);
-  //     return null;
-  //   }
-  // }
-
   const signUpMutation = useMutation({
     mutationFn: (values: any) => {
       return fetch(
@@ -200,7 +86,7 @@ export default function SignUpForm() {
           method: "POST",
           body: JSON.stringify(values),
           headers: {
-            // "Accept-Language": locale,
+            ...(router.locale && { "Accept-Language": router.locale }),
             "Content-Type": "application/json",
           },
         }
@@ -210,52 +96,31 @@ export default function SignUpForm() {
       if (data.ok) {
         const { message } = await data.json();
 
-        // TODO: set user session
-        // auth.user?.setSignInUserSession
-
         toast.success(message);
 
         router.push({
           pathname: "/verify-email",
           query: { cpr: createStudentFormValues.student.input.cpr },
         });
-
-        // router.push({
-        //   pathname: "/signUp",
-        //   query: { cpr: createStudentFormValues.student.input.cpr },
-        // });
-        // toast("email need to be verified");
       } else {
         const { message } = await data.json();
         throw new Error(message);
-
-        // toast.error(message, { duration: 6000 });
       }
     },
     async onError(error) {
       throw new Error(error.message);
-
-      // toast.error(error.message, { duration: 6000 });
     },
   });
 
   async function signUpProcess(data: CreateStudentFormValues) {
     setIsLoading(true);
-    // let userAlreadyExists = await auth.checkIfCprExist(
-    //   createStudentFormValues.student.input.cpr.trim()
-    // );
 
-    // if (userAlreadyExists) {
-    //   throw new Error("User already exists CODE:00001");
-    // }
-
-    // const createdParentInfo = await createDatabaseParentInfo(data);
-
-    // if (createdParentInfo?.data == null) {
-    //   throw new Error("Error creating the user CODE:00002");
-    // }
     if (data.cprDoc == undefined) {
-      throw new Error("CprDoc is missing CODE:00003");
+      throw new Error(
+        `CODE:00003 ${
+          tToast("cprDocumentIsMissing") ?? "Cpr document is missing"
+        }`
+      );
     }
 
     const cprDocStorage = await uploadFile(
@@ -337,15 +202,9 @@ export default function SignUpForm() {
     };
 
     setCreateStudentFormValues(temp);
+
     //* Call Sign up lambda
     await signUpMutation.mutateAsync(dataToLambda);
-    // const message =;
-
-    // const res = {
-    //   ok: signUpMutation.data?.ok,
-    //   message: await signUpMutation.data?.json().then((ddd) => ddd.message),
-    // };
-    // return res;
   }
 
   return (
@@ -427,34 +286,11 @@ export default function SignUpForm() {
               ),
               {
                 loading: t("processing"),
-                // success: t("accountCreated"),
-                success: (res) => t("processComplete"),
+                success: t("processComplete"),
                 error: (error) => `${error.message}`,
               }
             )
           }
-          // onFormSubmit={async () => {
-          //   setIsLoading(true);
-          //   await toast
-          //     .promise(
-          //       signUpProcess(createStudentFormValues)
-          //         .then((val) => val)
-          //         .catch((error) => {
-          //
-          //           throw error;
-          //         }),
-          //       {
-          //         loading: "Creating your account...",
-          //         success: "Account created successfully",
-          //         error: (err) => {
-          //           return `${err}`;
-          //         },
-          //       }
-          //     )
-          //     .finally(() => {
-          //       setIsLoading(false);
-          //     });
-          // }}
         ></TermsAndConditions>
       )}
     </div>

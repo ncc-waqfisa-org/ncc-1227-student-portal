@@ -79,6 +79,7 @@ export const ApplicationForm: FC<Props> = (props) => {
   const { student, syncStudentApplication, batch } = useAppContext();
   const { t } = useTranslation("applicationPage");
   const { t: tErrors } = useTranslation("errors");
+  const { t: tToast } = useTranslation("toast");
 
   const studentData = student?.getStudent as Student;
 
@@ -125,7 +126,7 @@ export const ApplicationForm: FC<Props> = (props) => {
     setWithdrawing(true);
     let res = await updateApplicationInDB(tempApplicationVar);
     if (res === undefined) {
-      throw new Error("Failed to withdraw");
+      throw new Error(tToast("failedToWithdraw") ?? "Failed to withdraw");
     }
     await syncStudentApplication();
     setWithdrawing(false);
@@ -143,8 +144,12 @@ export const ApplicationForm: FC<Props> = (props) => {
     let createdAttachmentInDB = await createAttachmentInDB(data.attachment);
 
     if (createdAttachmentInDB === undefined) {
-      toast.error("Failed to create application");
-      return;
+      throw new Error(
+        `EA0005 ${
+          tToast("failedToCreateTheApplication") ??
+          "Failed to create the application"
+        }`
+      );
     }
 
     let tempApplicationVar: CreateApplicationMutationVariables = {
@@ -176,8 +181,12 @@ export const ApplicationForm: FC<Props> = (props) => {
     );
 
     if (createdApplicationInDB === undefined) {
-      toast.error("Failed to create application");
-      return;
+      throw new Error(
+        `EA0006 ${
+          tToast("failedToCreateTheApplication") ??
+          "Failed to create the application"
+        }`
+      );
     }
 
     let tempPrimaryProgramChoice: CreateProgramChoiceMutationVariables = {
@@ -216,8 +225,12 @@ export const ApplicationForm: FC<Props> = (props) => {
         push("/applications");
       })
       .catch((err) => {
-        console.log("Create program choice error", err);
-        toast.error("Something went wrong");
+        throw new Error(
+          `EA0007 ${
+            tToast("failedToCreateTheApplication") ??
+            "Failed to create the application"
+          }`
+        );
       });
   }
 
@@ -225,8 +238,12 @@ export const ApplicationForm: FC<Props> = (props) => {
     let updatedAttachmentInDB = await updateAttachmentInDB(data.attachment);
 
     if (updatedAttachmentInDB === undefined) {
-      toast.error("Failed to update application");
-      return;
+      throw new Error(
+        `EA0002 ${
+          tToast("failedToUpdateTheApplication") ??
+          "Failed to update the application"
+        }`
+      );
     }
 
     let tempApplicationVar: UpdateApplicationMutationVariables = {
@@ -254,8 +271,12 @@ export const ApplicationForm: FC<Props> = (props) => {
     );
 
     if (updatedApplicationInDB === undefined) {
-      toast.error("Failed to update application");
-      return;
+      throw new Error(
+        `EA0003 ${
+          tToast("failedToUpdateTheApplication") ??
+          "Failed to update the application"
+        }`
+      );
     }
 
     let tempPrimaryProgramChoice: UpdateProgramChoiceMutationVariables = {
@@ -281,8 +302,12 @@ export const ApplicationForm: FC<Props> = (props) => {
         push("/applications");
       })
       .catch((err) => {
-        console.log("Update program choice error", err);
-        toast.error("Something went wrong");
+        throw new Error(
+          `EA0004 ${
+            tToast("failedToUpdateTheApplication") ??
+            "Failed to update the application"
+          }`
+        );
       });
   }
 
@@ -328,43 +353,11 @@ export const ApplicationForm: FC<Props> = (props) => {
         return res;
       })
       .catch((error) => {
-        console.log("Upload error", error);
-        throw error;
+        throw new Error(
+          `EA0001 ${tToast("failedToUploadFiles") ?? "Failed to upload files"}`
+        );
       });
-    // let storageKeys = await toast.promise(
-    //   Promise.all([
-    //     schoolCertificate &&
-    //       uploadFile(
-    //         schoolCertificate,
-    //         DocType.SCHOOL_CERTIFICATE,
-    //         `${student?.getStudent?.cpr}`
-    //       ),
-    //     transcriptDoc &&
-    //       uploadFile(
-    //         transcriptDoc,
-    //         DocType.TRANSCRIPT,
-    //         `${student?.getStudent?.cpr}`
-    //       ),
-    //     primaryAcceptanceDoc &&
-    //       (await uploadFile(
-    //         primaryAcceptanceDoc,
-    //         DocType.PRIMARY_PROGRAM_ACCEPTANCE,
-    //         `${student?.getStudent?.cpr}`
-    //       )),
-    //   ])
-    //     .then((res) => {
-    //       return res;
-    //     })
-    //     .catch((error) => {
-    //       console.log("Upload error", error);
-    //       throw error;
-    //     }),
-    //   {
-    //     loading: "Uploading documents...",
-    //     success: "Documents uploaded successfully",
-    //     error: "Uploading documents failed",
-    //   }
-    // );
+
     // School certificate doc storage key
     checkStorageKeys[0] =
       storageKeys?.[0] !== undefined ? storageKeys[0] : checkStorageKeys[0];
@@ -609,17 +602,6 @@ export const ApplicationForm: FC<Props> = (props) => {
       props.application
         ? await updateApplicationProcess(updateValues)
         : await createApplicationProcess(createValues);
-      // props.application
-      //   ? await toast.promise(updateApplicationProcess(updateValues), {
-      //       loading: "Updating application...",
-      //       success: "Application updated successfully",
-      //       error: "Application update failed",
-      //     })
-      //   : await toast.promise(createApplicationProcess(createValues), {
-      //       loading: "Creating application...",
-      //       success: "Application created successfully",
-      //       error: "Application creation failed",
-      //     });
     }
 
     actions.setSubmitting(false);
@@ -679,7 +661,10 @@ export const ApplicationForm: FC<Props> = (props) => {
           await toast.promise(handleSubmit({ values, actions }), {
             loading: t("processing"),
             success: t("proccessComplete"),
-            error: tErrors("somethingWentWrong"),
+            error: (error) =>
+              error.message
+                ? `${error.message}`
+                : `EA0000 ${tErrors("somethingWentWrong")}`,
           });
         }}
       >
@@ -694,7 +679,7 @@ export const ApplicationForm: FC<Props> = (props) => {
           setFieldValue,
           setFieldError,
         }) => (
-          <Form className="container grid max-w-3xl grid-cols-1 gap-3 mx-auto md:grid-cols-2 ">
+          <Form className="container grid grid-cols-1 gap-3 mx-auto max-w-3xl md:grid-cols-2">
             {/* FullName */}
             <div className="flex flex-col justify-start w-full">
               <label className="label">{t("fullName")}</label>
@@ -729,7 +714,7 @@ export const ApplicationForm: FC<Props> = (props) => {
             <div className="divider md:col-span-2"></div>
             {/* GPA */}
             <div className="flex flex-col justify-start w-full md:col-span-2">
-              <div className="flex items-center justify-between">
+              <div className="flex justify-between items-center">
                 <label className="label">{t("studentGPA")}</label>
                 <label className="label-text-alt text-error">
                   {errors.gpa && touched.gpa && errors.gpa}
@@ -753,7 +738,7 @@ export const ApplicationForm: FC<Props> = (props) => {
               />
             </div>
             <div className="flex flex-col justify-start w-full md:col-span-2">
-              <div className="flex items-center justify-between">
+              <div className="flex justify-between items-center">
                 <label className="label">{t("reason")}</label>
                 <label className="label-text-alt text-error">
                   {errors.reason && touched.reason && errors.reason}
@@ -782,9 +767,9 @@ export const ApplicationForm: FC<Props> = (props) => {
             {/* Primary Program */}
             {
               <div className="flex flex-col justify-start w-full md:col-span-2">
-                <div className="grid items-end grid-cols-1 gap-3 md:grid-cols-2">
+                <div className="grid grid-cols-1 gap-3 items-end md:grid-cols-2">
                   <div className="w-full">
-                    <div className="flex items-center justify-between">
+                    <div className="flex justify-between items-center">
                       <label className="label">{t("program")}</label>
                       <label className="label-text-alt text-error">
                         {errors.primaryProgramID &&
@@ -848,8 +833,8 @@ export const ApplicationForm: FC<Props> = (props) => {
                     </Field>
                   </div>
                   {primaryProgram?.university?.isException === 1 && (
-                    <div className="flex flex-col items-center justify-end h-full">
-                      <p className="w-full px-4 py-3 text-center border rounded-md border-secondary">
+                    <div className="flex flex-col justify-end items-center h-full">
+                      <p className="px-4 py-3 w-full text-center rounded-md border border-secondary">
                         {/* Acceptance letter not required */}
                         {t("acceptanceLetterNotRequired")}
                       </p>
@@ -936,7 +921,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                 )}
                 {(primaryProgram?.requirements ||
                   primaryProgram?.requirementsAr) && (
-                  <div className="p-3 mt-2 border border-gray-300 rounded-md">
+                  <div className="p-3 mt-2 rounded-md border border-gray-300">
                     <div className="stat-title">{t("requirements")}</div>
                     <label className="whitespace-pre-wrap stat-desc">
                       {locale == "ar"
@@ -1108,7 +1093,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                 props.application.status === Status.NOT_COMPLETED) && (
                 <label
                   htmlFor="my-modal"
-                  className="mx-auto btn btn-ghost hover:bg-error/20 btn-xs w-min text-error md:col-span-2 btn-error"
+                  className="mx-auto w-min btn btn-ghost hover:bg-error/20 btn-xs text-error md:col-span-2 btn-error"
                 >
                   {t("withdraw")}
                 </label>

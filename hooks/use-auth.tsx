@@ -14,6 +14,7 @@ import { API, graphqlOperation } from "aws-amplify";
 import { GetStudentQuery } from "../src/API";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 Auth.configure({ ...config, ssr: true });
 
@@ -66,6 +67,7 @@ function useProvideAuth() {
   );
 
   const { push } = useRouter();
+  const { t } = useTranslation("toast");
 
   const token =
     user?.getSignInUserSession()?.getAccessToken().getJwtToken() ?? undefined;
@@ -194,7 +196,8 @@ function useProvideAuth() {
             setUser(cognitoUser);
             return cognitoUser;
           } else {
-            throw new Error("CPR does not exist");
+            throw new Error(t("cprDoesNotExist") ?? "cpr does not exist");
+            // throw new Error("CPR does not exist");
           }
         })
         .catch((e) => {
@@ -205,12 +208,16 @@ function useProvideAuth() {
           }
         }),
       {
-        loading: "Signing in...",
+        loading: t("signingIn") ?? "Signing in...",
         success: (authUser) => {
-          return `${authUser?.getUsername()} Successfully signed in`;
+          return `${authUser?.getUsername()} ${
+            t("successfullySignedIn") ?? "Successfully signed in"
+          }`;
         },
         error: (error) => {
-          return `${error ? error.message : "Error signing in"}`;
+          return `${
+            error ? error.message : t("errorSigningIn") ?? "Error signing in"
+          }`;
         },
       }
     );
@@ -225,8 +232,8 @@ function useProvideAuth() {
         setUser(undefined);
       }),
       {
-        loading: "Signing Out...",
-        success: "Signed out",
+        loading: t("signingOut") ?? "Signing Out...",
+        success: t("signedOut") ?? "Signed out",
         error: (error) => {
           return `${error?.message}`;
         },

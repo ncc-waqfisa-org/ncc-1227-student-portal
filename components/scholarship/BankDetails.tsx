@@ -32,6 +32,7 @@ export const BankDetails: FC<TBankDetails> = ({ scholarship }) => {
 
   const { t } = useTranslation("scholarships");
   const { t: tErrors } = useTranslation("errors");
+  const { t: tToast } = useTranslation("toast");
   const queryClient = useQueryClient();
 
   const { cpr } = useAuth();
@@ -58,7 +59,7 @@ export const BankDetails: FC<TBankDetails> = ({ scholarship }) => {
           queryKey: [`scholarships/${scholarship.id}`],
         });
       } else {
-        throw Error("Failed to submit");
+        throw Error(`EB0001 ${tToast("failedToSubmit") ?? "Failed to submit"}`);
       }
     },
     async onError(error) {
@@ -71,7 +72,7 @@ export const BankDetails: FC<TBankDetails> = ({ scholarship }) => {
     IBAN: string;
   }) {
     if (!cpr) {
-      throw Error("User undefined");
+      throw Error(`EB0002 ${tToast("failedToSubmit") ?? "Failed to submit"}`);
     }
 
     const ibanLetterDocStorage = await uploadFile(
@@ -82,7 +83,9 @@ export const BankDetails: FC<TBankDetails> = ({ scholarship }) => {
 
     if (!ibanLetterDocStorage) {
       throw Error(
-        t("failedToUploadDocument") ?? "Failed to upload the document"
+        `EB0003 ${
+          tToast("failedToUploadFiles") ?? "Failed to upload the document"
+        }`
       );
     }
 
@@ -98,7 +101,7 @@ export const BankDetails: FC<TBankDetails> = ({ scholarship }) => {
   }
 
   return (
-    <div className="flex flex-col max-w-3xl gap-4 mx-auto">
+    <div className="flex flex-col gap-4 mx-auto max-w-3xl">
       <h3 className="text-xl font-medium">{t("bankDetails")}</h3>
       <Formik
         initialValues={initialValues}
@@ -110,7 +113,6 @@ export const BankDetails: FC<TBankDetails> = ({ scholarship }) => {
               error: (error) => `${error.message}`,
             });
           } catch (error) {
-            console.log("🚀 ~ onSubmit={ ~ error:", error);
             if (error instanceof Error) {
               toast.error(`Error: ${error.message}`);
             } else {
@@ -204,7 +206,7 @@ export const BankDetails: FC<TBankDetails> = ({ scholarship }) => {
             </div>
 
             <button
-              className={cn("my-3 text-white  btn btn-primary")}
+              className={cn("my-3 text-white btn btn-primary")}
               type="submit"
               disabled={
                 updateBankDetailsMutation.isPending ||

@@ -17,6 +17,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     props: {
       ...(await serverSideTranslations(locale ?? "en", [
         "common",
+        "toast",
         "errors",
         "signIn",
       ])),
@@ -37,6 +38,7 @@ interface IForgetPasswordOTPForm {
 const ForgetPassword: NextPage<Props> = () => {
   const { t } = useTranslation("signIn");
   const { t: tErrors } = useTranslation("errors");
+  const { t: tToast } = useTranslation("toast");
   const auth = useAuth();
   const initialValues: IForgetPasswordForm = {
     cpr: "",
@@ -54,7 +56,7 @@ const ForgetPassword: NextPage<Props> = () => {
   return (
     <div>
       <PageComponent title={t("forgetPassword")}>
-        <div className="container max-w-sm mx-auto">
+        <div className="container mx-auto max-w-sm">
           {!showOTP && (
             <Formik
               initialValues={initialValues}
@@ -75,7 +77,9 @@ const ForgetPassword: NextPage<Props> = () => {
                       }
                     });
                   } else {
-                    toast.error("CPR does not exist");
+                    toast.error(
+                      tToast("cprDoesNotExist") ?? "CPR does not exist"
+                    );
                   }
                 });
               }}
@@ -98,7 +102,7 @@ const ForgetPassword: NextPage<Props> = () => {
 
                   <button
                     type="submit"
-                    className={`btn btn-primary `}
+                    className={`btn btn-primary`}
                     disabled={isSubmitting || !isValid}
                   >
                     {isSubmitting && <span className="loading"></span>}
@@ -179,7 +183,7 @@ const ForgetPassword: NextPage<Props> = () => {
 
                   <button
                     type="submit"
-                    className={`btn btn-primary `}
+                    className={`btn btn-primary`}
                     disabled={isSubmitting || !isValid}
                   >
                     {isSubmitting && <span className="loading"></span>}

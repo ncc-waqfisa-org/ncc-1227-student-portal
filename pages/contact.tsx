@@ -12,6 +12,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     props: {
       ...(await serverSideTranslations(locale ?? "en", [
         "common",
+        "toast",
         "footer",
         "pageTitles",
         "signIn",
@@ -33,7 +34,6 @@ const ContactPage = () => {
             <h4>{t("email")}</h4>
             <a href="mailto:info@waqfisa.bh">info@waqfisa.bh</a>
           </div>
-       
         </div>
       </PageComponent>
     </div>

@@ -7,7 +7,7 @@ import {
   Student,
   UpdateStudentMutationVariables,
 } from "../../src/API";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikHelpers } from "formik";
 import * as yup from "yup";
 import "yup-phone";
 import { updateStudentInDB, uploadFile, DocType } from "../../src/CustomAPI";
@@ -51,6 +51,7 @@ export default function ViewAccount({ student }: Props) {
   const { syncStudent, editingApplicationsEnabled } = useAppContext();
   const { t } = useTranslation("account");
   const { t: tErrors } = useTranslation("errors");
+  const { t: tToast } = useTranslation("toast");
 
   const [familyIncomeProofDocsFile, setFamilyIncomeProofDocsFile] = useState<
     File[]
@@ -82,12 +83,60 @@ export default function ViewAccount({ student }: Props) {
   async function updateProcess(inputs: UpdateStudentMutationVariables) {
     return await updateStudentInDB(inputs).then(async (value) => {
       if (value === undefined) {
-        throw new Error("Failed to update");
+        throw new Error(tToast("failedToUpdate") ?? "Failed to update");
       }
       await syncStudent();
 
       return value;
     });
+  }
+
+  async function handleSubmit({
+    values,
+    actions,
+  }: {
+    values: FormValues;
+    actions: FormikHelpers<FormValues>;
+  }) {
+    const cprDocStorage = cprDoc
+      ? await uploadFile(cprDoc, DocType.CPR, student.cpr)
+      : student.cprDoc;
+
+    const storageKeys =
+      familyIncomeProofDocsFile.length > 0
+        ? await Promise.all([
+            ...familyIncomeProofDocsFile.map((f, index) =>
+              uploadFile(f, DocType.FAMILY_INCOME_PROOF, student.cpr, index)
+            ),
+          ])
+        : student.familyIncomeProofDocs;
+
+    let updateVars: UpdateStudentMutationVariables = {
+      input: {
+        cpr: student.cpr,
+        cprDoc: cprDocStorage,
+        phone: values.phone,
+        fullName: values.fullName,
+        gender: values.gender,
+        schoolName: values.schoolName,
+        schoolType: values.schoolType,
+        specialization: values.specialization,
+        placeOfBirth: values.placeOfBirth,
+        nationality: values.nationalityCategory?.toString(),
+        nationalityCategory: values.nationalityCategory,
+        studentOrderAmongSiblings: values.studentOrderAmongSiblings,
+        familyIncome: values.familyIncome,
+        familyIncomeProofDocs: storageKeys,
+        preferredLanguage: values.preferredLanguage,
+        graduationDate: values.graduationDate,
+        address: values.address,
+        _version: student._version,
+      },
+    };
+
+    await updateProcess(updateVars);
+
+    actions.setSubmitting(false);
   }
 
   return (
@@ -120,71 +169,19 @@ export default function ViewAccount({ student }: Props) {
         graduationDate: yup.date().required(`${tErrors("requiredField")}`),
       })}
       onSubmit={async (values, actions) => {
-        const cprDocStorage = cprDoc
-          ? await toast.promise(uploadFile(cprDoc, DocType.CPR, student.cpr), {
-              loading: "Uploading...",
-              success: "CPR uploaded successfully",
-              error: (err) => {
-                return `${err.message}`;
-              },
-            })
-          : student.cprDoc;
-
-        const storageKeys =
-          familyIncomeProofDocsFile.length > 0
-            ? await toast.promise(
-                Promise.all([
-                  ...familyIncomeProofDocsFile.map((f, index) =>
-                    uploadFile(
-                      f,
-                      DocType.FAMILY_INCOME_PROOF,
-                      student.cpr,
-                      index
-                    )
-                  ),
-                ]),
-                {
-                  loading: "Uploading...",
-                  success: "Family income proofs uploaded successfully",
-                  error: (err) => {
-                    return `${err.message}`;
-                  },
-                }
-              )
-            : student.familyIncomeProofDocs;
-
-        let updateVars: UpdateStudentMutationVariables = {
-          input: {
-            cpr: student.cpr,
-            cprDoc: cprDocStorage,
-            phone: values.phone,
-            fullName: values.fullName,
-            gender: values.gender,
-            schoolName: values.schoolName,
-            schoolType: values.schoolType,
-            specialization: values.specialization,
-            placeOfBirth: values.placeOfBirth,
-            nationality: values.nationalityCategory?.toString(),
-            nationalityCategory: values.nationalityCategory,
-            studentOrderAmongSiblings: values.studentOrderAmongSiblings,
-            familyIncome: values.familyIncome,
-            familyIncomeProofDocs: storageKeys,
-            preferredLanguage: values.preferredLanguage,
-            graduationDate: values.graduationDate,
-            address: values.address,
-            _version: student._version,
-          },
-        };
-
-        await toast.promise(updateProcess(updateVars), {
-          loading: "Updating...",
-          success: "Updated successfully",
-          error: (err) => {
-            return `${err.message}`;
-          },
-        });
-
-        actions.setSubmitting(false);
+        await toast
+          .promise(handleSubmit({ values, actions }), {
+            loading: tToast("processing") ?? "Updating...",
+            success: tToast("processComplete") ?? "Updated successfully",
+            error: (err) => {
+              return err.message
+                ? `${err.message}`
+                : tToast("failedToUpdate") ?? "Failed to update";
+            },
+          })
+          .finally(() => {
+            actions.setSubmitting(false);
+          });
       }}
     >
       {({
@@ -198,7 +195,7 @@ export default function ViewAccount({ student }: Props) {
         setFieldError,
         setFieldValue,
       }) => (
-        <Form className="container grid items-end max-w-3xl grid-cols-1 gap-3 mx-auto md:grid-cols-2">
+        <Form className="container grid grid-cols-1 gap-3 items-end mx-auto max-w-3xl md:grid-cols-2">
           {/* CPR */}
           <div className="flex flex-col justify-start w-full">
             <label className="label">{t("studentCPR")}</label>
@@ -208,7 +205,7 @@ export default function ViewAccount({ student }: Props) {
               name="cpr"
               title="cpr"
               placeholder="CPR"
-              className={`input input-bordered input-primary `}
+              className={`input input-bordered input-primary`}
               onChange={handleChange}
               onBlur={handleBlur}
               disabled
@@ -243,7 +240,10 @@ export default function ViewAccount({ student }: Props) {
                     setCprDoc(file);
                     handleChange(event);
                   } else {
-                    setFieldError("cprDoc", "File is too large");
+                    setFieldError(
+                      "cprDoc",
+                      tToast("fileIsTooLarge") ?? "File is too large"
+                    );
                   }
                 }}
                 onBlur={handleBlur}
@@ -274,19 +274,6 @@ export default function ViewAccount({ student }: Props) {
           {/* Phone */}
           <div className="flex flex-col justify-start w-full">
             <label className="label">{t("phone")}</label>
-            {/* <Field
-              dir="ltr"
-              type="phone"
-              name="phone"
-              title="phone"
-              placeholder="Phone (+973)"
-              className={`input input-bordered input-primary ${
-                errors.phone && "input-error"
-              }`}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.phone}
-            /> */}
             <PhoneNumberInput
               dir="ltr"
               type="phone"
@@ -348,8 +335,8 @@ export default function ViewAccount({ student }: Props) {
               <option disabled selected value={undefined}>
                 Select
               </option>
-              <option value={Gender.MALE}>Male</option>
-              <option value={Gender.FEMALE}>Female</option>
+              <option value={Gender.MALE}>Male-ذكر</option>
+              <option value={Gender.FEMALE}>Female-أنثى</option>
             </Field>
             <label className="label-text-alt text-error">
               {errors.gender && touched.gender && errors.gender}
@@ -506,19 +493,6 @@ export default function ViewAccount({ student }: Props) {
                 {t(Nationality.NON_BAHRAINI)}
               </option>
             </Field>
-            {/* <Field
-              dir="ltr"
-              type="text"
-              name="nationalityCategory"
-              title="nationalityCategory"
-              placeholder="nationality"
-              className={`input input-bordered input-primary ${
-                errors.nationalityCategory && "input-error"
-              }`}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.nationalityCategory}
-            /> */}
             <label className="label-text-alt text-error">
               {errors.nationalityCategory &&
                 touched.nationalityCategory &&
@@ -532,6 +506,7 @@ export default function ViewAccount({ student }: Props) {
             <Field
               dir="ltr"
               type="number"
+              min={1}
               name="studentOrderAmongSiblings"
               title="studentOrderAmongSiblings"
               placeholder="Student Order Among Siblings"
@@ -577,30 +552,6 @@ export default function ViewAccount({ student }: Props) {
                 {t("moreThan1500")}
               </option>
             </Field>
-            {/* <Field
-              dir="ltr"
-              as="select"
-              name="familyIncome"
-              title="familyIncome"
-              placeholder="Preferred Language"
-              className={`input input-bordered input-primary ${
-                errors.familyIncome && "input-error"
-              }`}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.familyIncome}
-            >
-              <option disabled selected value={undefined}>
-                Select
-              </option>
-
-              <option value={FamilyIncome.LESS_THAN_500}>Less than 500</option>
-              <option value={FamilyIncome.BETWEEN_500_AND_700}>500-700</option>
-              <option value={FamilyIncome.BETWEEN_700_AND_1000}>
-                700-1000
-              </option>
-              <option value={FamilyIncome.OVER_1000}>More than 1000</option>
-            </Field> */}
             <label className="label-text-alt text-error">
               {errors.familyIncome &&
                 touched.familyIncome &&
@@ -649,8 +600,8 @@ export default function ViewAccount({ student }: Props) {
               <option disabled selected value={undefined}>
                 Select
               </option>
-              <option value={Language.ARABIC}>Arabic</option>
-              <option value={Language.ENGLISH}>English</option>
+              <option value={Language.ARABIC}>Arabic-العربية</option>
+              <option value={Language.ENGLISH}>English-الانجليزية</option>
             </Field>
             <label className="label-text-alt text-error">
               {errors.preferredLanguage &&

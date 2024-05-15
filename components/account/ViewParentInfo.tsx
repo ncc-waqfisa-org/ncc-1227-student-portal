@@ -32,6 +32,7 @@ export default function ViewParentInfo({ parentInfo }: Props) {
   const { syncStudent, editingApplicationsEnabled } = useAppContext();
   const { t } = useTranslation("account");
   const { t: tErrors } = useTranslation("errors");
+  const { t: tToast } = useTranslation("toast");
 
   let initialValues: FormValues = {
     guardianFullName: parentInfo.guardianFullName,
@@ -116,10 +117,12 @@ export default function ViewParentInfo({ parentInfo }: Props) {
         };
 
         await toast.promise(updateProcess(updateVars), {
-          loading: "Updating...",
-          success: "Updated successfully",
+          loading: tToast("processing") ?? "Updating...",
+          success: tToast("processComplete") ?? "Updated successfully",
           error: (err) => {
-            return `${err.message}`;
+            return err.message
+              ? `${err.message}`
+              : tToast("processFailed") ?? "Failed to update";
           },
         });
 
@@ -136,7 +139,7 @@ export default function ViewParentInfo({ parentInfo }: Props) {
         isValid,
         setFieldValue,
       }) => (
-        <Form className="container grid max-w-3xl grid-cols-1 gap-3 mx-auto md:grid-cols-2">
+        <Form className="container grid grid-cols-1 gap-3 mx-auto max-w-3xl md:grid-cols-2">
           {/* guardianFullName */}
           <div className="flex flex-col justify-start w-full">
             <label className="label">{t("guardianName")}</label>

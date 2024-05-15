@@ -20,9 +20,10 @@ import { getStudent } from "../src/graphql/queries";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { getCurrentBatch, getStudentApplications } from "../src/CustomAPI";
 import { Crisp } from "crisp-sdk-web";
-
+import { GraphQLError } from "graphql";
 import dayjs from "dayjs";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 // interface for all the values & functions
 interface IUseAppContext {
@@ -30,7 +31,6 @@ interface IUseAppContext {
   studentAsStudent: Student | undefined;
   applications: Application[];
   haveActiveApplication: boolean;
-
   syncStudentApplication: () => Promise<void>;
   syncStudent: () => Promise<void>;
   resetContext: () => void;
@@ -96,7 +96,14 @@ function useProviderApp() {
         })
         .catch((error) => {
           console.log(error);
-
+          if (error.errors[0] instanceof GraphQLError) {
+            const graphQLError: GraphQLError = error.errors[0];
+            if (graphQLError.message === "Network Error") {
+              toast.error(graphQLError.message);
+              return null;
+              // throw new Error(graphQLError.message);
+            }
+          }
           return null;
         }),
   });
@@ -234,7 +241,6 @@ function useProviderApp() {
     studentAsStudent,
     applications,
     haveActiveApplication,
-
     syncStudentApplication,
     syncStudent,
     resetContext,

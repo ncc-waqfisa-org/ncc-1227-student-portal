@@ -23,6 +23,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     props: {
       ...(await serverSideTranslations(locale ?? "en", [
         "common",
+        "toast",
         "footer",
         "pageTitles",
         "applicationPage",
@@ -43,6 +44,7 @@ const NewApplicationPage: FC<Props> = (props) => {
     useAppContext();
 
   const { t } = useTranslation("applicationPage");
+
   return (
     <PageComponent title={t("newApplication")} authRequired>
       {newApplicationsEnabled ? (
@@ -62,7 +64,7 @@ const NewApplicationPage: FC<Props> = (props) => {
       ) : dayjs().isAfter(
           dayjs(batch?.createApplicationEndDate).endOf("day")
         ) ? (
-        <div className="flex flex-wrap justify-center gap-10">
+        <div className="flex flex-wrap gap-10 justify-center">
           <CardInfoComponent
             icon={info}
             title={"Applying"}
@@ -75,7 +77,7 @@ const NewApplicationPage: FC<Props> = (props) => {
           ></CardInfoComponent>
         </div>
       ) : (
-        <div className="flex flex-wrap justify-center gap-10">
+        <div className="flex flex-wrap gap-10 justify-center">
           <CardInfoComponent
             icon={info}
             title={"التقديم"}

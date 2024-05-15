@@ -1,0 +1,21 @@
+{
+  "cprDoesNotExist": "الرقم الشخصي غير موجود",
+  "signingIn": "جاري تسجيل الدخول...",
+  "successfullySignedIn": "تم تسجيل الدخول بنجاح",
+  "errorSigningIn": "خطأ في تسجيل الدخول",
+  "signedOut": "تم تسجيل الخروج",
+  "signingOut": "تسجيل خروج...",
+  "sendingVerificationCode": "جارٍ إرسال رمز التحقق...",
+  "verificationCodeHasBeenSent": "تم إرسال رمز التحقق",
+  "verifying": "جارٍ التحقق...",
+  "accountVerified": "تم التحقق من الحساب!",
+  "errorVerifyingAccount": "خطأ في التحقق من الحساب",
+  "cprDocumentIsMissing": "مستند الرقم الشخصي مفقود",
+  "failedToUpdate": "اخفاق التحديث",
+  "fileIsTooLarge": "الملف كبير جدا",
+  "failedToWithdraw": "فشل في الانسحاب",
+  "failedToUploadFiles": "فشل رفع الملفات",
+  "failedToUpdateTheApplication": "فشل في تحديث التطبيق",
+  "failedToCreateTheApplication": "فشل في إنشاء التطبيق",
+  "failedToSubmit": "فشل الإرسال"
+}

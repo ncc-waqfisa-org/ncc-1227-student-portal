@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import arLocale from "dayjs/locale/ar";
 import enLocale from "dayjs/locale/en";
 import { Skeleton } from "./Skeleton";
+import ErrorComponent from "./ErrorComponent";
 
 interface Props {
   comeBack?: boolean;
@@ -49,7 +50,12 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
           </div>
         </div>
       )}
-      {!isBatchPending && (
+      {!isBatchPending && !batch && (
+        <div>
+          <ErrorComponent />
+        </div>
+      )}
+      {!isBatchPending && batch && (
         <div className="flex flex-col gap-10 mx-auto">
           <h1 className="text-3xl font-semibold text-center text-gray-900">
             {t("availableServices")}

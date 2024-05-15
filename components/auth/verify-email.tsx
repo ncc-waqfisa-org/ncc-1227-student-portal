@@ -29,6 +29,7 @@ export const VerifyEmail = () => {
 
   const { t } = useTranslation("signUp");
   const { t: tErrors } = useTranslation("errors");
+  const { t: tToast } = useTranslation("toast");
   const { push, query } = useRouter();
   const { user } = useAuth();
 
@@ -86,8 +87,11 @@ export const VerifyEmail = () => {
     if (cpr) {
       await toast
         .promise(Auth.resendSignUp(cpr), {
-          loading: "Sending verification code...",
-          success: "Verification code has been sent",
+          loading:
+            tToast("sendingVerificationCode") ?? "Sending verification code...",
+          success:
+            tToast("verificationCodeHasBeenSent") ??
+            "Verification code has been sent",
           error: (error) => {
             return `${error.message}`;
           },
@@ -118,49 +122,12 @@ export const VerifyEmail = () => {
     return res.data?.getStudent?.email ?? null;
   }
 
-  /**
-   * Call an AWS Lambda function using the SDK
-   */
-  async function callLambdaFunction() {
-    console.log("called");
-    try {
-      // const response = await API.post(
-      //   "d8m1yp9dff",
-      //   "/updateStudentEmail-staging",
-      //   {
-      //     body: { cpr: "000000002", newEmail: "mukhtar.fthm@gmail.com" },
-      //   }
-      // )
-      const response = await fetch("/api/changeEmail", {
-        method: "POST",
-        body: JSON.stringify({
-          cpr: "000000002",
-          newEmail: "mukhtar.fthm@gmail.com",
-        }),
-      })
-        .then((val) => {
-          console.log(val);
-
-          return val.json();
-        })
-        .catch((err) => {
-          console.log(err);
-          return null;
-        });
-
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   return loading ? (
     <AppLoader></AppLoader>
   ) : (
     <div className="flex flex-col gap-3">
-      {/* <Button onClick={() => callLambdaFunction()}>click me</Button> */}
-      <h2>
-        {t("verificationCode")}{" "}
+      <h2 className="flex flex-wrap gap-1 items-center">
+        {t("verificationCode")}
         <span className="text-goblin-500">{partialEmail}</span>
       </h2>
 
@@ -172,19 +139,25 @@ export const VerifyEmail = () => {
         onSubmit={(values, actions) => {
           if (cpr) {
             try {
-              // toast.promise(
-              // Auth.verifyCurrentUserAttributeSubmit("email", values.code),
-              // {
               toast.promise(Auth.confirmSignUp(cpr, values.code), {
-                loading: "Verifying...",
+                loading: tToast("verifying") ?? "Verifying...",
                 success: () => {
                   push("/signIn");
-                  return <b>Account verified!</b>;
+                  return tToast("accountVerified") ?? "Account verified!";
                 },
                 error: (error) => error.message,
               });
             } catch (error) {
-              toast.error("Error verifying account");
+              if (error instanceof Error) {
+                toast.error(
+                  error.message ??
+                    tToast("errorVerifyingAccount") ??
+                    "Error verifying account"
+                );
+              }
+              toast.error(
+                tToast("errorVerifyingAccount") ?? "Error verifying account"
+              );
             }
             actions.setSubmitting(false);
           }
@@ -200,7 +173,7 @@ export const VerifyEmail = () => {
           isValid,
         }) => (
           <div dir="ltr" className="">
-            <Form className="flex flex-wrap items-start gap-3 ">
+            <Form className="flex flex-wrap gap-3 items-start">
               {/* Code field */}
               <div className="flex flex-col">
                 <Field

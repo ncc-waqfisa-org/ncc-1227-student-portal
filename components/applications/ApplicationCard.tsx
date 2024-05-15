@@ -28,11 +28,10 @@ export const ApplicationCard: FC<IApplicationCard> = ({
         href={`../applications/${application.id}`}
         className={`pt-6 shadow card  ${
           (application.status === Status.REVIEW ||
-            application.status === Status.ELIGIBLE) &&
+            application.status === Status.ELIGIBLE ||
+            application.status === Status.REJECTED) &&
           "bg-warning"
-        } ${application.status === Status.REJECTED && "bg-error"} ${
-          application.status === Status.APPROVED && "bg-success"
-        } ${
+        } ${application.status === Status.APPROVED && "bg-success"} ${
           (application.status === Status.WITHDRAWN ||
             application.status === Status.NOT_COMPLETED) &&
           "bg-neutral"
@@ -41,19 +40,20 @@ export const ApplicationCard: FC<IApplicationCard> = ({
       >
         <div className="p-4 bg-white min-h-[15rem] pt-10 card gap-4 flex flex-col justify-between">
           {/* Status */}
-          <div className="flex flex-wrap items-baseline justify-between">
+          <div className="flex flex-wrap justify-between items-baseline">
             <h3 className="text-xl font-semibold">
               {t(
                 `${
                   application.status === Status.ELIGIBLE ||
-                  application.status === Status.REVIEW
+                  application.status === Status.REVIEW ||
+                  application.status === Status.REJECTED
                     ? Status.REVIEW
                     : application.status
                 }`
               )}
             </h3>
             {/* Submit Date */}
-            <div className=" stat-desc">
+            <div className="stat-desc">
               {t("submitDate")}{" "}
               {Intl.DateTimeFormat(locale).format(
                 new Date(application.createdAt)
@@ -62,7 +62,7 @@ export const ApplicationCard: FC<IApplicationCard> = ({
           </div>
           {/* Programs */}
           <div>
-            <div className="mb-2 -mt-2 text-sm stat-title">
+            <div className="-mt-2 mb-2 text-sm stat-title">
               {t("selectedPrograms")}
             </div>
             {application.programs?.items.map((program) => (
@@ -78,8 +78,8 @@ export const ApplicationCard: FC<IApplicationCard> = ({
             ))}
           </div>
           {/* Attachments */}
-          <div className="p-3 border border-gray-200 rounded-xl">
-            <div className="flex gap-2 mb-2 -mt-2 text-sm stat-title ">
+          <div className="p-3 rounded-xl border border-gray-200">
+            <div className="flex gap-2 -mt-2 mb-2 text-sm stat-title">
               {t("uploadedAttachments")}{" "}
               {(student.cprDoc === (undefined || null) ||
                 (student.familyIncomeProofDocs ?? [])?.length === 0 ||
@@ -142,9 +142,10 @@ export const ApplicationCard: FC<IApplicationCard> = ({
       <div
         className={`absolute flex items-center justify-center w-12 h-12 border-2 border-white rounded-full top-2 left-2 ${
           (application.status === Status.REVIEW ||
-            application.status === Status.ELIGIBLE) &&
+            application.status === Status.ELIGIBLE ||
+            application.status === Status.REJECTED) &&
           "bg-warning"
-        } ${application.status === Status.REJECTED && "bg-error"} ${
+        } ${
           (application.status === Status.WITHDRAWN ||
             application.status === Status.NOT_COMPLETED) &&
           "bg-neutral"
