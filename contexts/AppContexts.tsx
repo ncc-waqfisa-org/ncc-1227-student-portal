@@ -47,7 +47,6 @@ const defaultState: IUseAppContext = {
   studentAsStudent: undefined,
   applications: [],
   haveActiveApplication: false,
-
   syncStudentApplication: async () => {},
   syncStudent: async () => {},
   resetContext: async () => {},

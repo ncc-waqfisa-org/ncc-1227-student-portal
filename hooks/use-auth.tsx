@@ -5,6 +5,7 @@ import {
   createContext,
   PropsWithChildren,
   FC,
+  useCallback,
 } from "react";
 import { Auth, CognitoUser } from "@aws-amplify/auth";
 import config from "../src/aws-exports";
@@ -72,16 +73,6 @@ function useProvideAuth() {
     user?.getSignInUserSession()?.getAccessToken().payload?.username ??
     undefined;
 
-  useEffect(() => {
-    // NOTE: check for user or risk an infinite loop
-    if (!user) {
-      // On component mount
-      // If a user cookie exists
-      // reset the user to it
-      getAuthUser();
-    }
-  }, [user]);
-
   /**
    * It checks if a CPR number is already in use by a student
    * @param {string} cpr - string - The CPR number of the student
@@ -133,7 +124,7 @@ function useProvideAuth() {
     }
   }
 
-  async function checkAuthUser(user: CognitoUser): Promise<boolean> {
+  const checkAuthUser = useCallback(async (user: CognitoUser) => {
     let isStudent = await checkIfCprExist(user.getUsername());
     if (!isStudent) {
       Auth.signOut();
@@ -141,13 +132,13 @@ function useProvideAuth() {
       setUser(undefined);
     }
     return isStudent;
-  }
+  }, []);
 
   /**
    * It checks if the user is signed in, and if so, it sets the user state to the user object returned by
    * the Auth.currentAuthenticatedUser() method
    */
-  async function getAuthUser(): Promise<void> {
+  const getAuthUser = useCallback(async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser();
 
@@ -165,7 +156,17 @@ function useProvideAuth() {
       setUser(undefined);
       setIsInitializing(false);
     }
-  }
+  }, [checkAuthUser]);
+
+  useEffect(() => {
+    // NOTE: check for user or risk an infinite loop
+    if (!user) {
+      // On component mount
+      // If a user cookie exists
+      // reset the user to it
+      getAuthUser();
+    }
+  }, [getAuthUser, user]);
 
   /**
    * It signs in a user with the given credentials.
