@@ -66,7 +66,7 @@ const Home = () => {
               haveActiveApplication ||
               (scholarships?.length ?? 0) > 0) && (
               <div className="flex flex-col gap-3 mx-auto md:flex-row md:mx-0">
-                <button
+                {/* <button
                   type="button"
                   className="w-full text-white md:w-auto btn btn-primary"
                   onClick={() => router.push("/applications")}
@@ -74,7 +74,7 @@ const Home = () => {
                   {haveActiveApplication
                     ? t("trackApplications")
                     : t("enrollNow")}
-                </button>
+                </button> */}
                 {(scholarships?.length ?? 0) > 0 && (
                   <button
                     type="button"
@@ -87,7 +87,7 @@ const Home = () => {
                 {!auth.isSignedIn && (
                   <button
                     type="button"
-                    className="w-full md:w-auto btn btn-outline btn-primary"
+                    className="w-full md:w-auto btn btn-primary"
                     onClick={() => router.push("/signIn")}
                   >
                     {t("login")}

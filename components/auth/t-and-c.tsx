@@ -54,7 +54,11 @@ export const TermsAndConditions: FC<ITermsAndConditions> = ({
           <div className="w-full h-[30rem] overflow-y-scroll p-6 border border-gray-300 rounded-2xl">
             <div className="mx-auto prose">
               <h3>{t("title")}</h3>
-              <p>{t("body")}</p>
+              <ul className="">
+                {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+                  <li key={i}>{t(`b${i}`)}</li>
+                ))}
+              </ul>
             </div>
           </div>
           {/* Accepted */}

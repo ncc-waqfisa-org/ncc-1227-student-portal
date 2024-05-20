@@ -57,6 +57,27 @@ export enum DocType {
   BANK_LETTER,
 }
 
+export enum SpecializationField {
+  Science = "Science",
+  Commerce = "Commerce",
+  Literature = "Literature",
+  HighSchoolDiploma = "HighSchoolDiploma",
+  InternationalBaccalaureate = "InternationalBaccalaureate",
+  GCSE = "GCSE",
+  ALevels = "ALevels",
+  Other = "Other",
+}
+
+export enum GuardianRelation {
+  Father = "Father",
+  Mother = "Mother",
+  Grandfather = "Grandfather",
+  Grandmother = "Grandmother",
+  Uncle = "Uncle",
+  Aunt = "Aunt",
+  Other = "Other",
+}
+
 export interface DownloadLinks {
   cprDoc?: string | null;
   schoolCertificate?: string | null;

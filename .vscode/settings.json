@@ -14,10 +14,12 @@
     "daisyui",
     "eventstream",
     "formik",
+    "GCSE",
     "msword",
     "nextjs",
     "salman",
     "tailwindcss",
+    "tanstack",
     "العربية"
   ],
   "i18n-ally.localesPaths": ["public/locales"],

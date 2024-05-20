@@ -1,6 +1,6 @@
 {
   "somethingWentWrong": "Something went wrong",
-  "requiredField": "Required field",
+  "requiredField": "Required Field",
   "passwordMustMatch": "Password must match",
   "cprShouldBe9": "CPR should be 9 numbers",
   "minimumGPA": "Minimum GPA is",

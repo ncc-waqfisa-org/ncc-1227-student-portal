@@ -5,6 +5,7 @@ import "yup-phone";
 import { useTranslation } from "react-i18next";
 import { PhoneNumberInput } from "../phone";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { GuardianRelation } from "../../src/CustomAPI";
 
 interface ICreateParentsForm {
   parentInfo: CreateParentInfoMutationVariables;
@@ -126,7 +127,7 @@ export const CreateParentsForm = (props: ICreateParentsForm) => {
                 {errors.relation && touched.relation && errors.relation}
               </label>
             </div>
-            <Field
+            {/* <Field
               type="text"
               name="relation"
               title="relation"
@@ -137,7 +138,46 @@ export const CreateParentsForm = (props: ICreateParentsForm) => {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.relation}
-            />
+            /> */}
+            <Field
+              dir="ltr"
+              as="select"
+              name="relation"
+              title="relation"
+              placeholder="Preferred Language"
+              className={`input input-bordered input-primary ${
+                errors.relation && touched.relation && "input-error"
+              }`}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.relation}
+            >
+              <option disabled selected value={undefined}>
+                {t("select")}
+              </option>
+
+              <option value={GuardianRelation.Father}>
+                {t(GuardianRelation.Father)}
+              </option>
+              <option value={GuardianRelation.Mother}>
+                {t(GuardianRelation.Mother)}
+              </option>
+              <option value={GuardianRelation.Grandfather}>
+                {t(GuardianRelation.Grandfather)}
+              </option>
+              <option value={GuardianRelation.Grandmother}>
+                {t(GuardianRelation.Grandmother)}
+              </option>
+              <option value={GuardianRelation.Uncle}>
+                {t(GuardianRelation.Uncle)}
+              </option>
+              <option value={GuardianRelation.Aunt}>
+                {t(GuardianRelation.Aunt)}
+              </option>
+              <option value={GuardianRelation.Other}>
+                {t(GuardianRelation.Other)}
+              </option>
+            </Field>
           </div>
 
           {/* Guardian CPR */}

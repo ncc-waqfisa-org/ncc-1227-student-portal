@@ -15,6 +15,8 @@ import { checkIfFilesAreTooBig } from "../../src/HelperFunctions";
 import { Nationality, FamilyIncome } from "../../src/models";
 import { PhoneNumberInput } from "../phone";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { SpecializationField } from "../../src/CustomAPI";
+import { useRouter } from "next/router";
 
 interface ICreateStudentForm {
   student: CreateStudentMutationVariables;
@@ -31,7 +33,7 @@ interface ICreateStudentForm {
 export const CreateStudentForm = (props: ICreateStudentForm) => {
   const { t } = useTranslation("account");
   const { t: tErrors } = useTranslation("errors");
-  // const { checkIfCprExist } = useAuth();
+  const { locale } = useRouter();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [cprAvailable, setCprAvailable] = useState<boolean>(false);
@@ -58,6 +60,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
         confirmPassword: "",
         familyIncomeProofDocsFile: [],
         cprDoc: undefined,
+        preferredLanguage: locale === "ar" ? Language.ARABIC : Language.ENGLISH,
       }}
       validationSchema={yup.object({
         cpr: yup
@@ -74,11 +77,9 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
           .required(`${tErrors("requiredField")}`),
         phone: yup
           .string()
-          // .string()
           .test((value) =>
             value ? isValidPhoneNumber(value.toString()) : false
           )
-          // .phone()
           .required(`${tErrors("requiredField")}`),
         gender: yup.string().required(`${tErrors("requiredField")}`),
         schoolName: yup.string().required(`${tErrors("requiredField")}`),
@@ -401,7 +402,10 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               className={`input input-bordered input-primary ${
                 errors.schoolType && touched.schoolType && "input-error"
               }`}
-              onChange={handleChange}
+              onChange={(e: any) => {
+                setFieldValue("specialization", undefined);
+                handleChange(e);
+              }}
               onBlur={handleBlur}
               value={values.schoolType}
             >
@@ -426,7 +430,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
                   errors.specialization}
               </label>
             </div>
-            <Field
+            {/* <Field
               type="text"
               name="specialization"
               title="specialization"
@@ -437,7 +441,56 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.specialization}
-            />
+            /> */}
+            <Field
+              dir="ltr"
+              as="select"
+              name="specialization"
+              title="specialization"
+              placeholder="Preferred Language"
+              className={`input input-bordered input-primary ${
+                errors.specialization && touched.specialization && "input-error"
+              }`}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.specialization}
+            >
+              <option disabled selected value={undefined}>
+                {t("select")}
+              </option>
+              {values.schoolType === SchoolType.PUBLIC && (
+                <>
+                  <option value={SpecializationField.Science}>
+                    {t("Science")}
+                  </option>
+                  <option value={SpecializationField.Commerce}>
+                    {t("Commerce")}
+                  </option>
+                  <option value={SpecializationField.Literature}>
+                    {t("Literature")}
+                  </option>
+                </>
+              )}
+              {values.schoolType === SchoolType.PRIVATE && (
+                <>
+                  <option value={SpecializationField.HighSchoolDiploma}>
+                    {t("HighSchoolDiploma")}
+                  </option>
+                  <option
+                    value={SpecializationField.InternationalBaccalaureate}
+                  >
+                    {t("InternationalBaccalaureate")}
+                  </option>
+                  <option value={SpecializationField.GCSE}>{t("GCSE")}</option>
+                  <option value={SpecializationField.ALevels}>
+                    {t("ALevels")}
+                  </option>
+                </>
+              )}
+              <option value={SpecializationField.Other}>
+                {t(SpecializationField.Other)}
+              </option>
+            </Field>
           </div>
           {/* placeOfBirth */}
           <div className="flex flex-col justify-start w-full">
@@ -638,7 +691,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               }}
               value={values.familyIncomeProofDocsFile ?? ""}
               filedName={"familyIncomeProofDocsFile"}
-              title={`${t("familyIncomeProof")} ${t("document")}`}
+              title={`${t("familyIncomeProofDocs")}`}
             ></MultiUpload>
             {/* <label className="whitespace-pre-wrap stat-desc">
               {t("IfYouWantToUploadMultiple")}
