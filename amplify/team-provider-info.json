@@ -24,7 +24,7 @@
       "function": {
         "signUp": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
-          "s3Key": "amplify-builds/signUp-6a4d425852447a675a70-build.zip"
+          "s3Key": "amplify-builds/signUp-357471444741772f6d35-build.zip"
         },
         "updateStudentEmail": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
@@ -76,7 +76,7 @@
         },
         "exportApplicationPdf": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
-          "s3Key": "amplify-builds/exportApplicationPdf-2b3631374244366b7177-build.zip"
+          "s3Key": "amplify-builds/exportApplicationPdf-67337a6a664b35796f79-build.zip"
         },
         "dummyUpdate": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
@@ -88,7 +88,11 @@
         },
         "sendSubmissionEmail": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
-          "s3Key": "amplify-builds/sendSubmissionEmail-2f767559766454334775-build.zip"
+          "s3Key": "amplify-builds/sendSubmissionEmail-56623837655048477a61-build.zip"
+        },
+        "deleteAdmin": {
+          "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
+          "s3Key": "amplify-builds/deleteAdmin-5032346a64654d4e4652-build.zip"
         }
       }
     }

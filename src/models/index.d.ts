@@ -408,6 +408,7 @@ type EagerAdmin = {
   readonly email?: string | null;
   readonly AdminLogs?: (AdminLog | null)[] | null;
   readonly role?: AdminRole | keyof typeof AdminRole | null;
+  readonly isDeactivated?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -422,6 +423,7 @@ type LazyAdmin = {
   readonly email?: string | null;
   readonly AdminLogs: AsyncCollection<AdminLog>;
   readonly role?: AdminRole | keyof typeof AdminRole | null;
+  readonly isDeactivated?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

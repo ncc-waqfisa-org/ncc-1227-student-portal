@@ -48,7 +48,7 @@ interface FormValues {
 }
 
 export default function ViewAccount({ student }: Props) {
-  const { syncStudent, editingApplicationsEnabled } = useAppContext();
+  const { syncStudent, editingApplicationsEnabled, batch } = useAppContext();
   const { t } = useTranslation("account");
   const { t: tErrors } = useTranslation("errors");
   const { t: tToast } = useTranslation("toast");
@@ -195,7 +195,7 @@ export default function ViewAccount({ student }: Props) {
         setFieldError,
         setFieldValue,
       }) => (
-        <Form className="container grid grid-cols-1 gap-3 items-end mx-auto max-w-3xl md:grid-cols-2">
+        <Form className="container grid items-end max-w-3xl grid-cols-1 gap-3 mx-auto md:grid-cols-2">
           {/* CPR */}
           <div className="flex flex-col justify-start w-full">
             <label className="label">{t("studentCPR")}</label>
@@ -613,7 +613,7 @@ export default function ViewAccount({ student }: Props) {
           {/* graduationDate */}
           <div className="flex flex-col justify-start w-full">
             <label className="label">{t("graduationDate")}</label>
-            <Field
+            {/* <Field
               dir="ltr"
               type="date"
               name="graduationDate"
@@ -626,7 +626,33 @@ export default function ViewAccount({ student }: Props) {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.graduationDate}
-            />
+            /> */}
+            <Field
+              dir="ltr"
+              as="select"
+              name="graduationDate"
+              title="graduationDate"
+              placeholder="Preferred Language"
+              className={`input input-bordered input-primary ${
+                errors.graduationDate && "input-error"
+              }`}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.graduationDate}
+              disabled={!editingApplicationsEnabled}
+            >
+              <option disabled selected value={undefined}>
+                {t("select")}
+              </option>
+              {batch && (
+                <option value={`${batch.batch}-01-01`}>{batch.batch}</option>
+              )}
+              {batch && (
+                <option value={`${batch.batch - 1}-01-01`}>
+                  {batch.batch - 1}
+                </option>
+              )}
+            </Field>
             <label className="label-text-alt text-error">
               {errors.graduationDate &&
                 touched.graduationDate &&

@@ -990,6 +990,7 @@ export const createAdminLog = /* GraphQL */ `mutation CreateAdminLog(
       fullName
       email
       role
+      isDeactivated
       createdAt
       updatedAt
       _version
@@ -1027,6 +1028,7 @@ export const updateAdminLog = /* GraphQL */ `mutation UpdateAdminLog(
       fullName
       email
       role
+      isDeactivated
       createdAt
       updatedAt
       _version
@@ -1064,6 +1066,7 @@ export const deleteAdminLog = /* GraphQL */ `mutation DeleteAdminLog(
       fullName
       email
       role
+      isDeactivated
       createdAt
       updatedAt
       _version
@@ -1261,6 +1264,7 @@ export const createAdmin = /* GraphQL */ `mutation CreateAdmin(
       __typename
     }
     role
+    isDeactivated
     createdAt
     updatedAt
     _version
@@ -1287,6 +1291,7 @@ export const updateAdmin = /* GraphQL */ `mutation UpdateAdmin(
       __typename
     }
     role
+    isDeactivated
     createdAt
     updatedAt
     _version
@@ -1313,6 +1318,7 @@ export const deleteAdmin = /* GraphQL */ `mutation DeleteAdmin(
       __typename
     }
     role
+    isDeactivated
     createdAt
     updatedAt
     _version

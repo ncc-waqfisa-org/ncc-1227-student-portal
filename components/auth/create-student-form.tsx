@@ -10,13 +10,13 @@ import "yup-phone";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import MultiUpload from "../MultiUpload";
-import { useAuth } from "../../hooks/use-auth";
 import { checkIfFilesAreTooBig } from "../../src/HelperFunctions";
 import { Nationality, FamilyIncome } from "../../src/models";
 import { PhoneNumberInput } from "../phone";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { SpecializationField } from "../../src/CustomAPI";
 import { useRouter } from "next/router";
+import { useAppContext } from "../../contexts/AppContexts";
 
 interface ICreateStudentForm {
   student: CreateStudentMutationVariables;
@@ -34,6 +34,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
   const { t } = useTranslation("account");
   const { t: tErrors } = useTranslation("errors");
   const { locale } = useRouter();
+  const { batch } = useAppContext();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [cprAvailable, setCprAvailable] = useState<boolean>(false);
@@ -155,7 +156,6 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
         isSubmitting,
         setFieldError,
         setFieldValue,
-        validateField,
       }) => (
         <Form className="container grid items-end max-w-3xl grid-cols-1 gap-3 mx-auto md:grid-cols-2">
           {/* CPR */}
@@ -629,17 +629,30 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               </label>
             </div>
             <Field
-              type="date"
+              dir="ltr"
+              as="select"
               name="graduationDate"
               title="graduationDate"
-              // placeholder="Graduation Date"
+              placeholder="Preferred Language"
               className={`input input-bordered input-primary ${
-                errors.graduationDate && touched.graduationDate && "input-error"
+                errors.graduationDate && "input-error"
               }`}
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.graduationDate}
-            />
+            >
+              <option disabled selected value={undefined}>
+                {t("select")}
+              </option>
+              {batch && (
+                <option value={`${batch.batch}-01-01`}>{batch.batch}</option>
+              )}
+              {batch && (
+                <option value={`${batch.batch - 1}-01-01`}>
+                  {batch.batch - 1}
+                </option>
+              )}
+            </Field>
           </div>
 
           {/* familyIncome */}

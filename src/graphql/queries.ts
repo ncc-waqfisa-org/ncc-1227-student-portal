@@ -700,6 +700,7 @@ export const getAdminLog = /* GraphQL */ `query GetAdminLog($id: ID!) {
       fullName
       email
       role
+      isDeactivated
       createdAt
       updatedAt
       _version
@@ -919,6 +920,7 @@ export const getAdmin = /* GraphQL */ `query GetAdmin($cpr: String!) {
       __typename
     }
     role
+    isDeactivated
     createdAt
     updatedAt
     _version
@@ -947,6 +949,7 @@ export const listAdmins = /* GraphQL */ `query ListAdmins(
       fullName
       email
       role
+      isDeactivated
       createdAt
       updatedAt
       _version
@@ -980,6 +983,7 @@ export const syncAdmins = /* GraphQL */ `query SyncAdmins(
       fullName
       email
       role
+      isDeactivated
       createdAt
       updatedAt
       _version

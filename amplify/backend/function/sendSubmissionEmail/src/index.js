@@ -52,6 +52,25 @@ exports.handler = async (event) => {
         const cpr = event.Records[0].dynamodb.NewImage.studentCPR.S;
         const email = await getStudentEmail(cpr);
         const studentName = event.Records[0].dynamodb.NewImage.studentName.S;
+        const attachmentId = event.Records[0].dynamodb.NewImage.applicationAttachmentId.S;
+        const attachment = await getAttachment(attachmentId);
+        const programChoice = await getProgramChoice(event.Records[0].dynamodb.NewImage.id.S);
+        console.log(`Attachment: ${JSON.stringify(attachment)}`);
+        const schoolCertificate = attachment.schoolCertificate;
+        const transcript = attachment.transcriptDoc;
+        const acceptanceLetter = programChoice.acceptanceLetterDoc;
+        const missingDoc = [];
+        if (!schoolCertificate) {
+            missingDoc.push('School Certificate');
+        }
+        if (!transcript) {
+            missingDoc.push('Transcript');
+        }
+        if (!acceptanceLetter) {
+            missingDoc.push('Acceptance Letter');
+        }
+
+
         console.log(`Email: ${email}`);
 
         const logo =
@@ -68,7 +87,7 @@ exports.handler = async (event) => {
                 subject: "Waqf Isa Application Submission",
                 body: {
                     contentType: "HTML",
-                    content: emailTemplate(logo, studentName),
+                    content: emailTemplate(logo, studentName, missingDoc),
                 },
                 toRecipients: [
                     {
@@ -104,6 +123,33 @@ exports.handler = async (event) => {
     }
 };
 
+async function getAttachment(attachmentId) {
+    const params = {
+        TableName: 'Attachment-cw7beg2perdtnl7onnneec4jfa-staging',
+        Key: {
+            id: attachmentId
+        }
+    };
+
+    const attachment = await dynamoDB.get(params).promise();
+    return attachment.Item;
+
+}
+async function getProgramChoice(applicationId) {
+    const indexName = 'applicationID-index';
+    const params = {
+        TableName: 'ProgramChoice-cw7beg2perdtnl7onnneec4jfa-staging',
+        IndexName: indexName,
+        KeyConditionExpression: 'applicationID = :applicationID',
+        ExpressionAttributeValues: {
+            ':applicationID': applicationId
+        }
+    };
+
+    const programChoice = await dynamoDB.query(params).promise();
+    return programChoice.Items[0];
+}
+
 
 async function getStudentEmail(cpr) {
     const params = {
@@ -117,7 +163,7 @@ async function getStudentEmail(cpr) {
     return student.Item.email;
 }
 
-function emailTemplate(logo, studentName) {
+function emailTemplate(logo, studentName, missingDoc) {
     return `
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html lang="en">
@@ -125,7 +171,9 @@ function emailTemplate(logo, studentName) {
     <head>
       <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
     </head>
-    <div id="__react-email-preview" style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0">A decision was made on your application.<div> ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿</div>
+    <div id="__react-email-preview" style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0"> 
+    Application submitted
+    <div> ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿</div>
     </div>
   
     <body style="background-color:rgb(255,251,235);padding-top:2.5rem;padding-bottom:2.5rem;font-family:ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;">
@@ -139,6 +187,12 @@ function emailTemplate(logo, studentName) {
                   <td>
                     <p style="font-size:16px;line-height:24px;font-weight:600;color:rgb(31,41,55);margin:16px 0;text-align:left">Dear ${studentName},</p>
                     <p style="color:rgb(107,114,128);font-size:14px;line-height:24px;margin:16px 0;text-align:left">Thank you for applying to Isa Bin Salman Education Charitable Trust Scholarship Service. We will review your application and get back to you soon.</p>
+                    ${missingDoc.length > 0 ? `<p style="color:rgb(107,114,128);font-size:14px;line-height:24px;margin:16px 0;text-align:left">Please note that the following documents are missing:</p>
+                    <ul style="color:rgb(107,114,128);font-size:14px;line-height:24px;margin:16px 0;text-align:left">   
+                    ${missingDoc.map(doc => `<li>${doc}</li>`).join('')}
+                    </ul>` : ''}
+                    
+                    
                     <p  style="color:rgb(107,114,128);font-size:14px;line-height:24px;margin:16px 0;text-align:left" >Regards, </p>
                   </td>
                 </tr>

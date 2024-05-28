@@ -49,6 +49,11 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "deleteAdmin": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "dummyUpdate": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -169,6 +174,22 @@
         {
           "category": "function",
           "resourceName": "bulkAutoReject"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteAdmin_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteAdmin"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteAdmin_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteAdmin"
         }
       ]
     },

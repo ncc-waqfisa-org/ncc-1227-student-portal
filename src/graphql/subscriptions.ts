@@ -966,6 +966,7 @@ export const onCreateAdminLog = /* GraphQL */ `subscription OnCreateAdminLog($fi
       fullName
       email
       role
+      isDeactivated
       createdAt
       updatedAt
       _version
@@ -1000,6 +1001,7 @@ export const onUpdateAdminLog = /* GraphQL */ `subscription OnUpdateAdminLog($fi
       fullName
       email
       role
+      isDeactivated
       createdAt
       updatedAt
       _version
@@ -1034,6 +1036,7 @@ export const onDeleteAdminLog = /* GraphQL */ `subscription OnDeleteAdminLog($fi
       fullName
       email
       role
+      isDeactivated
       createdAt
       updatedAt
       _version
@@ -1225,6 +1228,7 @@ export const onCreateAdmin = /* GraphQL */ `subscription OnCreateAdmin($filter: 
       __typename
     }
     role
+    isDeactivated
     createdAt
     updatedAt
     _version
@@ -1248,6 +1252,7 @@ export const onUpdateAdmin = /* GraphQL */ `subscription OnUpdateAdmin($filter: 
       __typename
     }
     role
+    isDeactivated
     createdAt
     updatedAt
     _version
@@ -1271,6 +1276,7 @@ export const onDeleteAdmin = /* GraphQL */ `subscription OnDeleteAdmin($filter: 
       __typename
     }
     role
+    isDeactivated
     createdAt
     updatedAt
     _version
