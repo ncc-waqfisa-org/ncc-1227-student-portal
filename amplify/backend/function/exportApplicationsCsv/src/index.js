@@ -13,7 +13,6 @@ exports.handler = async (event) => {
     console.log(`EVENT: ${JSON.stringify(event)}`);
     try {
         const token = event.headers?.authorization?.slice(7);
-
         const isAdmin = await checkIsAdmin(token);
         if (!isAdmin) {
             return {
@@ -66,8 +65,8 @@ exports.handler = async (event) => {
 async function exportApplicationsCsv(tableName, batchValue, status, selectedApplications) {
     const applications = selectedApplications? await getSelectedApplications(tableName, selectedApplications) :  await getApplications(tableName, batchValue, status);
     const students = await getStudents(batchValue);
-    const csv = convertToCsv(applications, students);
-    return uploadToS3(csv);
+    const csv = await convertToCsv(applications, students);
+    return uploadToS3(csv, batchValue);
 }
 
 async function getApplications(tableName, batchValue, status) {
@@ -104,21 +103,54 @@ async function getApplications(tableName, batchValue, status) {
 }
 
 
-function convertToCsv(applications, students) {
-    let csv = 'id,StudentCPR,Name,Gender,Nationality,Specialization,Phone,email,Batch,Status,GPA,Score,SchoolName,SchoolType,FamilyIncome\n';
-    applications.forEach(application => {
+async function convertToCsv(applications, students) {
+    let csv = 'id,Student CPR,Name,Gender,Nationality,Field,Phone,email,Graduation Year,Status,GPA,Score,School Name,School Type,Family Income,Chosen University,Chosen Program,Reason,Total Score,Number of Family Members\n';
+    for (const application of applications) {
         const student = students.find(student => student.cpr === application.studentCPR);
-        if(student) {
-            csv += `${application.id},=""${application.studentCPR}"","${student?.fullName}",${student?.gender},${student?.nationalityCategory},"${student?.specialization}",${student?.phone},${student?.email},${application.batch},${application.status},${application.gpa},${application.score},"${application.schoolName}",${application.schoolType},${application.familyIncome}\n`;
+        const university = application.universityID? await getUniversity(application.universityID): {name: "NA"}
+        const program = application.universityID? await getProgram(application.programID): {name: "NA"}
+        const reason = processReason(application.reason);
+        if (student) {
+            csv += `${application.id},=""${application.studentCPR}"","${student?.fullName}",${student?.gender},${student?.nationalityCategory},"${student?.specialization}",${student?.phone},${student?.email},${application.batch},${application.status},${application.gpa},${application.score},"${application.schoolName}",${application.schoolType},${application.familyIncome},"${university?.name}","${program?.name}","${reason}",${application.score},${student.numberOfFamilyMembers}\n`;
         }
-    });
+    }
+    console.log(csv);
     return csv;
 }
 
-async function uploadToS3(csv) {
+function processReason(reason) {
+    // take new line after every 90 characters, if there is a space. if not, move to the next space and take a new line
+    if (!reason) return '';
+    let processedReason = '';
+    let line = '';
+    let charCount = 0;
+
+    for (let i = 0; i < reason.length; i++) {
+        line += reason[i];
+        charCount++;
+        if (charCount >= 90) {
+            if (reason[i] === ' ') {
+                processedReason += line + '\n';
+                line = '';
+                charCount = 0;
+            } else if (reason[i + 1] === ' ' || i === reason.length - 1) {
+                processedReason += line + '\n';
+                line = '';
+                charCount = 0;
+            }
+        }
+    }
+
+    processedReason += line;
+    return processedReason;
+}
+
+
+async function uploadToS3(csv, batchValue) {
+    console.log('Uploading to S3', csv, batchValue);
     const params = {
         Bucket: 'amplify-ncc-staging-65406-deployment',
-        Key: 'applications.csv',
+        Key: 'Applications ' + batchValue + '.csv',
         Body: csv
     };
     await s3.upload(params).promise();
@@ -202,5 +234,29 @@ async function checkIsAdmin(token) {
         return false;
     }
 }
+
+async function getUniversity(universityId) {
+    const params = {
+        TableName: 'University-cw7beg2perdtnl7onnneec4jfa-staging',
+        Key: {
+            id: universityId
+        }
+    };
+    const university = await dynamoDB.get(params).promise();
+    return university.Item;
+}
+
+async function getProgram(programId) {
+    const params = {
+        TableName: 'Program-cw7beg2perdtnl7onnneec4jfa-staging',
+        Key: {
+            id: programId
+        }
+    };
+    const program = await dynamoDB.get(params).promise();
+    return program.Item;
+}
+
+
 
 

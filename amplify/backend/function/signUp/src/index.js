@@ -81,7 +81,7 @@ exports.handler = async (event) => {
 
         studentData.parentInfoID = await saveParentToDynamoDB(parentData);
 
-        await saveStudentToDynamoDB(studentData);
+        await saveStudentToDynamoDB(studentData, parentData);
         await signUpUserToCognito(username, email, password);
 
 
@@ -203,13 +203,14 @@ async function signUpUserToCognito(username, email, password) {
     };
     await cognito.signUp(params).promise();
 }
-async function saveStudentToDynamoDB(studentData) {
+async function saveStudentToDynamoDB(studentData, parentData) {
     studentData._version = 1;
     studentData._lastChangedAt = new Date().getTime(); // Get timestamp in milliseconds
     studentData.createdAt = new Date().toISOString(); // Get current date in ISO format
     studentData.updatedAt = new Date().toISOString(); // Get current date in ISO format
 
     studentData.batch = new Date().getFullYear();
+    studentData.numberOfFamilyMembers = parentData.numberOfFamilyMembers;
     const params = {
         TableName: 'Student-cw7beg2perdtnl7onnneec4jfa-staging',
         Item: studentData,

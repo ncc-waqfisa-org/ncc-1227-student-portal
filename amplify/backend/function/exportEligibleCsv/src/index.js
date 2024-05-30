@@ -43,7 +43,7 @@ exports.handler = async (event) => {
         const applications = await getApplications('Application-cw7beg2perdtnl7onnneec4jfa-staging', batchValue, exceptionUniversities,
         extendedUniversities, batchDetails);
         const csv = await convertToCsv(applications);
-        const url = await uploadToS3(csv);
+        const url = await uploadToS3(csv, batchValue);
         return {
             statusCode: 200,
             body: JSON.stringify({url})
@@ -130,7 +130,7 @@ async function getApplications(tableName, batchValue, exceptionUniversities, ext
 async function convertToCsv(applications) {
     // TODO: REMOVE THE Status, UniversityID, ProgramID from the CSV
     // let csv = 'StudentCPR,GPA,verifiedGPA,Status,University\n';
-    let csv = 'StudentCPR,verifiedGPA\n';
+    let csv = 'Student CPR,Verified GPA\n';
     for (const application of applications) {
         // let university = application.universityID? await getUniversity(application.universityID): {name: 'UNKNOWN'};
         // csv += `=""${application.studentCPR}"",${application.gpa},PLEASE VERIFY,${application.status},${university?.name}\n`;
@@ -140,10 +140,10 @@ async function convertToCsv(applications) {
     return csv;
 }
 
-async function uploadToS3(csv) {
+async function uploadToS3(csv, batchValue) {
     const params = {
         Bucket: 'amplify-ncc-staging-65406-deployment',
-        Key: 'applications.csv',
+        Key: 'Eligible Students ' + batchValue + '.csv',
         Body: csv
     };
     await s3.upload(params).promise();

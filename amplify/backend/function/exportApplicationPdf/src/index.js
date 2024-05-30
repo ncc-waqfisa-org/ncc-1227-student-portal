@@ -172,22 +172,30 @@ async function generatePdf(application, program, university, parent, student) {
     doc.text("Phone: ", {continued: true});
     doc.text(student.phone);
     // take a gap
-    doc.text(' ');
+    doc.text(' ')
     doc.font('./fonts/Almarai-Bold.ttf').fontSize(labelFontSize).text('Parents Details:');
-    doc.font('./fonts/Almarai.ttf').fontSize(valueFontSize).text("Father Name: ", {continued: true});
-    doc.text(parent.fatherFullName, {features: ['rtla']});
-    doc.text("Father CPR: ", {continued: true});
-    doc.text(parent.fatherCPR);
-    doc.text("Mother Name: ", {continued: true});
-    // align the text to the right
-    doc.text(parent.motherFullName, {features: ['rtla']});
 
-    doc.text("Mother CPR: ", {continued: true});
-    doc.text(parent.motherCPR);
-    doc.text("Guardian Name: ", {continued: true});
+    doc.font('./fonts/Almarai.ttf').fontSize(valueFontSize).text("Guardian Name: ", {continued: true});
     doc.text(parent.guardianFullName, {features: ['rtla']});
     doc.text("Guardian CPR: ", {continued: true});
     doc.text(parent.guardianCPR);
+    if(parent.fatherFullName) {
+        doc.text("Father Name: ", {continued: true});
+        doc.text(parent.fatherFullName ?? "-", {features: ['rtla']});
+        doc.text("Father CPR: ", {continued: true});
+        doc.text(parent.fatherCPR ?? "-");
+    }
+
+    if (parent.motherFullName) {
+        doc.text("Mother Name: ", {continued: true});
+        // align the text to the right
+        doc.text(parent.motherFullName ?? "-", {features: ['rtla']});
+
+        doc.text("Mother CPR: ", {continued: true});
+        doc.text(parent.motherCPR ?? "-");
+    }
+
+
     doc.text("Family Income: ", {continued: true});
     doc.text(application.familyIncome);
     // take a gap
@@ -290,24 +298,47 @@ async function generateArabicPdf(application, program, university, parent, stude
         .text(student.phone, {align: 'right', features: ['rtla']});
     doc.text(' ');
     doc.font('./fonts/Almarai-Bold.ttf').fontSize(labelFontSize).text('تفاصيل الأهل:', {features: ['rtla'], align: 'right'});
-    doc.font('./fonts/Almarai-Bold.ttf').fontSize(valueFontSize).text("اسم الأب: ", {align: 'right', features: ['rtla'], underline: true})
-        .font('./fonts/Almarai.ttf')
-        .text(parent.fatherFullName, {align: 'right', features: ['rtla']});
-    doc.font('./fonts/Almarai-Bold.ttf').font('./fonts/Almarai-Bold.ttf').text("رقم البطاقة الذكية للأب: ", {align: 'right', features: ['rtla'], underline: true})
-        .font('./fonts/Almarai.ttf')
-        .text(parent.fatherCPR, {align: 'right', features: ['rtla']});
-    doc.font('./fonts/Almarai-Bold.ttf').text("اسم الأم: ", {align: 'right', features: ['rtla'], underline: true})
-        .font('./fonts/Almarai.ttf')
-        .text(parent.motherFullName, {align: 'right', features: ['rtla']});
-    doc.font('./fonts/Almarai-Bold.ttf').text("رقم البطاقة الذكية للأم: ", {align: 'right', features: ['rtla'], underline: true})
-        .font('./fonts/Almarai.ttf')
-        .text(parent.motherCPR, {align: 'right', features: ['rtla']});
+
+
+
     doc.font('./fonts/Almarai-Bold.ttf').text("اسم ولي الأمر: ", {align: 'right', features: ['rtla'], underline: true})
         .font('./fonts/Almarai.ttf')
         .text(parent.guardianFullName, {align: 'right', features: ['rtla']});
     doc.font('./fonts/Almarai-Bold.ttf').text("رقم البطاقة الذكية لولي الأمر: ", {align: 'right', features: ['rtla'], underline: true})
         .font('./fonts/Almarai.ttf')
         .text(parent.guardianCPR, {align: 'right', features: ['rtla']});
+
+    if(parent.fatherFullName) {
+        doc.font('./fonts/Almarai-Bold.ttf').fontSize(valueFontSize).text("اسم الأب: ", {
+            align: 'right',
+            features: ['rtla'],
+            underline: true
+        })
+            .font('./fonts/Almarai.ttf')
+            .text(parent.fatherFullName ?? "-", {align: 'right', features: ['rtla']});
+        doc.font('./fonts/Almarai-Bold.ttf').font('./fonts/Almarai-Bold.ttf').text("رقم البطاقة الذكية للأب: ", {
+            align: 'right',
+            features: ['rtla'],
+            underline: true
+        })
+            .font('./fonts/Almarai.ttf')
+            .text(parent.fatherCPR ?? "-", {align: 'right', features: ['rtla']});
+    }
+
+    if (parent.motherFullName) {
+        doc.font('./fonts/Almarai-Bold.ttf').text("اسم الأم: ", {align: 'right', features: ['rtla'], underline: true})
+            .font('./fonts/Almarai.ttf')
+            .text(parent.motherFullName ?? "-", {align: 'right', features: ['rtla']});
+        doc.font('./fonts/Almarai-Bold.ttf').text("رقم البطاقة الذكية للأم: ", {
+            align: 'right',
+            features: ['rtla'],
+            underline: true
+        })
+            .font('./fonts/Almarai.ttf')
+            .text(parent.motherCPR ?? "-", {align: 'right', features: ['rtla']});
+    }
+
+
     doc.font('./fonts/Almarai-Bold.ttf').text("الدخل الشهري: ", {align: 'right', features: ['rtla'], underline: true})
         .font('./fonts/Almarai.ttf')
         .text(arabicLocal[application.familyIncome], {align: 'right', features: ['rtla']});

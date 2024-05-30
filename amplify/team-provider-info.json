@@ -24,7 +24,7 @@
       "function": {
         "signUp": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
-          "s3Key": "amplify-builds/signUp-357471444741772f6d35-build.zip"
+          "s3Key": "amplify-builds/signUp-7a39476369482b6f4a45-build.zip"
         },
         "updateStudentEmail": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
@@ -48,7 +48,7 @@
         },
         "exportApplicationsCsv": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
-          "s3Key": "amplify-builds/exportApplicationsCsv-776d6b7a593266436277-build.zip"
+          "s3Key": "amplify-builds/exportApplicationsCsv-757330655a515732356b-build.zip"
         },
         "updateStatistics": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
@@ -68,7 +68,7 @@
         },
         "exportEligibleCsv": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
-          "s3Key": "amplify-builds/exportEligibleCsv-6e61702f7a555a725a35-build.zip"
+          "s3Key": "amplify-builds/exportEligibleCsv-716b544f484f4651386f-build.zip"
         },
         "syncApplications": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
@@ -76,7 +76,7 @@
         },
         "exportApplicationPdf": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
-          "s3Key": "amplify-builds/exportApplicationPdf-67337a6a664b35796f79-build.zip"
+          "s3Key": "amplify-builds/exportApplicationPdf-624f4c4737793278496d-build.zip"
         },
         "dummyUpdate": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
@@ -88,7 +88,7 @@
         },
         "sendSubmissionEmail": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
-          "s3Key": "amplify-builds/sendSubmissionEmail-56623837655048477a61-build.zip"
+          "s3Key": "amplify-builds/sendSubmissionEmail-347a67506a4f6a462f33-build.zip"
         },
         "deleteAdmin": {
           "deploymentBucketName": "amplify-ncc-staging-65406-deployment",
