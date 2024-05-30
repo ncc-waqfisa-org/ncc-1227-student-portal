@@ -95,7 +95,6 @@ function useProviderApp() {
           return currentBatch;
         })
         .catch((error) => {
-          console.log(error);
           if (error.errors[0] instanceof GraphQLError) {
             const graphQLError: GraphQLError = error.errors[0];
             if (graphQLError.message === "Network Error") {

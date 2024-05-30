@@ -100,10 +100,6 @@ function useProvideAuth() {
     try {
       return await Auth.forgotPassword(email).then(() => true);
     } catch (error) {
-      console.log(
-        "🚀 ~ file: use-auth.tsx:89 ~ sendForgetPassword ~ error:",
-        error
-      );
       return false;
     }
   }
@@ -118,10 +114,6 @@ function useProvideAuth() {
         () => true
       );
     } catch (error) {
-      console.log(
-        "🚀 ~ file: use-auth.tsx:89 ~ sendForgetPassword ~ error:",
-        error
-      );
       return false;
     }
   }
@@ -185,15 +177,21 @@ function useProvideAuth() {
           if (cprExist) {
             const cognitoUser = await Auth.signIn(cpr, password).catch(
               (error) => {
-                // console.log("signIn error", error);
-
                 if (error.code === "UserNotConfirmedException") {
                   push({ pathname: "/verify-email", query: { cpr: cpr } });
                 }
+                if (error.code === "NotAuthorizedException") {
+                  throw new Error(
+                    error.message ?? t("failedToSignIn") ?? "Failed to sign in"
+                  );
+                }
               }
             );
-            setIsSignedIn(true);
-            setUser(cognitoUser);
+
+            if (cognitoUser) {
+              setIsSignedIn(true);
+              setUser(cognitoUser);
+            }
             return cognitoUser;
           } else {
             throw new Error(t("cprDoesNotExist") ?? "cpr does not exist");

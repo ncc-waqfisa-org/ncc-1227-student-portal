@@ -31,8 +31,6 @@ export const TermsAndConditions: FC<ITermsAndConditions> = ({
           .required(`${tErrors("requiredField")}`),
       })}
       onSubmit={async (values, actions) => {
-        // console.log({ values, actions });
-
         onFormSubmit(values.accepted);
 
         actions.setSubmitting(false);

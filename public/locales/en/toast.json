@@ -20,5 +20,6 @@
   "failedToUploadFiles": "Failed to upload files",
   "failedToUpdateTheApplication": "Failed to update the application",
   "failedToCreateTheApplication": "Failed to create the application",
-  "failedToSubmit": "Failed to submit"
+  "failedToSubmit": "Failed to submit",
+  "failedToSignIn": "Failed to sign in"
 }

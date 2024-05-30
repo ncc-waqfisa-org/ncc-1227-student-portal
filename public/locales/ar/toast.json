@@ -17,5 +17,6 @@
   "failedToUploadFiles": "فشل رفع الملفات",
   "failedToUpdateTheApplication": "فشل في تحديث التطبيق",
   "failedToCreateTheApplication": "فشل في إنشاء التطبيق",
-  "failedToSubmit": "فشل الإرسال"
+  "failedToSubmit": "فشل الإرسال",
+  "failedToSignIn": "فشل تسجيل الدخول"
 }

@@ -39,7 +39,7 @@ export const ChangeEmail: FC<TChangeEmail> = () => {
 
   function getUserToken() {
     const token = user?.getSignInUserSession()?.getAccessToken();
-    console.log("🚀 ~ getUserToken ~ token:", token);
+
     return token;
   }
 

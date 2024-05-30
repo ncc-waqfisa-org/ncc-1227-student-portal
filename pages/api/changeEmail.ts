@@ -16,7 +16,6 @@ export default async function handler(
   }
 
   const data: InputData = JSON.parse(req.body);
-  console.log("🚀 ~ data:", data);
 
   const resultData = await fetch(
     "https://sb87s08fch.execute-api.us-east-1.amazonaws.com/default/email",
@@ -31,8 +30,6 @@ export default async function handler(
   )
     .then(async (result) => {
       const jsonData = await result.json();
-
-      console.log("🚀 ~ .then ~ jsonData:", jsonData);
       if (result.ok) {
         return {
           d: jsonData,

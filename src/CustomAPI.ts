@@ -613,7 +613,6 @@ export async function uploadFile(
     );
     return res.key;
   } catch (error) {
-    console.log("Error uploading file: ", error);
     return null;
   }
 }

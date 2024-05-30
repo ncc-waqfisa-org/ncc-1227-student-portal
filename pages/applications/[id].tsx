@@ -42,7 +42,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   } catch (error) {
-    console.log("🚀 ~ getServerSideProps:GetServerSideProps= ~ error:", error);
     return {
       props: {
         ...(await serverSideTranslations(locale ?? "en", [

@@ -31,7 +31,6 @@ export default function CreateStudent() {
           return errors;
         }}
         onSubmit={(values, actions) => {
-          console.log({ values, actions });
           alert(JSON.stringify(values, null, 2));
           actions.setSubmitting(false);
         }}
