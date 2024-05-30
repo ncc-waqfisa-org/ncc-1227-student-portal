@@ -137,44 +137,31 @@ const ContactPage = () => {
   return (
     <div>
       <PageComponent title={"ContactUs"}>
-        <div className="mx-auto prose text-center divide-y">
-          <div>
-            <h4>{t("email")}</h4>
-            <a href="mailto:info@waqfisa.bh">info@waqfisa.bh</a>
+        <div className="flex flex-col gap-10">
+          <div className="flex flex-col max-w-xl gap-4 pt-6 mx-auto">
+            <p className={cn("text-xl font-medium")}>{t("faq")}</p>
+            <Accordion type="single" collapsible className="w-full text-start">
+              {(locale === "ar" ? arabicFaqs : englishFaqs).map(
+                (faq, index) => (
+                  <AccordionItem value={`${index}`} key={index}>
+                    <AccordionTrigger className="text-start">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent>{faq.answer}</AccordionContent>
+                  </AccordionItem>
+                )
+              )}
+            </Accordion>
           </div>
-        </div>
-        <div className="flex flex-col max-w-xl gap-4 pt-16 mx-auto">
-          <p className={cn("text-xl font-medium")}>{t("faq")}</p>
-          <Accordion type="single" collapsible className="w-full text-start">
-            {(locale === "ar" ? arabicFaqs : englishFaqs).map((faq, index) => (
-              <AccordionItem value={`${index}`} key={index}>
-                <AccordionTrigger className="text-start">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent>{faq.answer}</AccordionContent>
-              </AccordionItem>
-            ))}
-            {/* <AccordionItem value="item-1">
-              <AccordionTrigger>Is it accessible?</AccordionTrigger>
-              <AccordionContent>
-                Yes. It adheres to the WAI-ARIA design pattern.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2">
-              <AccordionTrigger>Is it styled?</AccordionTrigger>
-              <AccordionContent>
-                Yes. It comes with default styles that matches the other
-                components&apos; aesthetic.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-3">
-              <AccordionTrigger>Is it animated?</AccordionTrigger>
-              <AccordionContent>
-                Yes. It&apos;s animated by default, but you can disable it if
-                you prefer.
-              </AccordionContent>
-            </AccordionItem> */}
-          </Accordion>
+          <div className="mx-auto prose text-center divide-y">
+            <div>
+              <h4>{t("needFurtherAssistance")}</h4>
+              <div className="flex flex-wrap items-baseline justify-center gap-1">
+                <h4>{t("emailUsOn")}</h4>
+                <a href="mailto:info@waqfisa.bh">info@waqfisa.bh</a>
+              </div>
+            </div>
+          </div>
         </div>
       </PageComponent>
     </div>

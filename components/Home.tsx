@@ -43,10 +43,10 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
     <div>
       {isBatchPending && (
         <div className="flex flex-col gap-10 mx-auto">
-          <Skeleton className="mx-auto w-full max-w-md h-10"></Skeleton>
+          <Skeleton className="w-full h-10 max-w-md mx-auto"></Skeleton>
           <div className="grid gap-10 md:grid-cols-2">
-            <Skeleton className="mx-auto w-full max-w-md h-72"></Skeleton>
-            <Skeleton className="mx-auto w-full max-w-md h-72"></Skeleton>
+            <Skeleton className="w-full max-w-md mx-auto h-72"></Skeleton>
+            <Skeleton className="w-full max-w-md mx-auto h-72"></Skeleton>
           </div>
         </div>
       )}
@@ -57,10 +57,6 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
       )}
       {!isBatchPending && batch && (
         <div className="flex flex-col gap-10 mx-auto">
-          <h1 className="text-3xl font-semibold text-center text-gray-900">
-            {t("availableServices")}
-          </h1>
-
           {
             !(
               signUpEnabled ||
@@ -70,7 +66,7 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
               (scholarships?.length ?? 0) > 0
             ) &&
               (dayjs().isAfter(dayjs(batch?.signUpEndDate).endOf("day")) ? (
-                <div className="flex flex-wrap gap-10 justify-center">
+                <div className="flex flex-wrap justify-center gap-10">
                   <CardInfoComponent
                     icon={info}
                     title={"Registration"}
@@ -83,7 +79,7 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
                   ></CardInfoComponent>
                 </div>
               ) : (
-                <div className="flex flex-wrap gap-10 justify-center">
+                <div className="flex flex-wrap justify-center gap-10">
                   <CardInfoComponent
                     icon={info}
                     title={"التسجيل"}
@@ -104,7 +100,7 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
                   ></CardInfoComponent>
                 </div>
               ))
-            // <div className="grid grid-cols-1 gap-10 place-items-center mx-auto w-full max-w-4xl md:grid-cols-2">
+            // <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto place-items-center md:grid-cols-2">
             //   <CardInfoComponent
             //     icon={info}
             //     title={"التسجيل"}
@@ -129,7 +125,7 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
             (haveActiveApplication && editingApplicationsEnabled) ||
             haveActiveApplication ||
             (scholarships?.length ?? 0) > 0) && (
-            <div className="grid grid-cols-1 gap-10 place-items-center mx-auto w-full max-w-4xl md:grid-cols-2">
+            <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto place-items-center md:grid-cols-2">
               {!haveActiveApplication && (
                 <CardInfoComponent
                   icon={logs}
