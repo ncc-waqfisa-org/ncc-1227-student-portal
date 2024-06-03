@@ -121,20 +121,6 @@ function useProviderApp() {
     : dayjs().isBefore(dayjs(batch.signUpEndDate).endOf("day")) &&
       dayjs().isAfter(dayjs(batch.signUpStartDate).startOf("day"));
 
-  // ---- Dates Controls -----
-  // TODO: change this date later
-  // const lastDateForEditingApplications = dayjs("2024-07-30T00:00:00");
-  // const lastDateForNewApplications = dayjs("2024-07-13T23:00:00");
-  // const lastDateForNewStudents = dayjs("2024-07-10T00:00:00");
-  // ---- Access Controls -----
-
-  // TODO: change this later
-  // const editingApplicationsEnabled = lastDateForEditingApplications.isAfter(
-  //   dayjs()
-  // );
-  // const newApplicationsEnabled = lastDateForNewApplications.isAfter(dayjs());
-  // const signUpEnabled = lastDateForNewStudents.isAfter(dayjs());
-
   useEffect(() => {
     let cpr = user?.getUsername();
     if (cpr) {

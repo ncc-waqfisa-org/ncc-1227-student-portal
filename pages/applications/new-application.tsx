@@ -64,7 +64,7 @@ const NewApplicationPage: FC<Props> = (props) => {
       ) : dayjs().isAfter(
           dayjs(batch?.createApplicationEndDate).endOf("day")
         ) ? (
-        <div className="flex flex-wrap gap-10 justify-center">
+        <div className="flex flex-wrap justify-center gap-10">
           <CardInfoComponent
             icon={info}
             title={"Applying"}
@@ -77,7 +77,7 @@ const NewApplicationPage: FC<Props> = (props) => {
           ></CardInfoComponent>
         </div>
       ) : (
-        <div className="flex flex-wrap gap-10 justify-center">
+        <div className="flex flex-wrap justify-center gap-10">
           <CardInfoComponent
             icon={info}
             title={"التقديم"}

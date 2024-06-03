@@ -34,9 +34,9 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 const englishFaqs = [
   {
     question:
-      "What is the scholarship plan and the specializations included in the Isa bin Salman Charity Educational Scholarship?",
+      "What are the scholarship programs and specializations included in the Isa bin Salman Education Charitable Scholarship?",
     answer:
-      "You can review the available study programs for the academic year 2024-2025 after completing the registration process on the platform and submitting the scholarship application.",
+      "You can view the available programs for the academic year 2024-2025 after completing the registration process on the platform and submitting the scholarship application.",
   },
   {
     question:
@@ -46,33 +46,33 @@ const englishFaqs = [
   },
   {
     question:
-      "I am not sure if I qualify for a scholarship from the foundation. How can I check the required criteria?",
+      "I am not sure if I qualify for a scholarship. How can I check the acceptance criteria?",
     answer:
-      "You can check the criteria by reviewing the 'Application Acceptance Criteria and Registration Conditions' through the foundation's social media accounts and the website www.waqfisa.bh.",
+      "You can check the acceptance criteria by viewing the “Application Acceptance Criteria and Registration Conditions” on the Trust’s social media accounts and website www.waqfisa.bh.",
   },
   {
     question:
       "When registering, I am asked to provide proof of family income. What document should I upload?",
     answer:
-      "You can upload a salary certificate from the employer, and for retired guardians, you can upload a salary certificate from the General Authority for Social Insurance.",
+      "You can upload a salary certificate from your guardian’s current employer. For retired guardians, you can upload a salary certificate from SIO.",
   },
   {
     question:
-      "I completed the registration process on the platform, but when I applied for a scholarship, I couldn't find any of the universities I want to study at.",
+      "I completed the registration process but couldn't find any of the universities I want to study at",
     answer:
-      "The scholarships for the academic year 2024-2025 are only for the universities listed on the platform. You can review them after registering on the website and accessing the application platform. It is not possible to apply for universities not listed in the scholarship plan.",
+      "The scholarships for the academic year 2024-2025 are only for the universities listed on the platform. You can view them after registering on the website and accessing the application platform.",
   },
   {
     question:
       "When applying for the scholarship, I am asked to submit my academic certificates and transcripts. What documents are required in this case?",
     answer:
-      "The original graduation certificate and transcripts in Arabic or English, stamped by the school or the Ministry of Education, are accepted. For private schools, the certificate issued by the Private Schools Licensing Administration of the Ministry of Education should be uploaded.",
+      "The original graduation certificate and transcripts in Arabic or English, stamped by the school or the Ministry of Education. For private schools, the certificate issued by the Directorate of Licensing and Follow-up of Private Schools at the Ministry of Education should be uploaded.",
   },
   {
     question:
       "I tried clicking the submit button, but the submission did not succeed.",
     answer:
-      "Please make sure all required information is entered. If you encounter any other issues, please send an email to info@waqfisa.bh.",
+      "Please make sure all required information is entered. If you encounter any other issues, please email us specifying your issue info@waqfisa.bh.",
   },
   {
     question:
