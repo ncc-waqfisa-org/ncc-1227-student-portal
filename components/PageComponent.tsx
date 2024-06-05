@@ -146,12 +146,10 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                   </div>
                 )}
 
-                <RegPeriodDialog className="text-white btn-outline hover:bg-white/10 hover:border-white" />
+                <RegPeriodDialog className="py-2 leading-4 text-white h-fit btn-outline hover:bg-white/10 hover:border-white" />
               </div>
             </div>
-
             {
-              // <div className="z-40 p-4 pt-20 -mt-10 bg-base-100 sm:p-6 md:p-11">
               <div className="z-40 p-4 pt-20 -mt-10 md:pt-20 sm:pt-20 bg-base-100 sm:p-6 md:p-11">
                 {props.authRequired && !isSignedIn ? (
                   <div>
@@ -225,24 +223,10 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
               >
                 {footerTranslation.t("mediaCenter")}
               </Link>
-              <Link
-                href="/contact"
-                className="link link-hover"
-                // onClick={() => push("/contact")}
-              >
+              <Link href="/contact" className="link link-hover">
                 {footerTranslation.t("contact")}
               </Link>
             </div>
-            {/* <div className="flex flex-col items-center mx-auto text-base-100 md:items-start">
-              <span
-                className="opacity-100 footer-title text-primary"
-                onClick={() => push("/contact")}
-              >
-                {footerTranslation.t("contactUs")}
-              </span>
-              <a dir="ltr">1744 4444</a>
-              <a>edutrust@meo.gov.bh</a> 
-            </div> */}
           </footer>
           <div
             dir="ltr"

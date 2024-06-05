@@ -57,68 +57,48 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
       )}
       {!isBatchPending && batch && (
         <div className="flex flex-col gap-10 mx-auto">
-          {
-            !(
-              signUpEnabled ||
-              newApplicationsEnabled ||
-              (haveActiveApplication && editingApplicationsEnabled) ||
-              haveActiveApplication ||
-              (scholarships?.length ?? 0) > 0
-            ) &&
-              (dayjs().isAfter(dayjs(batch?.signUpEndDate).endOf("day")) ? (
-                <div className="flex flex-wrap justify-center gap-10">
-                  <CardInfoComponent
-                    icon={info}
-                    title={"Registration"}
-                    description={"Registration period is over"}
-                  ></CardInfoComponent>
-                  <CardInfoComponent
-                    icon={info}
-                    title={"التسجيل"}
-                    description={"فترة التسجيل إنتهت"}
-                  ></CardInfoComponent>
-                </div>
-              ) : (
-                <div className="flex flex-wrap justify-center gap-10">
-                  <CardInfoComponent
-                    icon={info}
-                    title={"التسجيل"}
-                    description={`سيتم فتح التسجيل في ${dayjs(
-                      batch?.signUpStartDate
-                    )
-                      .locale(arLocale)
-                      .format("MMM DD, YYYY")}`}
-                  ></CardInfoComponent>
-                  <CardInfoComponent
-                    icon={info}
-                    title={"Registration"}
-                    description={`Registration will open in ${dayjs(
-                      batch?.signUpStartDate
-                    )
-                      .locale(enLocale)
-                      .format("MMM DD, YYYY")}`}
-                  ></CardInfoComponent>
-                </div>
-              ))
-            // <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto place-items-center md:grid-cols-2">
-            //   <CardInfoComponent
-            //     icon={info}
-            //     title={"التسجيل"}
-            //     description={`سيتم فتح التسجيل في ${dayjs(batch?.signUpStartDate)
-            //       .locale(arLocale)
-            //       .format("MMM DD, YYYY")}`}
-            //   ></CardInfoComponent>
-            //   <CardInfoComponent
-            //     icon={info}
-            //     title={"Registration"}
-            //     description={`Registration will open in ${dayjs(
-            //       batch?.signUpStartDate
-            //     )
-            //       .locale(enLocale)
-            //       .format("MMM DD, YYYY")}`}
-            //   ></CardInfoComponent>
-            // </div>
-          }
+          {!(
+            signUpEnabled ||
+            newApplicationsEnabled ||
+            (haveActiveApplication && editingApplicationsEnabled) ||
+            haveActiveApplication ||
+            (scholarships?.length ?? 0) > 0
+          ) &&
+            (dayjs().isAfter(dayjs(batch?.signUpEndDate).endOf("day")) ? (
+              <div className="flex flex-wrap justify-center gap-10">
+                <CardInfoComponent
+                  icon={info}
+                  title={"Registration"}
+                  description={"Registration period is over"}
+                ></CardInfoComponent>
+                <CardInfoComponent
+                  icon={info}
+                  title={"التسجيل"}
+                  description={"فترة التسجيل إنتهت"}
+                ></CardInfoComponent>
+              </div>
+            ) : (
+              <div className="flex flex-wrap justify-center gap-10 ">
+                <CardInfoComponent
+                  icon={info}
+                  title={"التسجيل"}
+                  description={`سيتم فتح التسجيل في ${dayjs(
+                    batch?.signUpStartDate
+                  )
+                    .locale(arLocale)
+                    .format("MMM DD, YYYY")}`}
+                ></CardInfoComponent>
+                <CardInfoComponent
+                  icon={info}
+                  title={"Registration"}
+                  description={`Registration will open in ${dayjs(
+                    batch?.signUpStartDate
+                  )
+                    .locale(enLocale)
+                    .format("MMM DD, YYYY")}`}
+                ></CardInfoComponent>
+              </div>
+            ))}
 
           {(signUpEnabled ||
             newApplicationsEnabled ||
