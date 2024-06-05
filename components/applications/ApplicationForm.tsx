@@ -723,6 +723,7 @@ export const ApplicationForm: FC<Props> = (props) => {
               <Field
                 dir="ltr"
                 type="number"
+                step="0.01"
                 name="gpa"
                 title="gpa"
                 min={88}
