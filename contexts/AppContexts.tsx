@@ -147,12 +147,13 @@ function useProviderApp() {
         /* Checking if the student has an active application. */
         let active = allStudentApplications.find(
           (application) =>
-            application.status === Status.REVIEW ||
-            application.status === Status.APPROVED ||
-            application.status === Status.ELIGIBLE ||
-            application.status === Status.NOT_COMPLETED ||
-            application.status === Status.REJECTED ||
-            application.status === Status.WITHDRAWN
+            (application.status === Status.REVIEW ||
+              application.status === Status.APPROVED ||
+              application.status === Status.ELIGIBLE ||
+              application.status === Status.NOT_COMPLETED ||
+              application.status === Status.REJECTED ||
+              application.status === Status.WITHDRAWN) &&
+            batch?.batch === application.batch
         );
 
         setHaveActiveApplication(active !== undefined);
@@ -160,7 +161,7 @@ function useProviderApp() {
     }
 
     return () => {};
-  }, [user]);
+  }, [user, batch]);
 
   function resetContext() {
     setStudent(undefined);
@@ -191,11 +192,12 @@ function useProviderApp() {
         /* Checking if the student has an active application. */
         let active = allStudentApplications.find(
           (application) =>
-            application.status === Status.REVIEW ||
-            application.status === Status.APPROVED ||
-            application.status === Status.ELIGIBLE ||
-            application.status === Status.NOT_COMPLETED ||
-            application.status === Status.WITHDRAWN
+            (application.status === Status.REVIEW ||
+              application.status === Status.APPROVED ||
+              application.status === Status.ELIGIBLE ||
+              application.status === Status.NOT_COMPLETED ||
+              application.status === Status.WITHDRAWN) &&
+            batch?.batch === application.batch
         );
         setHaveActiveApplication(active !== undefined);
       });

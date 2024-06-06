@@ -137,6 +137,7 @@ export async function getApplicationData(
                 _version
                 _deleted
                 gpa
+                batch
                 reason
                 createdAt
                 attachmentID
@@ -319,6 +320,7 @@ export async function getStudentApplications(
         _version
         _deleted
         gpa
+        batch
         createdAt
         attachmentID
         applicationAttachmentId

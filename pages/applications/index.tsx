@@ -42,17 +42,18 @@ export default function ApplicationsPage() {
 
   const activeApplications = appContext.applications.filter(
     (app) =>
-      app.status === Status.APPROVED ||
-      app.status === Status.ELIGIBLE ||
-      app.status === Status.REVIEW ||
-      app.status === Status.NOT_COMPLETED ||
-      app.status === Status.REJECTED ||
-      app.status === Status.WITHDRAWN
+      (app.status === Status.APPROVED ||
+        app.status === Status.ELIGIBLE ||
+        app.status === Status.REVIEW ||
+        app.status === Status.NOT_COMPLETED ||
+        app.status === Status.REJECTED ||
+        app.status === Status.WITHDRAWN) &&
+      appContext.batch?.batch === app.batch
   );
 
-  // const pastApplications = appContext.applications.filter(
-  //   (app) => app.status === Status.WITHDRAWN
-  // );
+  const pastApplications = appContext.applications.filter(
+    (app) => (app.batch ?? 0) < (appContext.batch?.batch ?? 0)
+  );
 
   const { t } = useTranslation("applications");
 
@@ -133,14 +134,14 @@ export default function ApplicationsPage() {
                   />
                 ))}
           </div>
-          {/* {pastApplications.length > 0 && (
+          {pastApplications.length > 0 && (
             <div>
               <p className="my-4 text-2xl stat-value">
                 {t("pastApplications")}
               </p>
             </div>
-          )} */}
-          {/* <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 [grid-auto-rows:1fr]">
+          )}
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 [grid-auto-rows:1fr]">
             {pastApplications.length > 0 &&
               pastApplications
                 .sort((a, b) => {
@@ -159,7 +160,7 @@ export default function ApplicationsPage() {
                     student={student}
                   />
                 ))}
-          </div> */}
+          </div>
         </div>
       )}
     </PageComponent>

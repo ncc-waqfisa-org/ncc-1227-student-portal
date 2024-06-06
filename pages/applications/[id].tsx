@@ -63,7 +63,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 export default function SingleApplicationPage({ id }: Props) {
   const { t } = useTranslation("applicationPage");
   const [isEdit, setIsEdit] = useState(false);
-  const { student: studentData, editingApplicationsEnabled } = useAppContext();
+  const {
+    student: studentData,
+    editingApplicationsEnabled,
+    batch,
+  } = useAppContext();
   const student = studentData?.getStudent as Student;
 
   const { token } = useAuth();
@@ -130,6 +134,7 @@ export default function SingleApplicationPage({ id }: Props) {
         {(data?.application?.status === Status.REVIEW ||
           data?.application?.status === Status.NOT_COMPLETED ||
           data?.application?.status === Status.ELIGIBLE) &&
+          (data?.application?.batch ?? -1) >= (batch?.batch ?? 0) &&
           editingApplicationsEnabled && (
             <div className="flex justify-end mb-3 ">
               <button
