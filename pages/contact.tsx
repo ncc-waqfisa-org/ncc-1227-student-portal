@@ -80,13 +80,6 @@ const englishFaqs = [
     answer:
       "An email will be sent to you to confirm receipt of your application.",
   },
-  {
-    //New
-    question:
-      "How can I confirm that my application has been successfully submitted?",
-    answer:
-      "An email will be sent to you to confirm receipt of your application.",
-  },
 ];
 
 const arabicFaqs = [
