@@ -80,6 +80,13 @@ const englishFaqs = [
     answer:
       "An email will be sent to you to confirm receipt of your application.",
   },
+  {
+    //New
+    question:
+      "How can I confirm that my application has been successfully submitted?",
+    answer:
+      "An email will be sent to you to confirm receipt of your application.",
+  },
 ];
 
 const arabicFaqs = [
@@ -127,6 +134,12 @@ const arabicFaqs = [
   {
     question: "كيف يمكنني التأكد من أن طلبي قد تم إرساله بنجاح؟",
     answer: "سيتم إرسال بريد إلكتروني إليك لتأكيد استلام طلبك.",
+  },
+  {
+    question:
+      "كيف يمكنني الإطلاع على حالة الطلب المقدم والتعرف إن كان الطلب مكتمل أو غير مكتمل؟",
+    answer:
+      "بإمكانكم تسجيل الدخول في المنصة باستخدام الرقم الشخصي المستخدم خلال عملية التسجيل، والإطلاع ومتابعة حالة طلبكم في حال كان مكتمل أو غير مكتمل بعد إتمام عملية تقديم الطلب للبعثة.",
   },
 ];
 
