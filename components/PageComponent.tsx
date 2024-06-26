@@ -73,7 +73,7 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                   alt="logo"
                   onClick={() => push("/")}
                 />
-                {user && (
+                {user ? (
                   <div
                     tabIndex={0}
                     className="z-50 flex flex-col items-center p-2 rounded-lg hover:cursor-pointer dropdown dropdown-bottom md:dropdown-end md:items-end md:absolute md:right-4 md:top-4 glass"
@@ -105,6 +105,23 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                         </div>
                       </li>
                     </ul>
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => push(`/${locale}/signIn`)}
+                    className="z-50 flex flex-col items-center p-2 rounded-lg hover:cursor-pointer md:items-end md:absolute md:right-4 md:top-4 glass"
+                  >
+                    <div className="flex items-center">
+                      <Image
+                        className="w-10 p-2 "
+                        src={account}
+                        alt="account"
+                      />
+
+                      <div className="pr-2 text-white rtl:pl-2">
+                        <p>{titleTranslation.t("SignIn")}</p>
+                      </div>
+                    </div>
                   </div>
                 )}
 

@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import React, { useState } from "react";
 import { PageComponent } from "../../components/PageComponent";
-import { Application, Program, Status, Student } from "../../src/API";
+import { Application, Batch, Program, Status, Student } from "../../src/API";
 import ViewApplication from "../../components/applications/ViewApplication";
 import { ApplicationForm } from "../../components/applications/ApplicationForm";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -11,6 +11,7 @@ import GetStorageLinkComponent from "../../components/get-storage-link-component
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../hooks/use-auth";
+import dayjs from "dayjs";
 
 interface Props {
   id: string | null;
@@ -128,6 +129,42 @@ export default function SingleApplicationPage({ id }: Props) {
     );
   }
 
+  function checkIfEnabledEditingAfterExtension(
+    application: Application,
+    batch: Batch
+  ) {
+    const university = application?.programs?.items[0]?.program?.university;
+
+    if (!university) {
+      return false;
+    }
+
+    const isExtended = university?.isExtended === 1;
+    if (!isExtended) {
+      return false;
+    }
+
+    const extensionDays = university?.extensionDuration;
+    if (!extensionDays) {
+      return false;
+    }
+
+    if (!batch.updateApplicationEndDate) {
+      return false;
+    }
+
+    const lastDayToUpdateInBatch = dayjs(batch.updateApplicationEndDate).endOf(
+      "day"
+    );
+
+    const lastDayToUpdateAfterExtension = lastDayToUpdateInBatch.add(
+      extensionDays,
+      "days"
+    );
+
+    return dayjs().isBefore(lastDayToUpdateAfterExtension.endOf("day"));
+  }
+
   return (
     <PageComponent title={"Application"} authRequired>
       <div className="max-w-3xl mx-auto">
@@ -135,8 +172,13 @@ export default function SingleApplicationPage({ id }: Props) {
           data?.application?.status === Status.NOT_COMPLETED ||
           data?.application?.status === Status.ELIGIBLE) &&
           (data?.application?.batch ?? -1) >= (batch?.batch ?? 0) &&
-          editingApplicationsEnabled && (
-            <div className="flex justify-end mb-3 ">
+          (editingApplicationsEnabled ||
+            (batch &&
+              checkIfEnabledEditingAfterExtension(
+                data.application,
+                batch
+              ))) && (
+            <div className="flex justify-end mb-3">
               <button
                 className="btn btn-sm btn-outline btn-primary"
                 onClick={() => setIsEdit(!isEdit)}
@@ -157,12 +199,19 @@ export default function SingleApplicationPage({ id }: Props) {
       </div>
 
       <div className="max-w-3xl mx-auto">
-        {data?.application && isEdit && editingApplicationsEnabled && (
-          <ApplicationForm
-            application={data?.application}
-            programs={data?.programs}
-          />
-        )}
+        {data?.application &&
+          isEdit &&
+          (editingApplicationsEnabled ||
+            (batch &&
+              checkIfEnabledEditingAfterExtension(
+                data.application,
+                batch
+              ))) && (
+            <ApplicationForm
+              application={data?.application}
+              programs={data?.programs}
+            />
+          )}
       </div>
 
       <div className="max-w-3xl mx-auto">

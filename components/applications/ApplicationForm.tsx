@@ -76,7 +76,8 @@ interface Props {
 export const ApplicationForm: FC<Props> = (props) => {
   const { user } = useAuth();
   const { push, locale } = useRouter();
-  const { student, syncStudentApplication, batch } = useAppContext();
+  const { student, syncStudentApplication, batch, editingApplicationsEnabled } =
+    useAppContext();
   const { t } = useTranslation("applicationPage");
   const { t: tErrors } = useTranslation("errors");
   const { t: tToast } = useTranslation("toast");
@@ -679,7 +680,7 @@ export const ApplicationForm: FC<Props> = (props) => {
           setFieldValue,
           setFieldError,
         }) => (
-          <Form className="container grid grid-cols-1 gap-3 mx-auto max-w-3xl md:grid-cols-2">
+          <Form className="container grid max-w-3xl grid-cols-1 gap-3 mx-auto md:grid-cols-2">
             {/* FullName */}
             <div className="flex flex-col justify-start w-full">
               <label className="label">{t("fullName")}</label>
@@ -714,7 +715,7 @@ export const ApplicationForm: FC<Props> = (props) => {
             <div className="divider md:col-span-2"></div>
             {/* GPA */}
             <div className="flex flex-col justify-start w-full md:col-span-2">
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <label className="label">{t("studentGPA")}</label>
                 <label className="label-text-alt text-error">
                   {errors.gpa && touched.gpa && errors.gpa}
@@ -735,11 +736,11 @@ export const ApplicationForm: FC<Props> = (props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.gpa ?? ""}
-                disabled={applicationIsEligible}
+                disabled={applicationIsEligible || !editingApplicationsEnabled}
               />
             </div>
             <div className="flex flex-col justify-start w-full md:col-span-2">
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <label className="label">{t("reason")}</label>
                 <label className="label-text-alt text-error">
                   {errors.reason && touched.reason && errors.reason}
@@ -756,6 +757,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                 onChange={(e) => setFieldValue("reason", e.target.value)}
                 onBlur={handleBlur}
                 value={values.reason ?? ""}
+                disabled={applicationIsEligible || !editingApplicationsEnabled}
               />
               <WordCounter
                 className="pt-2"
@@ -768,9 +770,9 @@ export const ApplicationForm: FC<Props> = (props) => {
             {/* Primary Program */}
             {
               <div className="flex flex-col justify-start w-full md:col-span-2">
-                <div className="grid grid-cols-1 gap-3 items-end md:grid-cols-2">
+                <div className="grid items-end grid-cols-1 gap-3 md:grid-cols-2">
                   <div className="w-full">
-                    <div className="flex justify-between items-center">
+                    <div className="flex items-center justify-between">
                       <label className="label">{t("program")}</label>
                       <label className="label-text-alt text-error">
                         {errors.primaryProgramID &&
@@ -799,7 +801,9 @@ export const ApplicationForm: FC<Props> = (props) => {
                       }}
                       onBlur={handleBlur}
                       value={values.primaryProgramID}
-                      disabled={applicationIsEligible}
+                      disabled={
+                        applicationIsEligible || !editingApplicationsEnabled
+                      }
                     >
                       <option
                         selected={props.application === undefined}
@@ -834,8 +838,8 @@ export const ApplicationForm: FC<Props> = (props) => {
                     </Field>
                   </div>
                   {primaryProgram?.university?.isException === 1 && (
-                    <div className="flex flex-col justify-end items-center h-full">
-                      <p className="px-4 py-3 w-full text-center rounded-md border border-secondary">
+                    <div className="flex flex-col items-center justify-end h-full">
+                      <p className="w-full px-4 py-3 text-center border rounded-md border-secondary">
                         {/* Acceptance letter not required */}
                         {t("acceptanceLetterNotRequired")}
                       </p>
@@ -922,7 +926,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                 )}
                 {(primaryProgram?.requirements ||
                   primaryProgram?.requirementsAr) && (
-                  <div className="p-3 mt-2 rounded-md border border-gray-300">
+                  <div className="p-3 mt-2 border border-gray-300 rounded-md">
                     <div className="stat-title">{t("requirements")}</div>
                     <label className="whitespace-pre-wrap stat-desc">
                       {locale == "ar"
@@ -971,7 +975,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                 }}
                 onBlur={handleBlur}
                 value={values.schoolCertificate ?? ""}
-                disabled={applicationIsEligible}
+                disabled={applicationIsEligible || !editingApplicationsEnabled}
               />
               <label className="label-text-alt text-error">
                 {errors.schoolCertificate &&
@@ -1013,7 +1017,7 @@ export const ApplicationForm: FC<Props> = (props) => {
                 }}
                 onBlur={handleBlur}
                 value={values.transcriptDoc ?? ""}
-                disabled={applicationIsEligible}
+                disabled={applicationIsEligible || !editingApplicationsEnabled}
               />
               <p className="py-2 italic whitespace-pre-wrap stat-desc">
                 {t(`transcriptNote`)}
