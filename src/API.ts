@@ -19,6 +19,7 @@ export type ModelAttachmentConditionInput = {
   and?: Array< ModelAttachmentConditionInput | null > | null,
   or?: Array< ModelAttachmentConditionInput | null > | null,
   not?: ModelAttachmentConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelStringInput = {
@@ -59,6 +60,13 @@ export type ModelSizeInput = {
   ge?: number | null,
   gt?: number | null,
   between?: Array< number | null > | null,
+};
+
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
 };
 
 export type Attachment = {
@@ -173,6 +181,7 @@ export type ModelApplicationConditionInput = {
   and?: Array< ModelApplicationConditionInput | null > | null,
   or?: Array< ModelApplicationConditionInput | null > | null,
   not?: ModelApplicationConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
   programApplicationId?: ModelIDInput | null,
   universityApplicationsId?: ModelIDInput | null,
   applicationAttachmentId?: ModelIDInput | null,
@@ -193,13 +202,6 @@ export type ModelFloatInput = {
 export type ModelStatusInput = {
   eq?: Status | null,
   ne?: Status | null,
-};
-
-export type ModelBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
 };
 
 export type ModelNationalityInput = {
@@ -556,6 +558,7 @@ export type ModelProgramChoiceConditionInput = {
   and?: Array< ModelProgramChoiceConditionInput | null > | null,
   or?: Array< ModelProgramChoiceConditionInput | null > | null,
   not?: ModelProgramChoiceConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
   applicationProgramsId?: ModelIDInput | null,
   programApplicationsId?: ModelIDInput | null,
 };
@@ -604,6 +607,7 @@ export type ModelProgramConditionInput = {
   and?: Array< ModelProgramConditionInput | null > | null,
   or?: Array< ModelProgramConditionInput | null > | null,
   not?: ModelProgramConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
   universityProgramsId?: ModelIDInput | null,
 };
 
@@ -652,6 +656,7 @@ export type ModelUniversityConditionInput = {
   and?: Array< ModelUniversityConditionInput | null > | null,
   or?: Array< ModelUniversityConditionInput | null > | null,
   not?: ModelUniversityConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type UpdateUniversityInput = {
@@ -693,6 +698,7 @@ export type ModelAdminLogConditionInput = {
   and?: Array< ModelAdminLogConditionInput | null > | null,
   or?: Array< ModelAdminLogConditionInput | null > | null,
   not?: ModelAdminLogConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
   applicationAdminLogsId?: ModelIDInput | null,
   adminAdminLogsCpr?: ModelStringInput | null,
 };
@@ -735,6 +741,7 @@ export type ModelStudentLogConditionInput = {
   and?: Array< ModelStudentLogConditionInput | null > | null,
   or?: Array< ModelStudentLogConditionInput | null > | null,
   not?: ModelStudentLogConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
   applicationStudentLogsId?: ModelIDInput | null,
   studentStudentLogsCpr?: ModelStringInput | null,
 };
@@ -773,6 +780,7 @@ export type ModelAdminConditionInput = {
   and?: Array< ModelAdminConditionInput | null > | null,
   or?: Array< ModelAdminConditionInput | null > | null,
   not?: ModelAdminConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelAdminRoleInput = {
@@ -825,6 +833,7 @@ export type ModelParentInfoConditionInput = {
   and?: Array< ModelParentInfoConditionInput | null > | null,
   or?: Array< ModelParentInfoConditionInput | null > | null,
   not?: ModelParentInfoConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type UpdateParentInfoInput = {
@@ -897,6 +906,7 @@ export type ModelStudentConditionInput = {
   and?: Array< ModelStudentConditionInput | null > | null,
   or?: Array< ModelStudentConditionInput | null > | null,
   not?: ModelStudentConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelGenderInput = {
@@ -958,6 +968,7 @@ export type ModelBatchConditionInput = {
   and?: Array< ModelBatchConditionInput | null > | null,
   or?: Array< ModelBatchConditionInput | null > | null,
   not?: ModelBatchConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type Batch = {
@@ -1031,6 +1042,7 @@ export type ModelScholarshipConditionInput = {
   and?: Array< ModelScholarshipConditionInput | null > | null,
   or?: Array< ModelScholarshipConditionInput | null > | null,
   not?: ModelScholarshipConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelScholarshipStatusInput = {
@@ -1084,7 +1096,7 @@ export type DeleteScholarshipInput = {
 };
 
 export type CreateStatisticsInput = {
-  id?: number | null,
+  id: number,
   batch: number,
   totalApplications?: number | null,
   totalApplicationsPerStatus?: string | null,
@@ -1092,6 +1104,12 @@ export type CreateStatisticsInput = {
   gpaHistogram?: string | null,
   totalApplicationsPerUniversity?: string | null,
   topUniversities?: string | null,
+  topPrograms?: string | null,
+  familyIncome?: string | null,
+  schoolType?: string | null,
+  students?: string | null,
+  applications?: string | null,
+  today?: string | null,
   _version?: number | null,
 };
 
@@ -1103,9 +1121,16 @@ export type ModelStatisticsConditionInput = {
   gpaHistogram?: ModelStringInput | null,
   totalApplicationsPerUniversity?: ModelStringInput | null,
   topUniversities?: ModelStringInput | null,
+  topPrograms?: ModelStringInput | null,
+  familyIncome?: ModelStringInput | null,
+  schoolType?: ModelStringInput | null,
+  students?: ModelStringInput | null,
+  applications?: ModelStringInput | null,
+  today?: ModelStringInput | null,
   and?: Array< ModelStatisticsConditionInput | null > | null,
   or?: Array< ModelStatisticsConditionInput | null > | null,
   not?: ModelStatisticsConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type Statistics = {
@@ -1118,6 +1143,12 @@ export type Statistics = {
   gpaHistogram?: string | null,
   totalApplicationsPerUniversity?: string | null,
   topUniversities?: string | null,
+  topPrograms?: string | null,
+  familyIncome?: string | null,
+  schoolType?: string | null,
+  students?: string | null,
+  applications?: string | null,
+  today?: string | null,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -1134,6 +1165,12 @@ export type UpdateStatisticsInput = {
   gpaHistogram?: string | null,
   totalApplicationsPerUniversity?: string | null,
   topUniversities?: string | null,
+  topPrograms?: string | null,
+  familyIncome?: string | null,
+  schoolType?: string | null,
+  students?: string | null,
+  applications?: string | null,
+  today?: string | null,
   _version?: number | null,
 };
 
@@ -1151,6 +1188,7 @@ export type ModelAttachmentFilterInput = {
   and?: Array< ModelAttachmentFilterInput | null > | null,
   or?: Array< ModelAttachmentFilterInput | null > | null,
   not?: ModelAttachmentFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelAttachmentConnection = {
@@ -1185,6 +1223,7 @@ export type ModelApplicationFilterInput = {
   and?: Array< ModelApplicationFilterInput | null > | null,
   or?: Array< ModelApplicationFilterInput | null > | null,
   not?: ModelApplicationFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
   programApplicationId?: ModelIDInput | null,
   universityApplicationsId?: ModelIDInput | null,
   applicationAttachmentId?: ModelIDInput | null,
@@ -1199,6 +1238,7 @@ export type ModelProgramChoiceFilterInput = {
   and?: Array< ModelProgramChoiceFilterInput | null > | null,
   or?: Array< ModelProgramChoiceFilterInput | null > | null,
   not?: ModelProgramChoiceFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
   applicationProgramsId?: ModelIDInput | null,
   programApplicationsId?: ModelIDInput | null,
 };
@@ -1217,6 +1257,7 @@ export type ModelProgramFilterInput = {
   and?: Array< ModelProgramFilterInput | null > | null,
   or?: Array< ModelProgramFilterInput | null > | null,
   not?: ModelProgramFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
   universityProgramsId?: ModelIDInput | null,
 };
 
@@ -1233,6 +1274,7 @@ export type ModelUniversityFilterInput = {
   and?: Array< ModelUniversityFilterInput | null > | null,
   or?: Array< ModelUniversityFilterInput | null > | null,
   not?: ModelUniversityFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelUniversityConnection = {
@@ -1252,6 +1294,7 @@ export type ModelAdminLogFilterInput = {
   and?: Array< ModelAdminLogFilterInput | null > | null,
   or?: Array< ModelAdminLogFilterInput | null > | null,
   not?: ModelAdminLogFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
   applicationAdminLogsId?: ModelIDInput | null,
   adminAdminLogsCpr?: ModelStringInput | null,
 };
@@ -1266,6 +1309,7 @@ export type ModelStudentLogFilterInput = {
   and?: Array< ModelStudentLogFilterInput | null > | null,
   or?: Array< ModelStudentLogFilterInput | null > | null,
   not?: ModelStudentLogFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
   applicationStudentLogsId?: ModelIDInput | null,
   studentStudentLogsCpr?: ModelStringInput | null,
 };
@@ -1279,6 +1323,7 @@ export type ModelAdminFilterInput = {
   and?: Array< ModelAdminFilterInput | null > | null,
   or?: Array< ModelAdminFilterInput | null > | null,
   not?: ModelAdminFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export enum ModelSortDirection {
@@ -1310,6 +1355,7 @@ export type ModelParentInfoFilterInput = {
   and?: Array< ModelParentInfoFilterInput | null > | null,
   or?: Array< ModelParentInfoFilterInput | null > | null,
   not?: ModelParentInfoFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelParentInfoConnection = {
@@ -1344,6 +1390,7 @@ export type ModelStudentFilterInput = {
   and?: Array< ModelStudentFilterInput | null > | null,
   or?: Array< ModelStudentFilterInput | null > | null,
   not?: ModelStudentFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelStudentConnection = {
@@ -1363,6 +1410,7 @@ export type ModelBatchFilterInput = {
   and?: Array< ModelBatchFilterInput | null > | null,
   or?: Array< ModelBatchFilterInput | null > | null,
   not?: ModelBatchFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelBatchConnection = {
@@ -1389,6 +1437,7 @@ export type ModelScholarshipFilterInput = {
   and?: Array< ModelScholarshipFilterInput | null > | null,
   or?: Array< ModelScholarshipFilterInput | null > | null,
   not?: ModelScholarshipFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelScholarshipConnection = {
@@ -1407,9 +1456,16 @@ export type ModelStatisticsFilterInput = {
   gpaHistogram?: ModelStringInput | null,
   totalApplicationsPerUniversity?: ModelStringInput | null,
   topUniversities?: ModelStringInput | null,
+  topPrograms?: ModelStringInput | null,
+  familyIncome?: ModelStringInput | null,
+  schoolType?: ModelStringInput | null,
+  students?: ModelStringInput | null,
+  applications?: ModelStringInput | null,
+  today?: ModelStringInput | null,
   and?: Array< ModelStatisticsFilterInput | null > | null,
   or?: Array< ModelStatisticsFilterInput | null > | null,
   not?: ModelStatisticsFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelStatisticsConnection = {
@@ -1455,6 +1511,7 @@ export type ModelSubscriptionAttachmentFilterInput = {
   schoolCertificate?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionAttachmentFilterInput | null > | null,
   or?: Array< ModelSubscriptionAttachmentFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -1511,6 +1568,7 @@ export type ModelSubscriptionApplicationFilterInput = {
   reason?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionApplicationFilterInput | null > | null,
   or?: Array< ModelSubscriptionApplicationFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionFloatInput = {
@@ -1550,6 +1608,7 @@ export type ModelSubscriptionProgramChoiceFilterInput = {
   acceptanceLetterDoc?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionProgramChoiceFilterInput | null > | null,
   or?: Array< ModelSubscriptionProgramChoiceFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionProgramFilterInput = {
@@ -1565,6 +1624,7 @@ export type ModelSubscriptionProgramFilterInput = {
   isTrashed?: ModelSubscriptionBooleanInput | null,
   and?: Array< ModelSubscriptionProgramFilterInput | null > | null,
   or?: Array< ModelSubscriptionProgramFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionUniversityFilterInput = {
@@ -1579,6 +1639,7 @@ export type ModelSubscriptionUniversityFilterInput = {
   isTrashed?: ModelSubscriptionBooleanInput | null,
   and?: Array< ModelSubscriptionUniversityFilterInput | null > | null,
   or?: Array< ModelSubscriptionUniversityFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionAdminLogFilterInput = {
@@ -1590,6 +1651,7 @@ export type ModelSubscriptionAdminLogFilterInput = {
   reason?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionAdminLogFilterInput | null > | null,
   or?: Array< ModelSubscriptionAdminLogFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionStudentLogFilterInput = {
@@ -1601,6 +1663,7 @@ export type ModelSubscriptionStudentLogFilterInput = {
   reason?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionStudentLogFilterInput | null > | null,
   or?: Array< ModelSubscriptionStudentLogFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionAdminFilterInput = {
@@ -1611,6 +1674,7 @@ export type ModelSubscriptionAdminFilterInput = {
   isDeactivated?: ModelSubscriptionBooleanInput | null,
   and?: Array< ModelSubscriptionAdminFilterInput | null > | null,
   or?: Array< ModelSubscriptionAdminFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionParentInfoFilterInput = {
@@ -1628,6 +1692,7 @@ export type ModelSubscriptionParentInfoFilterInput = {
   address?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionParentInfoFilterInput | null > | null,
   or?: Array< ModelSubscriptionParentInfoFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionStudentFilterInput = {
@@ -1654,6 +1719,7 @@ export type ModelSubscriptionStudentFilterInput = {
   parentInfoID?: ModelSubscriptionIDInput | null,
   and?: Array< ModelSubscriptionStudentFilterInput | null > | null,
   or?: Array< ModelSubscriptionStudentFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionBatchFilterInput = {
@@ -1665,6 +1731,7 @@ export type ModelSubscriptionBatchFilterInput = {
   signUpEndDate?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionBatchFilterInput | null > | null,
   or?: Array< ModelSubscriptionBatchFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionScholarshipFilterInput = {
@@ -1683,6 +1750,7 @@ export type ModelSubscriptionScholarshipFilterInput = {
   IBANLetterDoc?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionScholarshipFilterInput | null > | null,
   or?: Array< ModelSubscriptionScholarshipFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionStatisticsFilterInput = {
@@ -1694,8 +1762,15 @@ export type ModelSubscriptionStatisticsFilterInput = {
   gpaHistogram?: ModelSubscriptionStringInput | null,
   totalApplicationsPerUniversity?: ModelSubscriptionStringInput | null,
   topUniversities?: ModelSubscriptionStringInput | null,
+  topPrograms?: ModelSubscriptionStringInput | null,
+  familyIncome?: ModelSubscriptionStringInput | null,
+  schoolType?: ModelSubscriptionStringInput | null,
+  students?: ModelSubscriptionStringInput | null,
+  applications?: ModelSubscriptionStringInput | null,
+  today?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionStatisticsFilterInput | null > | null,
   or?: Array< ModelSubscriptionStatisticsFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type CreateAttachmentMutationVariables = {
@@ -3547,6 +3622,12 @@ export type CreateStatisticsMutation = {
     gpaHistogram?: string | null,
     totalApplicationsPerUniversity?: string | null,
     topUniversities?: string | null,
+    topPrograms?: string | null,
+    familyIncome?: string | null,
+    schoolType?: string | null,
+    students?: string | null,
+    applications?: string | null,
+    today?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3571,6 +3652,12 @@ export type UpdateStatisticsMutation = {
     gpaHistogram?: string | null,
     totalApplicationsPerUniversity?: string | null,
     topUniversities?: string | null,
+    topPrograms?: string | null,
+    familyIncome?: string | null,
+    schoolType?: string | null,
+    students?: string | null,
+    applications?: string | null,
+    today?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3595,6 +3682,12 @@ export type DeleteStatisticsMutation = {
     gpaHistogram?: string | null,
     totalApplicationsPerUniversity?: string | null,
     topUniversities?: string | null,
+    topPrograms?: string | null,
+    familyIncome?: string | null,
+    schoolType?: string | null,
+    students?: string | null,
+    applications?: string | null,
+    today?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5021,6 +5114,12 @@ export type GetStatisticsQuery = {
     gpaHistogram?: string | null,
     totalApplicationsPerUniversity?: string | null,
     topUniversities?: string | null,
+    topPrograms?: string | null,
+    familyIncome?: string | null,
+    schoolType?: string | null,
+    students?: string | null,
+    applications?: string | null,
+    today?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5050,6 +5149,12 @@ export type ListStatisticsQuery = {
       gpaHistogram?: string | null,
       totalApplicationsPerUniversity?: string | null,
       topUniversities?: string | null,
+      topPrograms?: string | null,
+      familyIncome?: string | null,
+      schoolType?: string | null,
+      students?: string | null,
+      applications?: string | null,
+      today?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5081,6 +5186,12 @@ export type SyncStatisticsQuery = {
       gpaHistogram?: string | null,
       totalApplicationsPerUniversity?: string | null,
       topUniversities?: string | null,
+      topPrograms?: string | null,
+      familyIncome?: string | null,
+      schoolType?: string | null,
+      students?: string | null,
+      applications?: string | null,
+      today?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5634,6 +5745,12 @@ export type StatisticsByBatchAndTotalApplicationsQuery = {
       gpaHistogram?: string | null,
       totalApplicationsPerUniversity?: string | null,
       topUniversities?: string | null,
+      topPrograms?: string | null,
+      familyIncome?: string | null,
+      schoolType?: string | null,
+      students?: string | null,
+      applications?: string | null,
+      today?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -7457,6 +7574,12 @@ export type OnCreateStatisticsSubscription = {
     gpaHistogram?: string | null,
     totalApplicationsPerUniversity?: string | null,
     topUniversities?: string | null,
+    topPrograms?: string | null,
+    familyIncome?: string | null,
+    schoolType?: string | null,
+    students?: string | null,
+    applications?: string | null,
+    today?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -7480,6 +7603,12 @@ export type OnUpdateStatisticsSubscription = {
     gpaHistogram?: string | null,
     totalApplicationsPerUniversity?: string | null,
     topUniversities?: string | null,
+    topPrograms?: string | null,
+    familyIncome?: string | null,
+    schoolType?: string | null,
+    students?: string | null,
+    applications?: string | null,
+    today?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -7503,6 +7632,12 @@ export type OnDeleteStatisticsSubscription = {
     gpaHistogram?: string | null,
     totalApplicationsPerUniversity?: string | null,
     topUniversities?: string | null,
+    topPrograms?: string | null,
+    familyIncome?: string | null,
+    schoolType?: string | null,
+    students?: string | null,
+    applications?: string | null,
+    today?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,

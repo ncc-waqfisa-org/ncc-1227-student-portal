@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const XLSX = require('xlsx');
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const s3 = new AWS.S3();
 const cognito = new AWS.CognitoIdentityServiceProvider();
@@ -21,7 +22,15 @@ exports.handler = async (event) => {
             };
         }
         const batchValue = parseInt(event.queryStringParameters?.batch) || new Date().getFullYear();
-        const selectedApplications = JSON.parse(event.body)?.ids || null;
+        let body;
+
+        if (typeof event.body === 'string') {
+            body = JSON.parse(event.body);
+        } else {
+            body = event;
+        }
+
+        const selectedApplications = body.ids;
         if(selectedApplications && !Array.isArray(selectedApplications)) {
             return {
                 statusCode: 400,
@@ -62,12 +71,83 @@ exports.handler = async (event) => {
     }
 };
 
+
+function jsonToXlsx(jsonArray) {
+    const worksheet = XLSX.utils.json_to_sheet(jsonArray);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Applications');
+    const workbookBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+
+    return workbookBuffer;
+}
+
+async function getStudent(tableName, cpr) {
+    const params = {
+        TableName: tableName,
+        Key: {
+            cpr: cpr
+        }
+    };
+    const { Item } = await dynamoDB.get(params).promise();
+    return Item;
+}
+
+
+async function convertToJson(applications, students) {
+    const jsonArray = [];
+    for (const application of applications) {
+        let student = students.find(student => student.cpr === application.studentCPR);
+        const university = application.universityID ? await getUniversity(application.universityID) : { name: "NA" };
+        const program = application.universityID ? await getProgram(application.programID) : { name: "NA" };
+        const reason = processReason(application.reason);
+        if(!student) {
+            student = await getStudent('Student-cw7beg2perdtnl7onnneec4jfa-staging', application.studentCPR);
+        }
+        const graduationYear = student?.graduationDate? new Date(student?.graduationDate).getFullYear(): application.batch;
+
+
+        if (student) {
+            jsonArray.push({
+                "Id": application.id,
+                "Student CPR": application.studentCPR,
+                "Name": student.fullName,
+                "Gender": student.gender,
+                "Nationality": student.nationalityCategory,
+                "Field": student.specialization,
+                "Phone": student.phone,
+                "Email": student.email,
+                "Graduation Year": graduationYear,
+                "Status": application.status,
+                "GPA": application.gpa,
+                "Verified GPA": application.verifiedGPA,
+                "Score": application.score,
+                "School Name": application.schoolName,
+                "School Type": application.schoolType,
+                "Family Income": application.familyIncome,
+                "Chosen University": university.name,
+                "Chosen Program": program.name,
+                "Reason": reason,
+                "Total Score": application.score,
+                "Number Of Family Members": student.numberOfFamilyMembers,
+                "Is Family Income Verified": application.isFamilyIncomeVerified ? "Yes" : ""
+            });
+        }
+    }
+
+    return jsonArray;
+}
+
+
+
 async function exportApplicationsCsv(tableName, batchValue, status, selectedApplications) {
     const applications = selectedApplications? await getSelectedApplications(tableName, selectedApplications) :  await getApplications(tableName, batchValue, status);
     const students = await getStudents(batchValue);
-    const csv = await convertToCsv(applications, students);
-    return uploadToS3(csv, batchValue);
+    const jsonArray = await convertToJson(applications, students);
+    const xlsxBuffer = jsonToXlsx(jsonArray);
+    const uploadUrl = await uploadToS3(xlsxBuffer, batchValue);
+    return uploadUrl;
 }
+
 
 async function getApplications(tableName, batchValue, status) {
     const params = {
@@ -91,6 +171,7 @@ async function getApplications(tableName, batchValue, status) {
 
     let allApplications = [];
 
+
     do {
         const applications = await dynamoDB.query(params).promise();
         allApplications = allApplications.concat(applications.Items);
@@ -103,20 +184,20 @@ async function getApplications(tableName, batchValue, status) {
 }
 
 
-async function convertToCsv(applications, students) {
-    let csv = 'id,Student CPR,Name,Gender,Nationality,Field,Phone,email,Graduation Year,Status,GPA,Score,School Name,School Type,Family Income,Chosen University,Chosen Program,Reason,Total Score,Number of Family Members\n';
-    for (const application of applications) {
-        const student = students.find(student => student.cpr === application.studentCPR);
-        const university = application.universityID? await getUniversity(application.universityID): {name: "NA"}
-        const program = application.universityID? await getProgram(application.programID): {name: "NA"}
-        const reason = processReason(application.reason);
-        if (student) {
-            csv += `${application.id},=""${application.studentCPR}"","${student?.fullName}",${student?.gender},${student?.nationalityCategory},"${student?.specialization}",${student?.phone},${student?.email},${application.batch},${application.status},${application.gpa},${application.score},"${application.schoolName}",${application.schoolType},${application.familyIncome},"${university?.name}","${program?.name}","${reason}",${application.score},${student.numberOfFamilyMembers}\n`;
-        }
-    }
-    console.log(csv);
-    return csv;
-}
+// async function convertToCsv(applications, students) {
+//     let csv = 'id,Student CPR,Name,Gender,Nationality,Field,Phone,email,Graduation Year,Status,GPA,Score,School Name,School Type,Family Income,Chosen University,Chosen Program,Reason,Total Score,Number of Family Members\n';
+//     for (const application of applications) {
+//         const student = students.find(student => student.cpr === application.studentCPR);
+//         const university = application.universityID? await getUniversity(application.universityID): {name: "NA"}
+//         const program = application.universityID? await getProgram(application.programID): {name: "NA"}
+//         const reason = processReason(application.reason);
+//         if (student) {
+//             csv += `${application.id},=""${application.studentCPR}"","${student?.fullName}",${student?.gender},${student?.nationalityCategory},"${student?.specialization}",${student?.phone},${student?.email},${application.batch},${application.status},${application.gpa},${application.score},"${application.schoolName}",${application.schoolType},${application.familyIncome},"${university?.name}","${program?.name}","${reason}",${application.score},${student.numberOfFamilyMembers}\n`;
+//         }
+//     }
+//     console.log(csv);
+//     return csv;
+// }
 
 function processReason(reason) {
     // take new line after every 90 characters, if there is a space. if not, move to the next space and take a new line
@@ -146,17 +227,21 @@ function processReason(reason) {
 }
 
 
-async function uploadToS3(csv, batchValue) {
-    console.log('Uploading to S3', csv, batchValue);
+async function uploadToS3(xlsxBuffer, batchValue) {
+    console.log('Uploading to S3', batchValue);
+
     const params = {
         Bucket: 'amplify-ncc-staging-65406-deployment',
-        Key: 'Applications ' + batchValue + '.csv',
-        Body: csv
+        Key: `Applications ${batchValue}.xlsx`,
+        Body: xlsxBuffer,
+        ContentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     };
     await s3.upload(params).promise();
-    // return the URL of the uploaded file
-    return s3.getSignedUrl('getObject', {Bucket: params.Bucket, Key: params.Key});
+
+    // Return the URL of the uploaded file
+    return s3.getSignedUrl('getObject', { Bucket: params.Bucket, Key: params.Key });
 }
+
 
 async function getStudents(batchValue) {
     // const startDate = new Date();

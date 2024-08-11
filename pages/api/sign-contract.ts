@@ -42,8 +42,10 @@ async function signPDF(
   // Adjust these values based on the desired signature size and position
   const signatureWidth = 100;
   const signatureHeight = 50;
-  const xPosition = 70; // Position from the left of the page
-  const yPosition = 30; // Position from the bottom of the page
+  const xPosition = 100; // Position from the left of the page
+  const yPosition = 420; // Position from the bottom of the page
+  // const xPosition = 70; // Position from the left of the page
+  // const yPosition = 30; // Position from the bottom of the page
 
   // Put the first signature
   lastPage.drawImage(signatureImage, {

@@ -1505,6 +1505,12 @@ export const getStatistics = /* GraphQL */ `query GetStatistics($id: Int!) {
     gpaHistogram
     totalApplicationsPerUniversity
     topUniversities
+    topPrograms
+    familyIncome
+    schoolType
+    students
+    applications
+    today
     createdAt
     updatedAt
     _version
@@ -1540,6 +1546,12 @@ export const listStatistics = /* GraphQL */ `query ListStatistics(
       gpaHistogram
       totalApplicationsPerUniversity
       topUniversities
+      topPrograms
+      familyIncome
+      schoolType
+      students
+      applications
+      today
       createdAt
       updatedAt
       _version
@@ -1577,6 +1589,12 @@ export const syncStatistics = /* GraphQL */ `query SyncStatistics(
       gpaHistogram
       totalApplicationsPerUniversity
       topUniversities
+      topPrograms
+      familyIncome
+      schoolType
+      students
+      applications
+      today
       createdAt
       updatedAt
       _version
@@ -2232,6 +2250,12 @@ export const statisticsByBatchAndTotalApplications = /* GraphQL */ `query Statis
       gpaHistogram
       totalApplicationsPerUniversity
       topUniversities
+      topPrograms
+      familyIncome
+      schoolType
+      students
+      applications
+      today
       createdAt
       updatedAt
       _version

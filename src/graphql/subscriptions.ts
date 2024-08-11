@@ -1823,6 +1823,12 @@ export const onCreateStatistics = /* GraphQL */ `subscription OnCreateStatistics
     gpaHistogram
     totalApplicationsPerUniversity
     topUniversities
+    topPrograms
+    familyIncome
+    schoolType
+    students
+    applications
+    today
     createdAt
     updatedAt
     _version
@@ -1847,6 +1853,12 @@ export const onUpdateStatistics = /* GraphQL */ `subscription OnUpdateStatistics
     gpaHistogram
     totalApplicationsPerUniversity
     topUniversities
+    topPrograms
+    familyIncome
+    schoolType
+    students
+    applications
+    today
     createdAt
     updatedAt
     _version
@@ -1871,6 +1883,12 @@ export const onDeleteStatistics = /* GraphQL */ `subscription OnDeleteStatistics
     gpaHistogram
     totalApplicationsPerUniversity
     topUniversities
+    topPrograms
+    familyIncome
+    schoolType
+    students
+    applications
+    today
     createdAt
     updatedAt
     _version

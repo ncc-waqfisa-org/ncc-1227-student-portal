@@ -8,13 +8,23 @@ exports.handler = async (event) => {
     console.log(`EVENT: ${JSON.stringify(event)}`);
     try {
         // const requestBody = JSON.parse(event.body);
-        const requestBody = event;
+        const requestBody = event.Records[0];
         console.log(requestBody);
+        console.log(requestBody.eventName);
+        if(requestBody.eventName !== 'MODIFY') {
+            return {
+                statusCode: 200,
+                body: JSON.stringify({ message: 'No changes detected. Skipping update' })
+            };
+        }
 
-        const student = requestBody.Records[0].dynamodb.NewImage;
-        const oldStudent = requestBody.Records[0].dynamodb.OldImage;
+        const student = requestBody.dynamodb.NewImage;
+        const oldStudent = requestBody.dynamodb.OldImage;
+        console.log(student, oldStudent);
         const application = await getApplication(student.cpr.S);
+        console.log(application);
         if(!application) {
+            console.log('Application not found. Skipping update');
             return {
                 statusCode: 200,
                 body: JSON.stringify({ message: 'Application not found. Skipping update' })
@@ -30,11 +40,6 @@ exports.handler = async (event) => {
 
         return {
             statusCode: 200,
-            //  Uncomment below to enable CORS requests
-            //  headers: {
-            //      "Access-Control-Allow-Origin": "*",
-            //      "Access-Control-Allow-Headers": "*"
-            //  },
             body: JSON.stringify({
                 message: 'Application updated successfully'
             }),
@@ -104,7 +109,7 @@ async function getApplication(studentCPR) {
 
 function calculateScore(familyIncome, verifiedGPA, gpa, adminPoints) {
     let score = verifiedGPA? verifiedGPA * 0.7 : gpa * 0.7;
-    if (familyIncome === "LESS_THAN_1500") {
+    if (familyIncome === "LESS_THAN_1500" || familyIncome === "BETWEEN_500_AND_700" || familyIncome === "BETWEEN_700_AND_1000" || familyIncome === "LESS_THAN_500") {
         score += 20;
     }
     else if (familyIncome === "MORE_THAN_1500") {
@@ -114,3 +119,4 @@ function calculateScore(familyIncome, verifiedGPA, gpa, adminPoints) {
     score += adminPoints ? parseInt(adminPoints) : 0;
     return Math.round(score * 100) / 100;
 }
+

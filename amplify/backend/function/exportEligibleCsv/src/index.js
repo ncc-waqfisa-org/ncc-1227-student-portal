@@ -91,33 +91,33 @@ async function getApplications(tableName, batchValue, exceptionUniversities, ext
             return false;
         }
         // Filter out not completed applications unless they are from exception or extended universities
-        if (application.status === 'NOT_COMPLETED') {
-            // return exceptionUniversities.some(university => university.id === application.universityID)
-            //     || extendedUniversities.some(university => university.id === application.universityID);
-            if(exceptionUniversities.some(university => university.id === application.universityID)){
-                return true;
-            }
-            if (extendedUniversities.some(university => university.id === application.universityID)) {
-                // Check if today is before the extended deadline
-                const today = new Date();
-                const chosenUniversity = extendedUniversities.find(university => university.id === application.universityID);
-
-                const updateApplicationEndDate = batchDetails.updateApplicationEndDate;
-
-                const [year, month, day] = updateApplicationEndDate.split('-').map(Number);
-
-                let deadline = new Date(year, month - 1, day);
-
-                deadline.setDate(deadline.getDate() + chosenUniversity.extensionDuration);
-
-                console.log('Today:', today);
-                console.log('Deadline:', deadline);
-                console.log('Is today before deadline:', today <= deadline);
-
-                return today <= deadline;
-            }
-            return false;
-        }
+        // if (application.status === 'NOT_COMPLETED') {
+        //     // return exceptionUniversities.some(university => university.id === application.universityID)
+        //     //     || extendedUniversities.some(university => university.id === application.universityID);
+        //     if(exceptionUniversities.some(university => university.id === application.universityID)){
+        //         return true;
+        //     }
+        //     if (extendedUniversities.some(university => university.id === application.universityID)) {
+        //         // Check if today is before the extended deadline
+        //         const today = new Date();
+        //         const chosenUniversity = extendedUniversities.find(university => university.id === application.universityID);
+        //
+        //         const updateApplicationEndDate = batchDetails.updateApplicationEndDate;
+        //
+        //         const [year, month, day] = updateApplicationEndDate.split('-').map(Number);
+        //
+        //         let deadline = new Date(year, month - 1, day);
+        //
+        //         deadline.setDate(deadline.getDate() + chosenUniversity.extensionDuration);
+        //
+        //         console.log('Today:', today);
+        //         console.log('Deadline:', deadline);
+        //         console.log('Is today before deadline:', today <= deadline);
+        //
+        //         return today <= deadline;
+        //     }
+        //     return false;
+        // }
         // Keep all other applications
         return true;
     });
@@ -126,7 +126,6 @@ async function getApplications(tableName, batchValue, exceptionUniversities, ext
     return allApplications;
 }
 
-
 async function convertToCsv(applications) {
     // TODO: REMOVE THE Status, UniversityID, ProgramID from the CSV
     // let csv = 'StudentCPR,GPA,verifiedGPA,Status,University\n';
@@ -134,7 +133,7 @@ async function convertToCsv(applications) {
     for (const application of applications) {
         // let university = application.universityID? await getUniversity(application.universityID): {name: 'UNKNOWN'};
         // csv += `=""${application.studentCPR}"",${application.gpa},PLEASE VERIFY,${application.status},${university?.name}\n`;
-        csv += `=""${application.studentCPR}"",PLEASE VERIFY\n`;
+        csv += `=""${application.studentCPR}"",${application.verifiedGPA? application.verifiedGPA: 'PLEASE VERIFY'}\n`;
 
     }
     return csv;

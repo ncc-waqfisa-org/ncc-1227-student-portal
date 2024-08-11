@@ -2019,6 +2019,48 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "topPrograms": {
+                    "name": "topPrograms",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "familyIncome": {
+                    "name": "familyIncome",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "schoolType": {
+                    "name": "schoolType",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "students": {
+                    "name": "students",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "applications": {
+                    "name": "applications",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "today": {
+                    "name": "today",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -2150,5 +2192,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "cde1147934fcbecbcddde0d2b8cd2d7e"
+    "version": "397b85466ff78b779cffaf46213245d2"
 };

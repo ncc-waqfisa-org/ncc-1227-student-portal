@@ -40,11 +40,6 @@ exports.handler = async (event) => {
 
     return {
         statusCode: 200,
-    //  Uncomment below to enable CORS requests
-    //  headers: {
-    //      "Access-Control-Allow-Origin": "*",
-    //      "Access-Control-Allow-Headers": "*"
-    //  },
         body: JSON.stringify({ message: 'Applications updated' })
     };
 };
@@ -52,7 +47,7 @@ exports.handler = async (event) => {
 
 async function getApplications(batch) {
     const params = {
-        TableName: 'Application-cw7beg2perdtnl7onnneec4jfa-staging',
+        TableName: 'Application-cw7beg2perdtnl7onn neec4jfa-staging',
         IndexName: 'byProcessed',
         KeyConditionExpression: '#batch = :batchValue AND #processed = :processedValue',
         ScanIndexForward: false,
@@ -94,8 +89,8 @@ async function bulkUpdateApplications(batchValue, applications, extendedUniversi
         };
         const minimumGPA = programs.find(program => program.id === application.programID).minimumGPA || 88;
         const universityId = application.universityID;
-        const isExtended = extendedUniversities.some(university => university.id === universityId);
-        const isException = exceptionUniversities.some(university => university.id === universityId);
+        // const isExtended = extendedUniversities.some(university => university.id === universityId);
+        // const isException = exceptionUniversities.some(university => university.id === universityId);
         const isNonBahraini = application.nationalityCategory === 'NON_BAHRAINI';
         const isEligible = application.verifiedGPA? application.verifiedGPA >= minimumGPA : false;
         const isGpaVerified = !!application.verifiedGPA;
@@ -104,27 +99,27 @@ async function bulkUpdateApplications(batchValue, applications, extendedUniversi
         console.log('Application verified GPA:', application.verifiedGPA);
 
 
-        let isNotCompleted = application.status === 'NOT_COMPLETED';
-        if(isException) {
-            isNotCompleted = false;
-        } else if(isExtended) {
-            const today = new Date();
-            const chosenUniversity = extendedUniversities.find(university => university.id === application.universityID);
-
-            const updateApplicationEndDate = batchDetails.updateApplicationEndDate;
-
-            const [year, month, day] = updateApplicationEndDate.split('-').map(Number);
-
-            let deadline = new Date(year, month - 1, day);
-
-            deadline.setDate(deadline.getDate() + chosenUniversity.extensionDuration);
-
-            console.log('Today:', today);
-            console.log('Deadline:', deadline);
-            console.log('Is today before deadline:', today <= deadline);
-
-            isNotCompleted = today <= deadline;
-        }
+        // let isNotCompleted = application.status === 'NOT_COMPLETED';
+        // if(isException) {
+        //     isNotCompleted = false;
+        // } else if(isExtended) {
+        //     const today = new Date();
+        //     const chosenUniversity = extendedUniversities.find(university => university.id === application.universityID);
+        //
+        //     const updateApplicationEndDate = batchDetails.updateApplicationEndDate;
+        //
+        //     const [year, month, day] = updateApplicationEndDate.split('-').map(Number);
+        //
+        //     let deadline = new Date(year, month - 1, day);
+        //
+        //     deadline.setDate(deadline.getDate() + chosenUniversity.extensionDuration);
+        //
+        //     console.log('Today:', today);
+        //     console.log('Deadline:', deadline);
+        //     console.log('Is today before deadline:', today <= deadline);
+        //
+        //     isNotCompleted = today <= deadline;
+        // }
 
         let status;
         let reason = "Processed by system"
@@ -136,22 +131,24 @@ async function bulkUpdateApplications(batchValue, applications, extendedUniversi
             reason = "Student is not Bahraini";
             snapshot = "Changed from " + application.status + " to " + status;
         }
+
         else if(application.verifiedGPA && application.verifiedGPA < 88) {
             status = 'REJECTED';
             isProcessed = 1;
             reason = "GPA is less than 88";
             snapshot = "Changed from " + application.status + " to " + status;
         }
-        else if(isNotCompleted) {
-            status = 'REJECTED';
-            isProcessed = 1;
-            reason = "Application is not completed";
-            snapshot = "Changed from " + application.status + " to " + status;
-        }
-        else if(!isNotCompleted && !application.verifiedGPA) {
-            status = 'REVIEW';
-            isProcessed = 0;
-        }
+
+        // else if(isNotCompleted) {
+        //     status = 'REJECTED';
+        //     isProcessed = 1;
+        //     reason = "Application is not completed";
+        //     snapshot = "Changed from " + application.status + " to " + status;
+        // }
+        // else if(!isNotCompleted && !application.verifiedGPA) {
+        //     status = 'REVIEW';
+        //     isProcessed = 0;
+        // }
         else if(isEligible) {
             status = 'ELIGIBLE';
             isProcessed = 1;

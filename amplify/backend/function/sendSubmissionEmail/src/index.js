@@ -138,8 +138,8 @@ async function getAttachment(attachmentId) {
 
     const attachment = await dynamoDB.get(params).promise();
     return attachment.Item;
-
 }
+
 async function getProgramChoice(applicationId) {
     const indexName = 'applicationID-index';
     const params = {
@@ -195,7 +195,7 @@ function emailTemplate(logo, studentName, missingDoc) {
               <table align="center" role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%" style="width:100%;border-radius:5px;background-color:rgb(249,250,251);padding:0.75rem;max-width:37.5em;border:1px solid #eee">
                 <tr style="width:100%">
                   <td>
-                    <p style="font-size:16px;line-height:24px;font-weight:600;color:rgb(31,41,55);margin:16px 0;text-align:left">Dear diligent student,</p>
+                    <p style="font-size:16px;line-height:24px;font-weight:600;color:rgb(31,41,55);margin:16px 0;text-align:left">Dear applicant,</p>
                     <p style="color:rgb(107,114,128);font-size:14px;line-height:24px;margin:16px 0;text-align:left">We are pleased to receive your application for the Isa bin Salman Education Charitable Trust
 scholarship for the academic year ${new Date().getFullYear()} - ${new Date().getFullYear() + 1}.</p>
                     ${missingDoc.length > 0 ? `<p style="color:rgb(107,114,128);font-size:14px;line-height:24px;margin:16px 0;text-align:left">Please note that your application is <b>incomplete</b>. You can visit the website to review and update
@@ -263,7 +263,7 @@ function emailTemplateArabic(logo, missingDoc) {
                 <table align="center" role="presentation" cellSpacing="0" cellPadding="0" border="0" width="100%" style="width:100%;border-radius:5px;background-color:rgb(249,250,251);padding:0.75rem;max-width:37.5em;border:1px solid #eee">
                     <tr style="width:100%">
                     <td>
-                        <p style="font-size:16px;line-height:24px;font-weight:600;color:rgb(31,41,55);margin:16px 0;text-align:right">،عزيزي الطالب المجتهد</p>
+                        <p style="font-size:16px;line-height:24px;font-weight:600;color:rgb(31,41,55);margin:16px 0;text-align:right">،عزيزي مقدم الطلب</p>
                         <p style="color:rgb(107,114,128);font-size:14px;line-height:24px;margin:16px 0;text-align:right; direction: rtl"> يسعدنا تقديمك على بعثة وقف عيسى بن سلمان التعليمي الخيري للعام الأكاديمي ${nextYear} - ${currentYear}
                         .
                         </p>

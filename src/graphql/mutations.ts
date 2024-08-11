@@ -1890,6 +1890,12 @@ export const createStatistics = /* GraphQL */ `mutation CreateStatistics(
     gpaHistogram
     totalApplicationsPerUniversity
     topUniversities
+    topPrograms
+    familyIncome
+    schoolType
+    students
+    applications
+    today
     createdAt
     updatedAt
     _version
@@ -1915,6 +1921,12 @@ export const updateStatistics = /* GraphQL */ `mutation UpdateStatistics(
     gpaHistogram
     totalApplicationsPerUniversity
     topUniversities
+    topPrograms
+    familyIncome
+    schoolType
+    students
+    applications
+    today
     createdAt
     updatedAt
     _version
@@ -1940,6 +1952,12 @@ export const deleteStatistics = /* GraphQL */ `mutation DeleteStatistics(
     gpaHistogram
     totalApplicationsPerUniversity
     topUniversities
+    topPrograms
+    familyIncome
+    schoolType
+    students
+    applications
+    today
     createdAt
     updatedAt
     _version

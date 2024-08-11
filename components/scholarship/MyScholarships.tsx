@@ -309,7 +309,7 @@ export const MyScholarships: FC<TMyScholarships> = () => {
                                 {approveScholarshipMutation.isPending && (
                                   <span className="loading"></span>
                                 )}{" "}
-                                {t("accepts")}
+                                {t("accept")}
                               </button>
                             </div>
                           )}
