@@ -28,5 +28,7 @@
   "lastDayToUpdateApplications": "Last day to update applications",
   "createApplicationStartsIn": "Create application starts in",
   "days": "days",
+  "masters": "Masters",
+  "bachelor": "Bachelor",
   "login": "Login"
 }

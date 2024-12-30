@@ -28,5 +28,7 @@
   "lastDayToUpdateApplications": "آخر يوم لتحديث التطبيقات",
   "createApplicationStartsIn": "بدء فترة إنشاء التطبيق في",
   "days": "أيام",
-  "applyForScholarshipDescription": " "
+  "applyForScholarshipDescription": " ",
+  "masters": "الماجستير",
+  "bachelor": "البكلريوس"
 }

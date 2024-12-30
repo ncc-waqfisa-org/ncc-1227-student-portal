@@ -107,16 +107,36 @@ function useProviderApp() {
         }),
   });
 
-  const newApplicationsEnabled = !batch
+  /**
+   * Determines if the application is in development mode.
+   */
+  const isDevelopment = process.env.NODE_ENV === "development";
+
+  /**
+   * Checks if new applications can be submitted based on the current environment and batch dates.
+   */
+  const newApplicationsEnabled = isDevelopment
+    ? true
+    : !batch
     ? false
     : dayjs().isBefore(dayjs(batch.createApplicationEndDate).endOf("day")) &&
       dayjs().isAfter(dayjs(batch.createApplicationStartDate).startOf("day"));
 
-  const editingApplicationsEnabled = !batch
+  /**
+   * Checks if existing applications can be edited based on the current environment and batch dates.
+   */
+  const editingApplicationsEnabled = isDevelopment
+    ? true
+    : !batch
     ? false
     : dayjs().isBefore(dayjs(batch.updateApplicationEndDate).endOf("day"));
 
-  const signUpEnabled = !batch
+  /**
+   * Checks if sign-ups are currently allowed based on the current environment and batch dates.
+   */
+  const signUpEnabled = isDevelopment
+    ? true
+    : !batch
     ? false
     : dayjs().isBefore(dayjs(batch.signUpEndDate).endOf("day")) &&
       dayjs().isAfter(dayjs(batch.signUpStartDate).startOf("day"));

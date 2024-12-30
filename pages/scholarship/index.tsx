@@ -1,15 +1,10 @@
 import { PageComponent } from "../../components/PageComponent";
 
-import React, { useEffect } from "react";
-import { useAppContext } from "../../contexts/AppContexts";
+import React from "react";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
-import { Scholarship, Status, Student } from "../../src/API";
 import { MyScholarships } from "../../components/scholarship/MyScholarships";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getStudentScholarships } from "../../src/CustomAPI";
-import { useAuth } from "../../hooks/use-auth";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
