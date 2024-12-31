@@ -1,27 +1,28 @@
 import { GetServerSideProps } from "next";
-import React, { useState } from "react";
-import { PageComponent } from "../../components/PageComponent";
-import { Application, Batch, Program, Status, Student } from "../../src/API";
-import ViewApplication from "../../components/applications/ViewApplication";
-import { ApplicationForm } from "../../components/applications/ApplicationForm";
+import React, { ReactElement, useState } from "react";
+import { PageComponent } from "../../../components/PageComponent";
+import { Application, Batch, Program, Status, Student } from "../../../src/API";
+import ViewApplication from "../../../components/applications/ViewApplication";
+import { ApplicationForm } from "../../../components/applications/ApplicationForm";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
-import { useAppContext } from "../../contexts/AppContexts";
-import GetStorageLinkComponent from "../../components/get-storage-link-component";
+import {
+  BachelorProvider,
+  useBachelorContext,
+} from "../../../contexts/BachelorContexts";
+import GetStorageLinkComponent from "../../../components/get-storage-link-component";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "../../hooks/use-auth";
+import { useAuth } from "../../../hooks/use-auth";
 import dayjs from "dayjs";
+import { NextPageWithLayout } from "../../_app";
+import { useAppContext } from "../../../contexts/AppContexts";
 
 interface Props {
   id: string | null;
-  // application: Application | null;
-  // programs: any;
-  // haveScholarship: boolean;
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  // const { Auth } = withSSRContext(ctx);
   const { locale } = ctx;
 
   try {
@@ -61,27 +62,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 };
 
-export default function SingleApplicationPage({ id }: Props) {
+const Page: NextPageWithLayout<Props> = ({ id }) => {
   const { t } = useTranslation("applicationPage");
   const [isEdit, setIsEdit] = useState(false);
-  const {
-    student: studentData,
-    editingApplicationsEnabled,
-    batch,
-  } = useAppContext();
+  const { student: studentData } = useAppContext();
+
+  const { editingApplicationsEnabled, batch } = useBachelorContext();
   const student = studentData?.getStudent as Student;
 
   const { token } = useAuth();
-  // const [isPending, setIsPending] = useState(false);
-  // const [data, setData] = useState<{
-  //   application: Application | null;
-  //   programs: Program[];
-  //   haveScholarship: boolean;
-  // }>({
-  //   application: null,
-  //   programs: [],
-  //   haveScholarship: false,
-  // });
 
   const { data, isPending } = useQuery<{
     application: Application | null;
@@ -98,23 +87,6 @@ export default function SingleApplicationPage({ id }: Props) {
         }),
       }).then((resData) => resData.json()),
   });
-
-  // useEffect(() => {
-  //   if (id && token) {
-  //     fetchData();
-  //   }
-  //   async function fetchData() {
-  //     setIsPending(true);
-  //     await fetch(`/api/get-student-application?id=${id}&token=${token}`)
-  //       .then((resData) => resData.json())
-  //       .then((d) => {
-  //         setData(d);
-  //       })
-  //       .finally(() => setIsPending(false));
-  //   }
-
-  //   return () => {};
-  // }, [id, token]);
 
   if (isPending) {
     return (
@@ -229,7 +201,7 @@ export default function SingleApplicationPage({ id }: Props) {
       )}
     </PageComponent>
   );
-}
+};
 
 interface AccountDocs {
   student: Student;
@@ -294,3 +266,9 @@ function AccountDocs({ student }: AccountDocs) {
     </div>
   );
 }
+
+Page.getLayout = function getLayout(page: ReactElement) {
+  return <BachelorProvider>{page}</BachelorProvider>;
+};
+
+export default Page;

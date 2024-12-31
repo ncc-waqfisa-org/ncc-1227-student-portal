@@ -3,15 +3,19 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import { useAuth } from "../../hooks/use-auth";
+import { useRouter } from "next/router";
+
 interface ISignInForm {
   cpr: string;
   password: string;
 }
 
-export const SignInForm = () => {
+export const SignInForm: React.FC = () => {
   const auth = useAuth();
   const { t } = useTranslation("signIn");
   const { t: tErrors } = useTranslation("errors");
+  const router = useRouter();
+  const { type } = router.query;
 
   const initialValues: ISignInForm = {
     cpr: "",
@@ -82,7 +86,17 @@ export const SignInForm = () => {
       >
         {t("forgetPassword")}
       </Link>
-      <Link dir="ltr" className="link link-secondary" href="/signUp">
+      <Link
+        dir="ltr"
+        className="link link-secondary"
+        href={
+          type === "master"
+            ? "/masters/signup"
+            : type === "bachelor"
+            ? "/bachelor/signup"
+            : "/signup"
+        }
+      >
         {t("newUser")}
       </Link>
     </div>

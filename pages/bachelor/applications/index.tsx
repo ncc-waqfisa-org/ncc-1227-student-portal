@@ -1,20 +1,25 @@
-import { PageComponent } from "../../components/PageComponent";
+import { PageComponent } from "../../../components/PageComponent";
 
-import React from "react";
+import React, { ReactElement } from "react";
 import Link from "next/link";
-import { useAppContext } from "../../contexts/AppContexts";
+import {
+  BachelorProvider,
+  useBachelorContext,
+} from "../../../contexts/BachelorContexts";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
-import { ApplicationCard } from "../../components/applications/ApplicationCard";
-import { getStatusOrder } from "../../src/HelperFunctions";
-import { NewApplicationCard } from "../../components/applications/NewApplicationCard";
-import { Status, Student } from "../../src/API";
-import { CardInfoComponent } from "../../components/CardInfo";
-import info from "../../public/svg/info.svg";
+import { ApplicationCard } from "../../../components/applications/ApplicationCard";
+import { getStatusOrder } from "../../../src/HelperFunctions";
+import { NewApplicationCard } from "../../../components/applications/NewApplicationCard";
+import { Status, Student } from "../../../src/API";
+import { CardInfoComponent } from "../../../components/CardInfo";
+import info from "public/svg/info.svg";
 import dayjs from "dayjs";
 import arLocale from "dayjs/locale/ar";
 import enLocale from "dayjs/locale/en";
+import { NextPageWithLayout } from "../../_app";
+import { useAppContext } from "../../../contexts/AppContexts";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -33,14 +38,16 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   };
 };
 
-export default function ApplicationsPage() {
-  const appContext = useAppContext();
+const Page: NextPageWithLayout = () => {
+  const bachelorContext = useBachelorContext();
+  const { studentAsStudent: student } = useAppContext();
   // const regDialog = useRef<HTMLDialogElement>(null);
 
   // end of batches rules
-  const student = appContext.student?.getStudent as Student;
+  // const student = bachelorContext.student?.getStudent as Student;
+  // const student = appContext.student?.getStudent as Student;
 
-  const activeApplications = appContext.applications.filter(
+  const activeApplications = bachelorContext.applications.filter(
     (app) =>
       (app.status === Status.APPROVED ||
         app.status === Status.ELIGIBLE ||
@@ -48,19 +55,19 @@ export default function ApplicationsPage() {
         app.status === Status.NOT_COMPLETED ||
         app.status === Status.REJECTED ||
         app.status === Status.WITHDRAWN) &&
-      appContext.batch?.batch === app.batch
+      bachelorContext.batch?.batch === app.batch
   );
 
-  const pastApplications = appContext.applications.filter(
-    (app) => (app.batch ?? 0) < (appContext.batch?.batch ?? 0)
+  const pastApplications = bachelorContext.applications.filter(
+    (app) => (app.batch ?? 0) < (bachelorContext.batch?.batch ?? 0)
   );
 
   const { t } = useTranslation("applications");
 
   return (
     <PageComponent title={"Applications"} authRequired>
-      {appContext.applications.length === 0 &&
-        !appContext.newApplicationsEnabled && (
+      {bachelorContext.applications.length === 0 &&
+        !bachelorContext.newApplicationsEnabled && (
           <div className="flex flex-wrap justify-center gap-10">
             {/* <CardInfoComponent
               icon={info}
@@ -76,7 +83,7 @@ export default function ApplicationsPage() {
               icon={info}
               title={"الطلبات الجديدة"}
               description={`سيتم فتح التسجيل ${dayjs(
-                appContext.batch?.createApplicationStartDate
+                bachelorContext.batch?.createApplicationStartDate
               )
                 .locale(arLocale)
                 .format("MMM DD, YYYY")}`}
@@ -85,7 +92,7 @@ export default function ApplicationsPage() {
               icon={info}
               title={"New applications"}
               description={`Registration will open in ${dayjs(
-                appContext.batch?.createApplicationStartDate
+                bachelorContext.batch?.createApplicationStartDate
               )
                 .locale(enLocale)
                 .format("MMM DD, YYYY")}`}
@@ -95,8 +102,8 @@ export default function ApplicationsPage() {
 
       {student && (
         <div className="container mx-auto">
-          {!appContext.haveActiveApplication &&
-            appContext.newApplicationsEnabled && (
+          {!bachelorContext.haveActiveApplication &&
+            bachelorContext.newApplicationsEnabled && (
               <div>
                 <p className="my-4 text-2xl stat-value">
                   {t("newApplication")}
@@ -109,13 +116,13 @@ export default function ApplicationsPage() {
             </div>
           )}
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 [grid-auto-rows:1fr]">
-            {!appContext.haveActiveApplication &&
-              appContext.newApplicationsEnabled && (
+            {!bachelorContext.haveActiveApplication &&
+              bachelorContext.newApplicationsEnabled && (
                 <Link href={"../applications/new-application"}>
                   <NewApplicationCard></NewApplicationCard>
                 </Link>
               )}
-            {appContext.haveActiveApplication &&
+            {bachelorContext.haveActiveApplication &&
               activeApplications
                 .sort((a, b) => {
                   if (a.status && b.status) {
@@ -165,4 +172,10 @@ export default function ApplicationsPage() {
       )}
     </PageComponent>
   );
-}
+};
+
+Page.getLayout = function getLayout(page: ReactElement) {
+  return <BachelorProvider>{page}</BachelorProvider>;
+};
+
+export default Page;

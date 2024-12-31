@@ -1,19 +1,23 @@
-import React, { FC } from "react";
-import { ApplicationForm } from "../../components/applications/ApplicationForm";
-import { PageComponent } from "../../components/PageComponent";
+import React, { FC, ReactElement } from "react";
+import { ApplicationForm } from "../../../components/applications/ApplicationForm";
+import { PageComponent } from "../../../components/PageComponent";
 import { GetServerSideProps } from "next";
-import { listAllPrograms } from "../../src/CustomAPI";
-import { Program } from "../../src/API";
-import { useAppContext } from "../../contexts/AppContexts";
+import { listAllPrograms } from "../../../src/CustomAPI";
+import { Program } from "../../../src/API";
+import {
+  BachelorProvider,
+  useBachelorContext,
+} from "../../../contexts/BachelorContexts";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import arLocale from "dayjs/locale/ar";
 import enLocale from "dayjs/locale/en";
 
-import { CardInfoComponent } from "../../components/CardInfo";
+import { CardInfoComponent } from "../../../components/CardInfo";
 import info from "public/svg/info.svg";
 import dayjs from "dayjs";
+import { NextPageWithLayout } from "../../_app";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { locale } = ctx;
@@ -39,9 +43,9 @@ interface Props {
   programs: Program[];
 }
 
-const NewApplicationPage: FC<Props> = (props) => {
+const NewApplicationPage: NextPageWithLayout<Props> = (props) => {
   const { haveActiveApplication, newApplicationsEnabled, batch } =
-    useAppContext();
+    useBachelorContext();
 
   const { t } = useTranslation("applicationPage");
 
@@ -100,6 +104,10 @@ const NewApplicationPage: FC<Props> = (props) => {
       )}
     </PageComponent>
   );
+};
+
+NewApplicationPage.getLayout = function getLayout(page: ReactElement) {
+  return <BachelorProvider>{page}</BachelorProvider>;
 };
 
 export default NewApplicationPage;

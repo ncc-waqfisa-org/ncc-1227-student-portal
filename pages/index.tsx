@@ -1,17 +1,12 @@
-import React from "react";
-import { useRouter } from "next/router";
-import { HomeComponent } from "../components/Home";
+import React, { useState } from "react";
 import { PageComponent } from "../components/PageComponent";
-import { useAppContext } from "../contexts/AppContexts";
-import { useAuth } from "../hooks/use-auth";
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { GetStaticProps } from "next";
-import { useQuery } from "@tanstack/react-query";
-import { Scholarship } from "../src/API";
-import { getStudentScholarships } from "../src/CustomAPI";
-import dayjs from "dayjs";
+import { Dashboard } from "../components/Dashboard";
+import { cn } from "../src/lib/utils";
+import { DashboardHeader } from "../components/DashboardHeader";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -32,74 +27,40 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 };
 
 const Home = () => {
-  const comeBack: boolean = false;
-  const router = useRouter();
-  const auth = useAuth();
-  const {
-    haveActiveApplication,
-    signUpEnabled,
-    newApplicationsEnabled,
-    editingApplicationsEnabled,
-  } = useAppContext();
-  const { t } = useTranslation("common");
-  const { t: aPT } = useTranslation("applicationPage");
-
-  const { data: scholarships } = useQuery<Scholarship[]>({
-    queryKey: ["scholarships", auth.cpr],
-    queryFn: () => (auth.cpr ? getStudentScholarships(auth.cpr) : []),
-  });
+  const [type, setType] = useState<"bachelor" | "masters">("bachelor");
+  const { t: commonT } = useTranslation("common");
 
   return (
     <PageComponent
       title="Home"
       header={
-        <div className="mx-auto prose md:mx-0 md:mr-auto prose-p:text-white prose-headings:text-white">
-          <div className="flex flex-col text-center md:text-start">
-            <h1 className="mb-1 font-semibold rtl:md:border-r-8 ltr:md:border-l-8 md:pl-4">
-              {/* Enroll for 2023 */}
-              {t("enrollFor")} {dayjs().year()}
-            </h1>
-            <p>{t("enrollForDescription")}</p>
-            {(signUpEnabled ||
-              newApplicationsEnabled ||
-              editingApplicationsEnabled ||
-              haveActiveApplication ||
-              (scholarships?.length ?? 0) > 0) && (
-              <div className="flex flex-col gap-3 mx-auto md:flex-row md:mx-0">
-                {/* <button
-                  type="button"
-                  className="w-full text-white md:w-auto btn btn-primary"
-                  onClick={() => router.push("/applications")}
-                >
-                  {haveActiveApplication
-                    ? t("trackApplications")
-                    : t("enrollNow")}
-                </button> */}
-                {(scholarships?.length ?? 0) > 0 && (
-                  <button
-                    type="button"
-                    className="w-full text-white md:w-auto btn btn-primary"
-                    onClick={() => router.push("/scholarship")}
-                  >
-                    {aPT("goToScholarship")}
-                  </button>
-                )}
-                {!auth.isSignedIn && (
-                  <button
-                    type="button"
-                    className="w-full md:w-auto btn btn-primary"
-                    onClick={() => router.push("/signIn")}
-                  >
-                    {t("login")}
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
+        <div>
+          <DashboardHeader />
         </div>
       }
     >
-      <HomeComponent comeBack={comeBack}></HomeComponent>
+      <div className="flex flex-col gap-4">
+        <div role="tablist" className="w-full max-w-lg mx-auto tabs tabs-boxed">
+          <button
+            type="button"
+            onClick={() => setType("bachelor")}
+            role="tab"
+            className={cn("tab", type === "bachelor" && "tab-active")}
+          >
+            {commonT("bachelor")}
+          </button>
+          <button
+            type="button"
+            onClick={() => setType("masters")}
+            role="tab"
+            className={cn("tab", type === "masters" && "tab-active")}
+          >
+            {commonT("masters")}
+          </button>
+        </div>
+
+        <Dashboard type={type} />
+      </div>
     </PageComponent>
   );
 };

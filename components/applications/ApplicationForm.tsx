@@ -1,7 +1,7 @@
 import { Formik, Form, Field, FormikHelpers } from "formik";
 import { FC, useState } from "react";
 import * as yup from "yup";
-import { useAppContext } from "../../contexts/AppContexts";
+import { useBachelorContext } from "../../contexts/BachelorContexts";
 import { useAuth } from "../../hooks/use-auth";
 
 import {
@@ -77,7 +77,7 @@ export const ApplicationForm: FC<Props> = (props) => {
   const { user } = useAuth();
   const { push, locale } = useRouter();
   const { student, syncStudentApplication, batch, editingApplicationsEnabled } =
-    useAppContext();
+    useBachelorContext();
   const { t } = useTranslation("applicationPage");
   const { t: tErrors } = useTranslation("errors");
   const { t: tToast } = useTranslation("toast");
@@ -131,7 +131,7 @@ export const ApplicationForm: FC<Props> = (props) => {
     }
     await syncStudentApplication();
     setWithdrawing(false);
-    push("/applications/");
+    push("/bachelor/applications/");
     return res;
   }
 
@@ -223,7 +223,7 @@ export const ApplicationForm: FC<Props> = (props) => {
     ])
       .then(async (res) => {
         await syncStudentApplication();
-        push("/applications");
+        push("/bachelor/applications");
       })
       .catch((err) => {
         throw new Error(
@@ -300,7 +300,7 @@ export const ApplicationForm: FC<Props> = (props) => {
     ])
       .then(async (res) => {
         await syncStudentApplication();
-        push("/applications");
+        push("/bachelor/applications");
       })
       .catch((err) => {
         throw new Error(

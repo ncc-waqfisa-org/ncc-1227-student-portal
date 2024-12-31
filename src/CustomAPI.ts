@@ -12,6 +12,8 @@ import {
   CreateStudentLogMutationVariables,
   GetBatchQuery,
   GetBatchQueryVariables,
+  GetStudentQuery,
+  GetStudentQueryVariables,
   Program,
   Scholarship,
   UpdateApplicationMutation,
@@ -41,6 +43,7 @@ import {
 } from "./graphql/mutations";
 
 import dayjs from "dayjs";
+import { getStudent } from "./graphql/queries";
 
 /* -------------------------------------------------------------------------- */
 /*                                    ENUMS                                   */
@@ -55,6 +58,8 @@ export enum DocType {
   PRIMARY_PROGRAM_ACCEPTANCE,
   SECONDARY_PROGRAM_ACCEPTANCE,
   BANK_LETTER,
+  INCOME,
+  GUARDIAN,
 }
 
 export enum SpecializationField {
@@ -117,6 +122,24 @@ export async function getCurrentBatch() {
   )) as GraphQLResult<GetBatchQuery>;
 
   return res.data?.getBatch;
+}
+
+/**
+ * It takes a CPR number as input, and returns the student's information
+ * @param {string} cpr - The CPR number of the student you want to get information about.
+ * @returns The student object
+ */
+export async function getStudentInfo(cpr: string) {
+  let queryInput: GetStudentQueryVariables = {
+    cpr: cpr,
+  };
+
+  let res = (await API.graphql({
+    query: getStudent,
+    variables: queryInput,
+  })) as GraphQLResult<GetStudentQuery>;
+
+  return res.data;
 }
 
 /* -------------------------------------------------------------------------- */

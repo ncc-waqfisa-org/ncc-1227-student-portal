@@ -12,7 +12,7 @@ import * as yup from "yup";
 import "yup-phone";
 import { updateStudentInDB, uploadFile, DocType } from "../../src/CustomAPI";
 import { toast } from "react-hot-toast";
-import { useAppContext } from "../../contexts/AppContexts";
+import { useBachelorContext } from "../../contexts/BachelorContexts";
 
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -48,7 +48,8 @@ interface FormValues {
 }
 
 export default function ViewAccount({ student }: Props) {
-  const { syncStudent, editingApplicationsEnabled, batch } = useAppContext();
+  const { syncStudent, editingApplicationsEnabled, batch } =
+    useBachelorContext();
   const { t } = useTranslation("account");
   const { t: tErrors } = useTranslation("errors");
   const { t: tToast } = useTranslation("toast");

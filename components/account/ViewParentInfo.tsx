@@ -5,7 +5,7 @@ import "yup-phone";
 
 import { ParentInfo, UpdateParentInfoMutationVariables } from "../../src/API";
 import { updateParentInfoInDB } from "../../src/CustomAPI";
-import { useAppContext } from "../../contexts/AppContexts";
+import { useBachelorContext } from "../../contexts/BachelorContexts";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { PhoneNumberInput } from "../phone";
@@ -29,7 +29,7 @@ interface Props {
 }
 
 export default function ViewParentInfo({ parentInfo }: Props) {
-  const { syncStudent, editingApplicationsEnabled } = useAppContext();
+  const { syncStudent, editingApplicationsEnabled } = useBachelorContext();
   const { t } = useTranslation("account");
   const { t: tErrors } = useTranslation("errors");
   const { t: tToast } = useTranslation("toast");

@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useAppContext } from "../contexts/AppContexts";
+import { useBachelorContext } from "../contexts/BachelorContexts";
 import dayjs, { Dayjs } from "dayjs";
 import arLocale from "dayjs/locale/ar";
 import enLocale from "dayjs/locale/en";
@@ -13,7 +13,7 @@ import { Batch } from "../src/API";
 import { useRouter } from "next/router";
 
 export const RegPeriod = () => {
-  const { batch } = useAppContext();
+  const { batch } = useBachelorContext();
   const { t } = useTranslation("common");
   const { locale } = useRouter();
 
@@ -65,7 +65,7 @@ export const RegPeriod = () => {
 };
 
 export const RegPeriodDialog = ({ className }: { className?: string }) => {
-  const { batch, signUpEnabled } = useAppContext();
+  const { batch, signUpEnabled } = useBachelorContext();
   const regDialog = useRef<HTMLDialogElement>(null);
   const { t } = useTranslation("common");
   const { locale } = useRouter();

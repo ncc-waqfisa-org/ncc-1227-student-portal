@@ -1,6 +1,8 @@
 {
   "studentInfo": "Student Info",
   "parentsInfo": " Parents Info",
+  "applicantInfo": "Applicant Info",
+  "guardianInfo": " Guardian Info",
   "termsAndConditions": "Terms & Conditions",
   "nextStep": "Next Step",
   "register": "Register",
@@ -9,5 +11,6 @@
   "accountCreated": "Account created successfully",
   "verificationCode": "Verification code has been sent to",
   "processing": "Processing",
+
   "processComplete": "Process complete"
 }

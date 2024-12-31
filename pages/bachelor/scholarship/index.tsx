@@ -1,10 +1,10 @@
-import { PageComponent } from "../../components/PageComponent";
+import { PageComponent } from "../../../components/PageComponent";
 
 import React from "react";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
-import { MyScholarships } from "../../components/scholarship/MyScholarships";
+import { MyScholarships } from "../../../components/scholarship/MyScholarships";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;

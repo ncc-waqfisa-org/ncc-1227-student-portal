@@ -1,10 +1,10 @@
 import { CardInfoComponent } from "./CardInfo";
-import logs from "../public/svg/logs.svg";
-import search from "../public/svg/search.svg";
-import check from "../public/svg/check-dark.svg";
-import info from "../public/svg/info.svg";
+import logs from "public/svg/logs.svg";
+import search from "public/svg/search.svg";
+import check from "public/svg/check-dark.svg";
+import info from "public/svg/info.svg";
 import { useRouter } from "next/router";
-import { useAppContext } from "../contexts/AppContexts";
+import { useBachelorContext } from "../contexts/BachelorContexts";
 import { useTranslation } from "react-i18next";
 import { FC } from "react";
 import { useAuth } from "../hooks/use-auth";
@@ -17,11 +17,7 @@ import enLocale from "dayjs/locale/en";
 import { Skeleton } from "./Skeleton";
 import ErrorComponent from "./ErrorComponent";
 
-interface Props {
-  comeBack?: boolean;
-}
-
-export const HomeComponent: FC<Props> = ({ comeBack }) => {
+export const HomeComponent: FC = () => {
   const router = useRouter();
   const { t } = useTranslation("common");
   const {
@@ -31,7 +27,7 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
     signUpEnabled,
     newApplicationsEnabled,
     editingApplicationsEnabled,
-  } = useAppContext();
+  } = useBachelorContext();
 
   const { cpr } = useAuth();
   const { data: scholarships } = useQuery<Scholarship[]>({
@@ -111,7 +107,9 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
                   icon={logs}
                   title={t("applyForScholarship")}
                   description={t("applyForScholarshipDescription")}
-                  action={() => router.push("/applications")}
+                  action={() =>
+                    router.push("/bachelor/applications?type=bachelor")
+                  }
                   actionTitle={t("enrollNow") ?? "Enroll Now"}
                 ></CardInfoComponent>
               )}
@@ -120,7 +118,9 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
                   icon={check}
                   title={t("scholarships")}
                   description={t("trackApplicationDescription")}
-                  action={() => router.push("/scholarship")}
+                  action={() =>
+                    router.push("/bachelor/scholarship?type=bachelor")
+                  }
                   actionTitle={t("myScholarships") ?? "My Scholarships"}
                 ></CardInfoComponent>
               )}
@@ -129,7 +129,9 @@ export const HomeComponent: FC<Props> = ({ comeBack }) => {
                   icon={search}
                   title={t("trackApplication")}
                   description={t("trackApplicationDescription")}
-                  action={() => router.push("/applications")}
+                  action={() =>
+                    router.push("/bachelor/applications?type=bachelor")
+                  }
                   actionTitle={t("track") ?? "Track"}
                 ></CardInfoComponent>
               )}

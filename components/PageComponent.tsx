@@ -10,7 +10,7 @@ import account from "../public/svg/account.svg";
 import background from "../public/images/headerBg.jpg";
 import footerBg from "../public/images/footerBg.jpg";
 import Image from "next/image";
-import { useAppContext } from "../contexts/AppContexts";
+import { useBachelorContext } from "../contexts/BachelorContexts";
 import { useTranslation } from "react-i18next";
 import { LangSwitcher } from "./langSwitcher";
 import { RegPeriod, RegPeriodDialog } from "./reg-period";
@@ -23,7 +23,6 @@ interface Props {
 
 export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
   const { isSignedIn, user, signOut, isInitializing: init } = useAuth();
-  const { student, resetContext } = useAppContext();
   const { back, locale, push, pathname } = useRouter();
   const titleTranslation = useTranslation("pageTitles");
   const footerTranslation = useTranslation("footer");
@@ -33,7 +32,7 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
 
   async function signUserOut() {
     await signOut().then(() => {
-      resetContext();
+      location.reload();
     });
   }
 
@@ -78,15 +77,10 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                     tabIndex={0}
                     className="z-50 flex flex-col items-center p-2 rounded-lg hover:cursor-pointer dropdown dropdown-bottom md:dropdown-end md:items-end md:absolute md:right-4 md:top-4 glass"
                   >
-                    <div className="flex ">
-                      <Image
-                        className="w-10 p-2 "
-                        src={account}
-                        alt="account"
-                      />
+                    <div className="flex items-center">
+                      <Image className="w-10 p-2" src={account} alt="account" />
 
                       <div className="text-white">
-                        <p>{student?.getStudent?.fullName}</p>
                         <p>{user?.getUsername()}</p>
                       </div>
                     </div>
@@ -124,11 +118,9 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                     </div>
                   </div>
                 )}
-
                 <div className="md:dropdown-end md:items-end md:absolute md:left-4 md:top-4">
                   <LangSwitcher></LangSwitcher>
                 </div>
-
                 {!isHomePage && (
                   <button
                     dir="ltr"
@@ -153,7 +145,6 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                     {titleTranslation.t("Back")}
                   </button>
                 )}
-
                 <div className="w-full mt-10 md:mt-16">{props.header}</div>
                 {!props.header && (
                   <div className="prose prose-headings:text-white">
@@ -162,8 +153,6 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                     </h1>
                   </div>
                 )}
-
-                <RegPeriodDialog className="py-2 leading-4 text-white h-fit btn-outline hover:bg-white/10 hover:border-white" />
               </div>
             </div>
             {
@@ -223,8 +212,8 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
               <Link
                 href={
                   locale === "ar"
-                    ? "https://waqfisa.bh/ar/applications/"
-                    : "https://waqfisa.bh/applications/"
+                    ? "https://waqfisa.bh/ar/bachelor/applications/"
+                    : "https://waqfisa.bh/bachelor/applications/"
                 }
                 className="link link-hover"
               >

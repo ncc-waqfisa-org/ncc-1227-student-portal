@@ -23,7 +23,7 @@ export interface CreateStudentFormValues {
   cprDoc: File | undefined;
 }
 
-export default function SignUpForm() {
+export default function BachelorSignUpForm() {
   const router = useRouter();
   const { t } = useTranslation("signUp");
   const { t: tToast } = useTranslation("toast");

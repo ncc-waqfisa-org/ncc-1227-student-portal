@@ -1,4 +1,3 @@
-import { API } from "aws-amplify";
 import {
   createContext,
   FC,
@@ -8,53 +7,29 @@ import {
   useState,
 } from "react";
 import { useAuth } from "../hooks/use-auth";
-import {
-  GetStudentQueryVariables,
-  GetStudentQuery,
-  Application,
-  Status,
-  Student,
-  Batch,
-} from "../src/API";
-import { getStudent } from "../src/graphql/queries";
-import { GraphQLResult } from "@aws-amplify/api-graphql";
-import { getCurrentBatch, getStudentApplications } from "../src/CustomAPI";
-import { Crisp } from "crisp-sdk-web";
-import { GraphQLError } from "graphql";
-import dayjs from "dayjs";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
+import { CognitoUser } from "@aws-amplify/auth";
+import { getStudentInfo } from "../src/CustomAPI";
+import { GetStudentQuery, Student } from "../src/API";
 
 // interface for all the values & functions
 interface IUseAppContext {
+  cpr: string | undefined;
   student: GetStudentQuery | undefined;
   studentAsStudent: Student | undefined;
-  applications: Application[];
-  haveActiveApplication: boolean;
-  syncStudentApplication: () => Promise<void>;
-  syncStudent: () => Promise<void>;
+  cognitoUser: CognitoUser | undefined;
   resetContext: () => void;
-  signUpEnabled: boolean;
-  newApplicationsEnabled: boolean;
-  editingApplicationsEnabled: boolean;
-  batch: Batch | undefined;
-  isBatchPending: boolean;
+  syncStudent: () => Promise<void>;
 }
 
 // the default state for all the values & functions
 const defaultState: IUseAppContext = {
+  cpr: undefined,
   student: undefined,
   studentAsStudent: undefined,
-  applications: [],
-  haveActiveApplication: false,
-  syncStudentApplication: async () => {},
-  syncStudent: async () => {},
+  cognitoUser: undefined,
   resetContext: async () => {},
-  signUpEnabled: false,
-  newApplicationsEnabled: false,
-  editingApplicationsEnabled: false,
-  batch: undefined,
-  isBatchPending: true,
+  syncStudent: async () => {},
 };
 
 // creating the app contexts
@@ -71,129 +46,30 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
 
 //NOTE: declare vars and functions here
 function useProviderApp() {
-  const { user } = useAuth();
+  const { user: cognitoUser, cpr } = useAuth();
   const queryClient = useQueryClient();
 
   const [student, setStudent] = useState(defaultState.student);
   const [studentAsStudent, setStudentAsStudent] = useState(
     defaultState.studentAsStudent
   );
-  const [applications, setApplications] = useState<Application[]>(
-    defaultState.applications
-  );
-  const [haveActiveApplication, setHaveActiveApplication] = useState(
-    defaultState.haveActiveApplication
-  );
-
-  const { data: batch, isPending: isBatchPending } = useQuery<Batch | null>({
-    queryKey: ["currentBatch"],
-    queryFn: () =>
-      getCurrentBatch()
-        .then((value) => {
-          const currentBatch = value ? (value as Batch) : null;
-
-          return currentBatch;
-        })
-        .catch((error) => {
-          if (error.errors[0] instanceof GraphQLError) {
-            const graphQLError: GraphQLError = error.errors[0];
-            if (graphQLError.message === "Network Error") {
-              toast.error(graphQLError.message);
-              return null;
-              // throw new Error(graphQLError.message);
-            }
-          }
-          return null;
-        }),
-  });
-
-  /**
-   * Determines if the application is in development mode.
-   */
-  const isDevelopment = process.env.NODE_ENV === "development";
-
-  /**
-   * Checks if new applications can be submitted based on the current environment and batch dates.
-   */
-  const newApplicationsEnabled = isDevelopment
-    ? true
-    : !batch
-    ? false
-    : dayjs().isBefore(dayjs(batch.createApplicationEndDate).endOf("day")) &&
-      dayjs().isAfter(dayjs(batch.createApplicationStartDate).startOf("day"));
-
-  /**
-   * Checks if existing applications can be edited based on the current environment and batch dates.
-   */
-  const editingApplicationsEnabled = isDevelopment
-    ? true
-    : !batch
-    ? false
-    : dayjs().isBefore(dayjs(batch.updateApplicationEndDate).endOf("day"));
-
-  /**
-   * Checks if sign-ups are currently allowed based on the current environment and batch dates.
-   */
-  const signUpEnabled = isDevelopment
-    ? true
-    : !batch
-    ? false
-    : dayjs().isBefore(dayjs(batch.signUpEndDate).endOf("day")) &&
-      dayjs().isAfter(dayjs(batch.signUpStartDate).startOf("day"));
 
   useEffect(() => {
-    let cpr = user?.getUsername();
     if (cpr) {
       getStudentInfo(cpr).then((info) => {
         setStudent(info);
-
-        const stu: Student | undefined = info
-          ? (info?.getStudent as Student)
-          : undefined;
         setStudentAsStudent(info?.getStudent as Student);
-
-        Crisp.user.setEmail(`${stu?.email}`);
-
-        Crisp.user.setNickname(`${stu?.fullName}`);
-
-        Crisp.session.setData({
-          cpr: stu?.cpr,
-        });
-      });
-
-      getStudentApplications(cpr).then((allStudentApplications) => {
-        setApplications(allStudentApplications);
-
-        /* Checking if the student has an active application. */
-        let active = allStudentApplications.find(
-          (application) =>
-            (application.status === Status.REVIEW ||
-              application.status === Status.APPROVED ||
-              application.status === Status.ELIGIBLE ||
-              application.status === Status.NOT_COMPLETED ||
-              application.status === Status.REJECTED ||
-              application.status === Status.WITHDRAWN) &&
-            batch?.batch === application.batch
-        );
-
-        setHaveActiveApplication(active !== undefined);
       });
     }
 
     return () => {};
-  }, [user, batch]);
+  }, [cognitoUser, cpr]);
 
   function resetContext() {
-    setStudent(undefined);
-    setStudentAsStudent(undefined);
-    setApplications([]);
-    setHaveActiveApplication(false);
-    queryClient.invalidateQueries();
+    console.log("resetContext called");
   }
 
   async function syncStudent() {
-    let cpr = user?.getUsername();
-
     if (cpr) {
       getStudentInfo(cpr).then((info) => {
         setStudent(info);
@@ -202,59 +78,13 @@ function useProviderApp() {
     }
   }
 
-  async function syncStudentApplication() {
-    let cpr = user?.getUsername();
-
-    if (cpr) {
-      getStudentApplications(cpr).then((allStudentApplications) => {
-        setApplications(allStudentApplications);
-
-        /* Checking if the student has an active application. */
-        let active = allStudentApplications.find(
-          (application) =>
-            (application.status === Status.REVIEW ||
-              application.status === Status.APPROVED ||
-              application.status === Status.ELIGIBLE ||
-              application.status === Status.NOT_COMPLETED ||
-              application.status === Status.WITHDRAWN) &&
-            batch?.batch === application.batch
-        );
-        setHaveActiveApplication(active !== undefined);
-      });
-    }
-  }
-
-  /**
-   * It takes a CPR number as input, and returns the student's information
-   * @param {string} cpr - The CPR number of the student you want to get information about.
-   * @returns The student object
-   */
-  async function getStudentInfo(cpr: string) {
-    let queryInput: GetStudentQueryVariables = {
-      cpr: cpr,
-    };
-
-    let res = (await API.graphql({
-      query: getStudent,
-      variables: queryInput,
-    })) as GraphQLResult<GetStudentQuery>;
-
-    return res.data;
-  }
-
   // NOTE: return all the values & functions you want to export
   return {
+    cpr,
+    cognitoUser,
+    resetContext,
     student,
     studentAsStudent,
-    applications,
-    haveActiveApplication,
-    syncStudentApplication,
     syncStudent,
-    resetContext,
-    signUpEnabled,
-    newApplicationsEnabled,
-    editingApplicationsEnabled,
-    batch: batch ?? undefined,
-    isBatchPending,
   };
 }

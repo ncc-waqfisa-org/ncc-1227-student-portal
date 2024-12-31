@@ -16,7 +16,7 @@ import { PhoneNumberInput } from "../phone";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { SpecializationField } from "../../src/CustomAPI";
 import { useRouter } from "next/router";
-import { useAppContext } from "../../contexts/AppContexts";
+import { useBachelorContext } from "../../contexts/BachelorContexts";
 
 interface ICreateStudentForm {
   student: CreateStudentMutationVariables;
@@ -34,7 +34,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
   const { t } = useTranslation("account");
   const { t: tErrors } = useTranslation("errors");
   const { locale } = useRouter();
-  const { batch } = useAppContext();
+  const { batch } = useBachelorContext();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [cprAvailable, setCprAvailable] = useState<boolean>(false);

@@ -1,17 +1,16 @@
-import { withSSRContext } from "aws-amplify";
 import { GetServerSideProps } from "next";
 import React, { useEffect, useState } from "react";
-import { PageComponent } from "../../components/PageComponent";
-import { Scholarship } from "../../src/API";
-import { getScholarship } from "../../src/CustomAPI";
+import { PageComponent } from "../../../components/PageComponent";
+import { Scholarship } from "../../../src/API";
+import { getScholarship } from "../../../src/CustomAPI";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
-import { Contract } from "../../components/scholarship/Contract";
-import { ScholarshipPreview } from "../../components/scholarship/ScholarshipPreview";
-import { BankDetails } from "../../components/scholarship/BankDetails";
+import { Contract } from "../../../components/scholarship/Contract";
+import { ScholarshipPreview } from "../../../components/scholarship/ScholarshipPreview";
+import { BankDetails } from "../../../components/scholarship/BankDetails";
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "../../hooks/use-auth";
-import { Skeleton } from "../../components/Skeleton";
+import { useAuth } from "../../../hooks/use-auth";
+import { Skeleton } from "../../../components/Skeleton";
 
 interface Props {
   scholarshipId: string | null;
@@ -72,7 +71,7 @@ export default function ScholarshipPage({ scholarshipId }: Props) {
   if (isScholarshipPending) {
     return (
       <PageComponent title={"Scholarships"} authRequired>
-        <Skeleton className="bg-slate-200 rounded-md w-full max-w-3xl h-96" />
+        <Skeleton className="w-full max-w-3xl rounded-md bg-slate-200 h-96" />
       </PageComponent>
     );
   }

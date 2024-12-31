@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+import { RegPeriodDialog } from "./reg-period";
 
 export const DashboardHeader = () => {
   const { t } = useTranslation("common");
@@ -13,6 +14,7 @@ export const DashboardHeader = () => {
         </h1>
         <p>{t("enrollForDescription")}</p>
       </div>
+      <RegPeriodDialog className="py-2 leading-4 text-white h-fit btn-outline hover:bg-white/10 hover:border-white" />
     </div>
   );
 };

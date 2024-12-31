@@ -14,7 +14,8 @@
   "enrollForDescription": " ",
   "enrollNow": "التقديم الآن",
   "login": "تسجيل الدخول",
-  "applyForScholarship": "تقدم بطلب الحصول على منحة دراسية",
+  "applyForScholarship": "تقدم بطلب الحصول على منحة الباكلريوس",
+  "applyForScholarshipMasters": "تقدم بطلب الحصول على منحة الماجستير",
   "viewDocument": "عرض المستند",
   "loading": "تحميل",
   "words": "كلمات",
@@ -30,5 +31,7 @@
   "days": "أيام",
   "applyForScholarshipDescription": " ",
   "masters": "الماجستير",
-  "bachelor": "البكلريوس"
+  "bachelor": "البكلريوس",
+  "signUpToMasters": "قدم على الماجستير",
+  "signUpToBachelor": "قدم على الباكلريوس"
 }

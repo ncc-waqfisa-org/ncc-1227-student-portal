@@ -25,7 +25,7 @@ export const ApplicationCard: FC<IApplicationCard> = ({
   return (
     <div className="relative duration-200 hover:cursor-pointer hover:scale-105">
       <Link
-        href={`../applications/${application.id}`}
+        href={`../bachelor/applications/${application.id}`}
         className={`pt-6 shadow card  ${
           (application.status === Status.REVIEW ||
             application.status === Status.ELIGIBLE ||

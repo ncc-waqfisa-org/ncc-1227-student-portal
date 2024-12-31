@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 import ViewAccount from "../components/account/ViewAccount";
 import ViewParentInfo from "../components/account/ViewParentInfo";
 import { PageComponent } from "../components/PageComponent";
-import { useAppContext } from "../contexts/AppContexts";
+import {
+  BachelorProvider,
+  useBachelorContext,
+} from "../contexts/BachelorContexts";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
+import { useAppContext } from "../contexts/AppContexts";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -25,7 +29,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   };
 };
 
-export default function AccountPage() {
+const Page = () => {
   const { studentAsStudent } = useAppContext();
 
   const [isStudentInfo, setIsStudentInfo] = useState(true);
@@ -59,4 +63,10 @@ export default function AccountPage() {
       </div>
     </PageComponent>
   );
-}
+};
+
+// Page.getLayout = function getLayout(page: ReactElement) {
+//   return <BachelorProvider>{page}</BachelorProvider>;
+// };
+
+export default Page;

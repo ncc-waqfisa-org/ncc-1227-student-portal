@@ -1,7 +1,5 @@
 import { isEqual, round } from "lodash";
-import { Application, Batch, FamilyIncome, Status } from "./API";
-import dayjs, { Dayjs } from "dayjs";
-import { useTranslation } from "react-i18next";
+import { FamilyIncome, Status } from "./API";
 
 /**
  * It checks if a file is too big
