@@ -36,8 +36,8 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
   const { locale } = useRouter();
   const { batch } = useBachelorContext();
 
-  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [cprAvailable, setCprAvailable] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
   const [familyIncomeProofInvalid, setFamilyIncomeProofInvalid] =
@@ -157,7 +157,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
         setFieldError,
         setFieldValue,
       }) => (
-        <Form className="container grid items-end max-w-3xl grid-cols-1 gap-3 mx-auto md:grid-cols-2">
+        <Form className="container grid grid-cols-1 gap-3 items-end mx-auto max-w-3xl md:grid-cols-2">
           {/* CPR */}
           <div className="flex flex-col justify-start w-full">
             <div className="flex items-center">
@@ -205,7 +205,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
             <div className="flex items-center">
               <label className="label">
                 {t("studentCPRdoc")}{" "}
-                <span className="ml-1 mr-auto text-red-500">*</span>
+                <span className="mr-auto ml-1 text-red-500">*</span>
               </label>
               <label className="label-text-alt text-error">
                 {errors.cprDoc && errors.cprDoc}
@@ -736,7 +736,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               />
               <div
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 flex items-center px-3 text-sm leading-5 hover:cursor-pointer"
+                className="flex absolute inset-y-0 right-0 items-center px-3 text-sm leading-5 hover:cursor-pointer"
               >
                 <svg
                   className={`h-6  text-gray-700 ${
@@ -798,7 +798,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               />
               <div
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute inset-y-0 right-0 flex items-center px-3 text-sm leading-5 hover:cursor-pointer"
+                className="flex absolute inset-y-0 right-0 items-center px-3 text-sm leading-5 hover:cursor-pointer"
               >
                 <svg
                   className={`h-6  text-gray-700 ${

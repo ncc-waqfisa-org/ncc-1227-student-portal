@@ -10,7 +10,11 @@
   "reSend": "Resend Code",
   "accountCreated": "Account created successfully",
   "verificationCode": "Verification code has been sent to",
+  "back": "Back",
   "processing": "Processing",
-
+  "applicantCpr": "Applicant CPR",
+  "applicantCprDoc": "Applicant CPR Document",
+  "cpr": "CPR",
+  "cprDoc": "CPR Document",
   "processComplete": "Process complete"
 }

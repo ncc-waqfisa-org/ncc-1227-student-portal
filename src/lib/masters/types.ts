@@ -81,6 +81,9 @@ export type MasterSignUpFormSchema = {
 
   password: string;
   confirm_password: string;
+
+  // Terms
+  accepted: boolean;
 };
 
 export enum ApplicantType {

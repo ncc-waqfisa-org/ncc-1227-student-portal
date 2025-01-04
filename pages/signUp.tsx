@@ -55,7 +55,7 @@ const SignUpPage: NextPage<Props> = () => {
   return (
     <PageComponent title="SignUp">
       {showCards && (
-        <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto place-items-center md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-10 place-items-center mx-auto w-full max-w-4xl md:grid-cols-2">
           <CardInfoComponent
             icon={logs}
             title={t("signUpToMasters")}

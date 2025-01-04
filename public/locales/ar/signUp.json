@@ -11,5 +11,10 @@
   "accountCreated": "تم إنشاء الحساب بنجاح",
   "verificationCode": "تم إرسال رمز التحقق إلى",
   "processing": "جاري المعالجة",
+  "back": "الرجوع",
+  "applicantCpr": "الرقم الشخصي لمقدم الطلب",
+  "applicantCprDoc": "مستند الرقم الشخصي لمقدم الطلب",
+  "cpr": "الرقم الشخصي",
+  "cprDoc": "مستند الرقم الشخصي",
   "processComplete": "اكتملت العملية"
 }
