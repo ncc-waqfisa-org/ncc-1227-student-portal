@@ -5,6 +5,9 @@
   "cprShouldBe9": "CPR should be 9 numbers",
   "minimumGPA": "Minimum GPA is",
   "maximumGPA": "Maximum GPA is",
+  "invalidEmail": "Invalid Email",
+  "invalidPhone": "Invalid Phone",
+  "youHaveToAccept": "You have to accept the terms and conditions to continue.",
   "documentNotSubmitted": "Document not submitted",
   "dataLoadingError": "We're having trouble loading the data right now. Please try again later.",
   "tryAgain": "Try Again"

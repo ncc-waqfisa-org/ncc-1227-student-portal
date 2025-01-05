@@ -24,9 +24,12 @@ const PhoneNumberInput = React.forwardRef<
   }
   .phoneNumber input {
       background: transparent;
-      height: 3rem;
+      height: 2.9rem;
       border-inline-start-width: 1px;
-      border-radius: 0px;
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+      border-top-right-radius: 0.375rem;
+      border-bottom-right-radius: 0.375rem;
       padding: 0rem 0.5rem;
       border-color: black;
         }
@@ -43,7 +46,7 @@ const PhoneNumberInput = React.forwardRef<
         defaultCountry="BH"
         {...props}
         className={cn(
-          "phoneNumber border-border flex h-12 w-full rounded-md  border pl-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          "phoneNumber border-border flex h-12 w-full rounded-md !pr-0  border pl-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
           className
         )}
         type="phone"

@@ -88,11 +88,15 @@
   "lastName": "الاسم الأخير",
   "university": "الجامعة",
   "graduation": "التخرج",
+  "graduationYear": "سنة التخرج",
   "graduationProgram": "برنامج التخرج",
   "employment": "التوظيف",
   "employed": "موظف",
   "unemployed": "عاطل عن العمل",
   "placeOfEmployment": "مكان العمل",
+  "nextStep": "الخطوة التالية",
+  "submit": "تقديم",
   "income": "الدخل",
-  "incomeDoc": "مستند الدخل"
+  "incomeDoc": "مستند الدخل",
+  "formErrors": "حقول غير صالحة"
 }

@@ -15,14 +15,14 @@ export type MasterSignUpData = {
   address: string;
   email: string | null;
   phone: string | null;
-  gender: Gender | null;
+  gender: string | undefined;
   place_of_birth?: string | null;
-  nationality: Nationality | null;
+  nationality: string | undefined;
   number_of_family_member: number;
 
   // Graduated from
   graduation_year: string;
-  universityID: string;
+  universityID: string | undefined;
   old_program: string;
 
   // Employment info
@@ -30,7 +30,7 @@ export type MasterSignUpData = {
   place_of_employment: string | null;
 
   // Personal income or guardian income based on employment
-  income: Income;
+  income: Income | undefined;
   income_doc: string;
 
   // Guardian data
@@ -56,14 +56,14 @@ export type MasterSignUpFormSchema = {
   address: string;
   email: string | null;
   phone: string | null;
-  gender: Gender | null;
+  gender: string | undefined;
   place_of_birth?: string | null;
-  nationality: Nationality | null;
+  nationality: string | undefined;
   number_of_family_member: number;
 
   // Graduated from
   graduation_year: string;
-  universityID: string;
+  universityID: string | undefined;
   old_program: string;
 
   // Employment info
@@ -71,7 +71,7 @@ export type MasterSignUpFormSchema = {
   place_of_employment: string | null;
 
   // Personal income or guardian income based on employment
-  income: Income;
+  income: Income | undefined;
   income_doc?: File;
 
   // Guardian data

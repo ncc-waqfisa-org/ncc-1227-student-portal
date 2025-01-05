@@ -44,6 +44,7 @@ import dayjs from "dayjs";
 import { cn } from "../../src/lib/utils";
 import { Textarea } from "../Textarea";
 import WordCounter from "../word-counter";
+import { useAppContext } from "../../contexts/AppContexts";
 
 export interface CreateApplicationFormValues {
   application: CreateApplicationMutationVariables;
@@ -76,8 +77,9 @@ interface Props {
 export const ApplicationForm: FC<Props> = (props) => {
   const { user } = useAuth();
   const { push, locale } = useRouter();
-  const { student, syncStudentApplication, batch, editingApplicationsEnabled } =
+  const { syncStudentApplication, batch, editingApplicationsEnabled } =
     useBachelorContext();
+  const { student } = useAppContext();
   const { t } = useTranslation("applicationPage");
   const { t: tErrors } = useTranslation("errors");
   const { t: tToast } = useTranslation("toast");

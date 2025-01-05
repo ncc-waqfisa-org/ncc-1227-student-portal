@@ -88,12 +88,16 @@
   "lastName": "Last Name",
   "university": "University",
   "graduation": "Graduation",
+  "graduationYear": "Graduation Year",
   "graduationProgram": "Graduation Program",
   "employment": "Employment",
   "employed": "Employed",
   "unemployed": "Unemployed",
-  "placeOfEmployment": "placeOfEmployment",
+  "placeOfEmployment": "Place of Employment",
+  "nextStep": "Next Step",
+  "submit": "Submit",
   "income": "Income",
   "incomeDoc": "Income Document",
-  "termsAndConditions": "Terms & Conditions"
+  "termsAndConditions": "Terms & Conditions",
+  "formErrors": "Invalid Fields"
 }
