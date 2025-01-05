@@ -41,6 +41,7 @@ export type MasterSignUpData = {
   //   applicant_type: ApplicantType[];
   password: string;
 };
+
 export type MasterSignUpFormSchema = {
   // Should be set in the backend
   // batch: number | null; //current year
@@ -81,6 +82,82 @@ export type MasterSignUpFormSchema = {
 
   password: string;
   confirm_password: string;
+
+  // Terms
+  accepted: boolean;
+};
+
+export type MasterEnrollData = {
+  // Personal data
+
+  // prefill with student fullName splitted
+  first_name: string;
+  second_name: string;
+  last_name: string;
+
+  // Graduated from
+
+  graduation_year: string;
+
+  universityID: string | undefined;
+
+  old_program: string;
+
+  // Employment info
+
+  isEmployed: boolean;
+
+  place_of_employment: string | null;
+
+  // Personal income or guardian income based on employment
+
+  income: Income | undefined;
+
+  income_doc: string;
+
+  // Guardian data
+
+  guardian_cpr: string;
+
+  guardian_full_name: string;
+
+  guardian_cpr_doc: string;
+};
+export type MasterEnrollFormSchema = {
+  // Personal data
+
+  // prefill with student fullName splitted
+  first_name: string;
+  second_name: string;
+  last_name: string;
+
+  // Graduated from
+
+  graduation_year: string;
+
+  universityID: string | undefined;
+
+  old_program: string;
+
+  // Employment info
+
+  isEmployed: boolean;
+
+  place_of_employment: string | null;
+
+  // Personal income or guardian income based on employment
+
+  income: Income | undefined;
+
+  income_doc?: File;
+
+  // Guardian data
+
+  guardian_cpr: string;
+
+  guardian_full_name: string;
+
+  guardian_cpr_doc?: File;
 
   // Terms
   accepted: boolean;

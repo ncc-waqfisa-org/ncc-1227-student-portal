@@ -15,6 +15,7 @@ import {
 import dayjs from "dayjs";
 import arLocale from "dayjs/locale/ar";
 import enLocale from "dayjs/locale/en";
+import { Skeleton } from "./Skeleton";
 
 type TDashboard = {
   type: "masters" | "bachelor";
@@ -40,12 +41,43 @@ export const Dashboard: FC<TDashboard> = ({ type }) => {
 const BachelorDashboard = () => {
   return <HomeComponent></HomeComponent>;
 };
+
 const MastersDashboard = () => {
   const { t } = useTranslation("common");
   const router = useRouter();
-  const { signUpEnabled, newApplicationsEnabled, batch } = useMastersContext();
+  const { signUpEnabled, newApplicationsEnabled, batch, isBatchPending } =
+    useMastersContext();
+
+  if (isBatchPending) {
+    return (
+      <div className="flex flex-col gap-10 mx-auto w-full max-w-4xl">
+        <div className="grid gap-10 md:grid-cols-2">
+          <Skeleton className="mx-auto w-full max-w-md h-72 rounded-2xl"></Skeleton>
+          <Skeleton className="mx-auto w-full max-w-md h-72 rounded-2xl"></Skeleton>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isBatchPending && !batch) {
+    return (
+      <div className="flex flex-wrap gap-10 justify-center">
+        <CardInfoComponent
+          icon={info}
+          title={"Registration"}
+          description={"Registration for masters is not open"}
+        ></CardInfoComponent>
+        <CardInfoComponent
+          icon={info}
+          title={"التسجيل"}
+          description={"التسجيل للماجستير غير مفتوح"}
+        ></CardInfoComponent>
+      </div>
+    );
+  }
+
   return (
-    <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto place-items-center md:grid-cols-2">
+    <div className="grid grid-cols-1 gap-10 place-items-center mx-auto w-full max-w-4xl md:grid-cols-2">
       {!(
         (signUpEnabled || newApplicationsEnabled)
         // TODO: inclued the master applications/scholarship
@@ -56,7 +88,7 @@ const MastersDashboard = () => {
         // (scholarships?.length ?? 0) > 0
       ) &&
         (dayjs().isAfter(dayjs(batch?.signUpEndDate).endOf("day")) ? (
-          <div className="flex flex-wrap justify-center gap-10">
+          <div className="flex flex-wrap gap-10 justify-center">
             <CardInfoComponent
               icon={info}
               title={"Registration"}
@@ -69,7 +101,7 @@ const MastersDashboard = () => {
             ></CardInfoComponent>
           </div>
         ) : (
-          <div className="flex flex-wrap justify-center gap-10 ">
+          <div className="flex flex-wrap gap-10 justify-center">
             <CardInfoComponent
               icon={info}
               title={"التسجيل"}

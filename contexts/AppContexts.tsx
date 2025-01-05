@@ -18,6 +18,7 @@ interface IUseAppContext {
   student: GetStudentQuery | undefined;
   studentAsStudent: Student | undefined;
   cognitoUser: CognitoUser | undefined;
+  isStudentPending: boolean;
   resetContext: () => void;
   syncStudent: () => Promise<void>;
 }
@@ -28,6 +29,7 @@ const defaultState: IUseAppContext = {
   student: undefined,
   studentAsStudent: undefined,
   cognitoUser: undefined,
+  isStudentPending: false,
   resetContext: async () => {},
   syncStudent: async () => {},
 };
@@ -53,13 +55,19 @@ function useProviderApp() {
   const [studentAsStudent, setStudentAsStudent] = useState(
     defaultState.studentAsStudent
   );
+  const [isStudentPending, setIsStudentPending] = useState(false);
 
   useEffect(() => {
     if (cpr) {
-      getStudentInfo(cpr).then((info) => {
-        setStudent(info);
-        setStudentAsStudent(info?.getStudent as Student);
-      });
+      setIsStudentPending(true);
+      getStudentInfo(cpr)
+        .then((info) => {
+          setStudent(info);
+          setStudentAsStudent(info?.getStudent as Student);
+        })
+        .finally(() => {
+          setIsStudentPending(false);
+        });
     }
 
     return () => {};
@@ -71,10 +79,15 @@ function useProviderApp() {
 
   async function syncStudent() {
     if (cpr) {
-      getStudentInfo(cpr).then((info) => {
-        setStudent(info);
-        setStudentAsStudent(info?.getStudent as Student);
-      });
+      setIsStudentPending(true);
+      getStudentInfo(cpr)
+        .then((info) => {
+          setStudent(info);
+          setStudentAsStudent(info?.getStudent as Student);
+        })
+        .finally(() => {
+          setIsStudentPending(false);
+        });
     }
   }
 
@@ -85,6 +98,7 @@ function useProviderApp() {
     resetContext,
     student,
     studentAsStudent,
+    isStudentPending,
     syncStudent,
   };
 }

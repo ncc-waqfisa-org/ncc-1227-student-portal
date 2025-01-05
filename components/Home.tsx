@@ -35,14 +35,42 @@ export const HomeComponent: FC = () => {
     queryFn: () => (cpr ? getStudentScholarships(cpr) : []),
   });
 
+  if (isBatchPending) {
+    return (
+      <div className="flex flex-col gap-10 mx-auto w-full max-w-4xl">
+        <div className="grid gap-10 md:grid-cols-2">
+          <Skeleton className="mx-auto w-full max-w-md h-72 rounded-2xl"></Skeleton>
+          <Skeleton className="mx-auto w-full max-w-md h-72 rounded-2xl"></Skeleton>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isBatchPending && !batch) {
+    return (
+      <div className="flex flex-wrap gap-10 justify-center">
+        <CardInfoComponent
+          icon={info}
+          title={"Registration"}
+          description={"Registration for bachelor is not open"}
+        ></CardInfoComponent>
+        <CardInfoComponent
+          icon={info}
+          title={"التسجيل"}
+          description={"التسجيل للبكلريوس غير مفتوح"}
+        ></CardInfoComponent>
+      </div>
+    );
+  }
+
   return (
     <div>
-      {isBatchPending && (
+      {/* {isBatchPending && (
         <div className="flex flex-col gap-10 mx-auto">
-          <Skeleton className="w-full h-10 max-w-md mx-auto"></Skeleton>
+          <Skeleton className="mx-auto w-full max-w-md h-10"></Skeleton>
           <div className="grid gap-10 md:grid-cols-2">
-            <Skeleton className="w-full max-w-md mx-auto h-72"></Skeleton>
-            <Skeleton className="w-full max-w-md mx-auto h-72"></Skeleton>
+            <Skeleton className="mx-auto w-full max-w-md h-72"></Skeleton>
+            <Skeleton className="mx-auto w-full max-w-md h-72"></Skeleton>
           </div>
         </div>
       )}
@@ -50,7 +78,7 @@ export const HomeComponent: FC = () => {
         <div>
           <ErrorComponent />
         </div>
-      )}
+      )} */}
       {!isBatchPending && batch && (
         <div className="flex flex-col gap-10 mx-auto">
           {!(
@@ -61,7 +89,7 @@ export const HomeComponent: FC = () => {
             (scholarships?.length ?? 0) > 0
           ) &&
             (dayjs().isAfter(dayjs(batch?.signUpEndDate).endOf("day")) ? (
-              <div className="flex flex-wrap justify-center gap-10">
+              <div className="flex flex-wrap gap-10 justify-center">
                 <CardInfoComponent
                   icon={info}
                   title={"Registration"}
@@ -74,7 +102,7 @@ export const HomeComponent: FC = () => {
                 ></CardInfoComponent>
               </div>
             ) : (
-              <div className="flex flex-wrap justify-center gap-10 ">
+              <div className="flex flex-wrap gap-10 justify-center">
                 <CardInfoComponent
                   icon={info}
                   title={"التسجيل"}
@@ -101,7 +129,7 @@ export const HomeComponent: FC = () => {
             (haveActiveApplication && editingApplicationsEnabled) ||
             haveActiveApplication ||
             (scholarships?.length ?? 0) > 0) && (
-            <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto place-items-center md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-10 place-items-center mx-auto w-full max-w-4xl md:grid-cols-2">
               {!haveActiveApplication && (
                 <CardInfoComponent
                   icon={logs}
