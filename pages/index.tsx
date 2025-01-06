@@ -1,15 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PageComponent } from "../components/PageComponent";
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { Dashboard } from "../components/Dashboard";
 import { cn } from "../src/lib/utils";
 import { DashboardHeader } from "../components/DashboardHeader";
+import { useRouter } from "next/router";
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
-  const { locale } = ctx;
+interface HomeProps {
+  type: "bachelor" | "masters";
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { locale, query } = ctx;
+  let typeFromParams = (query.type as "bachelor" | "masters") || undefined;
+
+  // making sure it's only "bachelor" | "masters"
+  if (typeFromParams !== "bachelor" && typeFromParams !== "masters") {
+    typeFromParams = "bachelor";
+  }
+
+  query.type = typeFromParams;
 
   return {
     props: {
@@ -22,13 +35,33 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
         "signIn",
         "errors",
       ])),
+      type: typeFromParams || "bachelor",
     },
   };
 };
 
-const Home = () => {
-  const [type, setType] = useState<"bachelor" | "masters">("bachelor");
+const Home = ({ type: initialType }: HomeProps) => {
+  const [type, setType] = useState<"bachelor" | "masters">(initialType);
   const { t: commonT } = useTranslation("common");
+  const { push, pathname, query } = useRouter();
+
+  useEffect(() => {
+    push(
+      {
+        pathname: pathname,
+        query: { ...query, type },
+      },
+      undefined,
+      { shallow: true }
+    );
+  }, [type]);
+
+  useEffect(() => {
+    const typeFromParams = query.type as "bachelor" | "masters";
+    if (typeFromParams) {
+      setType(typeFromParams);
+    }
+  }, [query]);
 
   return (
     <PageComponent

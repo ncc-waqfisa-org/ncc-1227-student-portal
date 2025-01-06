@@ -1,47 +1,49 @@
-import { CardInfoComponent } from "./CardInfo";
+import { CardInfoComponent } from "./../CardInfo";
 import logs from "public/svg/logs.svg";
 import search from "public/svg/search.svg";
 import check from "public/svg/check-dark.svg";
 import info from "public/svg/info.svg";
 import { useRouter } from "next/router";
-import { useBachelorContext } from "../contexts/BachelorContexts";
+
 import { useTranslation } from "react-i18next";
 import { FC } from "react";
-import { useAuth } from "../hooks/use-auth";
-import { Scholarship } from "../src/API";
+import { useAuth } from "../../hooks/use-auth";
+import { Scholarship } from "../../src/API";
 import { useQuery } from "@tanstack/react-query";
-import { getStudentScholarships } from "../src/CustomAPI";
+import { getStudentScholarships } from "../../src/CustomAPI";
 import dayjs from "dayjs";
 import arLocale from "dayjs/locale/ar";
 import enLocale from "dayjs/locale/en";
-import { Skeleton } from "./Skeleton";
-import { NoAvailableBatch } from "./NoAvailableBatch";
+import { Skeleton } from "./../Skeleton";
+import { useMastersContext } from "../../contexts/MastersContexts";
+import { NoAvailableBatch } from "../NoAvailableBatch";
 
-export const HomeComponent: FC = () => {
+export const MastersHomeComponent: FC = () => {
   const router = useRouter();
   const { t } = useTranslation("common");
   const {
-    haveActiveApplication,
     batch,
     isBatchPending,
     signUpEnabled,
+    haveActiveApplication,
     newApplicationsEnabled,
     editingApplicationsEnabled,
-  } = useBachelorContext();
+  } = useMastersContext();
 
-  const { cpr } = useAuth();
+  const { cpr, isAuthedUserPending, isSignedIn } = useAuth();
   const { data: scholarships } = useQuery<Scholarship[]>({
     queryKey: ["scholarships", cpr],
     queryFn: () => (cpr ? getStudentScholarships(cpr) : []),
   });
 
-  const haveScholarships = (scholarships?.length ?? 0) > 0;
+  // TODO: change this back to number of scholarships
+  const haveScholarships = false;
+  // const haveScholarships = (scholarships?.length ?? 0) > 0;
 
   const canApply =
-    batch &&
-    (signUpEnabled ||
-      newApplicationsEnabled ||
-      (haveActiveApplication && editingApplicationsEnabled));
+    signUpEnabled ||
+    newApplicationsEnabled ||
+    (haveActiveApplication && editingApplicationsEnabled);
   const isRegistrationClosed = dayjs().isAfter(
     dayjs(batch?.signUpEndDate).endOf("day")
   );
@@ -67,7 +69,7 @@ export const HomeComponent: FC = () => {
             icon={check}
             title={t("scholarships")}
             description={t("trackApplicationDescription")}
-            action={() => router.push("/bachelor/scholarship?type=bachelor")}
+            action={() => router.push("/masters/scholarship?type=masters")}
             actionTitle={t("myScholarships") ?? "My Scholarships"}
           ></CardInfoComponent>
         )}
@@ -76,7 +78,7 @@ export const HomeComponent: FC = () => {
             icon={search}
             title={t("trackApplication")}
             description={t("trackApplicationDescription")}
-            action={() => router.push("/bachelor/applications?type=bachelor")}
+            action={() => router.push("/masters/applications?type=masters")}
             actionTitle={t("track") ?? "Track"}
           ></CardInfoComponent>
         )}
@@ -85,7 +87,7 @@ export const HomeComponent: FC = () => {
       {/* Check if batch available */}
       {!isBatchPending && !batch ? (
         <div className="flex justify-center">
-          <NoAvailableBatch type="bachelor" />
+          <NoAvailableBatch type="masters" />
         </div>
       ) : (
         <div className="flex flex-col gap-10 mx-auto">
@@ -127,10 +129,14 @@ export const HomeComponent: FC = () => {
               {!haveActiveApplication && (
                 <CardInfoComponent
                   icon={logs}
-                  title={t("applyForScholarship")}
+                  title={t("applyForScholarshipMasters")}
                   description={t("applyForScholarshipDescription")}
                   action={() =>
-                    router.push("/bachelor/applications?type=bachelor")
+                    router.push(
+                      isSignedIn
+                        ? "/masters/enroll"
+                        : "/masters/applications?type=masters"
+                    )
                   }
                   actionTitle={t("enrollNow") ?? "Enroll Now"}
                 ></CardInfoComponent>
@@ -156,12 +162,12 @@ export const HomeComponent: FC = () => {
 //       <CardInfoComponent
 //         icon={info}
 //         title={"Registration"}
-//         description={"Registration for bachelor is not open"}
+//         description={"Registration for masters is not open"}
 //       ></CardInfoComponent>
 //       <CardInfoComponent
 //         icon={info}
 //         title={"التسجيل"}
-//         description={"التسجيل للبكلريوس غير مفتوح"}
+//         description={"التسجيل للماجستير غير مفتوح"}
 //       ></CardInfoComponent>
 //     </div>
 //   );

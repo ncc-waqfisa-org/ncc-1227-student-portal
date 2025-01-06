@@ -1,7 +1,14 @@
-import { createContext, FC, PropsWithChildren, useContext } from "react";
+import {
+  createContext,
+  FC,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useAuth } from "../hooks/use-auth";
-import { Batch } from "../src/API";
-import { getCurrentBatch } from "../src/CustomAPI";
+import { Application, Batch, Status } from "../src/API";
+import { getCurrentBatch, getStudentApplications } from "../src/CustomAPI";
 import { GraphQLError } from "graphql";
 import dayjs from "dayjs";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,6 +22,12 @@ interface IUseMastersContext {
   editingApplicationsEnabled: boolean;
   batch: Batch | undefined;
   isBatchPending: boolean;
+
+  applications: Application[];
+  haveActiveApplication: boolean;
+  syncStudentApplication: () => Promise<void>;
+  syncStudent: () => Promise<void>;
+  resetContext: () => void;
 }
 
 // the default state for all the values & functions
@@ -24,6 +37,12 @@ const defaultState: IUseMastersContext = {
   editingApplicationsEnabled: false,
   batch: undefined,
   isBatchPending: true,
+
+  applications: [],
+  haveActiveApplication: false,
+  syncStudentApplication: async () => {},
+  syncStudent: async () => {},
+  resetContext: async () => {},
 };
 
 // creating the app contexts
@@ -44,7 +63,14 @@ export const MastersProvider: FC<PropsWithChildren> = ({ children }) => {
 function useProviderMasters() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const { student, studentAsStudent, syncStudent } = useAppContext();
+  const { syncStudent } = useAppContext();
+
+  const [applications, setApplications] = useState<Application[]>(
+    defaultState.applications
+  );
+  const [haveActiveApplication, setHaveActiveApplication] = useState(
+    defaultState.haveActiveApplication
+  );
 
   const { data: batch, isPending: isBatchPending } = useQuery<Batch | null>({
     queryKey: ["currentBatch"],
@@ -71,7 +97,8 @@ function useProviderMasters() {
   /**
    * Determines if the application is in development mode.
    */
-  const isDevelopment = process.env.NODE_ENV === "development";
+  const isDevelopment = false;
+  // const isDevelopment = process.env.NODE_ENV === "development";
 
   /**
    * Checks if new applications can be submitted based on the current environment and batch dates.
@@ -102,18 +129,69 @@ function useProviderMasters() {
     : dayjs().isBefore(dayjs(batch.signUpEndDate).endOf("day")) &&
       dayjs().isAfter(dayjs(batch.signUpStartDate).startOf("day"));
 
+  useEffect(() => {
+    let cpr = user?.getUsername();
+    if (cpr) {
+      getStudentApplications(cpr).then((allStudentApplications) => {
+        setApplications(allStudentApplications);
+
+        /* Checking if the student has an active application. */
+        let active = allStudentApplications.find(
+          (application) =>
+            (application.status === Status.REVIEW ||
+              application.status === Status.APPROVED ||
+              application.status === Status.ELIGIBLE ||
+              application.status === Status.NOT_COMPLETED ||
+              application.status === Status.REJECTED ||
+              application.status === Status.WITHDRAWN) &&
+            batch?.batch === application.batch
+        );
+
+        setHaveActiveApplication(active !== undefined);
+      });
+    }
+
+    return () => {};
+  }, [user, batch]);
+
   function resetContext() {
+    setApplications([]);
+    setHaveActiveApplication(false);
     queryClient.invalidateQueries();
   }
 
+  async function syncStudentApplication() {
+    let cpr = user?.getUsername();
+
+    if (cpr) {
+      getStudentApplications(cpr).then((allStudentApplications) => {
+        setApplications(allStudentApplications);
+
+        /* Checking if the student has an active application. */
+        let active = allStudentApplications.find(
+          (application) =>
+            (application.status === Status.REVIEW ||
+              application.status === Status.APPROVED ||
+              application.status === Status.ELIGIBLE ||
+              application.status === Status.NOT_COMPLETED ||
+              application.status === Status.WITHDRAWN) &&
+            batch?.batch === application.batch
+        );
+        setHaveActiveApplication(active !== undefined);
+      });
+    }
+  }
   // NOTE: return all the values & functions you want to export
   return {
-    syncStudent,
-    resetContext,
     signUpEnabled,
     newApplicationsEnabled,
     editingApplicationsEnabled,
     batch: batch ?? undefined,
     isBatchPending,
+    applications,
+    haveActiveApplication,
+    syncStudentApplication,
+    syncStudent,
+    resetContext,
   };
 }

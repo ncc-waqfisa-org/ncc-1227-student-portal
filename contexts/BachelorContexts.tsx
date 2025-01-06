@@ -17,30 +17,32 @@ import { useAppContext } from "./AppContexts";
 
 // interface for all the values & functions
 interface IUseBachelorContext {
-  applications: Application[];
-  haveActiveApplication: boolean;
-  syncStudentApplication: () => Promise<void>;
-  syncStudent: () => Promise<void>;
-  resetContext: () => void;
   signUpEnabled: boolean;
   newApplicationsEnabled: boolean;
   editingApplicationsEnabled: boolean;
   batch: Batch | undefined;
   isBatchPending: boolean;
+
+  applications: Application[];
+  haveActiveApplication: boolean;
+  syncStudentApplication: () => Promise<void>;
+  syncStudent: () => Promise<void>;
+  resetContext: () => void;
 }
 
 // the default state for all the values & functions
 const defaultState: IUseBachelorContext = {
-  applications: [],
-  haveActiveApplication: false,
-  syncStudentApplication: async () => {},
-  syncStudent: async () => {},
-  resetContext: async () => {},
   signUpEnabled: false,
   newApplicationsEnabled: false,
   editingApplicationsEnabled: false,
   batch: undefined,
   isBatchPending: true,
+
+  applications: [],
+  haveActiveApplication: false,
+  syncStudentApplication: async () => {},
+  syncStudent: async () => {},
+  resetContext: async () => {},
 };
 
 // creating the app contexts
@@ -61,7 +63,7 @@ export const BachelorProvider: FC<PropsWithChildren> = ({ children }) => {
 function useProviderBachelor() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const { student, studentAsStudent, syncStudent } = useAppContext();
+  const { syncStudent } = useAppContext();
 
   const [applications, setApplications] = useState<Application[]>(
     defaultState.applications
@@ -95,7 +97,8 @@ function useProviderBachelor() {
   /**
    * Determines if the application is in development mode.
    */
-  const isDevelopment = process.env.NODE_ENV === "development";
+  const isDevelopment = false;
+  // const isDevelopment = process.env.NODE_ENV === "development";
 
   /**
    * Checks if new applications can be submitted based on the current environment and batch dates.
@@ -181,15 +184,15 @@ function useProviderBachelor() {
 
   // NOTE: return all the values & functions you want to export
   return {
-    applications,
-    haveActiveApplication,
-    syncStudentApplication,
-    syncStudent,
-    resetContext,
     signUpEnabled,
     newApplicationsEnabled,
     editingApplicationsEnabled,
     batch: batch ?? undefined,
     isBatchPending,
+    applications,
+    haveActiveApplication,
+    syncStudentApplication,
+    syncStudent,
+    resetContext,
   };
 }

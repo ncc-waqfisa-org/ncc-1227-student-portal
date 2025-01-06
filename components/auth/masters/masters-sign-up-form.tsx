@@ -338,8 +338,8 @@ export default function MastersSignUpForm() {
 
           const thirdStepHaveError = !!errors.accepted;
           return (
-            <Form className="flex flex-col justify-center mx-auto max-w-4xl">
-              <ul dir="ltr" className="overflow-visible relative mb-6 steps">
+            <Form className="flex flex-col justify-center max-w-4xl mx-auto">
+              <ul dir="ltr" className="relative mb-6 overflow-visible steps">
                 <li
                   onClick={() => steps > 1 && setSteps(1)}
                   className={cn(
@@ -380,7 +380,7 @@ export default function MastersSignUpForm() {
                 >
                   {t("termsAndConditions")}
                 </li>
-                <li className="flex absolute left-0 top-1 flex-col justify-center md:-left-8">
+                <li className="absolute left-0 flex flex-col justify-center top-1 md:-left-8">
                   <button
                     title={t("back") ?? "Back"}
                     type="button"
@@ -821,7 +821,7 @@ export default function MastersSignUpForm() {
                     />
                     <div
                       onClick={() => setShowPassword(!showPassword)}
-                      className="flex absolute inset-y-0 right-0 items-center px-3 text-sm leading-5 hover:cursor-pointer"
+                      className="absolute inset-y-0 right-0 flex items-center px-3 text-sm leading-5 hover:cursor-pointer"
                     >
                       <svg
                         className={`h-6  text-gray-700 ${
@@ -885,7 +885,7 @@ export default function MastersSignUpForm() {
                       onClick={() =>
                         setShowConfirmPassword(!showConfirmPassword)
                       }
-                      className="flex absolute inset-y-0 right-0 items-center px-3 text-sm leading-5 hover:cursor-pointer"
+                      className="absolute inset-y-0 right-0 flex items-center px-3 text-sm leading-5 hover:cursor-pointer"
                     >
                       <svg
                         className={`h-6  text-gray-700 ${
@@ -1053,7 +1053,7 @@ export default function MastersSignUpForm() {
                   steps !== 3 && "hidden"
                 )}
               >
-                <div className="container flex flex-col gap-3 mx-auto max-w-3xl">
+                <div className="container flex flex-col max-w-3xl gap-3 mx-auto">
                   <h1 className="text-2xl font-semibold md:text-3xl">
                     {tAC("termsAndConditions")}
                   </h1>
@@ -1068,7 +1068,7 @@ export default function MastersSignUpForm() {
                     </div>
                   </div>
                   {/* Accepted */}
-                  <div className="flex flex-wrap gap-3 justify-start items-center w-full">
+                  <div className="flex flex-wrap items-center justify-start w-full gap-3">
                     <label
                       className={cn(
                         "label",
@@ -1443,7 +1443,7 @@ const LabelField: FC<TLabelField> = ({
 
 export const FormSeparator = ({ title }: { title: string }) => {
   return (
-    <div className="flex gap-4 items-center md:col-span-2">
+    <div className="flex items-center gap-4 md:col-span-2">
       <div className="h-[1px] bg-zinc-300 flex-1"></div>
       <p>{title}</p>
       <div className="h-[1px] bg-zinc-300 flex-1"></div>

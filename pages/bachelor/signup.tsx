@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import arLocale from "dayjs/locale/ar";
 import enLocale from "dayjs/locale/en";
 import { NextPageWithLayout } from "./../_app";
+import { NoAvailableBatch } from "../../components/NoAvailableBatch";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -58,6 +59,10 @@ const SignUpPage: NextPageWithLayout<Props> = () => {
     <PageComponent title="BSignUp">
       {isBatchPending ? (
         <Skeleton className="w-full h-96 bg-slate-300/80 " />
+      ) : !batch ? (
+        <div className="flex justify-center w-full ">
+          <NoAvailableBatch type="bachelor" />
+        </div>
       ) : (
         <>
           {signUpEnabled ? (

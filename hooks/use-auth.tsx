@@ -24,6 +24,7 @@ interface IUseAuthContext {
   cpr: string | undefined;
   isSignedIn: boolean;
   isInitializing: boolean;
+  isAuthedUserPending: boolean;
   signIn: (cpr: string, password: string) => Promise<CognitoUser | undefined>;
   signOut: () => Promise<void>;
   checkIfCprExist: (cpr: string) => Promise<boolean>;
@@ -39,6 +40,7 @@ const defaultState: IUseAuthContext = {
   user: undefined,
   isSignedIn: false,
   isInitializing: true,
+  isAuthedUserPending: false,
   signIn: async () => undefined,
   signOut: async () => {},
   checkIfCprExist: async () => false,
@@ -65,6 +67,7 @@ function useProvideAuth() {
   const [isInitializing, setIsInitializing] = useState(
     defaultState.isInitializing
   );
+  const [isAuthedUserPending, setIsAuthedUserPending] = useState(true);
 
   const { push } = useRouter();
   const { t } = useTranslation("toast");
@@ -133,6 +136,7 @@ function useProvideAuth() {
    * the Auth.currentAuthenticatedUser() method
    */
   const getAuthUser = useCallback(async () => {
+    setIsAuthedUserPending(true);
     try {
       const authUser = await Auth.currentAuthenticatedUser();
 
@@ -149,6 +153,8 @@ function useProvideAuth() {
       setIsSignedIn(false);
       setUser(undefined);
       setIsInitializing(false);
+    } finally {
+      setIsAuthedUserPending(false);
     }
   }, [checkAuthUser]);
 
@@ -243,6 +249,7 @@ function useProvideAuth() {
     token,
     cpr,
     isSignedIn,
+    isAuthedUserPending,
     signIn,
     signOut,
     checkIfCprExist,

@@ -17,6 +17,7 @@ import {
   useMastersContext,
 } from "../../contexts/MastersContexts";
 import MastersSignUpForm from "../../components/auth/masters/masters-sign-up-form";
+import { NoAvailableBatch } from "../../components/NoAvailableBatch";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -58,6 +59,10 @@ const SignUpPage: NextPageWithLayout<Props> = () => {
     <PageComponent title="MSignUp">
       {isBatchPending ? (
         <Skeleton className="w-full h-96 bg-slate-300/80 " />
+      ) : !batch ? (
+        <div className="flex justify-center w-full ">
+          <NoAvailableBatch type="masters" />
+        </div>
       ) : (
         <>
           {signUpEnabled ? (

@@ -179,11 +179,13 @@ export const MyScholarships: FC<TMyScholarships> = () => {
                         )}
                       </h3>
                       {/* Submit Date */}
-                      <div className=" stat-desc">
-                        {t("submitDate")}
-                        {Intl.DateTimeFormat(locale).format(
-                          new Date(scholarship?.createdAt)
-                        )}
+                      <div className="inline-flex gap-1  stat-desc">
+                        <p>{t("submitDate")}</p>
+                        <p>
+                          {Intl.DateTimeFormat(locale).format(
+                            new Date(scholarship.createdAt)
+                          )}
+                        </p>
                       </div>
                     </div>
 
@@ -248,16 +250,16 @@ export const MyScholarships: FC<TMyScholarships> = () => {
                               >
                                 <div className="modal-box">
                                   <form method="dialog">
-                                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                                    <button className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2">
                                       ✕
                                     </button>
                                   </form>
-                                  <h3 className="font-bold text-lg">
+                                  <h3 className="text-lg font-bold">
                                     {t("youWantToDecline")}
                                     {/* Are you sure you want to decline this
                                     scholarship? */}
                                   </h3>
-                                  <div className="pt-2 pb-4 flex flex-col gap-2">
+                                  <div className="flex flex-col gap-2 pt-2 pb-4">
                                     <p className="stat-desc">
                                       {t("cannotBeUndone")}
                                       {/* This action cannot be undone. */}
@@ -265,7 +267,7 @@ export const MyScholarships: FC<TMyScholarships> = () => {
                                   </div>
                                   <form
                                     method="dialog"
-                                    className="flex gap-3 items-center justify-center"
+                                    className="flex items-center justify-center gap-3"
                                   >
                                     <button
                                       // type="button"

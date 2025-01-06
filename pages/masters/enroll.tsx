@@ -42,19 +42,20 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 interface Props {}
 
 const EnrollIntoMasters: NextPageWithLayout<Props> = () => {
-  const auth = useAuth();
+  const { isSignedIn, isAuthedUserPending } = useAuth();
   const router = useRouter();
 
   const { signUpEnabled, isBatchPending, batch } = useMastersContext();
 
   useEffect(() => {
+    console.log({ isSignedIn, isAuthedUserPending });
     // TODO: check if this redirect before the value is set to signed in, if so then use it to control hiding the page
-    if (!auth.isSignedIn) {
+    if (!isSignedIn && !isAuthedUserPending) {
       router.replace("/");
     }
 
     return () => {};
-  }, [auth.isSignedIn, router]);
+  }, [isSignedIn, isAuthedUserPending, router]);
 
   return (
     <PageComponent title="MEnroll">
@@ -69,7 +70,7 @@ const EnrollIntoMasters: NextPageWithLayout<Props> = () => {
             </div>
           ) : // if registration period is over
           dayjs().isAfter(dayjs(batch?.signUpEndDate).endOf("day")) ? (
-            <div className="flex flex-wrap gap-10 justify-center">
+            <div className="flex flex-wrap justify-center gap-10">
               <CardInfoComponent
                 icon={info}
                 title={"Registration"}
@@ -82,7 +83,7 @@ const EnrollIntoMasters: NextPageWithLayout<Props> = () => {
               ></CardInfoComponent>
             </div>
           ) : (
-            <div className="flex flex-wrap gap-10 justify-center">
+            <div className="flex flex-wrap justify-center gap-10">
               <CardInfoComponent
                 icon={info}
                 title={"التسجيل"}
