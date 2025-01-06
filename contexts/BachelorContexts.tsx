@@ -97,8 +97,8 @@ function useProviderBachelor() {
   /**
    * Determines if the application is in development mode.
    */
-  const isDevelopment = false;
-  // const isDevelopment = process.env.NODE_ENV === "development";
+  // const isDevelopment = false;
+  const isDevelopment = process.env.NODE_ENV === "development";
 
   /**
    * Checks if new applications can be submitted based on the current environment and batch dates.

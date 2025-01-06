@@ -14,11 +14,13 @@ import { useBachelorContext } from "../contexts/BachelorContexts";
 import { useTranslation } from "react-i18next";
 import { LangSwitcher } from "./langSwitcher";
 import { RegPeriod, RegPeriodDialog } from "./reg-period";
+import { cn } from "../src/lib/utils";
 
 interface Props {
   title: string;
   authRequired?: boolean;
   header?: ReactNode;
+  className?: string;
 }
 
 export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
@@ -156,7 +158,12 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
               </div>
             </div>
             {
-              <div className="z-40 p-4 pt-20 -mt-10 md:pt-20 sm:pt-20 bg-base-100 sm:p-6 md:p-11">
+              <div
+                className={cn(
+                  "z-40 p-4 pt-20 -mt-10 md:pt-20 sm:pt-20 bg-base-100 sm:p-6 md:p-11",
+                  props.className
+                )}
+              >
                 {props.authRequired && !isSignedIn ? (
                   <div>
                     <SignInForm></SignInForm>
