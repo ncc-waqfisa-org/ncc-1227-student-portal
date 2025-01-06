@@ -8,21 +8,22 @@ import { Dashboard } from "../components/Dashboard";
 import { cn } from "../src/lib/utils";
 import { DashboardHeader } from "../components/DashboardHeader";
 import { useRouter } from "next/router";
+import { useAppContext } from "../contexts/AppContexts";
 
 interface HomeProps {
-  type: "bachelor" | "masters";
+  type: "bachelor" | "masters" | null;
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { locale, query } = ctx;
-  let typeFromParams = (query.type as "bachelor" | "masters") || undefined;
+  let typeFromParams = query.type || null;
 
   // making sure it's only "bachelor" | "masters"
   if (typeFromParams !== "bachelor" && typeFromParams !== "masters") {
-    typeFromParams = "bachelor";
+    typeFromParams = null;
   }
 
-  query.type = typeFromParams;
+  query.type = typeFromParams ?? undefined;
 
   return {
     props: {
@@ -35,15 +36,32 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         "signIn",
         "errors",
       ])),
-      type: typeFromParams || "bachelor",
+      type: typeFromParams,
     },
   };
 };
 
 const Home = ({ type: initialType }: HomeProps) => {
-  const [type, setType] = useState<"bachelor" | "masters">(initialType);
+  const [type, setType] = useState<"bachelor" | "masters">(
+    initialType ?? "bachelor"
+  );
   const { t: commonT } = useTranslation("common");
   const { push, pathname, query } = useRouter();
+  const { studentAsStudent: student } = useAppContext();
+
+  // TODO add the correct check for applicantType
+  // useEffect(() => {
+  //   if (initialType === null) {
+
+  //     // TODO add the correct check for applicantType
+  //     const isMasterApplicant = true; //student.applicantType.includes("masters");
+
+  //     if (isMasterApplicant) {
+  //       setType("masters");
+  //     }
+  //     // setType("bachelor"); // Default to "bachelor" if initialType is undefined
+  //   }
+  // }, [initialType, student]);
 
   useEffect(() => {
     push(
