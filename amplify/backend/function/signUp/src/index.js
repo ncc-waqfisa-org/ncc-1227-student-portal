@@ -22,7 +22,7 @@ exports.handler = async (event) => {
         const requestBody = JSON.parse(event.body);
         let studentData = requestBody.student.input;
         let parentData = requestBody.parentInfo?.input;
-        const username = studentData?.cpr;
+        const username = studentData?.cpr ? studentData.cpr : requestBody.username;
         let email = studentData?.email;
         const password = requestBody.password;
         const user =  await getUserFromCognito(username);
@@ -46,16 +46,12 @@ exports.handler = async (event) => {
                     ),
                 };
             } else {
+                studentData = await getUserFromDynamoDB(username);
+                parentData = await getParentFromDynamoDB(studentData.parentInfoID);
                 email = studentData.email;
-                const oldStudent = await getUserFromDynamoDB(username);
-                const oldParentID = oldStudent.parentInfoID;
-                console.log(oldParentID, 'oldParentID');
                 await deleteUserFromCognito(username);
-                console.log('deleted from cognito');
                 await deleteUserFromDynamoDB(username);
-                console.log('deleted from dynamo');
-                await deleteParentFromDynamoDB(oldParentID);
-                console.log('deleted parent from dynamo');
+                await deleteParentFromDynamoDB(studentData.parentInfoID);
 
                 await signUpUserToCognito(username, email, password);
                 studentData.parentInfoID = await saveParentToDynamoDB(parentData);
@@ -81,7 +77,7 @@ exports.handler = async (event) => {
 
         studentData.parentInfoID = await saveParentToDynamoDB(parentData);
 
-        await saveStudentToDynamoDB(studentData, parentData);
+        await saveStudentToDynamoDB(studentData);
         await signUpUserToCognito(username, email, password);
 
 
@@ -140,7 +136,6 @@ async function getUserFromDynamoDB(username) {
         },
     };
     const { Item } = await dynamoDB.get(params).promise();
-    console.log(Item, 'Item');
     return Item;
 }
 async function getParentFromDynamoDB(parentID) {
@@ -203,14 +198,11 @@ async function signUpUserToCognito(username, email, password) {
     };
     await cognito.signUp(params).promise();
 }
-async function saveStudentToDynamoDB(studentData, parentData) {
+async function saveStudentToDynamoDB(studentData) {
     studentData._version = 1;
     studentData._lastChangedAt = new Date().getTime(); // Get timestamp in milliseconds
     studentData.createdAt = new Date().toISOString(); // Get current date in ISO format
     studentData.updatedAt = new Date().toISOString(); // Get current date in ISO format
-
-    studentData.batch = new Date().getFullYear();
-    studentData.numberOfFamilyMembers = parentData.numberOfFamilyMembers;
     const params = {
         TableName: 'Student-cw7beg2perdtnl7onnneec4jfa-staging',
         Item: studentData,
@@ -234,6 +226,10 @@ async function saveParentToDynamoDB(parentData) {
     await createdItem;
     return parentData.id;
 }
+
+
+
+
 
 
 // 4. rollback function

@@ -6,65 +6,76 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { fetchByPath, validateField } from "./utils";
-import { Attachment } from "../models";
-import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import { Attachment } from "../models";
+import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 export default function AttachmentUpdateForm(props) {
   const {
-    id,
-    attachment,
+    id: idProp,
+    attachment: attachmentModelProp,
     onSuccess,
     onError,
     onSubmit,
-    onCancel,
     onValidate,
     onChange,
     overrides,
     ...rest
   } = props;
   const initialValues = {
-    cprDoc: undefined,
-    acceptanceLetterDoc: undefined,
-    transcriptDoc: undefined,
-    signedContractDoc: undefined,
+    cprDoc: "",
+    signedContractDoc: "",
+    transcriptDoc: "",
+    schoolCertificate: "",
   };
   const [cprDoc, setCprDoc] = React.useState(initialValues.cprDoc);
-  const [acceptanceLetterDoc, setAcceptanceLetterDoc] = React.useState(
-    initialValues.acceptanceLetterDoc
+  const [signedContractDoc, setSignedContractDoc] = React.useState(
+    initialValues.signedContractDoc
   );
   const [transcriptDoc, setTranscriptDoc] = React.useState(
     initialValues.transcriptDoc
   );
-  const [signedContractDoc, setSignedContractDoc] = React.useState(
-    initialValues.signedContractDoc
+  const [schoolCertificate, setSchoolCertificate] = React.useState(
+    initialValues.schoolCertificate
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = { ...initialValues, ...attachmentRecord };
+    const cleanValues = attachmentRecord
+      ? { ...initialValues, ...attachmentRecord }
+      : initialValues;
     setCprDoc(cleanValues.cprDoc);
-    setAcceptanceLetterDoc(cleanValues.acceptanceLetterDoc);
-    setTranscriptDoc(cleanValues.transcriptDoc);
     setSignedContractDoc(cleanValues.signedContractDoc);
+    setTranscriptDoc(cleanValues.transcriptDoc);
+    setSchoolCertificate(cleanValues.schoolCertificate);
     setErrors({});
   };
-  const [attachmentRecord, setAttachmentRecord] = React.useState(attachment);
+  const [attachmentRecord, setAttachmentRecord] =
+    React.useState(attachmentModelProp);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = id ? await DataStore.query(Attachment, id) : attachment;
+      const record = idProp
+        ? await DataStore.query(Attachment, idProp)
+        : attachmentModelProp;
       setAttachmentRecord(record);
     };
     queryData();
-  }, [id, attachment]);
+  }, [idProp, attachmentModelProp]);
   React.useEffect(resetStateValues, [attachmentRecord]);
   const validations = {
     cprDoc: [],
-    acceptanceLetterDoc: [],
-    transcriptDoc: [],
     signedContractDoc: [],
+    transcriptDoc: [],
+    schoolCertificate: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -83,9 +94,9 @@ export default function AttachmentUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           cprDoc,
-          acceptanceLetterDoc,
-          transcriptDoc,
           signedContractDoc,
+          transcriptDoc,
+          schoolCertificate,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -110,6 +121,11 @@ export default function AttachmentUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
+            }
+          });
           await DataStore.save(
             Attachment.copyOf(attachmentRecord, (updated) => {
               Object.assign(updated, modelFields);
@@ -124,22 +140,22 @@ export default function AttachmentUpdateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, "AttachmentUpdateForm")}
+      {...rest}
     >
       <TextField
         label="Cpr doc"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={cprDoc}
+        value={cprDoc}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               cprDoc: value,
-              acceptanceLetterDoc,
-              transcriptDoc,
               signedContractDoc,
+              transcriptDoc,
+              schoolCertificate,
             };
             const result = onChange(modelFields);
             value = result?.cprDoc ?? value;
@@ -155,74 +171,18 @@ export default function AttachmentUpdateForm(props) {
         {...getOverrideProps(overrides, "cprDoc")}
       ></TextField>
       <TextField
-        label="Acceptance letter doc"
-        isRequired={false}
-        isReadOnly={false}
-        defaultValue={acceptanceLetterDoc}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              cprDoc,
-              acceptanceLetterDoc: value,
-              transcriptDoc,
-              signedContractDoc,
-            };
-            const result = onChange(modelFields);
-            value = result?.acceptanceLetterDoc ?? value;
-          }
-          if (errors.acceptanceLetterDoc?.hasError) {
-            runValidationTasks("acceptanceLetterDoc", value);
-          }
-          setAcceptanceLetterDoc(value);
-        }}
-        onBlur={() =>
-          runValidationTasks("acceptanceLetterDoc", acceptanceLetterDoc)
-        }
-        errorMessage={errors.acceptanceLetterDoc?.errorMessage}
-        hasError={errors.acceptanceLetterDoc?.hasError}
-        {...getOverrideProps(overrides, "acceptanceLetterDoc")}
-      ></TextField>
-      <TextField
-        label="Transcript doc"
-        isRequired={false}
-        isReadOnly={false}
-        defaultValue={transcriptDoc}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              cprDoc,
-              acceptanceLetterDoc,
-              transcriptDoc: value,
-              signedContractDoc,
-            };
-            const result = onChange(modelFields);
-            value = result?.transcriptDoc ?? value;
-          }
-          if (errors.transcriptDoc?.hasError) {
-            runValidationTasks("transcriptDoc", value);
-          }
-          setTranscriptDoc(value);
-        }}
-        onBlur={() => runValidationTasks("transcriptDoc", transcriptDoc)}
-        errorMessage={errors.transcriptDoc?.errorMessage}
-        hasError={errors.transcriptDoc?.hasError}
-        {...getOverrideProps(overrides, "transcriptDoc")}
-      ></TextField>
-      <TextField
         label="Signed contract doc"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={signedContractDoc}
+        value={signedContractDoc}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               cprDoc,
-              acceptanceLetterDoc,
-              transcriptDoc,
               signedContractDoc: value,
+              transcriptDoc,
+              schoolCertificate,
             };
             const result = onChange(modelFields);
             value = result?.signedContractDoc ?? value;
@@ -239,6 +199,62 @@ export default function AttachmentUpdateForm(props) {
         hasError={errors.signedContractDoc?.hasError}
         {...getOverrideProps(overrides, "signedContractDoc")}
       ></TextField>
+      <TextField
+        label="Transcript doc"
+        isRequired={false}
+        isReadOnly={false}
+        value={transcriptDoc}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              cprDoc,
+              signedContractDoc,
+              transcriptDoc: value,
+              schoolCertificate,
+            };
+            const result = onChange(modelFields);
+            value = result?.transcriptDoc ?? value;
+          }
+          if (errors.transcriptDoc?.hasError) {
+            runValidationTasks("transcriptDoc", value);
+          }
+          setTranscriptDoc(value);
+        }}
+        onBlur={() => runValidationTasks("transcriptDoc", transcriptDoc)}
+        errorMessage={errors.transcriptDoc?.errorMessage}
+        hasError={errors.transcriptDoc?.hasError}
+        {...getOverrideProps(overrides, "transcriptDoc")}
+      ></TextField>
+      <TextField
+        label="School certificate"
+        isRequired={false}
+        isReadOnly={false}
+        value={schoolCertificate}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              cprDoc,
+              signedContractDoc,
+              transcriptDoc,
+              schoolCertificate: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.schoolCertificate ?? value;
+          }
+          if (errors.schoolCertificate?.hasError) {
+            runValidationTasks("schoolCertificate", value);
+          }
+          setSchoolCertificate(value);
+        }}
+        onBlur={() =>
+          runValidationTasks("schoolCertificate", schoolCertificate)
+        }
+        errorMessage={errors.schoolCertificate?.errorMessage}
+        hasError={errors.schoolCertificate?.hasError}
+        {...getOverrideProps(overrides, "schoolCertificate")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
@@ -246,7 +262,11 @@ export default function AttachmentUpdateForm(props) {
         <Button
           children="Reset"
           type="reset"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || attachmentModelProp)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -254,18 +274,13 @@ export default function AttachmentUpdateForm(props) {
           {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
         >
           <Button
-            children="Cancel"
-            type="button"
-            onClick={() => {
-              onCancel && onCancel();
-            }}
-            {...getOverrideProps(overrides, "CancelButton")}
-          ></Button>
-          <Button
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(idProp || attachmentModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>

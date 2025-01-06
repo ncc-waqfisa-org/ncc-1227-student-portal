@@ -5,8 +5,17 @@
  **************************************************************************/
 
 import * as React from "react";
-import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SelectFieldProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -16,18 +25,24 @@ export declare type AdminCreateFormInputValues = {
     cpr?: string;
     fullName?: string;
     email?: string;
+    role?: string;
+    isDeactivated?: boolean;
 };
 export declare type AdminCreateFormValidationValues = {
     cpr?: ValidationFunction<string>;
     fullName?: ValidationFunction<string>;
     email?: ValidationFunction<string>;
+    role?: ValidationFunction<string>;
+    isDeactivated?: ValidationFunction<boolean>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type AdminCreateFormOverridesProps = {
-    AdminCreateFormGrid?: FormProps<GridProps>;
-    cpr?: FormProps<TextFieldProps>;
-    fullName?: FormProps<TextFieldProps>;
-    email?: FormProps<TextFieldProps>;
+    AdminCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    cpr?: PrimitiveOverrideProps<TextFieldProps>;
+    fullName?: PrimitiveOverrideProps<TextFieldProps>;
+    email?: PrimitiveOverrideProps<TextFieldProps>;
+    role?: PrimitiveOverrideProps<SelectFieldProps>;
+    isDeactivated?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type AdminCreateFormProps = React.PropsWithChildren<{
     overrides?: AdminCreateFormOverridesProps | undefined | null;
@@ -36,7 +51,6 @@ export declare type AdminCreateFormProps = React.PropsWithChildren<{
     onSubmit?: (fields: AdminCreateFormInputValues) => AdminCreateFormInputValues;
     onSuccess?: (fields: AdminCreateFormInputValues) => void;
     onError?: (fields: AdminCreateFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
     onChange?: (fields: AdminCreateFormInputValues) => AdminCreateFormInputValues;
     onValidate?: AdminCreateFormValidationValues;
 } & React.CSSProperties>;

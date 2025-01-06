@@ -6,36 +6,34 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { fetchByPath, validateField } from "./utils";
-import { ParentInfo } from "../models";
-import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import { ParentInfo } from "../models";
+import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 export default function ParentInfoUpdateForm(props) {
   const {
-    id,
-    parentInfo,
+    id: idProp,
+    parentInfo: parentInfoModelProp,
     onSuccess,
     onError,
     onSubmit,
-    onCancel,
     onValidate,
     onChange,
     overrides,
     ...rest
   } = props;
   const initialValues = {
-    guardianFullName: undefined,
-    relation: undefined,
-    guardianCPR: undefined,
-    primaryMobile: undefined,
-    secondaryMobile: undefined,
-    fatherFullName: undefined,
-    fatherCPR: undefined,
-    motherFullName: undefined,
-    motherCPR: undefined,
-    numberOfFamilyMembers: undefined,
-    address: undefined,
+    guardianFullName: "",
+    relation: "",
+    guardianCPR: "",
+    primaryMobile: "",
+    secondaryMobile: "",
+    fatherFullName: "",
+    fatherCPR: "",
+    motherFullName: "",
+    motherCPR: "",
+    numberOfFamilyMembers: "",
+    address: "",
   };
   const [guardianFullName, setGuardianFullName] = React.useState(
     initialValues.guardianFullName
@@ -64,7 +62,9 @@ export default function ParentInfoUpdateForm(props) {
   const [address, setAddress] = React.useState(initialValues.address);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = { ...initialValues, ...parentInfoRecord };
+    const cleanValues = parentInfoRecord
+      ? { ...initialValues, ...parentInfoRecord }
+      : initialValues;
     setGuardianFullName(cleanValues.guardianFullName);
     setRelation(cleanValues.relation);
     setGuardianCPR(cleanValues.guardianCPR);
@@ -78,14 +78,17 @@ export default function ParentInfoUpdateForm(props) {
     setAddress(cleanValues.address);
     setErrors({});
   };
-  const [parentInfoRecord, setParentInfoRecord] = React.useState(parentInfo);
+  const [parentInfoRecord, setParentInfoRecord] =
+    React.useState(parentInfoModelProp);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = id ? await DataStore.query(ParentInfo, id) : parentInfo;
+      const record = idProp
+        ? await DataStore.query(ParentInfo, idProp)
+        : parentInfoModelProp;
       setParentInfoRecord(record);
     };
     queryData();
-  }, [id, parentInfo]);
+  }, [idProp, parentInfoModelProp]);
   React.useEffect(resetStateValues, [parentInfoRecord]);
   const validations = {
     guardianFullName: [],
@@ -100,7 +103,15 @@ export default function ParentInfoUpdateForm(props) {
     numberOfFamilyMembers: [],
     address: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -153,6 +164,11 @@ export default function ParentInfoUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
+            }
+          });
           await DataStore.save(
             ParentInfo.copyOf(parentInfoRecord, (updated) => {
               Object.assign(updated, modelFields);
@@ -167,14 +183,14 @@ export default function ParentInfoUpdateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, "ParentInfoUpdateForm")}
+      {...rest}
     >
       <TextField
         label="Guardian full name"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={guardianFullName}
+        value={guardianFullName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -208,7 +224,7 @@ export default function ParentInfoUpdateForm(props) {
         label="Relation"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={relation}
+        value={relation}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -242,7 +258,7 @@ export default function ParentInfoUpdateForm(props) {
         label="Guardian cpr"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={guardianCPR}
+        value={guardianCPR}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -276,7 +292,7 @@ export default function ParentInfoUpdateForm(props) {
         label="Primary mobile"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={primaryMobile}
+        value={primaryMobile}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -310,7 +326,7 @@ export default function ParentInfoUpdateForm(props) {
         label="Secondary mobile"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={secondaryMobile}
+        value={secondaryMobile}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -344,7 +360,7 @@ export default function ParentInfoUpdateForm(props) {
         label="Father full name"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={fatherFullName}
+        value={fatherFullName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -378,7 +394,7 @@ export default function ParentInfoUpdateForm(props) {
         label="Father cpr"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={fatherCPR}
+        value={fatherCPR}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -412,7 +428,7 @@ export default function ParentInfoUpdateForm(props) {
         label="Mother full name"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={motherFullName}
+        value={motherFullName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -446,7 +462,7 @@ export default function ParentInfoUpdateForm(props) {
         label="Mother cpr"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={motherCPR}
+        value={motherCPR}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -482,16 +498,11 @@ export default function ParentInfoUpdateForm(props) {
         isReadOnly={false}
         type="number"
         step="any"
-        defaultValue={numberOfFamilyMembers}
+        value={numberOfFamilyMembers}
         onChange={(e) => {
-          let value = parseInt(e.target.value);
-          if (isNaN(value)) {
-            setErrors((errors) => ({
-              ...errors,
-              numberOfFamilyMembers: "Value must be a valid number",
-            }));
-            return;
-          }
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
           if (onChange) {
             const modelFields = {
               guardianFullName,
@@ -525,7 +536,7 @@ export default function ParentInfoUpdateForm(props) {
         label="Address"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={address}
+        value={address}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -562,7 +573,11 @@ export default function ParentInfoUpdateForm(props) {
         <Button
           children="Reset"
           type="reset"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || parentInfoModelProp)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -570,18 +585,13 @@ export default function ParentInfoUpdateForm(props) {
           {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
         >
           <Button
-            children="Cancel"
-            type="button"
-            onClick={() => {
-              onCancel && onCancel();
-            }}
-            {...getOverrideProps(overrides, "CancelButton")}
-          ></Button>
-          <Button
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(idProp || parentInfoModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>

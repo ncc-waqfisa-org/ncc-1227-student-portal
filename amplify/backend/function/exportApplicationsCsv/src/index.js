@@ -1,8 +1,6 @@
 const AWS = require('aws-sdk');
-const XLSX = require('xlsx');
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const s3 = new AWS.S3();
-const cognito = new AWS.CognitoIdentityServiceProvider();
 
 const tableName = 'Application-cw7beg2perdtnl7onnneec4jfa-staging';
 
@@ -13,31 +11,7 @@ const tableName = 'Application-cw7beg2perdtnl7onnneec4jfa-staging';
 exports.handler = async (event) => {
     console.log(`EVENT: ${JSON.stringify(event)}`);
     try {
-        const token = event.headers?.authorization?.slice(7);
-        const isAdmin = await checkIsAdmin(token);
-        if (!isAdmin) {
-            return {
-                statusCode: 403,
-                body: JSON.stringify({ message: 'Forbidden. You are not an admin' })
-            };
-        }
-        const batchValue = parseInt(event.queryStringParameters?.batch) || new Date().getFullYear();
-        let body;
-
-        if (typeof event.body === 'string') {
-            body = JSON.parse(event.body);
-        } else {
-            body = event;
-        }
-
-        const selectedApplications = body.ids;
-        if(selectedApplications && !Array.isArray(selectedApplications)) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({ message: 'Invalid selected applications. Must be an array of application IDs' })
-            };
-        }
-
+        const batchValue = parseInt(event.queryStringParameters?.batch) || 2024;
         const status = event.queryStringParameters?.status || null;
         if(status && !['APPROVED', 'WITHDRAWN', 'REJECTED', 'ELIGIBLE', 'NOT_COMPLETED'].includes(status)) {
             return {
@@ -45,7 +19,8 @@ exports.handler = async (event) => {
                 body: JSON.stringify({ message: 'Invalid status. Must be one of: APPROVED, WITHDRAWN, REJECTED, ELIGIBLE, NOT_COMPLETED' })
             };
         }
-        const csv = await exportApplicationsCsv(tableName, batchValue, status, selectedApplications);
+        const csv = await exportApplicationsCsv(tableName, batchValue, status);
+
 
 
         return {
@@ -71,83 +46,12 @@ exports.handler = async (event) => {
     }
 };
 
-
-function jsonToXlsx(jsonArray) {
-    const worksheet = XLSX.utils.json_to_sheet(jsonArray);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Applications');
-    const workbookBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
-
-    return workbookBuffer;
-}
-
-async function getStudent(tableName, cpr) {
-    const params = {
-        TableName: tableName,
-        Key: {
-            cpr: cpr
-        }
-    };
-    const { Item } = await dynamoDB.get(params).promise();
-    return Item;
-}
-
-
-async function convertToJson(applications, students) {
-    const jsonArray = [];
-    for (const application of applications) {
-        let student = students.find(student => student.cpr === application.studentCPR);
-        const university = application.universityID ? await getUniversity(application.universityID) : { name: "NA" };
-        const program = application.universityID ? await getProgram(application.programID) : { name: "NA" };
-        const reason = processReason(application.reason);
-        if(!student) {
-            student = await getStudent('Student-cw7beg2perdtnl7onnneec4jfa-staging', application.studentCPR);
-        }
-        const graduationYear = student?.graduationDate? new Date(student?.graduationDate).getFullYear(): application.batch;
-
-
-        if (student) {
-            jsonArray.push({
-                "Id": application.id,
-                "Student CPR": application.studentCPR,
-                "Name": student.fullName,
-                "Gender": student.gender,
-                "Nationality": student.nationalityCategory,
-                "Field": student.specialization,
-                "Phone": student.phone,
-                "Email": student.email,
-                "Graduation Year": graduationYear,
-                "Status": application.status,
-                "GPA": application.gpa,
-                "Verified GPA": application.verifiedGPA,
-                "Score": application.score,
-                "School Name": application.schoolName,
-                "School Type": application.schoolType,
-                "Family Income": application.familyIncome,
-                "Chosen University": university.name,
-                "Chosen Program": program.name,
-                "Reason": reason,
-                "Total Score": application.score,
-                "Number Of Family Members": student.numberOfFamilyMembers,
-                "Is Family Income Verified": application.isFamilyIncomeVerified ? "Yes" : ""
-            });
-        }
-    }
-
-    return jsonArray;
-}
-
-
-
-async function exportApplicationsCsv(tableName, batchValue, status, selectedApplications) {
-    const applications = selectedApplications? await getSelectedApplications(tableName, selectedApplications) :  await getApplications(tableName, batchValue, status);
+async function exportApplicationsCsv(tableName, batchValue, status) {
+    const applications = await getApplications(tableName, batchValue, status);
     const students = await getStudents(batchValue);
-    const jsonArray = await convertToJson(applications, students);
-    const xlsxBuffer = jsonToXlsx(jsonArray);
-    const uploadUrl = await uploadToS3(xlsxBuffer, batchValue);
-    return uploadUrl;
+    const csv = convertToCsv(applications, students);
+    return uploadToS3(csv);
 }
-
 
 async function getApplications(tableName, batchValue, status) {
     const params = {
@@ -171,7 +75,6 @@ async function getApplications(tableName, batchValue, status) {
 
     let allApplications = [];
 
-
     do {
         const applications = await dynamoDB.query(params).promise();
         allApplications = allApplications.concat(applications.Items);
@@ -184,84 +87,43 @@ async function getApplications(tableName, batchValue, status) {
 }
 
 
-// async function convertToCsv(applications, students) {
-//     let csv = 'id,Student CPR,Name,Gender,Nationality,Field,Phone,email,Graduation Year,Status,GPA,Score,School Name,School Type,Family Income,Chosen University,Chosen Program,Reason,Total Score,Number of Family Members\n';
-//     for (const application of applications) {
-//         const student = students.find(student => student.cpr === application.studentCPR);
-//         const university = application.universityID? await getUniversity(application.universityID): {name: "NA"}
-//         const program = application.universityID? await getProgram(application.programID): {name: "NA"}
-//         const reason = processReason(application.reason);
-//         if (student) {
-//             csv += `${application.id},=""${application.studentCPR}"","${student?.fullName}",${student?.gender},${student?.nationalityCategory},"${student?.specialization}",${student?.phone},${student?.email},${application.batch},${application.status},${application.gpa},${application.score},"${application.schoolName}",${application.schoolType},${application.familyIncome},"${university?.name}","${program?.name}","${reason}",${application.score},${student.numberOfFamilyMembers}\n`;
-//         }
-//     }
-//     console.log(csv);
-//     return csv;
-// }
-
-function processReason(reason) {
-    // take new line after every 90 characters, if there is a space. if not, move to the next space and take a new line
-    if (!reason) return '';
-    let processedReason = '';
-    let line = '';
-    let charCount = 0;
-
-    for (let i = 0; i < reason.length; i++) {
-        line += reason[i];
-        charCount++;
-        if (charCount >= 90) {
-            if (reason[i] === ' ') {
-                processedReason += line + '\n';
-                line = '';
-                charCount = 0;
-            } else if (reason[i + 1] === ' ' || i === reason.length - 1) {
-                processedReason += line + '\n';
-                line = '';
-                charCount = 0;
-            }
+function convertToCsv(applications, students) {
+    let csv = 'id,StudentCPR,Name,Gender,Nationality,Specialization,Phone,email,Batch,Status,GPA,Score,SchoolName,SchoolType,FamilyIncome\n';
+    applications.forEach(application => {
+        const student = students.find(student => student.cpr === application.studentCPR);
+        if(student) {
+            csv += `${application.id},${application.studentCPR},"${student?.fullName}",${student?.gender},${student?.nationalityCategory},"${student?.specialization}",${student?.phone},${student?.email},${application.batch},${application.status},${application.gpa},${application.score},"${application.schoolName}",${application.schoolType},${application.familyIncome}\n`;
         }
-    }
-
-    processedReason += line;
-    return processedReason;
+    });
+    return csv;
 }
 
-
-async function uploadToS3(xlsxBuffer, batchValue) {
-    console.log('Uploading to S3', batchValue);
-
+async function uploadToS3(csv) {
     const params = {
         Bucket: 'amplify-ncc-staging-65406-deployment',
-        Key: `Applications ${batchValue}.xlsx`,
-        Body: xlsxBuffer,
-        ContentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        Key: 'applications.csv',
+        Body: csv
     };
     await s3.upload(params).promise();
-
-    // Return the URL of the uploaded file
-    return s3.getSignedUrl('getObject', { Bucket: params.Bucket, Key: params.Key });
+    // return the URL of the uploaded file
+    return s3.getSignedUrl('getObject', {Bucket: params.Bucket, Key: params.Key});
 }
 
-
 async function getStudents(batchValue) {
-    // const startDate = new Date();
-    // startDate.setFullYear(batchValue);
-    // startDate.setMonth(0); // September
-    // startDate.setDate(1); // 1st
-    // const endDate = new Date();
-    // endDate.setMonth(11); // December
-    // endDate.setDate(31); // 31st
+    const startDate = new Date();
+    startDate.setFullYear(batchValue);
+    startDate.setMonth(0); // September
+    startDate.setDate(1); // 1st
+    const endDate = new Date();
+    endDate.setMonth(11); // December
+    endDate.setDate(31); // 31st
     const params = {
         TableName: 'Student-cw7beg2perdtnl7onnneec4jfa-staging',
         // graduationDate is contained in the batch attribute
-        FilterExpression: '#batch = :batchValue',
+        FilterExpression: 'graduationDate BETWEEN :startDate AND :endDate',
         ExpressionAttributeValues: {
-            // ':startDate': startDate.toISOString(),
-            // ':endDate': endDate.toISOString()
-            ':batchValue': batchValue
-        },
-        ExpressionAttributeNames: {
-            '#batch': 'batch'
+            ':startDate': startDate.toISOString(),
+            ':endDate': endDate.toISOString()
         }
     };
     let allStudents = [];
@@ -276,72 +138,5 @@ async function getStudents(batchValue) {
 
     return allStudents;
 }
-
-
-async function getSelectedApplications(tableName, selectedApplications) {
-    console.log('Selected applications:', selectedApplications);
-    console.log('Processed applications:', selectedApplications.map(id => ({id})));
-    const params = {
-        // IndexName: 'byId',
-        RequestItems: {
-            [tableName]: {
-                Keys: selectedApplications.map(id => ({id}))
-            }
-        }
-    };
-
-    try {
-        const data = await dynamoDB.batchGet(params).promise();
-        return data.Responses[tableName];
-    } catch (err) {
-        console.error('Error getting selected applications', err);
-        return []; // or handle the error appropriately
-    }
-}
-
-
-async function checkIsAdmin(token) {
-    // get the username from the token using cognito
-    try {
-        const cognitoUser = await cognito.getUser({AccessToken: token}).promise();
-        const username = cognitoUser.Username;
-
-        const params = {
-            TableName: 'Admin-cw7beg2perdtnl7onnneec4jfa-staging',
-            Key: {
-                cpr: username
-            }
-        };
-        const {Item} = await dynamoDB.get(params).promise();
-        return Item !== undefined;
-    } catch (error) {
-        console.error('Error checking if user is admin', error);
-        return false;
-    }
-}
-
-async function getUniversity(universityId) {
-    const params = {
-        TableName: 'University-cw7beg2perdtnl7onnneec4jfa-staging',
-        Key: {
-            id: universityId
-        }
-    };
-    const university = await dynamoDB.get(params).promise();
-    return university.Item;
-}
-
-async function getProgram(programId) {
-    const params = {
-        TableName: 'Program-cw7beg2perdtnl7onnneec4jfa-staging',
-        Key: {
-            id: programId
-        }
-    };
-    const program = await dynamoDB.get(params).promise();
-    return program.Item;
-}
-
-
 
 

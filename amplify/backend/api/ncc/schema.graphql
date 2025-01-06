@@ -18,20 +18,21 @@ type Application @model @auth(rules: [{ allow: public }]) {
   programs: [ProgramChoice] @hasMany
   dateTime: AWSDateTime!
   isEmailSent: Boolean @default(value: "false")
-  nationalityCategory: Nationality @index(name: "byNationalityCategory", sortKeyFields: ["batch"])
+  nationalityCategory: Nationality
+    @index(name: "byNationalityCategory", sortKeyFields: ["batch"])
   familyIncome: FamilyIncome
   schoolName: String
   schoolType: SchoolType
   studentName: String
-  programID : ID
+  programID: ID
   program: Program @belongsTo(fields: ["programID"])
   universityID: ID
   university: University @belongsTo(fields: ["universityID"])
   studentCPR: String! @index(name: "byCPR", sortKeyFields: ["gpa"])
   student: Student @belongsTo(fields: ["studentCPR"])
-#  batchID: ID! @index(name: "byBatchRelation") @default(value: "48745538-4051-4c99-ad0f-7be0cac6cf16")
+  #  batchID: ID! @index(name: "byBatchRelation") @default(value: "48745538-4051-4c99-ad0f-7be0cac6cf16")
   batch: Int @index(name: "byBatch", sortKeyFields: ["status"])
-#  batchRelation: Batch @belongsTo(fields: ["batchID"])
+  #  batchRelation: Batch @belongsTo(fields: ["batchID"])
   # add a new field to the Application model called "score" that is a Float and is indexed for sorting
   score: Float @index(name: "byScore", sortKeyFields: ["status"])
   adminPoints: Int
@@ -64,7 +65,6 @@ type Program @model @auth(rules: [{ allow: public }]) {
   isDeactivated: Boolean
   isTrashed: Boolean @default(value: "false")
   application: [Application] @hasMany
-
 }
 
 type University @model @auth(rules: [{ allow: public }]) {
@@ -124,7 +124,6 @@ enum Status {
   WITHDRAWN
 }
 
-
 type ParentInfo @model @auth(rules: [{ allow: public }]) {
   id: ID!
   guardianFullName: String
@@ -168,14 +167,15 @@ type Student @model @auth(rules: [{ allow: public }]) {
   email: String
   phone: String
   gender: Gender
-  nationalityCategory: Nationality @index(name: "byNationalityCategory", sortKeyFields: ["graduationDate"])
+  nationalityCategory: Nationality
+    @index(name: "byNationalityCategory", sortKeyFields: ["graduationDate"])
   nationality: String
   schoolName: String
   schoolType: SchoolType
   specialization: String
   placeOfBirth: String
   studentOrderAmongSiblings: Int
-#  householdIncome: Float
+  #  householdIncome: Float
   familyIncome: FamilyIncome
   familyIncomeProofDoc: String
   familyIncomeProofDocs: [String]
@@ -195,8 +195,8 @@ type Batch @model @auth(rules: [{ allow: public }]) {
   updateApplicationEndDate: AWSDate
   signUpStartDate: AWSDate
   signUpEndDate: AWSDate
-#  updateExceptions: AWSJSON
-#  applications: [Application] @hasMany(indexName: "byBatchRelation", fields: ["id"])
+  #  updateExceptions: AWSJSON
+  #  applications: [Application] @hasMany(indexName: "byBatchRelation", fields: ["id"])
 }
 
 type Scholarship @model @auth(rules: [{ allow: public }]) {
@@ -224,7 +224,7 @@ type Statistics @model @auth(rules: [{ allow: public }]) {
   scoreHistogram: AWSJSON
   gpaHistogram: AWSJSON
   totalApplicationsPerUniversity: AWSJSON
-#  topPrograms: AWSJSON
+  #  topPrograms: AWSJSON
   topUniversities: AWSJSON
   topPrograms: AWSJSON
   familyIncome: AWSJSON
@@ -256,7 +256,6 @@ type Statistics @model @auth(rules: [{ allow: public }]) {
 #  score: Float @index(name: "byScore", sortKeyFields: ["status"])
 #  adminPoints: Int
 #}
-
 
 enum FamilyIncome {
   LESS_THAN_500

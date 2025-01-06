@@ -5,9 +5,18 @@
  **************************************************************************/
 
 import * as React from "react";
-import { ParentInfo } from "../models";
-import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { ParentInfo } from "../models";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -39,20 +48,20 @@ export declare type ParentInfoUpdateFormValidationValues = {
     numberOfFamilyMembers?: ValidationFunction<number>;
     address?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ParentInfoUpdateFormOverridesProps = {
-    ParentInfoUpdateFormGrid?: FormProps<GridProps>;
-    guardianFullName?: FormProps<TextFieldProps>;
-    relation?: FormProps<TextFieldProps>;
-    guardianCPR?: FormProps<TextFieldProps>;
-    primaryMobile?: FormProps<TextFieldProps>;
-    secondaryMobile?: FormProps<TextFieldProps>;
-    fatherFullName?: FormProps<TextFieldProps>;
-    fatherCPR?: FormProps<TextFieldProps>;
-    motherFullName?: FormProps<TextFieldProps>;
-    motherCPR?: FormProps<TextFieldProps>;
-    numberOfFamilyMembers?: FormProps<TextFieldProps>;
-    address?: FormProps<TextFieldProps>;
+    ParentInfoUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    guardianFullName?: PrimitiveOverrideProps<TextFieldProps>;
+    relation?: PrimitiveOverrideProps<TextFieldProps>;
+    guardianCPR?: PrimitiveOverrideProps<TextFieldProps>;
+    primaryMobile?: PrimitiveOverrideProps<TextFieldProps>;
+    secondaryMobile?: PrimitiveOverrideProps<TextFieldProps>;
+    fatherFullName?: PrimitiveOverrideProps<TextFieldProps>;
+    fatherCPR?: PrimitiveOverrideProps<TextFieldProps>;
+    motherFullName?: PrimitiveOverrideProps<TextFieldProps>;
+    motherCPR?: PrimitiveOverrideProps<TextFieldProps>;
+    numberOfFamilyMembers?: PrimitiveOverrideProps<TextFieldProps>;
+    address?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type ParentInfoUpdateFormProps = React.PropsWithChildren<{
     overrides?: ParentInfoUpdateFormOverridesProps | undefined | null;
@@ -62,7 +71,6 @@ export declare type ParentInfoUpdateFormProps = React.PropsWithChildren<{
     onSubmit?: (fields: ParentInfoUpdateFormInputValues) => ParentInfoUpdateFormInputValues;
     onSuccess?: (fields: ParentInfoUpdateFormInputValues) => void;
     onError?: (fields: ParentInfoUpdateFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
     onChange?: (fields: ParentInfoUpdateFormInputValues) => ParentInfoUpdateFormInputValues;
     onValidate?: ParentInfoUpdateFormValidationValues;
 } & React.CSSProperties>;

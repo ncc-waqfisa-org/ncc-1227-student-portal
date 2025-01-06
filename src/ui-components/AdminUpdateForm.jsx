@@ -6,55 +6,82 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { fetchByPath, validateField } from "./utils";
+import {
+  Button,
+  Flex,
+  Grid,
+  SelectField,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { Admin } from "../models";
-import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 export default function AdminUpdateForm(props) {
   const {
-    id,
-    admin,
+    cpr: cprProp,
+    admin: adminModelProp,
     onSuccess,
     onError,
     onSubmit,
-    onCancel,
     onValidate,
     onChange,
     overrides,
     ...rest
   } = props;
   const initialValues = {
-    cpr: undefined,
-    fullName: undefined,
-    email: undefined,
+    cpr: "",
+    fullName: "",
+    email: "",
+    role: "",
+    isDeactivated: false,
   };
   const [cpr, setCpr] = React.useState(initialValues.cpr);
   const [fullName, setFullName] = React.useState(initialValues.fullName);
   const [email, setEmail] = React.useState(initialValues.email);
+  const [role, setRole] = React.useState(initialValues.role);
+  const [isDeactivated, setIsDeactivated] = React.useState(
+    initialValues.isDeactivated
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = { ...initialValues, ...adminRecord };
+    const cleanValues = adminRecord
+      ? { ...initialValues, ...adminRecord }
+      : initialValues;
     setCpr(cleanValues.cpr);
     setFullName(cleanValues.fullName);
     setEmail(cleanValues.email);
+    setRole(cleanValues.role);
+    setIsDeactivated(cleanValues.isDeactivated);
     setErrors({});
   };
-  const [adminRecord, setAdminRecord] = React.useState(admin);
+  const [adminRecord, setAdminRecord] = React.useState(adminModelProp);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = id ? await DataStore.query(Admin, id) : admin;
+      const record = cprProp
+        ? await DataStore.query(Admin, cprProp)
+        : adminModelProp;
       setAdminRecord(record);
     };
     queryData();
-  }, [id, admin]);
+  }, [cprProp, adminModelProp]);
   React.useEffect(resetStateValues, [adminRecord]);
   const validations = {
     cpr: [{ type: "Required" }],
     fullName: [],
     email: [],
+    role: [],
+    isDeactivated: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -75,6 +102,8 @@ export default function AdminUpdateForm(props) {
           cpr,
           fullName,
           email,
+          role,
+          isDeactivated,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -99,6 +128,11 @@ export default function AdminUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
+            }
+          });
           await DataStore.save(
             Admin.copyOf(adminRecord, (updated) => {
               Object.assign(updated, modelFields);
@@ -113,14 +147,14 @@ export default function AdminUpdateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, "AdminUpdateForm")}
+      {...rest}
     >
       <TextField
         label="Cpr"
         isRequired={true}
-        isReadOnly={false}
-        defaultValue={cpr}
+        isReadOnly={true}
+        value={cpr}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -128,6 +162,8 @@ export default function AdminUpdateForm(props) {
               cpr: value,
               fullName,
               email,
+              role,
+              isDeactivated,
             };
             const result = onChange(modelFields);
             value = result?.cpr ?? value;
@@ -146,7 +182,7 @@ export default function AdminUpdateForm(props) {
         label="Full name"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={fullName}
+        value={fullName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -154,6 +190,8 @@ export default function AdminUpdateForm(props) {
               cpr,
               fullName: value,
               email,
+              role,
+              isDeactivated,
             };
             const result = onChange(modelFields);
             value = result?.fullName ?? value;
@@ -172,7 +210,7 @@ export default function AdminUpdateForm(props) {
         label="Email"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={email}
+        value={email}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -180,6 +218,8 @@ export default function AdminUpdateForm(props) {
               cpr,
               fullName,
               email: value,
+              role,
+              isDeactivated,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -194,6 +234,73 @@ export default function AdminUpdateForm(props) {
         hasError={errors.email?.hasError}
         {...getOverrideProps(overrides, "email")}
       ></TextField>
+      <SelectField
+        label="Role"
+        placeholder="Please select an option"
+        isDisabled={false}
+        value={role}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              cpr,
+              fullName,
+              email,
+              role: value,
+              isDeactivated,
+            };
+            const result = onChange(modelFields);
+            value = result?.role ?? value;
+          }
+          if (errors.role?.hasError) {
+            runValidationTasks("role", value);
+          }
+          setRole(value);
+        }}
+        onBlur={() => runValidationTasks("role", role)}
+        errorMessage={errors.role?.errorMessage}
+        hasError={errors.role?.hasError}
+        {...getOverrideProps(overrides, "role")}
+      >
+        <option
+          children="Admin"
+          value="ADMIN"
+          {...getOverrideProps(overrides, "roleoption0")}
+        ></option>
+        <option
+          children="Super admin"
+          value="SUPER_ADMIN"
+          {...getOverrideProps(overrides, "roleoption1")}
+        ></option>
+      </SelectField>
+      <SwitchField
+        label="Is deactivated"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={isDeactivated}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              cpr,
+              fullName,
+              email,
+              role,
+              isDeactivated: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.isDeactivated ?? value;
+          }
+          if (errors.isDeactivated?.hasError) {
+            runValidationTasks("isDeactivated", value);
+          }
+          setIsDeactivated(value);
+        }}
+        onBlur={() => runValidationTasks("isDeactivated", isDeactivated)}
+        errorMessage={errors.isDeactivated?.errorMessage}
+        hasError={errors.isDeactivated?.hasError}
+        {...getOverrideProps(overrides, "isDeactivated")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
@@ -201,7 +308,11 @@ export default function AdminUpdateForm(props) {
         <Button
           children="Reset"
           type="reset"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(cprProp || adminModelProp)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -209,18 +320,13 @@ export default function AdminUpdateForm(props) {
           {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
         >
           <Button
-            children="Cancel"
-            type="button"
-            onClick={() => {
-              onCancel && onCancel();
-            }}
-            {...getOverrideProps(overrides, "CancelButton")}
-          ></Button>
-          <Button
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(cprProp || adminModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>

@@ -5,9 +5,18 @@
  **************************************************************************/
 
 import * as React from "react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { University } from "../models";
-import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -15,14 +24,35 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type UniversityUpdateFormInputValues = {
     name?: string;
+    nameAr?: string;
+    availability?: number;
+    isDeactivated?: boolean;
+    isExtended?: number;
+    extensionDuration?: number;
+    isException?: number;
+    isTrashed?: boolean;
 };
 export declare type UniversityUpdateFormValidationValues = {
     name?: ValidationFunction<string>;
+    nameAr?: ValidationFunction<string>;
+    availability?: ValidationFunction<number>;
+    isDeactivated?: ValidationFunction<boolean>;
+    isExtended?: ValidationFunction<number>;
+    extensionDuration?: ValidationFunction<number>;
+    isException?: ValidationFunction<number>;
+    isTrashed?: ValidationFunction<boolean>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UniversityUpdateFormOverridesProps = {
-    UniversityUpdateFormGrid?: FormProps<GridProps>;
-    name?: FormProps<TextFieldProps>;
+    UniversityUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    nameAr?: PrimitiveOverrideProps<TextFieldProps>;
+    availability?: PrimitiveOverrideProps<TextFieldProps>;
+    isDeactivated?: PrimitiveOverrideProps<SwitchFieldProps>;
+    isExtended?: PrimitiveOverrideProps<TextFieldProps>;
+    extensionDuration?: PrimitiveOverrideProps<TextFieldProps>;
+    isException?: PrimitiveOverrideProps<TextFieldProps>;
+    isTrashed?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type UniversityUpdateFormProps = React.PropsWithChildren<{
     overrides?: UniversityUpdateFormOverridesProps | undefined | null;
@@ -32,7 +62,6 @@ export declare type UniversityUpdateFormProps = React.PropsWithChildren<{
     onSubmit?: (fields: UniversityUpdateFormInputValues) => UniversityUpdateFormInputValues;
     onSuccess?: (fields: UniversityUpdateFormInputValues) => void;
     onError?: (fields: UniversityUpdateFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
     onChange?: (fields: UniversityUpdateFormInputValues) => UniversityUpdateFormInputValues;
     onValidate?: UniversityUpdateFormValidationValues;
 } & React.CSSProperties>;

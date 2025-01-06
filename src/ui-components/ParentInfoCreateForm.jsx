@@ -6,10 +6,9 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { fetchByPath, validateField } from "./utils";
-import { ParentInfo } from "../models";
-import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import { ParentInfo } from "../models";
+import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 export default function ParentInfoCreateForm(props) {
   const {
@@ -17,24 +16,23 @@ export default function ParentInfoCreateForm(props) {
     onSuccess,
     onError,
     onSubmit,
-    onCancel,
     onValidate,
     onChange,
     overrides,
     ...rest
   } = props;
   const initialValues = {
-    guardianFullName: undefined,
-    relation: undefined,
-    guardianCPR: undefined,
-    primaryMobile: undefined,
-    secondaryMobile: undefined,
-    fatherFullName: undefined,
-    fatherCPR: undefined,
-    motherFullName: undefined,
-    motherCPR: undefined,
-    numberOfFamilyMembers: undefined,
-    address: undefined,
+    guardianFullName: "",
+    relation: "",
+    guardianCPR: "",
+    primaryMobile: "",
+    secondaryMobile: "",
+    fatherFullName: "",
+    fatherCPR: "",
+    motherFullName: "",
+    motherCPR: "",
+    numberOfFamilyMembers: "",
+    address: "",
   };
   const [guardianFullName, setGuardianFullName] = React.useState(
     initialValues.guardianFullName
@@ -89,7 +87,15 @@ export default function ParentInfoCreateForm(props) {
     numberOfFamilyMembers: [],
     address: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -142,6 +148,11 @@ export default function ParentInfoCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
+            }
+          });
           await DataStore.save(new ParentInfo(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
@@ -155,13 +166,14 @@ export default function ParentInfoCreateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, "ParentInfoCreateForm")}
+      {...rest}
     >
       <TextField
         label="Guardian full name"
         isRequired={false}
         isReadOnly={false}
+        value={guardianFullName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -195,6 +207,7 @@ export default function ParentInfoCreateForm(props) {
         label="Relation"
         isRequired={false}
         isReadOnly={false}
+        value={relation}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -228,6 +241,7 @@ export default function ParentInfoCreateForm(props) {
         label="Guardian cpr"
         isRequired={false}
         isReadOnly={false}
+        value={guardianCPR}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -261,6 +275,7 @@ export default function ParentInfoCreateForm(props) {
         label="Primary mobile"
         isRequired={false}
         isReadOnly={false}
+        value={primaryMobile}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -294,6 +309,7 @@ export default function ParentInfoCreateForm(props) {
         label="Secondary mobile"
         isRequired={false}
         isReadOnly={false}
+        value={secondaryMobile}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -327,6 +343,7 @@ export default function ParentInfoCreateForm(props) {
         label="Father full name"
         isRequired={false}
         isReadOnly={false}
+        value={fatherFullName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -360,6 +377,7 @@ export default function ParentInfoCreateForm(props) {
         label="Father cpr"
         isRequired={false}
         isReadOnly={false}
+        value={fatherCPR}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -393,6 +411,7 @@ export default function ParentInfoCreateForm(props) {
         label="Mother full name"
         isRequired={false}
         isReadOnly={false}
+        value={motherFullName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -426,6 +445,7 @@ export default function ParentInfoCreateForm(props) {
         label="Mother cpr"
         isRequired={false}
         isReadOnly={false}
+        value={motherCPR}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -461,15 +481,11 @@ export default function ParentInfoCreateForm(props) {
         isReadOnly={false}
         type="number"
         step="any"
+        value={numberOfFamilyMembers}
         onChange={(e) => {
-          let value = parseInt(e.target.value);
-          if (isNaN(value)) {
-            setErrors((errors) => ({
-              ...errors,
-              numberOfFamilyMembers: "Value must be a valid number",
-            }));
-            return;
-          }
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
           if (onChange) {
             const modelFields = {
               guardianFullName,
@@ -503,6 +519,7 @@ export default function ParentInfoCreateForm(props) {
         label="Address"
         isRequired={false}
         isReadOnly={false}
+        value={address}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -539,21 +556,16 @@ export default function ParentInfoCreateForm(props) {
         <Button
           children="Clear"
           type="reset"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, "ClearButton")}
         ></Button>
         <Flex
           gap="15px"
           {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
         >
-          <Button
-            children="Cancel"
-            type="button"
-            onClick={() => {
-              onCancel && onCancel();
-            }}
-            {...getOverrideProps(overrides, "CancelButton")}
-          ></Button>
           <Button
             children="Submit"
             type="submit"

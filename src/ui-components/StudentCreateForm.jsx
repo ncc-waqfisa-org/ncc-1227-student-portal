@@ -6,52 +6,225 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { fetchByPath, validateField } from "./utils";
-import { Student } from "../models";
-import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import {
+  Badge,
   Button,
+  Divider,
   Flex,
   Grid,
+  Icon,
+  ScrollView,
   SelectField,
+  Text,
   TextField,
+  useTheme,
 } from "@aws-amplify/ui-react";
+import { Student } from "../models";
+import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  runValidationTasks,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    const { hasError } = runValidationTasks();
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== "" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height="inherit" width="inherit" maxHeight={"7rem"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: "pointer",
+                  alignItems: "center",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? "#B8CEF9" : "",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: "pointer",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: "M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z",
+                      stroke: "black",
+                    },
+                  ]}
+                  ariaLabel="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation="horizontal" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent="flex-end">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children="Cancel"
+              type="button"
+              size="small"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button size="small" variation="link" onClick={addItem}>
+            {selectedBadgeIndex !== undefined ? "Save" : "Add"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
 export default function StudentCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
-    onCancel,
     onValidate,
     onChange,
     overrides,
     ...rest
   } = props;
   const initialValues = {
-    cpr: undefined,
-    fullName: undefined,
-    email: undefined,
-    phone: undefined,
-    gender: undefined,
-    schoolName: undefined,
-    specialization: undefined,
-    placeOfBirth: undefined,
-    studentOrderAmongSiblings: undefined,
-    householdIncome: undefined,
-    preferredLanguage: undefined,
-    graduationDate: undefined,
-    address: undefined,
-    ParentInfo: {},
-    parentInfoID: undefined,
+    cpr: "",
+    cprDoc: "",
+    fullName: "",
+    batch: "",
+    email: "",
+    phone: "",
+    gender: "",
+    nationalityCategory: "",
+    nationality: "",
+    schoolName: "",
+    schoolType: "",
+    specialization: "",
+    placeOfBirth: "",
+    studentOrderAmongSiblings: "",
+    familyIncome: "",
+    familyIncomeProofDoc: "",
+    familyIncomeProofDocs: [],
+    preferredLanguage: "",
+    graduationDate: "",
+    address: "",
   };
   const [cpr, setCpr] = React.useState(initialValues.cpr);
+  const [cprDoc, setCprDoc] = React.useState(initialValues.cprDoc);
   const [fullName, setFullName] = React.useState(initialValues.fullName);
+  const [batch, setBatch] = React.useState(initialValues.batch);
   const [email, setEmail] = React.useState(initialValues.email);
   const [phone, setPhone] = React.useState(initialValues.phone);
   const [gender, setGender] = React.useState(initialValues.gender);
+  const [nationalityCategory, setNationalityCategory] = React.useState(
+    initialValues.nationalityCategory
+  );
+  const [nationality, setNationality] = React.useState(
+    initialValues.nationality
+  );
   const [schoolName, setSchoolName] = React.useState(initialValues.schoolName);
+  const [schoolType, setSchoolType] = React.useState(initialValues.schoolType);
   const [specialization, setSpecialization] = React.useState(
     initialValues.specialization
   );
@@ -60,8 +233,14 @@ export default function StudentCreateForm(props) {
   );
   const [studentOrderAmongSiblings, setStudentOrderAmongSiblings] =
     React.useState(initialValues.studentOrderAmongSiblings);
-  const [householdIncome, setHouseholdIncome] = React.useState(
-    initialValues.householdIncome
+  const [familyIncome, setFamilyIncome] = React.useState(
+    initialValues.familyIncome
+  );
+  const [familyIncomeProofDoc, setFamilyIncomeProofDoc] = React.useState(
+    initialValues.familyIncomeProofDoc
+  );
+  const [familyIncomeProofDocs, setFamilyIncomeProofDocs] = React.useState(
+    initialValues.familyIncomeProofDocs
   );
   const [preferredLanguage, setPreferredLanguage] = React.useState(
     initialValues.preferredLanguage
@@ -70,47 +249,67 @@ export default function StudentCreateForm(props) {
     initialValues.graduationDate
   );
   const [address, setAddress] = React.useState(initialValues.address);
-  const [ParentInfo, setParentInfo] = React.useState(initialValues.ParentInfo);
-  const [parentInfoID, setParentInfoID] = React.useState(
-    initialValues.parentInfoID
-  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setCpr(initialValues.cpr);
+    setCprDoc(initialValues.cprDoc);
     setFullName(initialValues.fullName);
+    setBatch(initialValues.batch);
     setEmail(initialValues.email);
     setPhone(initialValues.phone);
     setGender(initialValues.gender);
+    setNationalityCategory(initialValues.nationalityCategory);
+    setNationality(initialValues.nationality);
     setSchoolName(initialValues.schoolName);
+    setSchoolType(initialValues.schoolType);
     setSpecialization(initialValues.specialization);
     setPlaceOfBirth(initialValues.placeOfBirth);
     setStudentOrderAmongSiblings(initialValues.studentOrderAmongSiblings);
-    setHouseholdIncome(initialValues.householdIncome);
+    setFamilyIncome(initialValues.familyIncome);
+    setFamilyIncomeProofDoc(initialValues.familyIncomeProofDoc);
+    setFamilyIncomeProofDocs(initialValues.familyIncomeProofDocs);
+    setCurrentFamilyIncomeProofDocsValue("");
     setPreferredLanguage(initialValues.preferredLanguage);
     setGraduationDate(initialValues.graduationDate);
     setAddress(initialValues.address);
-    setParentInfo(initialValues.ParentInfo);
-    setParentInfoID(initialValues.parentInfoID);
     setErrors({});
   };
+  const [
+    currentFamilyIncomeProofDocsValue,
+    setCurrentFamilyIncomeProofDocsValue,
+  ] = React.useState("");
+  const familyIncomeProofDocsRef = React.createRef();
   const validations = {
     cpr: [{ type: "Required" }],
+    cprDoc: [],
     fullName: [],
+    batch: [],
     email: [],
     phone: [],
     gender: [],
+    nationalityCategory: [],
+    nationality: [],
     schoolName: [],
+    schoolType: [],
     specialization: [],
     placeOfBirth: [],
     studentOrderAmongSiblings: [],
-    householdIncome: [],
+    familyIncome: [],
+    familyIncomeProofDoc: [],
+    familyIncomeProofDocs: [],
     preferredLanguage: [],
     graduationDate: [],
     address: [],
-    ParentInfo: [],
-    parentInfoID: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -129,20 +328,25 @@ export default function StudentCreateForm(props) {
         event.preventDefault();
         let modelFields = {
           cpr,
+          cprDoc,
           fullName,
+          batch,
           email,
           phone,
           gender,
+          nationalityCategory,
+          nationality,
           schoolName,
+          schoolType,
           specialization,
           placeOfBirth,
           studentOrderAmongSiblings,
-          householdIncome,
+          familyIncome,
+          familyIncomeProofDoc,
+          familyIncomeProofDocs,
           preferredLanguage,
           graduationDate,
           address,
-          ParentInfo,
-          parentInfoID,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -167,6 +371,11 @@ export default function StudentCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
+            }
+          });
           await DataStore.save(new Student(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
@@ -180,32 +389,38 @@ export default function StudentCreateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, "StudentCreateForm")}
+      {...rest}
     >
       <TextField
         label="Cpr"
         isRequired={true}
         isReadOnly={false}
+        value={cpr}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               cpr: value,
+              cprDoc,
               fullName,
+              batch,
               email,
               phone,
               gender,
+              nationalityCategory,
+              nationality,
               schoolName,
+              schoolType,
               specialization,
               placeOfBirth,
               studentOrderAmongSiblings,
-              householdIncome,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
               preferredLanguage,
               graduationDate,
               address,
-              ParentInfo,
-              parentInfoID,
             };
             const result = onChange(modelFields);
             value = result?.cpr ?? value;
@@ -221,28 +436,77 @@ export default function StudentCreateForm(props) {
         {...getOverrideProps(overrides, "cpr")}
       ></TextField>
       <TextField
-        label="Full name"
+        label="Cpr doc"
         isRequired={false}
         isReadOnly={false}
+        value={cprDoc}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               cpr,
-              fullName: value,
+              cprDoc: value,
+              fullName,
+              batch,
               email,
               phone,
               gender,
+              nationalityCategory,
+              nationality,
               schoolName,
+              schoolType,
               specialization,
               placeOfBirth,
               studentOrderAmongSiblings,
-              householdIncome,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
               preferredLanguage,
               graduationDate,
               address,
-              ParentInfo,
-              parentInfoID,
+            };
+            const result = onChange(modelFields);
+            value = result?.cprDoc ?? value;
+          }
+          if (errors.cprDoc?.hasError) {
+            runValidationTasks("cprDoc", value);
+          }
+          setCprDoc(value);
+        }}
+        onBlur={() => runValidationTasks("cprDoc", cprDoc)}
+        errorMessage={errors.cprDoc?.errorMessage}
+        hasError={errors.cprDoc?.hasError}
+        {...getOverrideProps(overrides, "cprDoc")}
+      ></TextField>
+      <TextField
+        label="Full name"
+        isRequired={false}
+        isReadOnly={false}
+        value={fullName}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              cpr,
+              cprDoc,
+              fullName: value,
+              batch,
+              email,
+              phone,
+              gender,
+              nationalityCategory,
+              nationality,
+              schoolName,
+              schoolType,
+              specialization,
+              placeOfBirth,
+              studentOrderAmongSiblings,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
+              preferredLanguage,
+              graduationDate,
+              address,
             };
             const result = onChange(modelFields);
             value = result?.fullName ?? value;
@@ -258,28 +522,81 @@ export default function StudentCreateForm(props) {
         {...getOverrideProps(overrides, "fullName")}
       ></TextField>
       <TextField
+        label="Batch"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={batch}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              cpr,
+              cprDoc,
+              fullName,
+              batch: value,
+              email,
+              phone,
+              gender,
+              nationalityCategory,
+              nationality,
+              schoolName,
+              schoolType,
+              specialization,
+              placeOfBirth,
+              studentOrderAmongSiblings,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
+              preferredLanguage,
+              graduationDate,
+              address,
+            };
+            const result = onChange(modelFields);
+            value = result?.batch ?? value;
+          }
+          if (errors.batch?.hasError) {
+            runValidationTasks("batch", value);
+          }
+          setBatch(value);
+        }}
+        onBlur={() => runValidationTasks("batch", batch)}
+        errorMessage={errors.batch?.errorMessage}
+        hasError={errors.batch?.hasError}
+        {...getOverrideProps(overrides, "batch")}
+      ></TextField>
+      <TextField
         label="Email"
         isRequired={false}
         isReadOnly={false}
+        value={email}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               cpr,
+              cprDoc,
               fullName,
+              batch,
               email: value,
               phone,
               gender,
+              nationalityCategory,
+              nationality,
               schoolName,
+              schoolType,
               specialization,
               placeOfBirth,
               studentOrderAmongSiblings,
-              householdIncome,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
               preferredLanguage,
               graduationDate,
               address,
-              ParentInfo,
-              parentInfoID,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -298,25 +615,31 @@ export default function StudentCreateForm(props) {
         label="Phone"
         isRequired={false}
         isReadOnly={false}
+        value={phone}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               cpr,
+              cprDoc,
               fullName,
+              batch,
               email,
               phone: value,
               gender,
+              nationalityCategory,
+              nationality,
               schoolName,
+              schoolType,
               specialization,
               placeOfBirth,
               studentOrderAmongSiblings,
-              householdIncome,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
               preferredLanguage,
               graduationDate,
               address,
-              ParentInfo,
-              parentInfoID,
             };
             const result = onChange(modelFields);
             value = result?.phone ?? value;
@@ -341,20 +664,25 @@ export default function StudentCreateForm(props) {
           if (onChange) {
             const modelFields = {
               cpr,
+              cprDoc,
               fullName,
+              batch,
               email,
               phone,
               gender: value,
+              nationalityCategory,
+              nationality,
               schoolName,
+              schoolType,
               specialization,
               placeOfBirth,
               studentOrderAmongSiblings,
-              householdIncome,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
               preferredLanguage,
               graduationDate,
               address,
-              ParentInfo,
-              parentInfoID,
             };
             const result = onChange(modelFields);
             value = result?.gender ?? value;
@@ -380,29 +708,134 @@ export default function StudentCreateForm(props) {
           {...getOverrideProps(overrides, "genderoption1")}
         ></option>
       </SelectField>
-      <TextField
-        label="School name"
-        isRequired={false}
-        isReadOnly={false}
+      <SelectField
+        label="Nationality category"
+        placeholder="Please select an option"
+        isDisabled={false}
+        value={nationalityCategory}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               cpr,
+              cprDoc,
               fullName,
+              batch,
               email,
               phone,
               gender,
-              schoolName: value,
+              nationalityCategory: value,
+              nationality,
+              schoolName,
+              schoolType,
               specialization,
               placeOfBirth,
               studentOrderAmongSiblings,
-              householdIncome,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
               preferredLanguage,
               graduationDate,
               address,
-              ParentInfo,
-              parentInfoID,
+            };
+            const result = onChange(modelFields);
+            value = result?.nationalityCategory ?? value;
+          }
+          if (errors.nationalityCategory?.hasError) {
+            runValidationTasks("nationalityCategory", value);
+          }
+          setNationalityCategory(value);
+        }}
+        onBlur={() =>
+          runValidationTasks("nationalityCategory", nationalityCategory)
+        }
+        errorMessage={errors.nationalityCategory?.errorMessage}
+        hasError={errors.nationalityCategory?.hasError}
+        {...getOverrideProps(overrides, "nationalityCategory")}
+      >
+        <option
+          children="Bahraini"
+          value="BAHRAINI"
+          {...getOverrideProps(overrides, "nationalityCategoryoption0")}
+        ></option>
+        <option
+          children="Non bahraini"
+          value="NON_BAHRAINI"
+          {...getOverrideProps(overrides, "nationalityCategoryoption1")}
+        ></option>
+      </SelectField>
+      <TextField
+        label="Nationality"
+        isRequired={false}
+        isReadOnly={false}
+        value={nationality}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              cpr,
+              cprDoc,
+              fullName,
+              batch,
+              email,
+              phone,
+              gender,
+              nationalityCategory,
+              nationality: value,
+              schoolName,
+              schoolType,
+              specialization,
+              placeOfBirth,
+              studentOrderAmongSiblings,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
+              preferredLanguage,
+              graduationDate,
+              address,
+            };
+            const result = onChange(modelFields);
+            value = result?.nationality ?? value;
+          }
+          if (errors.nationality?.hasError) {
+            runValidationTasks("nationality", value);
+          }
+          setNationality(value);
+        }}
+        onBlur={() => runValidationTasks("nationality", nationality)}
+        errorMessage={errors.nationality?.errorMessage}
+        hasError={errors.nationality?.hasError}
+        {...getOverrideProps(overrides, "nationality")}
+      ></TextField>
+      <TextField
+        label="School name"
+        isRequired={false}
+        isReadOnly={false}
+        value={schoolName}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              cpr,
+              cprDoc,
+              fullName,
+              batch,
+              email,
+              phone,
+              gender,
+              nationalityCategory,
+              nationality,
+              schoolName: value,
+              schoolType,
+              specialization,
+              placeOfBirth,
+              studentOrderAmongSiblings,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
+              preferredLanguage,
+              graduationDate,
+              address,
             };
             const result = onChange(modelFields);
             value = result?.schoolName ?? value;
@@ -417,29 +850,89 @@ export default function StudentCreateForm(props) {
         hasError={errors.schoolName?.hasError}
         {...getOverrideProps(overrides, "schoolName")}
       ></TextField>
-      <TextField
-        label="Specialization"
-        isRequired={false}
-        isReadOnly={false}
+      <SelectField
+        label="School type"
+        placeholder="Please select an option"
+        isDisabled={false}
+        value={schoolType}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               cpr,
+              cprDoc,
               fullName,
+              batch,
               email,
               phone,
               gender,
+              nationalityCategory,
+              nationality,
               schoolName,
-              specialization: value,
+              schoolType: value,
+              specialization,
               placeOfBirth,
               studentOrderAmongSiblings,
-              householdIncome,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
               preferredLanguage,
               graduationDate,
               address,
-              ParentInfo,
-              parentInfoID,
+            };
+            const result = onChange(modelFields);
+            value = result?.schoolType ?? value;
+          }
+          if (errors.schoolType?.hasError) {
+            runValidationTasks("schoolType", value);
+          }
+          setSchoolType(value);
+        }}
+        onBlur={() => runValidationTasks("schoolType", schoolType)}
+        errorMessage={errors.schoolType?.errorMessage}
+        hasError={errors.schoolType?.hasError}
+        {...getOverrideProps(overrides, "schoolType")}
+      >
+        <option
+          children="Private"
+          value="PRIVATE"
+          {...getOverrideProps(overrides, "schoolTypeoption0")}
+        ></option>
+        <option
+          children="Public"
+          value="PUBLIC"
+          {...getOverrideProps(overrides, "schoolTypeoption1")}
+        ></option>
+      </SelectField>
+      <TextField
+        label="Specialization"
+        isRequired={false}
+        isReadOnly={false}
+        value={specialization}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              cpr,
+              cprDoc,
+              fullName,
+              batch,
+              email,
+              phone,
+              gender,
+              nationalityCategory,
+              nationality,
+              schoolName,
+              schoolType,
+              specialization: value,
+              placeOfBirth,
+              studentOrderAmongSiblings,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
+              preferredLanguage,
+              graduationDate,
+              address,
             };
             const result = onChange(modelFields);
             value = result?.specialization ?? value;
@@ -458,25 +951,31 @@ export default function StudentCreateForm(props) {
         label="Place of birth"
         isRequired={false}
         isReadOnly={false}
+        value={placeOfBirth}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               cpr,
+              cprDoc,
               fullName,
+              batch,
               email,
               phone,
               gender,
+              nationalityCategory,
+              nationality,
               schoolName,
+              schoolType,
               specialization,
               placeOfBirth: value,
               studentOrderAmongSiblings,
-              householdIncome,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
               preferredLanguage,
               graduationDate,
               address,
-              ParentInfo,
-              parentInfoID,
             };
             const result = onChange(modelFields);
             value = result?.placeOfBirth ?? value;
@@ -497,32 +996,33 @@ export default function StudentCreateForm(props) {
         isReadOnly={false}
         type="number"
         step="any"
+        value={studentOrderAmongSiblings}
         onChange={(e) => {
-          let value = parseInt(e.target.value);
-          if (isNaN(value)) {
-            setErrors((errors) => ({
-              ...errors,
-              studentOrderAmongSiblings: "Value must be a valid number",
-            }));
-            return;
-          }
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
           if (onChange) {
             const modelFields = {
               cpr,
+              cprDoc,
               fullName,
+              batch,
               email,
               phone,
               gender,
+              nationalityCategory,
+              nationality,
               schoolName,
+              schoolType,
               specialization,
               placeOfBirth,
               studentOrderAmongSiblings: value,
-              householdIncome,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
               preferredLanguage,
               graduationDate,
               address,
-              ParentInfo,
-              parentInfoID,
             };
             const result = onChange(modelFields);
             value = result?.studentOrderAmongSiblings ?? value;
@@ -542,52 +1042,197 @@ export default function StudentCreateForm(props) {
         hasError={errors.studentOrderAmongSiblings?.hasError}
         {...getOverrideProps(overrides, "studentOrderAmongSiblings")}
       ></TextField>
-      <TextField
-        label="Household income"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
+      <SelectField
+        label="Family income"
+        placeholder="Please select an option"
+        isDisabled={false}
+        value={familyIncome}
         onChange={(e) => {
-          let value = Number(e.target.value);
-          if (isNaN(value)) {
-            setErrors((errors) => ({
-              ...errors,
-              householdIncome: "Value must be a valid number",
-            }));
-            return;
-          }
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
               cpr,
+              cprDoc,
               fullName,
+              batch,
               email,
               phone,
               gender,
+              nationalityCategory,
+              nationality,
               schoolName,
+              schoolType,
               specialization,
               placeOfBirth,
               studentOrderAmongSiblings,
-              householdIncome: value,
+              familyIncome: value,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
               preferredLanguage,
               graduationDate,
               address,
-              ParentInfo,
-              parentInfoID,
             };
             const result = onChange(modelFields);
-            value = result?.householdIncome ?? value;
+            value = result?.familyIncome ?? value;
           }
-          if (errors.householdIncome?.hasError) {
-            runValidationTasks("householdIncome", value);
+          if (errors.familyIncome?.hasError) {
+            runValidationTasks("familyIncome", value);
           }
-          setHouseholdIncome(value);
+          setFamilyIncome(value);
         }}
-        onBlur={() => runValidationTasks("householdIncome", householdIncome)}
-        errorMessage={errors.householdIncome?.errorMessage}
-        hasError={errors.householdIncome?.hasError}
-        {...getOverrideProps(overrides, "householdIncome")}
+        onBlur={() => runValidationTasks("familyIncome", familyIncome)}
+        errorMessage={errors.familyIncome?.errorMessage}
+        hasError={errors.familyIncome?.hasError}
+        {...getOverrideProps(overrides, "familyIncome")}
+      >
+        <option
+          children="Less than 500"
+          value="LESS_THAN_500"
+          {...getOverrideProps(overrides, "familyIncomeoption0")}
+        ></option>
+        <option
+          children="Between 500 and 700"
+          value="BETWEEN_500_AND_700"
+          {...getOverrideProps(overrides, "familyIncomeoption1")}
+        ></option>
+        <option
+          children="Between 700 and 1000"
+          value="BETWEEN_700_AND_1000"
+          {...getOverrideProps(overrides, "familyIncomeoption2")}
+        ></option>
+        <option
+          children="Less than 1500"
+          value="LESS_THAN_1500"
+          {...getOverrideProps(overrides, "familyIncomeoption3")}
+        ></option>
+        <option
+          children="More than 1500"
+          value="MORE_THAN_1500"
+          {...getOverrideProps(overrides, "familyIncomeoption4")}
+        ></option>
+        <option
+          children="Over 1000"
+          value="OVER_1000"
+          {...getOverrideProps(overrides, "familyIncomeoption5")}
+        ></option>
+      </SelectField>
+      <TextField
+        label="Family income proof doc"
+        isRequired={false}
+        isReadOnly={false}
+        value={familyIncomeProofDoc}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              cpr,
+              cprDoc,
+              fullName,
+              batch,
+              email,
+              phone,
+              gender,
+              nationalityCategory,
+              nationality,
+              schoolName,
+              schoolType,
+              specialization,
+              placeOfBirth,
+              studentOrderAmongSiblings,
+              familyIncome,
+              familyIncomeProofDoc: value,
+              familyIncomeProofDocs,
+              preferredLanguage,
+              graduationDate,
+              address,
+            };
+            const result = onChange(modelFields);
+            value = result?.familyIncomeProofDoc ?? value;
+          }
+          if (errors.familyIncomeProofDoc?.hasError) {
+            runValidationTasks("familyIncomeProofDoc", value);
+          }
+          setFamilyIncomeProofDoc(value);
+        }}
+        onBlur={() =>
+          runValidationTasks("familyIncomeProofDoc", familyIncomeProofDoc)
+        }
+        errorMessage={errors.familyIncomeProofDoc?.errorMessage}
+        hasError={errors.familyIncomeProofDoc?.hasError}
+        {...getOverrideProps(overrides, "familyIncomeProofDoc")}
       ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              cpr,
+              cprDoc,
+              fullName,
+              batch,
+              email,
+              phone,
+              gender,
+              nationalityCategory,
+              nationality,
+              schoolName,
+              schoolType,
+              specialization,
+              placeOfBirth,
+              studentOrderAmongSiblings,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs: values,
+              preferredLanguage,
+              graduationDate,
+              address,
+            };
+            const result = onChange(modelFields);
+            values = result?.familyIncomeProofDocs ?? values;
+          }
+          setFamilyIncomeProofDocs(values);
+          setCurrentFamilyIncomeProofDocsValue("");
+        }}
+        currentFieldValue={currentFamilyIncomeProofDocsValue}
+        label={"Family income proof docs"}
+        items={familyIncomeProofDocs}
+        hasError={errors?.familyIncomeProofDocs?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            "familyIncomeProofDocs",
+            currentFamilyIncomeProofDocsValue
+          )
+        }
+        errorMessage={errors?.familyIncomeProofDocs?.errorMessage}
+        setFieldValue={setCurrentFamilyIncomeProofDocsValue}
+        inputFieldRef={familyIncomeProofDocsRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Family income proof docs"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentFamilyIncomeProofDocsValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.familyIncomeProofDocs?.hasError) {
+              runValidationTasks("familyIncomeProofDocs", value);
+            }
+            setCurrentFamilyIncomeProofDocsValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              "familyIncomeProofDocs",
+              currentFamilyIncomeProofDocsValue
+            )
+          }
+          errorMessage={errors.familyIncomeProofDocs?.errorMessage}
+          hasError={errors.familyIncomeProofDocs?.hasError}
+          ref={familyIncomeProofDocsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "familyIncomeProofDocs")}
+        ></TextField>
+      </ArrayField>
       <SelectField
         label="Preferred language"
         placeholder="Please select an option"
@@ -598,20 +1243,25 @@ export default function StudentCreateForm(props) {
           if (onChange) {
             const modelFields = {
               cpr,
+              cprDoc,
               fullName,
+              batch,
               email,
               phone,
               gender,
+              nationalityCategory,
+              nationality,
               schoolName,
+              schoolType,
               specialization,
               placeOfBirth,
               studentOrderAmongSiblings,
-              householdIncome,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
               preferredLanguage: value,
               graduationDate,
               address,
-              ParentInfo,
-              parentInfoID,
             };
             const result = onChange(modelFields);
             value = result?.preferredLanguage ?? value;
@@ -644,25 +1294,31 @@ export default function StudentCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type="date"
+        value={graduationDate}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               cpr,
+              cprDoc,
               fullName,
+              batch,
               email,
               phone,
               gender,
+              nationalityCategory,
+              nationality,
               schoolName,
+              schoolType,
               specialization,
               placeOfBirth,
               studentOrderAmongSiblings,
-              householdIncome,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
               preferredLanguage,
               graduationDate: value,
               address,
-              ParentInfo,
-              parentInfoID,
             };
             const result = onChange(modelFields);
             value = result?.graduationDate ?? value;
@@ -681,25 +1337,31 @@ export default function StudentCreateForm(props) {
         label="Address"
         isRequired={false}
         isReadOnly={false}
+        value={address}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               cpr,
+              cprDoc,
               fullName,
+              batch,
               email,
               phone,
               gender,
+              nationalityCategory,
+              nationality,
               schoolName,
+              schoolType,
               specialization,
               placeOfBirth,
               studentOrderAmongSiblings,
-              householdIncome,
+              familyIncome,
+              familyIncomeProofDoc,
+              familyIncomeProofDocs,
               preferredLanguage,
               graduationDate,
               address: value,
-              ParentInfo,
-              parentInfoID,
             };
             const result = onChange(modelFields);
             value = result?.address ?? value;
@@ -714,81 +1376,6 @@ export default function StudentCreateForm(props) {
         hasError={errors.address?.hasError}
         {...getOverrideProps(overrides, "address")}
       ></TextField>
-      <SelectField
-        label="Parent info"
-        placeholder="Please select an option"
-        isDisabled={false}
-        value={ParentInfo}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              cpr,
-              fullName,
-              email,
-              phone,
-              gender,
-              schoolName,
-              specialization,
-              placeOfBirth,
-              studentOrderAmongSiblings,
-              householdIncome,
-              preferredLanguage,
-              graduationDate,
-              address,
-              ParentInfo: value,
-              parentInfoID,
-            };
-            const result = onChange(modelFields);
-            value = result?.ParentInfo ?? value;
-          }
-          if (errors.ParentInfo?.hasError) {
-            runValidationTasks("ParentInfo", value);
-          }
-          setParentInfo(value);
-        }}
-        onBlur={() => runValidationTasks("ParentInfo", ParentInfo)}
-        errorMessage={errors.ParentInfo?.errorMessage}
-        hasError={errors.ParentInfo?.hasError}
-        {...getOverrideProps(overrides, "ParentInfo")}
-      ></SelectField>
-      <TextField
-        label="Parent info id"
-        isRequired={false}
-        isReadOnly={false}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              cpr,
-              fullName,
-              email,
-              phone,
-              gender,
-              schoolName,
-              specialization,
-              placeOfBirth,
-              studentOrderAmongSiblings,
-              householdIncome,
-              preferredLanguage,
-              graduationDate,
-              address,
-              ParentInfo,
-              parentInfoID: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.parentInfoID ?? value;
-          }
-          if (errors.parentInfoID?.hasError) {
-            runValidationTasks("parentInfoID", value);
-          }
-          setParentInfoID(value);
-        }}
-        onBlur={() => runValidationTasks("parentInfoID", parentInfoID)}
-        errorMessage={errors.parentInfoID?.errorMessage}
-        hasError={errors.parentInfoID?.hasError}
-        {...getOverrideProps(overrides, "parentInfoID")}
-      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
@@ -796,21 +1383,16 @@ export default function StudentCreateForm(props) {
         <Button
           children="Clear"
           type="reset"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, "ClearButton")}
         ></Button>
         <Flex
           gap="15px"
           {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
         >
-          <Button
-            children="Cancel"
-            type="button"
-            onClick={() => {
-              onCancel && onCancel();
-            }}
-            {...getOverrideProps(overrides, "CancelButton")}
-          ></Button>
           <Button
             children="Submit"
             type="submit"

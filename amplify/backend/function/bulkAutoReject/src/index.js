@@ -1,8 +1,6 @@
 const AWS = require('aws-sdk');
-const uuid = require('uuid');
-
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
-
+const cognito = new AWS.CognitoIdentityServiceProvider();
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
@@ -34,12 +32,17 @@ exports.handler = async (event) => {
     console.log('universities', universities);
     const extendedUniversities = universities.filter(university => university.isExtended);
     const exceptionUniversities = universities.filter(university => university.isException);
-    await bulkUpdateApplications(batchValue, applications, extendedUniversities, exceptionUniversities, universities, programs, batchDetails);
+    await bulkUpdateApplications(batchValue, applications, extendedUniversities, exceptionUniversities, universities, programs);
 
 
 
     return {
         statusCode: 200,
+    //  Uncomment below to enable CORS requests
+    //  headers: {
+    //      "Access-Control-Allow-Origin": "*",
+    //      "Access-Control-Allow-Headers": "*"
+    //  },
         body: JSON.stringify({ message: 'Applications updated' })
     };
 };
@@ -47,7 +50,7 @@ exports.handler = async (event) => {
 
 async function getApplications(batch) {
     const params = {
-        TableName: 'Application-cw7beg2perdtnl7onn neec4jfa-staging',
+        TableName: 'Application-cw7beg2perdtnl7onnneec4jfa-staging',
         IndexName: 'byProcessed',
         KeyConditionExpression: '#batch = :batchValue AND #processed = :processedValue',
         ScanIndexForward: false,
@@ -72,7 +75,7 @@ async function getApplications(batch) {
     return allApplications;
 }
 
-async function bulkUpdateApplications(batchValue, applications, extendedUniversities, exceptionUniversities, universities, programs, batchDetails) {
+async function bulkUpdateApplications(batchValue, applications, extendedUniversities, exceptionUniversities, universities, programs) {
     const updatePromises = applications.map(async application => {
         let isProcessed = 1;
         // const student = await getStudent(application.studentCPR);
@@ -87,77 +90,41 @@ async function bulkUpdateApplications(batchValue, applications, extendedUniversi
             },
             ExpressionAttributeNames: {}
         };
-        const minimumGPA = programs.find(program => program.id === application.programID).minimumGPA || 88;
         const universityId = application.universityID;
-        // const isExtended = extendedUniversities.some(university => university.id === universityId);
-        // const isException = exceptionUniversities.some(university => university.id === universityId);
+        const programId = application.programID;
+        const isExtended = extendedUniversities.some(university => university.id === universityId);
+        const isException = exceptionUniversities.some(university => university.id === universityId);
         const isNonBahraini = application.nationalityCategory === 'NON_BAHRAINI';
-        const isEligible = application.verifiedGPA? application.verifiedGPA >= minimumGPA : false;
-        const isGpaVerified = !!application.verifiedGPA;
-        console.log('isEligible', isEligible);
-        console.log('Program minimum GPA:', minimumGPA);
-        console.log('Application verified GPA:', application.verifiedGPA);
+        const isEligible = application.verifiedGPA? application.verifiedGPA >= programs.find(program => program.id === programId).minimumGPA: true;
 
 
-        // let isNotCompleted = application.status === 'NOT_COMPLETED';
-        // if(isException) {
-        //     isNotCompleted = false;
-        // } else if(isExtended) {
-        //     const today = new Date();
-        //     const chosenUniversity = extendedUniversities.find(university => university.id === application.universityID);
-        //
-        //     const updateApplicationEndDate = batchDetails.updateApplicationEndDate;
-        //
-        //     const [year, month, day] = updateApplicationEndDate.split('-').map(Number);
-        //
-        //     let deadline = new Date(year, month - 1, day);
-        //
-        //     deadline.setDate(deadline.getDate() + chosenUniversity.extensionDuration);
-        //
-        //     console.log('Today:', today);
-        //     console.log('Deadline:', deadline);
-        //     console.log('Is today before deadline:', today <= deadline);
-        //
-        //     isNotCompleted = today <= deadline;
-        // }
+        let isNotCompleted = application.status === 'NOT_COMPLETED';
+        if(isException) {
+            isNotCompleted = false;
+        } else if(isExtended) {
+            // check the date with extended deadline
+            const university = extendedUniversities.find(university => university.id === universityId);
+            const deadline = new Date(university.extendedTo);
+            const today = new Date();
+            isNotCompleted = today < deadline;
+        }
 
         let status;
-        let reason = "Processed by system"
-        let snapshot = "";
 
         if(isNonBahraini) {
             status = 'REJECTED';
             isProcessed = 1;
-            reason = "Student is not Bahraini";
-            snapshot = "Changed from " + application.status + " to " + status;
-        }
-
-        else if(application.verifiedGPA && application.verifiedGPA < 88) {
+        } else if(isNotCompleted) {
             status = 'REJECTED';
             isProcessed = 1;
-            reason = "GPA is less than 88";
-            snapshot = "Changed from " + application.status + " to " + status;
         }
-
-        // else if(isNotCompleted) {
-        //     status = 'REJECTED';
-        //     isProcessed = 1;
-        //     reason = "Application is not completed";
-        //     snapshot = "Changed from " + application.status + " to " + status;
-        // }
-        // else if(!isNotCompleted && !application.verifiedGPA) {
-        //     status = 'REVIEW';
-        //     isProcessed = 0;
-        // }
+        else if(!isNotCompleted && !isEligible && ! application.verifiedGPA) {
+            status = 'REVIEW';
+            isProcessed = 0;
+        }
         else if(isEligible) {
             status = 'ELIGIBLE';
             isProcessed = 1;
-        }
-        else if(!isEligible && application.verifiedGPA) {
-            status = 'REJECTED';
-            isProcessed = 1;
-            reason = "GPA is less than program minimum GPA";
-            snapshot = "Changed from " + application.status + " to " + status;
         }
         else {
             isProcessed = 0;
@@ -175,12 +142,11 @@ async function bulkUpdateApplications(batchValue, applications, extendedUniversi
         if(status) {
             params.UpdateExpression += '#status = :status';
         }
-        else {
+        else{
             // remove the last comma
             params.UpdateExpression = params.UpdateExpression.slice(0, -2);
         }
 
-        console.log('UpdateExpression:', params.UpdateExpression);
 
         params.ExpressionAttributeValues[':status'] = status;
         params.ExpressionAttributeValues[':processedValue'] = isProcessed;
@@ -188,8 +154,8 @@ async function bulkUpdateApplications(batchValue, applications, extendedUniversi
         params.ExpressionAttributeNames['#status'] = 'status';
         params.ExpressionAttributeNames['#processed'] = 'processed';
 
-        await dynamoDB.update(params).promise();
-        await createAdminLog(reason, snapshot, application.id);
+
+        return dynamoDB.update(params).promise();
     });
     return Promise.all(updatePromises);
     }
@@ -310,26 +276,4 @@ async function getPrograms(){
     } while (params.ExclusiveStartKey);
 
     return allPrograms;
-}
-async function createAdminLog(reason, snapshot, applicationId){
-    const id = uuid.v4();
-    const params = {
-        TableName: 'AdminLog-cw7beg2perdtnl7onnneec4jfa-staging',
-        Item: {
-            id: id,
-            __typename: 'AdminLog',
-            _version: 1,
-            reason: reason,
-            snapshot: snapshot,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            dateTime: new Date().toISOString(),
-            applicationID: applicationId,
-            applicationAdminLogsId: applicationId,
-            adminCPR: '999999999',
-            _lastChangedAt: new Date().getTime(),
-        }
-    };
-
-    await dynamoDB.put(params).promise();
 }
