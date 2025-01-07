@@ -1,5 +1,5 @@
 import "yup-phone";
-import React, { FC, useState } from "react";
+import React, { FC, ReactNode, useState } from "react";
 
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
@@ -20,6 +20,8 @@ import { cn } from "../../../src/lib/utils";
 import { PhoneNumberInput } from "../../phone";
 import { Gender, Nationality } from "../../../src/API";
 import { useAppContext } from "../../../contexts/AppContexts";
+import GetStorageLinkComponent from "../../get-storage-link-component";
+import { useMastersContext } from "../../../contexts/MastersContexts";
 
 // Add an optional readOnly that will disable all fields and remove the update button
 export default function MasterInfoForm() {
@@ -27,7 +29,8 @@ export default function MasterInfoForm() {
   const { t: tErrors } = useTranslation("errors");
   const { t: tToast } = useTranslation("toast");
   const { t } = useTranslation("account");
-  const { studentAsStudent: student } = useAppContext();
+  const { studentAsStudent: student, isStudentPending } = useAppContext();
+  const { editingApplicationsEnabled } = useMastersContext();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,13 +43,15 @@ export default function MasterInfoForm() {
 
   //   TODO prefill the data with student/applicant data
   const initialValues: MasterUpdateFormSchema = {
-    first_name: "",
-    second_name: "",
-    last_name: "",
-    address: "",
-    phone: "",
+    // TODO: fill with new student names
+    first_name: student?.fullName ?? "", // student.firstName
+    second_name: student?.fullName ?? "", // student.secondName
+    last_name: student?.fullName ?? "", // student.lastName
 
-    number_of_family_member: 1,
+    address: student?.address ?? "",
+    phone: student?.phone ?? "",
+
+    number_of_family_member: 1, // student?.numberOfFamilyMember
     graduation_year: "",
     old_program: "",
 
@@ -54,17 +59,18 @@ export default function MasterInfoForm() {
     place_of_employment: "",
     income: Income.LESS_THAN_1500,
 
+    // Files are not prefilled
     cpr_doc: undefined,
     income_doc: undefined,
     guardian_cpr_doc: undefined,
 
-    gender: "",
-    place_of_birth: "",
-    nationality: "",
+    gender: student?.gender ?? "",
+    place_of_birth: student?.placeOfBirth ?? "",
+    nationality: student?.nationalityCategory ?? "",
     universityID: "",
 
-    guardian_cpr: "",
-    guardian_full_name: "",
+    guardian_cpr: "", // student?.guardianCpr
+    guardian_full_name: "", // student?.guardianFullName
   };
 
   const formValidationSchema = yup.object({
@@ -242,7 +248,7 @@ export default function MasterInfoForm() {
           setFieldValue,
           isValid,
         }) => {
-          const firstStepHaveError =
+          const formErrors =
             !!errors.first_name ||
             !!errors.second_name ||
             !!errors.last_name ||
@@ -263,6 +269,33 @@ export default function MasterInfoForm() {
             (!values.isEmployed ? !!errors.income : false) ||
             (!values.isEmployed ? !!errors.income_doc : false) ||
             !!errors.guardian_cpr_doc;
+
+          if (isStudentPending) {
+            return (
+              <div className="w-full max-w-lg p-6 mx-auto my-8 border border-gray-200 rounded-lg shadow-lg bg-white/30">
+                <div className="flex flex-col gap-4">
+                  <div className="w-3/4 h-6 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="w-1/2 h-6 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="w-2/3 h-6 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+              </div>
+            );
+          }
+
+          if (!student && !isStudentPending) {
+            return (
+              <div className="w-full max-w-lg p-6 mx-auto my-8 border border-red-200 rounded-lg shadow-lg bg-white/30">
+                <div className="flex flex-col gap-4 text-center">
+                  <div className="text-xl font-semibold text-error">
+                    Applicant details could not be fetched
+                  </div>
+                  <div className="text-xl font-semibold text-error" dir="rtl">
+                    لم نتمكن من جلب تفاصيل المقدم
+                  </div>
+                </div>
+              </div>
+            );
+          }
 
           return (
             <Form className="flex flex-col justify-center max-w-4xl mx-auto">
@@ -285,6 +318,7 @@ export default function MasterInfoForm() {
                   errors={errors.cpr_doc}
                   touched={touched.cpr_doc}
                   fieldName={"cpr_doc"}
+                  disabled={!editingApplicationsEnabled}
                   type="file"
                   onFile={(file) =>
                     setDocs({
@@ -296,6 +330,11 @@ export default function MasterInfoForm() {
                   handleBlur={handleBlur}
                   setFieldError={setFieldError}
                   setFieldValue={setFieldValue}
+                  labelComponent={
+                    <GetStorageLinkComponent
+                      storageKey={student?.cprDoc}
+                    ></GetStorageLinkComponent>
+                  }
                 />
                 {/* User Name */}
                 <div className="grid grid-cols-1 gap-4 md:col-span-2 md:grid-cols-3">
@@ -309,6 +348,7 @@ export default function MasterInfoForm() {
                     handleBlur={handleBlur}
                     setFieldError={setFieldError}
                     setFieldValue={setFieldValue}
+                    disabled={!editingApplicationsEnabled}
                   />
                   <LabelField
                     title={t("secondName")}
@@ -320,6 +360,7 @@ export default function MasterInfoForm() {
                     handleBlur={handleBlur}
                     setFieldError={setFieldError}
                     setFieldValue={setFieldValue}
+                    disabled={!editingApplicationsEnabled}
                   />
                   <LabelField
                     title={t("lastName")}
@@ -331,6 +372,7 @@ export default function MasterInfoForm() {
                     handleBlur={handleBlur}
                     setFieldError={setFieldError}
                     setFieldValue={setFieldValue}
+                    disabled={!editingApplicationsEnabled}
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -344,6 +386,7 @@ export default function MasterInfoForm() {
                     handleBlur={handleBlur}
                     setFieldError={setFieldError}
                     setFieldValue={setFieldValue}
+                    disabled={!editingApplicationsEnabled}
                   />
                 </div>
                 <div className="flex flex-col justify-start w-full">
@@ -368,6 +411,7 @@ export default function MasterInfoForm() {
                   handleBlur={handleBlur}
                   setFieldError={setFieldError}
                   setFieldValue={setFieldValue}
+                  disabled={!editingApplicationsEnabled}
                 />
                 <div className="flex flex-col justify-start w-full">
                   <div className="flex items-center">
@@ -379,7 +423,7 @@ export default function MasterInfoForm() {
                     as="select"
                     name="gender"
                     title="gender"
-                    // placeholder="Gender"
+                    disabled={!editingApplicationsEnabled}
                     className={`input input-bordered input-primary ${
                       errors.gender && touched.gender && "input-error"
                     }`}
@@ -408,6 +452,7 @@ export default function MasterInfoForm() {
                   handleBlur={handleBlur}
                   setFieldError={setFieldError}
                   setFieldValue={setFieldValue}
+                  disabled={!editingApplicationsEnabled}
                 />
 
                 <div className="flex flex-col justify-start w-full">
@@ -421,6 +466,7 @@ export default function MasterInfoForm() {
                     name="nationality"
                     title="nationality"
                     placeholder={t("nationality")}
+                    disabled={!editingApplicationsEnabled}
                     className={`input input-bordered input-primary ${
                       errors.nationality && touched.nationality && "input-error"
                     }`}
@@ -428,7 +474,7 @@ export default function MasterInfoForm() {
                     onBlur={handleBlur}
                     value={values.nationality}
                   >
-                    <option disabled selected value={undefined}>
+                    <option disabled value={undefined}>
                       {t("select")}
                     </option>
                     <option value={Nationality.BAHRAINI}>
@@ -463,6 +509,7 @@ export default function MasterInfoForm() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.number_of_family_member}
+                    disabled={!editingApplicationsEnabled}
                   />
                   <label className="pt-2 label-text-alt text-error">
                     {errors.number_of_family_member &&
@@ -491,6 +538,7 @@ export default function MasterInfoForm() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.universityID}
+                    disabled={!editingApplicationsEnabled}
                   >
                     <option disabled selected value={undefined}>
                       {t("select")}
@@ -515,6 +563,7 @@ export default function MasterInfoForm() {
                     name="graduation_year"
                     title="graduation_year"
                     placeholder={t("graduationDate")}
+                    disabled={!editingApplicationsEnabled}
                     className={`input input-bordered input-primary ${
                       errors.graduation_year &&
                       touched.graduation_year &&
@@ -541,6 +590,7 @@ export default function MasterInfoForm() {
                   handleBlur={handleBlur}
                   setFieldError={setFieldError}
                   setFieldValue={setFieldValue}
+                  disabled={!editingApplicationsEnabled}
                 />
 
                 <FormSeparator title={t("employment")} />
@@ -555,6 +605,7 @@ export default function MasterInfoForm() {
                     name="isEmployed"
                     title="employment"
                     placeholder={t("employment")}
+                    disabled={!editingApplicationsEnabled}
                     className={`input input-bordered input-primary ${
                       errors.isEmployed && touched.isEmployed && "input-error"
                     }`}
@@ -592,6 +643,7 @@ export default function MasterInfoForm() {
                       handleBlur={handleBlur}
                       setFieldError={setFieldError}
                       setFieldValue={setFieldValue}
+                      disabled={!editingApplicationsEnabled}
                     />
                     <div className="flex flex-col justify-start w-full">
                       <div className="flex items-center">
@@ -605,6 +657,7 @@ export default function MasterInfoForm() {
                         name="income"
                         title="income"
                         placeholder="Personal Income"
+                        disabled={!editingApplicationsEnabled}
                         className={`input input-bordered input-primary ${
                           errors.income && touched.income && "input-error"
                         }`}
@@ -643,11 +696,18 @@ export default function MasterInfoForm() {
                       handleBlur={handleBlur}
                       setFieldError={setFieldError}
                       setFieldValue={setFieldValue}
+                      disabled={!editingApplicationsEnabled}
+                      labelComponent={
+                        <GetStorageLinkComponent
+                          // TODO: update it with the correct field
+                          storageKey={null} // student?.incomeDoc
+                        ></GetStorageLinkComponent>
+                      }
                     />
                   </>
                 )}
-              </div>
-              <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-4")}>
+                <FormSeparator title={t("guardianInfo")} />
+
                 <div className="md:col-span-2">
                   <LabelField
                     title={t("guardianFullName")}
@@ -659,6 +719,7 @@ export default function MasterInfoForm() {
                     handleBlur={handleBlur}
                     setFieldError={setFieldError}
                     setFieldValue={setFieldValue}
+                    disabled={!editingApplicationsEnabled}
                   />
                 </div>
                 <LabelField
@@ -671,6 +732,7 @@ export default function MasterInfoForm() {
                   handleBlur={handleBlur}
                   setFieldError={setFieldError}
                   setFieldValue={setFieldValue}
+                  disabled={!editingApplicationsEnabled}
                 />
                 <LabelField
                   value={values.guardian_cpr_doc}
@@ -685,10 +747,17 @@ export default function MasterInfoForm() {
                       guardian_cpr_doc: file,
                     })
                   }
+                  disabled={!editingApplicationsEnabled}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
                   setFieldError={setFieldError}
                   setFieldValue={setFieldValue}
+                  labelComponent={
+                    <GetStorageLinkComponent
+                      // TODO: update it with the correct field
+                      storageKey={null} // student?.guardianCprDoc
+                    ></GetStorageLinkComponent>
+                  }
                 />
 
                 {!values.isEmployed && (
@@ -705,6 +774,7 @@ export default function MasterInfoForm() {
                         name="income"
                         title="income"
                         placeholder="Personal Income"
+                        disabled={!editingApplicationsEnabled}
                         className={`input input-bordered input-primary ${
                           errors.income && touched.income && "input-error"
                         }`}
@@ -739,31 +809,40 @@ export default function MasterInfoForm() {
                           income_doc: file,
                         })
                       }
+                      disabled={!editingApplicationsEnabled}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                       setFieldError={setFieldError}
                       setFieldValue={setFieldValue}
+                      labelComponent={
+                        <GetStorageLinkComponent
+                          // TODO: update it with the correct field
+                          storageKey={null} // student?.incomeDoc
+                        ></GetStorageLinkComponent>
+                      }
                     />
                   </>
                 )}
 
                 {/* Submit */}
-                <button
-                  className={`my-3 text-white btn btn-primary md:col-span-2`}
-                  type="submit"
-                  disabled={updateMutation.isPending || isLoading}
-                >
-                  {isLoading && <span className="loading"></span>}
-                  {t("update")}
-                </button>
+                {editingApplicationsEnabled && (
+                  <button
+                    className={`my-3 text-white btn btn-primary md:col-span-2`}
+                    type="submit"
+                    disabled={updateMutation.isPending || isLoading}
+                  >
+                    {isLoading && <span className="loading"></span>}
+                    {t("update")}
+                  </button>
+                )}
               </div>
 
-              {firstStepHaveError && (
+              {formErrors && editingApplicationsEnabled && (
                 <div className="flex flex-col gap-2 pt-8 error-list">
                   <h2 className="text-lg font-bold">{t("formErrors")}</h2>
 
-                  {/* Step 1 Errors */}
-                  {firstStepHaveError && (
+                  {/*  Errors */}
+                  {formErrors && (
                     <div className="mb-4">
                       <h3 className="font-semibold text-red-600 text-md">
                         {t("applicantInfo")}
@@ -923,6 +1002,7 @@ type TLabelField = {
   value: any;
   errors: any;
   touched: any;
+  disabled?: boolean;
   handleChange: {
     (e: React.ChangeEvent<any>): void;
     <T = string | React.ChangeEvent<any>>(
@@ -938,6 +1018,7 @@ type TLabelField = {
   setFieldError: (field: string, message: string | undefined) => void;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   onFile?: (file: File) => void;
+  labelComponent?: ReactNode;
 };
 
 const LabelField: FC<TLabelField> = ({
@@ -952,12 +1033,22 @@ const LabelField: FC<TLabelField> = ({
   setFieldError,
   setFieldValue,
   onFile,
+  labelComponent,
+  disabled,
 }) => {
   return (
     <div className="flex flex-col justify-start w-full">
       <div className="flex items-center">
-        <label className="label">{title}</label>
-        <label className="text-error label">*</label>{" "}
+        <label className="w-full h-10 label">
+          <div className="flex justify-between w-full gap-2">
+            <p className="inline-flex gap-1">
+              {title}
+
+              {type !== "file" && <span className="text-error">*</span>}
+            </p>
+            <div className="text-end">{labelComponent}</div>
+          </div>
+        </label>
       </div>
 
       {type === "phone" && (
@@ -973,6 +1064,7 @@ const LabelField: FC<TLabelField> = ({
           onChange={(val) => setFieldValue(fieldName, (val ?? "")?.toString())}
           onBlur={handleBlur}
           value={value}
+          disabled={disabled}
         />
       )}
       {type !== "phone" && (
@@ -984,6 +1076,7 @@ const LabelField: FC<TLabelField> = ({
 
             errors && touched && "input-error"
           )}
+          disabled={disabled}
           type={type}
           name={fieldName}
           title={fieldName}

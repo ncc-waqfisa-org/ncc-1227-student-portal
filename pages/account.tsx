@@ -41,6 +41,7 @@ const Page: NextPageWithLayout = () => {
   const [isStudentInfo, setIsStudentInfo] = useState(true);
   const [type, setType] = useState<"bachelor" | "masters">("bachelor");
 
+  // TODO: add the correct data
   const haveMaster = true; // student.applicantType.includes("masters")
 
   useEffect(() => {
