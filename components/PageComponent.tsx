@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import { LangSwitcher } from "./langSwitcher";
 import { RegPeriod, RegPeriodDialog } from "./reg-period";
 import { cn } from "../src/lib/utils";
+import { useAppContext } from "../contexts/AppContexts";
 
 interface Props {
   title: string;
@@ -25,6 +26,7 @@ interface Props {
 
 export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
   const { isSignedIn, user, signOut, isInitializing: init } = useAuth();
+  const { studentAsStudent: student } = useAppContext();
   const { back, locale, push, pathname } = useRouter();
   const titleTranslation = useTranslation("pageTitles");
   const footerTranslation = useTranslation("footer");
@@ -84,6 +86,10 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
 
                       <div className="text-white">
                         <p>{user?.getUsername()}</p>
+                        {
+                          // TODO: add master name
+                          student && <p>{student.fullName ?? ""}</p> //student.m_firstName ?? ""
+                        }
                       </div>
                     </div>
                     <ul

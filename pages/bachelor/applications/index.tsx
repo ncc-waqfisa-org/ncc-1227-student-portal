@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import { ApplicationCard } from "../../../components/applications/ApplicationCard";
 import { getStatusOrder } from "../../../src/HelperFunctions";
 import { NewApplicationCard } from "../../../components/applications/NewApplicationCard";
-import { Status, Student } from "../../../src/API";
+import { Status } from "../../../src/API";
 import { CardInfoComponent } from "../../../components/CardInfo";
 import info from "public/svg/info.svg";
 import dayjs from "dayjs";
@@ -20,6 +20,8 @@ import arLocale from "dayjs/locale/ar";
 import enLocale from "dayjs/locale/en";
 import { NextPageWithLayout } from "../../_app";
 import { useAppContext } from "../../../contexts/AppContexts";
+import { NoAvailableBatch } from "../../../components/NoAvailableBatch";
+import { SkeletonApplicationCard } from "../../../components/applications/SkeletonApplicationCard";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -59,26 +61,30 @@ const Page: NextPageWithLayout = () => {
   );
 
   const pastApplications = bachelorContext.applications.filter(
-    (app) => (app.batch ?? 0) < (bachelorContext.batch?.batch ?? 0)
+    (app) => (app.batch ?? 0) < (bachelorContext.batch?.batch ?? dayjs().year())
   );
 
   const { t } = useTranslation("applications");
 
   return (
-    <PageComponent title={"Applications"} authRequired>
+    <PageComponent title={"BApplications"} authRequired>
+      {bachelorContext.isBatchPending && (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 [grid-auto-rows:1fr] py-8">
+          <SkeletonApplicationCard />
+          <SkeletonApplicationCard />
+        </div>
+      )}
+
+      {!bachelorContext.batch && (
+        <div className="flex justify-center py-4">
+          <NoAvailableBatch type="bachelor" />
+        </div>
+      )}
+
       {bachelorContext.applications.length === 0 &&
-        !bachelorContext.newApplicationsEnabled && (
+        !bachelorContext.newApplicationsEnabled &&
+        bachelorContext.batch && (
           <div className="flex flex-wrap justify-center gap-10">
-            {/* <CardInfoComponent
-              icon={info}
-              title={"Registration"}
-              description={"Registration period is over"}
-            ></CardInfoComponent>
-            <CardInfoComponent
-              icon={info}
-              title={"التسجيل"}
-              description={"سيتم فتح التسجيل في يونيو 2024"}
-            ></CardInfoComponent> */}
             <CardInfoComponent
               icon={info}
               title={"الطلبات الجديدة"}
@@ -115,10 +121,12 @@ const Page: NextPageWithLayout = () => {
               <p className="my-4 text-2xl stat-value">{t("myApplications")}</p>
             </div>
           )}
+          {bachelorContext.haveActiveApplication &&
+            "bachelorContext.haveActiveApplication"}
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 [grid-auto-rows:1fr]">
             {!bachelorContext.haveActiveApplication &&
               bachelorContext.newApplicationsEnabled && (
-                <Link href={"../applications/new-application"}>
+                <Link href={"../bachelor/applications/new-application"}>
                   <NewApplicationCard></NewApplicationCard>
                 </Link>
               )}

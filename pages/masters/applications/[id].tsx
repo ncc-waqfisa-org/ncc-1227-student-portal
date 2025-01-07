@@ -17,6 +17,10 @@ import { useAuth } from "../../../hooks/use-auth";
 import dayjs from "dayjs";
 import { NextPageWithLayout } from "../../_app";
 import { useAppContext } from "../../../contexts/AppContexts";
+import {
+  MastersProvider,
+  useMastersContext,
+} from "../../../contexts/MastersContexts";
 
 interface Props {
   id: string | null;
@@ -67,7 +71,7 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
   const [isEdit, setIsEdit] = useState(false);
   const { student: studentData } = useAppContext();
 
-  const { editingApplicationsEnabled, batch } = useBachelorContext();
+  const { editingApplicationsEnabled, batch } = useMastersContext();
   const student = studentData?.getStudent as Student;
 
   const { token } = useAuth();
@@ -90,7 +94,7 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
 
   if (isPending) {
     return (
-      <PageComponent title={"Application"} authRequired>
+      <PageComponent title={"MApplication"} authRequired>
         <div className="flex flex-col items-center justify-center">
           <p className="flex items-center gap-2">
             <span className="loading"></span>
@@ -138,7 +142,7 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
   }
 
   return (
-    <PageComponent title={"Application"} authRequired>
+    <PageComponent title={"MApplication"} authRequired>
       <div className="max-w-3xl mx-auto">
         {(data?.application?.status === Status.REVIEW ||
           data?.application?.status === Status.NOT_COMPLETED ||
@@ -268,7 +272,7 @@ function AccountDocs({ student }: AccountDocs) {
 }
 
 Page.getLayout = function getLayout(page: ReactElement) {
-  return <BachelorProvider>{page}</BachelorProvider>;
+  return <MastersProvider>{page}</MastersProvider>;
 };
 
 export default Page;

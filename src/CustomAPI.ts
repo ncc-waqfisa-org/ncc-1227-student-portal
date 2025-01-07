@@ -16,6 +16,7 @@ import {
   GetStudentQueryVariables,
   Program,
   Scholarship,
+  University,
   UpdateApplicationMutation,
   UpdateApplicationMutationVariables,
   UpdateAttachmentMutation,
@@ -459,6 +460,29 @@ export async function listAllPrograms() {
   let res = (await API.graphql(graphqlOperation(q))) as GraphQLResult<any>; // your fetch function here
   let programs = res.data?.listPrograms.items as Program[];
   return programs;
+}
+
+// TODO: add this
+export async function listAllMasterUniversities() {
+  let q = `
+  query ListAllMasterUniversities {
+    listMastersUniversities(limit: 9999999) {
+      items {
+        id
+        name
+        nameAr
+        isDeactivated
+        _version
+        _deleted
+      }
+    }
+  }
+`;
+
+  let res = (await API.graphql(graphqlOperation(q))) as GraphQLResult<any>; // your fetch function here
+  // TODO: update the type to the MastersUniversity
+  let universities = res.data?.listMastersUniversities.items as University[];
+  return universities;
 }
 
 /**

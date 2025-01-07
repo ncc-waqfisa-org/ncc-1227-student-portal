@@ -90,7 +90,7 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
 
   if (isPending) {
     return (
-      <PageComponent title={"Application"} authRequired>
+      <PageComponent title={"BApplication"} authRequired>
         <div className="flex flex-col items-center justify-center">
           <p className="flex items-center gap-2">
             <span className="loading"></span>
@@ -138,7 +138,7 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
   }
 
   return (
-    <PageComponent title={"Application"} authRequired>
+    <PageComponent title={"BApplication"} authRequired>
       <div className="max-w-3xl mx-auto">
         {(data?.application?.status === Status.REVIEW ||
           data?.application?.status === Status.NOT_COMPLETED ||

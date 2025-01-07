@@ -18,6 +18,7 @@ import { CardInfoComponent } from "../../../components/CardInfo";
 import info from "public/svg/info.svg";
 import dayjs from "dayjs";
 import { NextPageWithLayout } from "../../_app";
+import { NoAvailableBatch } from "../../../components/NoAvailableBatch";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { locale } = ctx;
@@ -50,7 +51,7 @@ const NewApplicationPage: NextPageWithLayout<Props> = (props) => {
   const { t } = useTranslation("applicationPage");
 
   return (
-    <PageComponent title={t("newApplication")} authRequired>
+    <PageComponent title={t("BNewApplication")} authRequired>
       {newApplicationsEnabled ? (
         <div>
           {!haveActiveApplication && (
@@ -65,6 +66,8 @@ const NewApplicationPage: NextPageWithLayout<Props> = (props) => {
             </div>
           )}
         </div>
+      ) : !batch ? (
+        <NoAvailableBatch type="bachelor" />
       ) : dayjs().isAfter(
           dayjs(batch?.createApplicationEndDate).endOf("day")
         ) ? (

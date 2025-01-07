@@ -49,15 +49,6 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  // useEffect(() => {
-  //   Crisp.configure(`${process.env.NEXT_PUBLIC_CRISP_WEBSITE_ID}`, {
-  //     locale: locale,
-  //     autoload: true,
-  //   });
-
-  //   return () => {};
-  // }, [locale]);
-
   return (
     <div dir={dir} className={locale === "ar" ? "font-IBMArabic" : "font-IBM"}>
       <QueryClientProvider client={queryClient}>

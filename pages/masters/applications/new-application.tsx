@@ -2,8 +2,11 @@ import React, { FC, ReactElement } from "react";
 import { ApplicationForm } from "../../../components/applications/ApplicationForm";
 import { PageComponent } from "../../../components/PageComponent";
 import { GetServerSideProps } from "next";
-import { listAllPrograms } from "../../../src/CustomAPI";
-import { Program } from "../../../src/API";
+import {
+  listAllMasterUniversities,
+  listAllPrograms,
+} from "../../../src/CustomAPI";
+import { Program, University } from "../../../src/API";
 import {
   BachelorProvider,
   useBachelorContext,
@@ -18,10 +21,17 @@ import { CardInfoComponent } from "../../../components/CardInfo";
 import info from "public/svg/info.svg";
 import dayjs from "dayjs";
 import { NextPageWithLayout } from "../../_app";
+import {
+  MastersProvider,
+  useMastersContext,
+} from "../../../contexts/MastersContexts";
+import { NoAvailableBatch } from "../../../components/NoAvailableBatch";
+// import { MastersApplicationForm } from "../../../components/applications/MastersApplicationForm";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { locale } = ctx;
-  const programs = await listAllPrograms();
+  const universities = await listAllMasterUniversities();
+  // const programs = await listAllPrograms();
 
   return {
     props: {
@@ -34,27 +44,31 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         "signIn",
         "errors",
       ])),
-      programs: programs,
+      universities: universities,
     },
   };
 };
 
 interface Props {
-  programs: Program[];
+  // TODO: Update to MastersUnivirsity
+  universities: University[];
 }
 
 const NewApplicationPage: NextPageWithLayout<Props> = (props) => {
   const { haveActiveApplication, newApplicationsEnabled, batch } =
-    useBachelorContext();
+    useMastersContext();
 
   const { t } = useTranslation("applicationPage");
 
   return (
-    <PageComponent title={t("newApplication")} authRequired>
+    <PageComponent title={t("MNewApplication")} authRequired>
       {newApplicationsEnabled ? (
         <div>
           {!haveActiveApplication && (
-            <ApplicationForm programs={props.programs}></ApplicationForm>
+            // <MastersApplicationForm
+            //   universities={props.universities}
+            // ></MastersApplicationForm>
+            <></>
           )}
           {haveActiveApplication && (
             <div className="rounded-2xl bg-zinc-200 text-zinc-500 flex flex-col p-4 border border-zinc-300 text-center justify-center items-center min-h-[5rem]">
@@ -65,6 +79,8 @@ const NewApplicationPage: NextPageWithLayout<Props> = (props) => {
             </div>
           )}
         </div>
+      ) : !batch ? (
+        <NoAvailableBatch type="masters" />
       ) : dayjs().isAfter(
           dayjs(batch?.createApplicationEndDate).endOf("day")
         ) ? (
@@ -107,7 +123,7 @@ const NewApplicationPage: NextPageWithLayout<Props> = (props) => {
 };
 
 NewApplicationPage.getLayout = function getLayout(page: ReactElement) {
-  return <BachelorProvider>{page}</BachelorProvider>;
+  return <MastersProvider>{page}</MastersProvider>;
 };
 
 export default NewApplicationPage;

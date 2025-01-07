@@ -2,17 +2,13 @@ import { PageComponent } from "../../../components/PageComponent";
 
 import React, { ReactElement } from "react";
 import Link from "next/link";
-import {
-  BachelorProvider,
-  useBachelorContext,
-} from "../../../contexts/BachelorContexts";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import { ApplicationCard } from "../../../components/applications/ApplicationCard";
 import { getStatusOrder } from "../../../src/HelperFunctions";
 import { NewApplicationCard } from "../../../components/applications/NewApplicationCard";
-import { Status, Student } from "../../../src/API";
+import { Status } from "../../../src/API";
 import { CardInfoComponent } from "../../../components/CardInfo";
 import info from "public/svg/info.svg";
 import dayjs from "dayjs";
@@ -20,7 +16,12 @@ import arLocale from "dayjs/locale/ar";
 import enLocale from "dayjs/locale/en";
 import { NextPageWithLayout } from "../../_app";
 import { useAppContext } from "../../../contexts/AppContexts";
-import { MastersProvider } from "../../../contexts/MastersContexts";
+import {
+  MastersProvider,
+  useMastersContext,
+} from "../../../contexts/MastersContexts";
+import { SkeletonApplicationCard } from "../../../components/applications/SkeletonApplicationCard";
+import { NoAvailableBatch } from "../../../components/NoAvailableBatch";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -40,7 +41,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 };
 
 const Page: NextPageWithLayout = () => {
-  const bachelorContext = useBachelorContext();
+  const mastersContext = useMastersContext();
   const { studentAsStudent: student } = useAppContext();
   // const regDialog = useRef<HTMLDialogElement>(null);
 
@@ -48,7 +49,7 @@ const Page: NextPageWithLayout = () => {
   // const student = bachelorContext.student?.getStudent as Student;
   // const student = appContext.student?.getStudent as Student;
 
-  const activeApplications = bachelorContext.applications.filter(
+  const activeApplications = mastersContext.applications.filter(
     (app) =>
       (app.status === Status.APPROVED ||
         app.status === Status.ELIGIBLE ||
@@ -56,35 +57,39 @@ const Page: NextPageWithLayout = () => {
         app.status === Status.NOT_COMPLETED ||
         app.status === Status.REJECTED ||
         app.status === Status.WITHDRAWN) &&
-      bachelorContext.batch?.batch === app.batch
+      mastersContext.batch?.batch === app.batch
   );
 
-  const pastApplications = bachelorContext.applications.filter(
-    (app) => (app.batch ?? 0) < (bachelorContext.batch?.batch ?? 0)
+  const pastApplications = mastersContext.applications.filter(
+    (app) => (app.batch ?? 0) < (mastersContext.batch?.batch ?? dayjs().year())
   );
 
   const { t } = useTranslation("applications");
 
   return (
-    <PageComponent title={"Applications"} authRequired>
-      {bachelorContext.applications.length === 0 &&
-        !bachelorContext.newApplicationsEnabled && (
+    <PageComponent title={"MApplications"} authRequired>
+      {mastersContext.isBatchPending && (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 [grid-auto-rows:1fr] py-8">
+          <SkeletonApplicationCard />
+          <SkeletonApplicationCard />
+        </div>
+      )}
+
+      {!mastersContext.batch && (
+        <div className="flex justify-center py-4">
+          <NoAvailableBatch type="masters" />
+        </div>
+      )}
+
+      {mastersContext.applications.length === 0 &&
+        !mastersContext.newApplicationsEnabled &&
+        mastersContext.batch && (
           <div className="flex flex-wrap justify-center gap-10">
-            {/* <CardInfoComponent
-              icon={info}
-              title={"Registration"}
-              description={"Registration period is over"}
-            ></CardInfoComponent>
-            <CardInfoComponent
-              icon={info}
-              title={"التسجيل"}
-              description={"سيتم فتح التسجيل في يونيو 2024"}
-            ></CardInfoComponent> */}
             <CardInfoComponent
               icon={info}
               title={"الطلبات الجديدة"}
               description={`سيتم فتح التسجيل ${dayjs(
-                bachelorContext.batch?.createApplicationStartDate
+                mastersContext.batch.createApplicationStartDate
               )
                 .locale(arLocale)
                 .format("MMM DD, YYYY")}`}
@@ -93,7 +98,7 @@ const Page: NextPageWithLayout = () => {
               icon={info}
               title={"New applications"}
               description={`Registration will open in ${dayjs(
-                bachelorContext.batch?.createApplicationStartDate
+                mastersContext.batch.createApplicationStartDate
               )
                 .locale(enLocale)
                 .format("MMM DD, YYYY")}`}
@@ -103,8 +108,8 @@ const Page: NextPageWithLayout = () => {
 
       {student && (
         <div className="container mx-auto">
-          {!bachelorContext.haveActiveApplication &&
-            bachelorContext.newApplicationsEnabled && (
+          {!mastersContext.haveActiveApplication &&
+            mastersContext.newApplicationsEnabled && (
               <div>
                 <p className="my-4 text-2xl stat-value">
                   {t("newApplication")}
@@ -116,14 +121,15 @@ const Page: NextPageWithLayout = () => {
               <p className="my-4 text-2xl stat-value">{t("myApplications")}</p>
             </div>
           )}
+
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 [grid-auto-rows:1fr]">
-            {!bachelorContext.haveActiveApplication &&
-              bachelorContext.newApplicationsEnabled && (
-                <Link href={"../applications/new-application"}>
+            {!mastersContext.haveActiveApplication &&
+              mastersContext.newApplicationsEnabled && (
+                <Link href={"../masters/applications/new-application"}>
                   <NewApplicationCard></NewApplicationCard>
                 </Link>
               )}
-            {bachelorContext.haveActiveApplication &&
+            {mastersContext.haveActiveApplication &&
               activeApplications
                 .sort((a, b) => {
                   if (a.status && b.status) {
