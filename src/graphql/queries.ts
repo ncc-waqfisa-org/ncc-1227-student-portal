@@ -192,6 +192,21 @@ export const getApplication = /* GraphQL */ `query GetApplication($id: ID!) {
       graduationDate
       address
       parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
       createdAt
       updatedAt
       _version
@@ -715,6 +730,7 @@ export const getAdminLog = /* GraphQL */ `query GetAdminLog($id: ID!) {
     _lastChangedAt
     applicationAdminLogsId
     adminAdminLogsCpr
+    masterApplicationAdminLogsId
     __typename
   }
 }
@@ -742,6 +758,7 @@ export const listAdminLogs = /* GraphQL */ `query ListAdminLogs(
       _lastChangedAt
       applicationAdminLogsId
       adminAdminLogsCpr
+      masterApplicationAdminLogsId
       __typename
     }
     nextToken
@@ -779,6 +796,7 @@ export const syncAdminLogs = /* GraphQL */ `query SyncAdminLogs(
       _lastChangedAt
       applicationAdminLogsId
       adminAdminLogsCpr
+      masterApplicationAdminLogsId
       __typename
     }
     nextToken
@@ -820,6 +838,21 @@ export const getStudentLog = /* GraphQL */ `query GetStudentLog($id: ID!) {
       graduationDate
       address
       parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
       createdAt
       updatedAt
       _version
@@ -1155,6 +1188,43 @@ export const getStudent = /* GraphQL */ `query GetStudent($cpr: String!) {
       startedAt
       __typename
     }
+    m_MasterLogs {
+      nextToken
+      startedAt
+      __typename
+    }
+    m_firstName
+    m_secondName
+    m_lastName
+    m_numberOfFamilyMembers
+    m_graduationYear
+    m_university {
+      id
+      universityName
+      universityNameAr
+      isDeactivated
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    m_universityID
+    m_oldProgram
+    m_applicantType
+    m_isEmployeed
+    m_placeOfEmployment
+    m_income
+    m_incomeDoc
+    m_guardianCPR
+    m_guardianFullName
+    m_guardianCPRDoc
+    m_masterApplications {
+      nextToken
+      startedAt
+      __typename
+    }
     createdAt
     updatedAt
     _version
@@ -1203,6 +1273,21 @@ export const listStudents = /* GraphQL */ `query ListStudents(
       graduationDate
       address
       parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
       createdAt
       updatedAt
       _version
@@ -1253,6 +1338,21 @@ export const syncStudents = /* GraphQL */ `query SyncStudents(
       graduationDate
       address
       parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
       createdAt
       updatedAt
       _version
@@ -1610,6 +1710,953 @@ export const syncStatistics = /* GraphQL */ `query SyncStatistics(
 ` as GeneratedQuery<
   APITypes.SyncStatisticsQueryVariables,
   APITypes.SyncStatisticsQuery
+>;
+export const getMasterBatch = /* GraphQL */ `query GetMasterBatch($batch: Int!) {
+  getMasterBatch(batch: $batch) {
+    batch
+    createApplicationStartDate
+    createApplicationEndDate
+    updateApplicationEndDate
+    signUpStartDate
+    signUpEndDate
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetMasterBatchQueryVariables,
+  APITypes.GetMasterBatchQuery
+>;
+export const listMasterBatches = /* GraphQL */ `query ListMasterBatches(
+  $batch: Int
+  $filter: ModelMasterBatchFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listMasterBatches(
+    batch: $batch
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      batch
+      createApplicationStartDate
+      createApplicationEndDate
+      updateApplicationEndDate
+      signUpStartDate
+      signUpEndDate
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListMasterBatchesQueryVariables,
+  APITypes.ListMasterBatchesQuery
+>;
+export const syncMasterBatches = /* GraphQL */ `query SyncMasterBatches(
+  $filter: ModelMasterBatchFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncMasterBatches(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      batch
+      createApplicationStartDate
+      createApplicationEndDate
+      updateApplicationEndDate
+      signUpStartDate
+      signUpEndDate
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncMasterBatchesQueryVariables,
+  APITypes.SyncMasterBatchesQuery
+>;
+export const getMasterLog = /* GraphQL */ `query GetMasterLog($id: ID!) {
+  getMasterLog(id: $id) {
+    id
+    applicationID
+    studentCPR
+    dateTime
+    snapshot
+    reason
+    student {
+      cpr
+      cprDoc
+      fullName
+      batch
+      email
+      phone
+      gender
+      nationalityCategory
+      nationality
+      schoolName
+      schoolType
+      specialization
+      placeOfBirth
+      studentOrderAmongSiblings
+      familyIncome
+      familyIncomeProofDoc
+      familyIncomeProofDocs
+      preferredLanguage
+      graduationDate
+      address
+      parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    studentM_MasterLogsCpr
+    masterApplicationMasterLogsId
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetMasterLogQueryVariables,
+  APITypes.GetMasterLogQuery
+>;
+export const listMasterLogs = /* GraphQL */ `query ListMasterLogs(
+  $filter: ModelMasterLogFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listMasterLogs(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      applicationID
+      studentCPR
+      dateTime
+      snapshot
+      reason
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      studentM_MasterLogsCpr
+      masterApplicationMasterLogsId
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListMasterLogsQueryVariables,
+  APITypes.ListMasterLogsQuery
+>;
+export const syncMasterLogs = /* GraphQL */ `query SyncMasterLogs(
+  $filter: ModelMasterLogFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncMasterLogs(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      applicationID
+      studentCPR
+      dateTime
+      snapshot
+      reason
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      studentM_MasterLogsCpr
+      masterApplicationMasterLogsId
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncMasterLogsQueryVariables,
+  APITypes.SyncMasterLogsQuery
+>;
+export const getBahrainUniversities = /* GraphQL */ `query GetBahrainUniversities($id: ID!) {
+  getBahrainUniversities(id: $id) {
+    id
+    universityName
+    universityNameAr
+    isDeactivated
+    students {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetBahrainUniversitiesQueryVariables,
+  APITypes.GetBahrainUniversitiesQuery
+>;
+export const listBahrainUniversities = /* GraphQL */ `query ListBahrainUniversities(
+  $id: ID
+  $filter: ModelBahrainUniversitiesFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listBahrainUniversities(
+    id: $id
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      id
+      universityName
+      universityNameAr
+      isDeactivated
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListBahrainUniversitiesQueryVariables,
+  APITypes.ListBahrainUniversitiesQuery
+>;
+export const syncBahrainUniversities = /* GraphQL */ `query SyncBahrainUniversities(
+  $filter: ModelBahrainUniversitiesFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncBahrainUniversities(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      universityName
+      universityNameAr
+      isDeactivated
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncBahrainUniversitiesQueryVariables,
+  APITypes.SyncBahrainUniversitiesQuery
+>;
+export const getMasterUniversities = /* GraphQL */ `query GetMasterUniversities($id: ID!) {
+  getMasterUniversities(id: $id) {
+    id
+    universityName
+    isDeactivated
+    applications {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetMasterUniversitiesQueryVariables,
+  APITypes.GetMasterUniversitiesQuery
+>;
+export const listMasterUniversities = /* GraphQL */ `query ListMasterUniversities(
+  $id: ID
+  $filter: ModelMasterUniversitiesFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listMasterUniversities(
+    id: $id
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      id
+      universityName
+      isDeactivated
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListMasterUniversitiesQueryVariables,
+  APITypes.ListMasterUniversitiesQuery
+>;
+export const syncMasterUniversities = /* GraphQL */ `query SyncMasterUniversities(
+  $filter: ModelMasterUniversitiesFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncMasterUniversities(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      universityName
+      isDeactivated
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncMasterUniversitiesQueryVariables,
+  APITypes.SyncMasterUniversitiesQuery
+>;
+export const getMasterApplication = /* GraphQL */ `query GetMasterApplication($id: ID!) {
+  getMasterApplication(id: $id) {
+    id
+    gpa
+    verifiedGPA
+    status
+    adminLogs {
+      nextToken
+      startedAt
+      __typename
+    }
+    masterLogs {
+      nextToken
+      startedAt
+      __typename
+    }
+    attachment {
+      id
+      cprDoc
+      signedContractDoc
+      transcriptDoc
+      universityCertificate
+      tofelILETSCertificate
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    program
+    dateTime
+    isEmailSent
+    nationalityCategory
+    universityID
+    university {
+      id
+      universityName
+      isDeactivated
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    studentCPR
+    student {
+      cpr
+      cprDoc
+      fullName
+      batch
+      email
+      phone
+      gender
+      nationalityCategory
+      nationality
+      schoolName
+      schoolType
+      specialization
+      placeOfBirth
+      studentOrderAmongSiblings
+      familyIncome
+      familyIncomeProofDoc
+      familyIncomeProofDocs
+      preferredLanguage
+      graduationDate
+      address
+      parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    batch
+    score
+    adminPoints
+    processed
+    isIncomeVerified
+    reason
+    income
+    incomeDoc
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    masterApplicationAttachmentId
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetMasterApplicationQueryVariables,
+  APITypes.GetMasterApplicationQuery
+>;
+export const listMasterApplications = /* GraphQL */ `query ListMasterApplications(
+  $filter: ModelMasterApplicationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listMasterApplications(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      gpa
+      verifiedGPA
+      status
+      program
+      dateTime
+      isEmailSent
+      nationalityCategory
+      universityID
+      studentCPR
+      batch
+      score
+      adminPoints
+      processed
+      isIncomeVerified
+      reason
+      income
+      incomeDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      masterApplicationAttachmentId
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListMasterApplicationsQueryVariables,
+  APITypes.ListMasterApplicationsQuery
+>;
+export const syncMasterApplications = /* GraphQL */ `query SyncMasterApplications(
+  $filter: ModelMasterApplicationFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncMasterApplications(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      gpa
+      verifiedGPA
+      status
+      program
+      dateTime
+      isEmailSent
+      nationalityCategory
+      universityID
+      studentCPR
+      batch
+      score
+      adminPoints
+      processed
+      isIncomeVerified
+      reason
+      income
+      incomeDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      masterApplicationAttachmentId
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncMasterApplicationsQueryVariables,
+  APITypes.SyncMasterApplicationsQuery
+>;
+export const getMasterStatistics = /* GraphQL */ `query GetMasterStatistics($id: Int!) {
+  getMasterStatistics(id: $id) {
+    id
+    batch
+    totalApplications
+    totalApplicationsPerStatus
+    scoreHistogram
+    gpaHistogram
+    totalApplicationsPerUniversity
+    topUniversities
+    topPrograms
+    familyIncome
+    schoolType
+    students
+    applications
+    today
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetMasterStatisticsQueryVariables,
+  APITypes.GetMasterStatisticsQuery
+>;
+export const listMasterStatistics = /* GraphQL */ `query ListMasterStatistics(
+  $id: Int
+  $filter: ModelMasterStatisticsFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listMasterStatistics(
+    id: $id
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      id
+      batch
+      totalApplications
+      totalApplicationsPerStatus
+      scoreHistogram
+      gpaHistogram
+      totalApplicationsPerUniversity
+      topUniversities
+      topPrograms
+      familyIncome
+      schoolType
+      students
+      applications
+      today
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListMasterStatisticsQueryVariables,
+  APITypes.ListMasterStatisticsQuery
+>;
+export const syncMasterStatistics = /* GraphQL */ `query SyncMasterStatistics(
+  $filter: ModelMasterStatisticsFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncMasterStatistics(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      batch
+      totalApplications
+      totalApplicationsPerStatus
+      scoreHistogram
+      gpaHistogram
+      totalApplicationsPerUniversity
+      topUniversities
+      topPrograms
+      familyIncome
+      schoolType
+      students
+      applications
+      today
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncMasterStatisticsQueryVariables,
+  APITypes.SyncMasterStatisticsQuery
+>;
+export const getMasterAttachment = /* GraphQL */ `query GetMasterAttachment($id: ID!) {
+  getMasterAttachment(id: $id) {
+    id
+    cprDoc
+    signedContractDoc
+    transcriptDoc
+    universityCertificate
+    tofelILETSCertificate
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetMasterAttachmentQueryVariables,
+  APITypes.GetMasterAttachmentQuery
+>;
+export const listMasterAttachments = /* GraphQL */ `query ListMasterAttachments(
+  $filter: ModelMasterAttachmentFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listMasterAttachments(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      cprDoc
+      signedContractDoc
+      transcriptDoc
+      universityCertificate
+      tofelILETSCertificate
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListMasterAttachmentsQueryVariables,
+  APITypes.ListMasterAttachmentsQuery
+>;
+export const syncMasterAttachments = /* GraphQL */ `query SyncMasterAttachments(
+  $filter: ModelMasterAttachmentFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncMasterAttachments(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      cprDoc
+      signedContractDoc
+      transcriptDoc
+      universityCertificate
+      tofelILETSCertificate
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncMasterAttachmentsQueryVariables,
+  APITypes.SyncMasterAttachmentsQuery
+>;
+export const getMasterscholarship = /* GraphQL */ `query GetMasterscholarship($id: ID!) {
+  getMasterscholarship(id: $id) {
+    id
+    status
+    applicationID
+    batch
+    isConfirmed
+    application {
+      id
+      gpa
+      verifiedGPA
+      status
+      program
+      dateTime
+      isEmailSent
+      nationalityCategory
+      universityID
+      studentCPR
+      batch
+      score
+      adminPoints
+      processed
+      isIncomeVerified
+      reason
+      income
+      incomeDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      masterApplicationAttachmentId
+      __typename
+    }
+    studentCPR
+    unsignedContractDoc
+    signedContractDoc
+    studentSignature
+    guardianSignature
+    bankName
+    IBAN
+    IBANLetterDoc
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetMasterscholarshipQueryVariables,
+  APITypes.GetMasterscholarshipQuery
+>;
+export const listMasterscholarships = /* GraphQL */ `query ListMasterscholarships(
+  $filter: ModelMasterscholarshipFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listMasterscholarships(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      status
+      applicationID
+      batch
+      isConfirmed
+      studentCPR
+      unsignedContractDoc
+      signedContractDoc
+      studentSignature
+      guardianSignature
+      bankName
+      IBAN
+      IBANLetterDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListMasterscholarshipsQueryVariables,
+  APITypes.ListMasterscholarshipsQuery
+>;
+export const syncMasterscholarships = /* GraphQL */ `query SyncMasterscholarships(
+  $filter: ModelMasterscholarshipFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncMasterscholarships(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      status
+      applicationID
+      batch
+      isConfirmed
+      studentCPR
+      unsignedContractDoc
+      signedContractDoc
+      studentSignature
+      guardianSignature
+      bankName
+      IBAN
+      IBANLetterDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncMasterscholarshipsQueryVariables,
+  APITypes.SyncMasterscholarshipsQuery
 >;
 export const applicationsByIdAndDateTime = /* GraphQL */ `query ApplicationsByIdAndDateTime(
   $id: ID!
@@ -2073,6 +3120,21 @@ export const studentsByNationalityCategoryAndGraduationDate = /* GraphQL */ `que
       graduationDate
       address
       parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
       createdAt
       updatedAt
       _version
@@ -2088,6 +3150,73 @@ export const studentsByNationalityCategoryAndGraduationDate = /* GraphQL */ `que
 ` as GeneratedQuery<
   APITypes.StudentsByNationalityCategoryAndGraduationDateQueryVariables,
   APITypes.StudentsByNationalityCategoryAndGraduationDateQuery
+>;
+export const studentsByM_universityID = /* GraphQL */ `query StudentsByM_universityID(
+  $m_universityID: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelStudentFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  studentsByM_universityID(
+    m_universityID: $m_universityID
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      cpr
+      cprDoc
+      fullName
+      batch
+      email
+      phone
+      gender
+      nationalityCategory
+      nationality
+      schoolName
+      schoolType
+      specialization
+      placeOfBirth
+      studentOrderAmongSiblings
+      familyIncome
+      familyIncomeProofDoc
+      familyIncomeProofDocs
+      preferredLanguage
+      graduationDate
+      address
+      parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.StudentsByM_universityIDQueryVariables,
+  APITypes.StudentsByM_universityIDQuery
 >;
 export const scholarshipsByApplicationID = /* GraphQL */ `query ScholarshipsByApplicationID(
   $applicationID: ID!
@@ -2271,4 +3400,499 @@ export const statisticsByBatchAndTotalApplications = /* GraphQL */ `query Statis
 ` as GeneratedQuery<
   APITypes.StatisticsByBatchAndTotalApplicationsQueryVariables,
   APITypes.StatisticsByBatchAndTotalApplicationsQuery
+>;
+export const masterApplicationsByIdAndDateTime = /* GraphQL */ `query MasterApplicationsByIdAndDateTime(
+  $id: ID!
+  $dateTime: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelMasterApplicationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  masterApplicationsByIdAndDateTime(
+    id: $id
+    dateTime: $dateTime
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      gpa
+      verifiedGPA
+      status
+      program
+      dateTime
+      isEmailSent
+      nationalityCategory
+      universityID
+      studentCPR
+      batch
+      score
+      adminPoints
+      processed
+      isIncomeVerified
+      reason
+      income
+      incomeDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      masterApplicationAttachmentId
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.MasterApplicationsByIdAndDateTimeQueryVariables,
+  APITypes.MasterApplicationsByIdAndDateTimeQuery
+>;
+export const masterApplicationsByNationalityCategoryAndBatch = /* GraphQL */ `query MasterApplicationsByNationalityCategoryAndBatch(
+  $nationalityCategory: Nationality!
+  $batch: ModelIntKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelMasterApplicationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  masterApplicationsByNationalityCategoryAndBatch(
+    nationalityCategory: $nationalityCategory
+    batch: $batch
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      gpa
+      verifiedGPA
+      status
+      program
+      dateTime
+      isEmailSent
+      nationalityCategory
+      universityID
+      studentCPR
+      batch
+      score
+      adminPoints
+      processed
+      isIncomeVerified
+      reason
+      income
+      incomeDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      masterApplicationAttachmentId
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.MasterApplicationsByNationalityCategoryAndBatchQueryVariables,
+  APITypes.MasterApplicationsByNationalityCategoryAndBatchQuery
+>;
+export const masterApplicationsByStudentCPRAndGpa = /* GraphQL */ `query MasterApplicationsByStudentCPRAndGpa(
+  $studentCPR: String!
+  $gpa: ModelFloatKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelMasterApplicationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  masterApplicationsByStudentCPRAndGpa(
+    studentCPR: $studentCPR
+    gpa: $gpa
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      gpa
+      verifiedGPA
+      status
+      program
+      dateTime
+      isEmailSent
+      nationalityCategory
+      universityID
+      studentCPR
+      batch
+      score
+      adminPoints
+      processed
+      isIncomeVerified
+      reason
+      income
+      incomeDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      masterApplicationAttachmentId
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.MasterApplicationsByStudentCPRAndGpaQueryVariables,
+  APITypes.MasterApplicationsByStudentCPRAndGpaQuery
+>;
+export const masterApplicationsByBatchAndStatus = /* GraphQL */ `query MasterApplicationsByBatchAndStatus(
+  $batch: Int!
+  $status: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelMasterApplicationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  masterApplicationsByBatchAndStatus(
+    batch: $batch
+    status: $status
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      gpa
+      verifiedGPA
+      status
+      program
+      dateTime
+      isEmailSent
+      nationalityCategory
+      universityID
+      studentCPR
+      batch
+      score
+      adminPoints
+      processed
+      isIncomeVerified
+      reason
+      income
+      incomeDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      masterApplicationAttachmentId
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.MasterApplicationsByBatchAndStatusQueryVariables,
+  APITypes.MasterApplicationsByBatchAndStatusQuery
+>;
+export const masterApplicationsByScoreAndStatus = /* GraphQL */ `query MasterApplicationsByScoreAndStatus(
+  $score: Float!
+  $status: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelMasterApplicationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  masterApplicationsByScoreAndStatus(
+    score: $score
+    status: $status
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      gpa
+      verifiedGPA
+      status
+      program
+      dateTime
+      isEmailSent
+      nationalityCategory
+      universityID
+      studentCPR
+      batch
+      score
+      adminPoints
+      processed
+      isIncomeVerified
+      reason
+      income
+      incomeDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      masterApplicationAttachmentId
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.MasterApplicationsByScoreAndStatusQueryVariables,
+  APITypes.MasterApplicationsByScoreAndStatusQuery
+>;
+export const masterApplicationsByProcessedAndBatch = /* GraphQL */ `query MasterApplicationsByProcessedAndBatch(
+  $processed: Int!
+  $batch: ModelIntKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelMasterApplicationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  masterApplicationsByProcessedAndBatch(
+    processed: $processed
+    batch: $batch
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      gpa
+      verifiedGPA
+      status
+      program
+      dateTime
+      isEmailSent
+      nationalityCategory
+      universityID
+      studentCPR
+      batch
+      score
+      adminPoints
+      processed
+      isIncomeVerified
+      reason
+      income
+      incomeDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      masterApplicationAttachmentId
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.MasterApplicationsByProcessedAndBatchQueryVariables,
+  APITypes.MasterApplicationsByProcessedAndBatchQuery
+>;
+export const masterStatisticsByBatchAndTotalApplications = /* GraphQL */ `query MasterStatisticsByBatchAndTotalApplications(
+  $batch: Int!
+  $totalApplications: ModelIntKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelMasterStatisticsFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  masterStatisticsByBatchAndTotalApplications(
+    batch: $batch
+    totalApplications: $totalApplications
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      batch
+      totalApplications
+      totalApplicationsPerStatus
+      scoreHistogram
+      gpaHistogram
+      totalApplicationsPerUniversity
+      topUniversities
+      topPrograms
+      familyIncome
+      schoolType
+      students
+      applications
+      today
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.MasterStatisticsByBatchAndTotalApplicationsQueryVariables,
+  APITypes.MasterStatisticsByBatchAndTotalApplicationsQuery
+>;
+export const masterscholarshipsByApplicationID = /* GraphQL */ `query MasterscholarshipsByApplicationID(
+  $applicationID: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelMasterscholarshipFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  masterscholarshipsByApplicationID(
+    applicationID: $applicationID
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      status
+      applicationID
+      batch
+      isConfirmed
+      studentCPR
+      unsignedContractDoc
+      signedContractDoc
+      studentSignature
+      guardianSignature
+      bankName
+      IBAN
+      IBANLetterDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.MasterscholarshipsByApplicationIDQueryVariables,
+  APITypes.MasterscholarshipsByApplicationIDQuery
+>;
+export const masterscholarshipsByBatchAndStatus = /* GraphQL */ `query MasterscholarshipsByBatchAndStatus(
+  $batch: Int!
+  $status: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelMasterscholarshipFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  masterscholarshipsByBatchAndStatus(
+    batch: $batch
+    status: $status
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      status
+      applicationID
+      batch
+      isConfirmed
+      studentCPR
+      unsignedContractDoc
+      signedContractDoc
+      studentSignature
+      guardianSignature
+      bankName
+      IBAN
+      IBANLetterDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.MasterscholarshipsByBatchAndStatusQueryVariables,
+  APITypes.MasterscholarshipsByBatchAndStatusQuery
+>;
+export const masterscholarshipsByStudentCPRAndStatus = /* GraphQL */ `query MasterscholarshipsByStudentCPRAndStatus(
+  $studentCPR: String!
+  $status: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelMasterscholarshipFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  masterscholarshipsByStudentCPRAndStatus(
+    studentCPR: $studentCPR
+    status: $status
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      status
+      applicationID
+      batch
+      isConfirmed
+      studentCPR
+      unsignedContractDoc
+      signedContractDoc
+      studentSignature
+      guardianSignature
+      bankName
+      IBAN
+      IBANLetterDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.MasterscholarshipsByStudentCPRAndStatusQueryVariables,
+  APITypes.MasterscholarshipsByStudentCPRAndStatusQuery
 >;

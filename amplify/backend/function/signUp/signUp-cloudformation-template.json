@@ -15,6 +15,18 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "UserPoolId": {
+      "Type": "String"
+    },
+    "ClientId": {
+      "Type": "String"
+    },
+    "StudentTable": {
+      "Type": "String"
+    },
+    "ParentTable": {
+      "Type": "String"
     }
   },
   "Conditions": {

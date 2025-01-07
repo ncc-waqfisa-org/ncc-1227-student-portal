@@ -1,7 +1,14 @@
 import { GetServerSideProps } from "next";
 import React, { ReactElement, useState } from "react";
 import { PageComponent } from "../../../components/PageComponent";
-import { Application, Batch, Program, Status, Student } from "../../../src/API";
+import {
+  Application,
+  Batch,
+  MasterBatch,
+  Program,
+  Status,
+  Student,
+} from "../../../src/API";
 import ViewApplication from "../../../components/applications/ViewApplication";
 import { ApplicationForm } from "../../../components/applications/ApplicationForm";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -107,7 +114,7 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
 
   function checkIfEnabledEditingAfterExtension(
     application: Application,
-    batch: Batch
+    batch: Batch | MasterBatch
   ) {
     const university = application?.programs?.items[0]?.program?.university;
 

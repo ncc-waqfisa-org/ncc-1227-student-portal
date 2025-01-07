@@ -8,6 +8,8 @@
     "@types/aws-lambda": "^8.10.92"
   },
   "dependencies": {
-    "aws-sdk": "^2.1579.0"
+    "aws-sdk": "^2.1579.0",
+    "fs": "^0.0.1-security",
+    "xlsx": "^0.18.5"
   }
 }

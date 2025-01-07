@@ -176,6 +176,21 @@ export const onCreateApplication = /* GraphQL */ `subscription OnCreateApplicati
       graduationDate
       address
       parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
       createdAt
       updatedAt
       _version
@@ -309,6 +324,21 @@ export const onUpdateApplication = /* GraphQL */ `subscription OnUpdateApplicati
       graduationDate
       address
       parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
       createdAt
       updatedAt
       _version
@@ -442,6 +472,21 @@ export const onDeleteApplication = /* GraphQL */ `subscription OnDeleteApplicati
       graduationDate
       address
       parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
       createdAt
       updatedAt
       _version
@@ -981,6 +1026,7 @@ export const onCreateAdminLog = /* GraphQL */ `subscription OnCreateAdminLog($fi
     _lastChangedAt
     applicationAdminLogsId
     adminAdminLogsCpr
+    masterApplicationAdminLogsId
     __typename
   }
 }
@@ -1016,6 +1062,7 @@ export const onUpdateAdminLog = /* GraphQL */ `subscription OnUpdateAdminLog($fi
     _lastChangedAt
     applicationAdminLogsId
     adminAdminLogsCpr
+    masterApplicationAdminLogsId
     __typename
   }
 }
@@ -1051,6 +1098,7 @@ export const onDeleteAdminLog = /* GraphQL */ `subscription OnDeleteAdminLog($fi
     _lastChangedAt
     applicationAdminLogsId
     adminAdminLogsCpr
+    masterApplicationAdminLogsId
     __typename
   }
 }
@@ -1090,6 +1138,21 @@ export const onCreateStudentLog = /* GraphQL */ `subscription OnCreateStudentLog
       graduationDate
       address
       parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
       createdAt
       updatedAt
       _version
@@ -1143,6 +1206,21 @@ export const onUpdateStudentLog = /* GraphQL */ `subscription OnUpdateStudentLog
       graduationDate
       address
       parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
       createdAt
       updatedAt
       _version
@@ -1196,6 +1274,21 @@ export const onDeleteStudentLog = /* GraphQL */ `subscription OnDeleteStudentLog
       graduationDate
       address
       parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
       createdAt
       updatedAt
       _version
@@ -1426,6 +1519,43 @@ export const onCreateStudent = /* GraphQL */ `subscription OnCreateStudent($filt
       startedAt
       __typename
     }
+    m_MasterLogs {
+      nextToken
+      startedAt
+      __typename
+    }
+    m_firstName
+    m_secondName
+    m_lastName
+    m_numberOfFamilyMembers
+    m_graduationYear
+    m_university {
+      id
+      universityName
+      universityNameAr
+      isDeactivated
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    m_universityID
+    m_oldProgram
+    m_applicantType
+    m_isEmployeed
+    m_placeOfEmployment
+    m_income
+    m_incomeDoc
+    m_guardianCPR
+    m_guardianFullName
+    m_guardianCPRDoc
+    m_masterApplications {
+      nextToken
+      startedAt
+      __typename
+    }
     createdAt
     updatedAt
     _version
@@ -1491,6 +1621,43 @@ export const onUpdateStudent = /* GraphQL */ `subscription OnUpdateStudent($filt
       startedAt
       __typename
     }
+    m_MasterLogs {
+      nextToken
+      startedAt
+      __typename
+    }
+    m_firstName
+    m_secondName
+    m_lastName
+    m_numberOfFamilyMembers
+    m_graduationYear
+    m_university {
+      id
+      universityName
+      universityNameAr
+      isDeactivated
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    m_universityID
+    m_oldProgram
+    m_applicantType
+    m_isEmployeed
+    m_placeOfEmployment
+    m_income
+    m_incomeDoc
+    m_guardianCPR
+    m_guardianFullName
+    m_guardianCPRDoc
+    m_masterApplications {
+      nextToken
+      startedAt
+      __typename
+    }
     createdAt
     updatedAt
     _version
@@ -1552,6 +1719,43 @@ export const onDeleteStudent = /* GraphQL */ `subscription OnDeleteStudent($filt
     }
     parentInfoID
     StudentLogs {
+      nextToken
+      startedAt
+      __typename
+    }
+    m_MasterLogs {
+      nextToken
+      startedAt
+      __typename
+    }
+    m_firstName
+    m_secondName
+    m_lastName
+    m_numberOfFamilyMembers
+    m_graduationYear
+    m_university {
+      id
+      universityName
+      universityNameAr
+      isDeactivated
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    m_universityID
+    m_oldProgram
+    m_applicantType
+    m_isEmployeed
+    m_placeOfEmployment
+    m_income
+    m_incomeDoc
+    m_guardianCPR
+    m_guardianFullName
+    m_guardianCPRDoc
+    m_masterApplications {
       nextToken
       startedAt
       __typename
@@ -1900,4 +2104,1081 @@ export const onDeleteStatistics = /* GraphQL */ `subscription OnDeleteStatistics
 ` as GeneratedSubscription<
   APITypes.OnDeleteStatisticsSubscriptionVariables,
   APITypes.OnDeleteStatisticsSubscription
+>;
+export const onCreateMasterBatch = /* GraphQL */ `subscription OnCreateMasterBatch(
+  $filter: ModelSubscriptionMasterBatchFilterInput
+) {
+  onCreateMasterBatch(filter: $filter) {
+    batch
+    createApplicationStartDate
+    createApplicationEndDate
+    updateApplicationEndDate
+    signUpStartDate
+    signUpEndDate
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateMasterBatchSubscriptionVariables,
+  APITypes.OnCreateMasterBatchSubscription
+>;
+export const onUpdateMasterBatch = /* GraphQL */ `subscription OnUpdateMasterBatch(
+  $filter: ModelSubscriptionMasterBatchFilterInput
+) {
+  onUpdateMasterBatch(filter: $filter) {
+    batch
+    createApplicationStartDate
+    createApplicationEndDate
+    updateApplicationEndDate
+    signUpStartDate
+    signUpEndDate
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateMasterBatchSubscriptionVariables,
+  APITypes.OnUpdateMasterBatchSubscription
+>;
+export const onDeleteMasterBatch = /* GraphQL */ `subscription OnDeleteMasterBatch(
+  $filter: ModelSubscriptionMasterBatchFilterInput
+) {
+  onDeleteMasterBatch(filter: $filter) {
+    batch
+    createApplicationStartDate
+    createApplicationEndDate
+    updateApplicationEndDate
+    signUpStartDate
+    signUpEndDate
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteMasterBatchSubscriptionVariables,
+  APITypes.OnDeleteMasterBatchSubscription
+>;
+export const onCreateMasterLog = /* GraphQL */ `subscription OnCreateMasterLog($filter: ModelSubscriptionMasterLogFilterInput) {
+  onCreateMasterLog(filter: $filter) {
+    id
+    applicationID
+    studentCPR
+    dateTime
+    snapshot
+    reason
+    student {
+      cpr
+      cprDoc
+      fullName
+      batch
+      email
+      phone
+      gender
+      nationalityCategory
+      nationality
+      schoolName
+      schoolType
+      specialization
+      placeOfBirth
+      studentOrderAmongSiblings
+      familyIncome
+      familyIncomeProofDoc
+      familyIncomeProofDocs
+      preferredLanguage
+      graduationDate
+      address
+      parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    studentM_MasterLogsCpr
+    masterApplicationMasterLogsId
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateMasterLogSubscriptionVariables,
+  APITypes.OnCreateMasterLogSubscription
+>;
+export const onUpdateMasterLog = /* GraphQL */ `subscription OnUpdateMasterLog($filter: ModelSubscriptionMasterLogFilterInput) {
+  onUpdateMasterLog(filter: $filter) {
+    id
+    applicationID
+    studentCPR
+    dateTime
+    snapshot
+    reason
+    student {
+      cpr
+      cprDoc
+      fullName
+      batch
+      email
+      phone
+      gender
+      nationalityCategory
+      nationality
+      schoolName
+      schoolType
+      specialization
+      placeOfBirth
+      studentOrderAmongSiblings
+      familyIncome
+      familyIncomeProofDoc
+      familyIncomeProofDocs
+      preferredLanguage
+      graduationDate
+      address
+      parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    studentM_MasterLogsCpr
+    masterApplicationMasterLogsId
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateMasterLogSubscriptionVariables,
+  APITypes.OnUpdateMasterLogSubscription
+>;
+export const onDeleteMasterLog = /* GraphQL */ `subscription OnDeleteMasterLog($filter: ModelSubscriptionMasterLogFilterInput) {
+  onDeleteMasterLog(filter: $filter) {
+    id
+    applicationID
+    studentCPR
+    dateTime
+    snapshot
+    reason
+    student {
+      cpr
+      cprDoc
+      fullName
+      batch
+      email
+      phone
+      gender
+      nationalityCategory
+      nationality
+      schoolName
+      schoolType
+      specialization
+      placeOfBirth
+      studentOrderAmongSiblings
+      familyIncome
+      familyIncomeProofDoc
+      familyIncomeProofDocs
+      preferredLanguage
+      graduationDate
+      address
+      parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    studentM_MasterLogsCpr
+    masterApplicationMasterLogsId
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteMasterLogSubscriptionVariables,
+  APITypes.OnDeleteMasterLogSubscription
+>;
+export const onCreateBahrainUniversities = /* GraphQL */ `subscription OnCreateBahrainUniversities(
+  $filter: ModelSubscriptionBahrainUniversitiesFilterInput
+) {
+  onCreateBahrainUniversities(filter: $filter) {
+    id
+    universityName
+    universityNameAr
+    isDeactivated
+    students {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateBahrainUniversitiesSubscriptionVariables,
+  APITypes.OnCreateBahrainUniversitiesSubscription
+>;
+export const onUpdateBahrainUniversities = /* GraphQL */ `subscription OnUpdateBahrainUniversities(
+  $filter: ModelSubscriptionBahrainUniversitiesFilterInput
+) {
+  onUpdateBahrainUniversities(filter: $filter) {
+    id
+    universityName
+    universityNameAr
+    isDeactivated
+    students {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateBahrainUniversitiesSubscriptionVariables,
+  APITypes.OnUpdateBahrainUniversitiesSubscription
+>;
+export const onDeleteBahrainUniversities = /* GraphQL */ `subscription OnDeleteBahrainUniversities(
+  $filter: ModelSubscriptionBahrainUniversitiesFilterInput
+) {
+  onDeleteBahrainUniversities(filter: $filter) {
+    id
+    universityName
+    universityNameAr
+    isDeactivated
+    students {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteBahrainUniversitiesSubscriptionVariables,
+  APITypes.OnDeleteBahrainUniversitiesSubscription
+>;
+export const onCreateMasterUniversities = /* GraphQL */ `subscription OnCreateMasterUniversities(
+  $filter: ModelSubscriptionMasterUniversitiesFilterInput
+) {
+  onCreateMasterUniversities(filter: $filter) {
+    id
+    universityName
+    isDeactivated
+    applications {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateMasterUniversitiesSubscriptionVariables,
+  APITypes.OnCreateMasterUniversitiesSubscription
+>;
+export const onUpdateMasterUniversities = /* GraphQL */ `subscription OnUpdateMasterUniversities(
+  $filter: ModelSubscriptionMasterUniversitiesFilterInput
+) {
+  onUpdateMasterUniversities(filter: $filter) {
+    id
+    universityName
+    isDeactivated
+    applications {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateMasterUniversitiesSubscriptionVariables,
+  APITypes.OnUpdateMasterUniversitiesSubscription
+>;
+export const onDeleteMasterUniversities = /* GraphQL */ `subscription OnDeleteMasterUniversities(
+  $filter: ModelSubscriptionMasterUniversitiesFilterInput
+) {
+  onDeleteMasterUniversities(filter: $filter) {
+    id
+    universityName
+    isDeactivated
+    applications {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteMasterUniversitiesSubscriptionVariables,
+  APITypes.OnDeleteMasterUniversitiesSubscription
+>;
+export const onCreateMasterApplication = /* GraphQL */ `subscription OnCreateMasterApplication(
+  $filter: ModelSubscriptionMasterApplicationFilterInput
+) {
+  onCreateMasterApplication(filter: $filter) {
+    id
+    gpa
+    verifiedGPA
+    status
+    adminLogs {
+      nextToken
+      startedAt
+      __typename
+    }
+    masterLogs {
+      nextToken
+      startedAt
+      __typename
+    }
+    attachment {
+      id
+      cprDoc
+      signedContractDoc
+      transcriptDoc
+      universityCertificate
+      tofelILETSCertificate
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    program
+    dateTime
+    isEmailSent
+    nationalityCategory
+    universityID
+    university {
+      id
+      universityName
+      isDeactivated
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    studentCPR
+    student {
+      cpr
+      cprDoc
+      fullName
+      batch
+      email
+      phone
+      gender
+      nationalityCategory
+      nationality
+      schoolName
+      schoolType
+      specialization
+      placeOfBirth
+      studentOrderAmongSiblings
+      familyIncome
+      familyIncomeProofDoc
+      familyIncomeProofDocs
+      preferredLanguage
+      graduationDate
+      address
+      parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    batch
+    score
+    adminPoints
+    processed
+    isIncomeVerified
+    reason
+    income
+    incomeDoc
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    masterApplicationAttachmentId
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateMasterApplicationSubscriptionVariables,
+  APITypes.OnCreateMasterApplicationSubscription
+>;
+export const onUpdateMasterApplication = /* GraphQL */ `subscription OnUpdateMasterApplication(
+  $filter: ModelSubscriptionMasterApplicationFilterInput
+) {
+  onUpdateMasterApplication(filter: $filter) {
+    id
+    gpa
+    verifiedGPA
+    status
+    adminLogs {
+      nextToken
+      startedAt
+      __typename
+    }
+    masterLogs {
+      nextToken
+      startedAt
+      __typename
+    }
+    attachment {
+      id
+      cprDoc
+      signedContractDoc
+      transcriptDoc
+      universityCertificate
+      tofelILETSCertificate
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    program
+    dateTime
+    isEmailSent
+    nationalityCategory
+    universityID
+    university {
+      id
+      universityName
+      isDeactivated
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    studentCPR
+    student {
+      cpr
+      cprDoc
+      fullName
+      batch
+      email
+      phone
+      gender
+      nationalityCategory
+      nationality
+      schoolName
+      schoolType
+      specialization
+      placeOfBirth
+      studentOrderAmongSiblings
+      familyIncome
+      familyIncomeProofDoc
+      familyIncomeProofDocs
+      preferredLanguage
+      graduationDate
+      address
+      parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    batch
+    score
+    adminPoints
+    processed
+    isIncomeVerified
+    reason
+    income
+    incomeDoc
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    masterApplicationAttachmentId
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateMasterApplicationSubscriptionVariables,
+  APITypes.OnUpdateMasterApplicationSubscription
+>;
+export const onDeleteMasterApplication = /* GraphQL */ `subscription OnDeleteMasterApplication(
+  $filter: ModelSubscriptionMasterApplicationFilterInput
+) {
+  onDeleteMasterApplication(filter: $filter) {
+    id
+    gpa
+    verifiedGPA
+    status
+    adminLogs {
+      nextToken
+      startedAt
+      __typename
+    }
+    masterLogs {
+      nextToken
+      startedAt
+      __typename
+    }
+    attachment {
+      id
+      cprDoc
+      signedContractDoc
+      transcriptDoc
+      universityCertificate
+      tofelILETSCertificate
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    program
+    dateTime
+    isEmailSent
+    nationalityCategory
+    universityID
+    university {
+      id
+      universityName
+      isDeactivated
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    studentCPR
+    student {
+      cpr
+      cprDoc
+      fullName
+      batch
+      email
+      phone
+      gender
+      nationalityCategory
+      nationality
+      schoolName
+      schoolType
+      specialization
+      placeOfBirth
+      studentOrderAmongSiblings
+      familyIncome
+      familyIncomeProofDoc
+      familyIncomeProofDocs
+      preferredLanguage
+      graduationDate
+      address
+      parentInfoID
+      m_firstName
+      m_secondName
+      m_lastName
+      m_numberOfFamilyMembers
+      m_graduationYear
+      m_universityID
+      m_oldProgram
+      m_applicantType
+      m_isEmployeed
+      m_placeOfEmployment
+      m_income
+      m_incomeDoc
+      m_guardianCPR
+      m_guardianFullName
+      m_guardianCPRDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    batch
+    score
+    adminPoints
+    processed
+    isIncomeVerified
+    reason
+    income
+    incomeDoc
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    masterApplicationAttachmentId
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteMasterApplicationSubscriptionVariables,
+  APITypes.OnDeleteMasterApplicationSubscription
+>;
+export const onCreateMasterStatistics = /* GraphQL */ `subscription OnCreateMasterStatistics(
+  $filter: ModelSubscriptionMasterStatisticsFilterInput
+) {
+  onCreateMasterStatistics(filter: $filter) {
+    id
+    batch
+    totalApplications
+    totalApplicationsPerStatus
+    scoreHistogram
+    gpaHistogram
+    totalApplicationsPerUniversity
+    topUniversities
+    topPrograms
+    familyIncome
+    schoolType
+    students
+    applications
+    today
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateMasterStatisticsSubscriptionVariables,
+  APITypes.OnCreateMasterStatisticsSubscription
+>;
+export const onUpdateMasterStatistics = /* GraphQL */ `subscription OnUpdateMasterStatistics(
+  $filter: ModelSubscriptionMasterStatisticsFilterInput
+) {
+  onUpdateMasterStatistics(filter: $filter) {
+    id
+    batch
+    totalApplications
+    totalApplicationsPerStatus
+    scoreHistogram
+    gpaHistogram
+    totalApplicationsPerUniversity
+    topUniversities
+    topPrograms
+    familyIncome
+    schoolType
+    students
+    applications
+    today
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateMasterStatisticsSubscriptionVariables,
+  APITypes.OnUpdateMasterStatisticsSubscription
+>;
+export const onDeleteMasterStatistics = /* GraphQL */ `subscription OnDeleteMasterStatistics(
+  $filter: ModelSubscriptionMasterStatisticsFilterInput
+) {
+  onDeleteMasterStatistics(filter: $filter) {
+    id
+    batch
+    totalApplications
+    totalApplicationsPerStatus
+    scoreHistogram
+    gpaHistogram
+    totalApplicationsPerUniversity
+    topUniversities
+    topPrograms
+    familyIncome
+    schoolType
+    students
+    applications
+    today
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteMasterStatisticsSubscriptionVariables,
+  APITypes.OnDeleteMasterStatisticsSubscription
+>;
+export const onCreateMasterAttachment = /* GraphQL */ `subscription OnCreateMasterAttachment(
+  $filter: ModelSubscriptionMasterAttachmentFilterInput
+) {
+  onCreateMasterAttachment(filter: $filter) {
+    id
+    cprDoc
+    signedContractDoc
+    transcriptDoc
+    universityCertificate
+    tofelILETSCertificate
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateMasterAttachmentSubscriptionVariables,
+  APITypes.OnCreateMasterAttachmentSubscription
+>;
+export const onUpdateMasterAttachment = /* GraphQL */ `subscription OnUpdateMasterAttachment(
+  $filter: ModelSubscriptionMasterAttachmentFilterInput
+) {
+  onUpdateMasterAttachment(filter: $filter) {
+    id
+    cprDoc
+    signedContractDoc
+    transcriptDoc
+    universityCertificate
+    tofelILETSCertificate
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateMasterAttachmentSubscriptionVariables,
+  APITypes.OnUpdateMasterAttachmentSubscription
+>;
+export const onDeleteMasterAttachment = /* GraphQL */ `subscription OnDeleteMasterAttachment(
+  $filter: ModelSubscriptionMasterAttachmentFilterInput
+) {
+  onDeleteMasterAttachment(filter: $filter) {
+    id
+    cprDoc
+    signedContractDoc
+    transcriptDoc
+    universityCertificate
+    tofelILETSCertificate
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteMasterAttachmentSubscriptionVariables,
+  APITypes.OnDeleteMasterAttachmentSubscription
+>;
+export const onCreateMasterscholarship = /* GraphQL */ `subscription OnCreateMasterscholarship(
+  $filter: ModelSubscriptionMasterscholarshipFilterInput
+) {
+  onCreateMasterscholarship(filter: $filter) {
+    id
+    status
+    applicationID
+    batch
+    isConfirmed
+    application {
+      id
+      gpa
+      verifiedGPA
+      status
+      program
+      dateTime
+      isEmailSent
+      nationalityCategory
+      universityID
+      studentCPR
+      batch
+      score
+      adminPoints
+      processed
+      isIncomeVerified
+      reason
+      income
+      incomeDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      masterApplicationAttachmentId
+      __typename
+    }
+    studentCPR
+    unsignedContractDoc
+    signedContractDoc
+    studentSignature
+    guardianSignature
+    bankName
+    IBAN
+    IBANLetterDoc
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateMasterscholarshipSubscriptionVariables,
+  APITypes.OnCreateMasterscholarshipSubscription
+>;
+export const onUpdateMasterscholarship = /* GraphQL */ `subscription OnUpdateMasterscholarship(
+  $filter: ModelSubscriptionMasterscholarshipFilterInput
+) {
+  onUpdateMasterscholarship(filter: $filter) {
+    id
+    status
+    applicationID
+    batch
+    isConfirmed
+    application {
+      id
+      gpa
+      verifiedGPA
+      status
+      program
+      dateTime
+      isEmailSent
+      nationalityCategory
+      universityID
+      studentCPR
+      batch
+      score
+      adminPoints
+      processed
+      isIncomeVerified
+      reason
+      income
+      incomeDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      masterApplicationAttachmentId
+      __typename
+    }
+    studentCPR
+    unsignedContractDoc
+    signedContractDoc
+    studentSignature
+    guardianSignature
+    bankName
+    IBAN
+    IBANLetterDoc
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateMasterscholarshipSubscriptionVariables,
+  APITypes.OnUpdateMasterscholarshipSubscription
+>;
+export const onDeleteMasterscholarship = /* GraphQL */ `subscription OnDeleteMasterscholarship(
+  $filter: ModelSubscriptionMasterscholarshipFilterInput
+) {
+  onDeleteMasterscholarship(filter: $filter) {
+    id
+    status
+    applicationID
+    batch
+    isConfirmed
+    application {
+      id
+      gpa
+      verifiedGPA
+      status
+      program
+      dateTime
+      isEmailSent
+      nationalityCategory
+      universityID
+      studentCPR
+      batch
+      score
+      adminPoints
+      processed
+      isIncomeVerified
+      reason
+      income
+      incomeDoc
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      masterApplicationAttachmentId
+      __typename
+    }
+    studentCPR
+    unsignedContractDoc
+    signedContractDoc
+    studentSignature
+    guardianSignature
+    bankName
+    IBAN
+    IBANLetterDoc
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteMasterscholarshipSubscriptionVariables,
+  APITypes.OnDeleteMasterscholarshipSubscription
 >;

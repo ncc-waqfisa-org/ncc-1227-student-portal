@@ -2,6 +2,7 @@ import "yup-phone";
 import React, { useState } from "react";
 
 import {
+  ApplicantType,
   CreateParentInfoMutationVariables,
   CreateStudentMutationVariables,
 } from "../../src/API";
@@ -49,6 +50,7 @@ export default function BachelorSignUpForm() {
         graduationDate: undefined,
         parentInfoID: undefined,
         _version: undefined,
+        m_applicantType: [ApplicantType.STUDENT],
       },
       condition: undefined,
     },
@@ -81,7 +83,8 @@ export default function BachelorSignUpForm() {
   const signUpMutation = useMutation({
     mutationFn: (values: any) => {
       return fetch(
-        `https://ciuxdqxmol.execute-api.us-east-1.amazonaws.com/default/sign-up`,
+        `https://6tviwvcyjf3tousfqqxyoftige0ueqev.lambda-url.us-east-1.on.aws`,
+        // `https://ciuxdqxmol.execute-api.us-east-1.amazonaws.com/default/sign-up`,
         {
           method: "POST",
           body: JSON.stringify(values),
@@ -164,6 +167,7 @@ export default function BachelorSignUpForm() {
           nationality: data.student.input.nationality,
           nationalityCategory: data.student.input.nationalityCategory,
           _version: data.student.input._version,
+          m_applicantType: data.student.input.m_applicantType,
         },
         condition: data.student.condition,
       },

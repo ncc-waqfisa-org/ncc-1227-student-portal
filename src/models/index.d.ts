@@ -52,6 +52,16 @@ export enum ScholarshipStatus {
   WITHDRAWN = "WITHDRAWN"
 }
 
+export enum ApplicantType {
+  STUDENT = "STUDENT",
+  MASTER = "MASTER"
+}
+
+export enum Income {
+  LESS_THAN_1500 = "LESS_THAN_1500",
+  MORE_THAN_1500 = "MORE_THAN_1500"
+}
+
 
 
 type EagerAttachment = {
@@ -330,6 +340,7 @@ type EagerAdminLog = {
   readonly updatedAt?: string | null;
   readonly applicationAdminLogsId?: string | null;
   readonly adminAdminLogsCpr?: string | null;
+  readonly masterApplicationAdminLogsId?: string | null;
 }
 
 type LazyAdminLog = {
@@ -348,6 +359,7 @@ type LazyAdminLog = {
   readonly updatedAt?: string | null;
   readonly applicationAdminLogsId?: string | null;
   readonly adminAdminLogsCpr?: string | null;
+  readonly masterApplicationAdminLogsId?: string | null;
 }
 
 export declare type AdminLog = LazyLoading extends LazyLoadingDisabled ? EagerAdminLog : LazyAdminLog
@@ -511,6 +523,24 @@ type EagerStudent = {
   readonly ParentInfo?: ParentInfo | null;
   readonly parentInfoID?: string | null;
   readonly StudentLogs?: (StudentLog | null)[] | null;
+  readonly m_MasterLogs?: (MasterLog | null)[] | null;
+  readonly m_firstName?: string | null;
+  readonly m_secondName?: string | null;
+  readonly m_lastName?: string | null;
+  readonly m_numberOfFamilyMembers?: number | null;
+  readonly m_graduationYear?: string | null;
+  readonly m_university?: BahrainUniversities | null;
+  readonly m_universityID?: string | null;
+  readonly m_oldProgram?: string | null;
+  readonly m_applicantType: ApplicantType[] | Array<keyof typeof ApplicantType>;
+  readonly m_isEmployeed?: boolean | null;
+  readonly m_placeOfEmployment?: string | null;
+  readonly m_income?: Income | keyof typeof Income | null;
+  readonly m_incomeDoc?: string | null;
+  readonly m_guardianCPR?: string | null;
+  readonly m_guardianFullName?: string | null;
+  readonly m_guardianCPRDoc?: string | null;
+  readonly m_masterApplications?: (MasterApplication | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -544,6 +574,24 @@ type LazyStudent = {
   readonly ParentInfo: AsyncItem<ParentInfo | undefined>;
   readonly parentInfoID?: string | null;
   readonly StudentLogs: AsyncCollection<StudentLog>;
+  readonly m_MasterLogs: AsyncCollection<MasterLog>;
+  readonly m_firstName?: string | null;
+  readonly m_secondName?: string | null;
+  readonly m_lastName?: string | null;
+  readonly m_numberOfFamilyMembers?: number | null;
+  readonly m_graduationYear?: string | null;
+  readonly m_university: AsyncItem<BahrainUniversities | undefined>;
+  readonly m_universityID?: string | null;
+  readonly m_oldProgram?: string | null;
+  readonly m_applicantType: ApplicantType[] | Array<keyof typeof ApplicantType>;
+  readonly m_isEmployeed?: boolean | null;
+  readonly m_placeOfEmployment?: string | null;
+  readonly m_income?: Income | keyof typeof Income | null;
+  readonly m_incomeDoc?: string | null;
+  readonly m_guardianCPR?: string | null;
+  readonly m_guardianFullName?: string | null;
+  readonly m_guardianCPRDoc?: string | null;
+  readonly m_masterApplications: AsyncCollection<MasterApplication>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -692,4 +740,360 @@ export declare type Statistics = LazyLoading extends LazyLoadingDisabled ? Eager
 
 export declare const Statistics: (new (init: ModelInit<Statistics>) => Statistics) & {
   copyOf(source: Statistics, mutator: (draft: MutableModel<Statistics>) => MutableModel<Statistics> | void): Statistics;
+}
+
+type EagerMasterBatch = {
+  readonly [__modelMeta__]: {
+    identifier: CustomIdentifier<MasterBatch, 'batch'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly batch: number;
+  readonly createApplicationStartDate?: string | null;
+  readonly createApplicationEndDate?: string | null;
+  readonly updateApplicationEndDate?: string | null;
+  readonly signUpStartDate?: string | null;
+  readonly signUpEndDate?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyMasterBatch = {
+  readonly [__modelMeta__]: {
+    identifier: CustomIdentifier<MasterBatch, 'batch'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly batch: number;
+  readonly createApplicationStartDate?: string | null;
+  readonly createApplicationEndDate?: string | null;
+  readonly updateApplicationEndDate?: string | null;
+  readonly signUpStartDate?: string | null;
+  readonly signUpEndDate?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type MasterBatch = LazyLoading extends LazyLoadingDisabled ? EagerMasterBatch : LazyMasterBatch
+
+export declare const MasterBatch: (new (init: ModelInit<MasterBatch>) => MasterBatch) & {
+  copyOf(source: MasterBatch, mutator: (draft: MutableModel<MasterBatch>) => MutableModel<MasterBatch> | void): MasterBatch;
+}
+
+type EagerMasterLog = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<MasterLog, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly applicationID: string;
+  readonly studentCPR: string;
+  readonly dateTime?: string | null;
+  readonly snapshot?: string | null;
+  readonly reason?: string | null;
+  readonly student?: Student | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly studentM_MasterLogsCpr?: string | null;
+  readonly masterApplicationMasterLogsId?: string | null;
+}
+
+type LazyMasterLog = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<MasterLog, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly applicationID: string;
+  readonly studentCPR: string;
+  readonly dateTime?: string | null;
+  readonly snapshot?: string | null;
+  readonly reason?: string | null;
+  readonly student: AsyncItem<Student | undefined>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly studentM_MasterLogsCpr?: string | null;
+  readonly masterApplicationMasterLogsId?: string | null;
+}
+
+export declare type MasterLog = LazyLoading extends LazyLoadingDisabled ? EagerMasterLog : LazyMasterLog
+
+export declare const MasterLog: (new (init: ModelInit<MasterLog>) => MasterLog) & {
+  copyOf(source: MasterLog, mutator: (draft: MutableModel<MasterLog>) => MutableModel<MasterLog> | void): MasterLog;
+}
+
+type EagerBahrainUniversities = {
+  readonly [__modelMeta__]: {
+    identifier: OptionallyManagedIdentifier<BahrainUniversities, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly universityName?: string | null;
+  readonly universityNameAr?: string | null;
+  readonly isDeactivated?: boolean | null;
+  readonly students?: (Student | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyBahrainUniversities = {
+  readonly [__modelMeta__]: {
+    identifier: OptionallyManagedIdentifier<BahrainUniversities, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly universityName?: string | null;
+  readonly universityNameAr?: string | null;
+  readonly isDeactivated?: boolean | null;
+  readonly students: AsyncCollection<Student>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type BahrainUniversities = LazyLoading extends LazyLoadingDisabled ? EagerBahrainUniversities : LazyBahrainUniversities
+
+export declare const BahrainUniversities: (new (init: ModelInit<BahrainUniversities>) => BahrainUniversities) & {
+  copyOf(source: BahrainUniversities, mutator: (draft: MutableModel<BahrainUniversities>) => MutableModel<BahrainUniversities> | void): BahrainUniversities;
+}
+
+type EagerMasterUniversities = {
+  readonly [__modelMeta__]: {
+    identifier: OptionallyManagedIdentifier<MasterUniversities, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly universityName: string;
+  readonly isDeactivated?: boolean | null;
+  readonly applications?: (MasterApplication | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyMasterUniversities = {
+  readonly [__modelMeta__]: {
+    identifier: OptionallyManagedIdentifier<MasterUniversities, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly universityName: string;
+  readonly isDeactivated?: boolean | null;
+  readonly applications: AsyncCollection<MasterApplication>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type MasterUniversities = LazyLoading extends LazyLoadingDisabled ? EagerMasterUniversities : LazyMasterUniversities
+
+export declare const MasterUniversities: (new (init: ModelInit<MasterUniversities>) => MasterUniversities) & {
+  copyOf(source: MasterUniversities, mutator: (draft: MutableModel<MasterUniversities>) => MutableModel<MasterUniversities> | void): MasterUniversities;
+}
+
+type EagerMasterApplication = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<MasterApplication, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly gpa?: number | null;
+  readonly verifiedGPA?: number | null;
+  readonly status?: Status | keyof typeof Status | null;
+  readonly adminLogs?: (AdminLog | null)[] | null;
+  readonly masterLogs?: (MasterLog | null)[] | null;
+  readonly attachment?: MasterAttachment | null;
+  readonly program?: string | null;
+  readonly dateTime: string;
+  readonly isEmailSent?: boolean | null;
+  readonly nationalityCategory?: Nationality | keyof typeof Nationality | null;
+  readonly universityID: string;
+  readonly university?: MasterUniversities | null;
+  readonly studentCPR: string;
+  readonly student?: Student | null;
+  readonly batch?: number | null;
+  readonly score?: number | null;
+  readonly adminPoints?: number | null;
+  readonly processed?: number | null;
+  readonly isIncomeVerified?: boolean | null;
+  readonly reason?: string | null;
+  readonly income?: Income | keyof typeof Income | null;
+  readonly incomeDoc?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly masterApplicationAttachmentId?: string | null;
+}
+
+type LazyMasterApplication = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<MasterApplication, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly gpa?: number | null;
+  readonly verifiedGPA?: number | null;
+  readonly status?: Status | keyof typeof Status | null;
+  readonly adminLogs: AsyncCollection<AdminLog>;
+  readonly masterLogs: AsyncCollection<MasterLog>;
+  readonly attachment: AsyncItem<MasterAttachment | undefined>;
+  readonly program?: string | null;
+  readonly dateTime: string;
+  readonly isEmailSent?: boolean | null;
+  readonly nationalityCategory?: Nationality | keyof typeof Nationality | null;
+  readonly universityID: string;
+  readonly university: AsyncItem<MasterUniversities | undefined>;
+  readonly studentCPR: string;
+  readonly student: AsyncItem<Student | undefined>;
+  readonly batch?: number | null;
+  readonly score?: number | null;
+  readonly adminPoints?: number | null;
+  readonly processed?: number | null;
+  readonly isIncomeVerified?: boolean | null;
+  readonly reason?: string | null;
+  readonly income?: Income | keyof typeof Income | null;
+  readonly incomeDoc?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly masterApplicationAttachmentId?: string | null;
+}
+
+export declare type MasterApplication = LazyLoading extends LazyLoadingDisabled ? EagerMasterApplication : LazyMasterApplication
+
+export declare const MasterApplication: (new (init: ModelInit<MasterApplication>) => MasterApplication) & {
+  copyOf(source: MasterApplication, mutator: (draft: MutableModel<MasterApplication>) => MutableModel<MasterApplication> | void): MasterApplication;
+}
+
+type EagerMasterStatistics = {
+  readonly [__modelMeta__]: {
+    identifier: OptionallyManagedIdentifier<MasterStatistics, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: number;
+  readonly batch: number;
+  readonly totalApplications?: number | null;
+  readonly totalApplicationsPerStatus?: string | null;
+  readonly scoreHistogram?: string | null;
+  readonly gpaHistogram?: string | null;
+  readonly totalApplicationsPerUniversity?: string | null;
+  readonly topUniversities?: string | null;
+  readonly topPrograms?: string | null;
+  readonly familyIncome?: string | null;
+  readonly schoolType?: string | null;
+  readonly students?: string | null;
+  readonly applications?: string | null;
+  readonly today?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyMasterStatistics = {
+  readonly [__modelMeta__]: {
+    identifier: OptionallyManagedIdentifier<MasterStatistics, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: number;
+  readonly batch: number;
+  readonly totalApplications?: number | null;
+  readonly totalApplicationsPerStatus?: string | null;
+  readonly scoreHistogram?: string | null;
+  readonly gpaHistogram?: string | null;
+  readonly totalApplicationsPerUniversity?: string | null;
+  readonly topUniversities?: string | null;
+  readonly topPrograms?: string | null;
+  readonly familyIncome?: string | null;
+  readonly schoolType?: string | null;
+  readonly students?: string | null;
+  readonly applications?: string | null;
+  readonly today?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type MasterStatistics = LazyLoading extends LazyLoadingDisabled ? EagerMasterStatistics : LazyMasterStatistics
+
+export declare const MasterStatistics: (new (init: ModelInit<MasterStatistics>) => MasterStatistics) & {
+  copyOf(source: MasterStatistics, mutator: (draft: MutableModel<MasterStatistics>) => MutableModel<MasterStatistics> | void): MasterStatistics;
+}
+
+type EagerMasterAttachment = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<MasterAttachment, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly cprDoc?: string | null;
+  readonly signedContractDoc?: string | null;
+  readonly transcriptDoc?: string | null;
+  readonly universityCertificate?: string | null;
+  readonly tofelILETSCertificate?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyMasterAttachment = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<MasterAttachment, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly cprDoc?: string | null;
+  readonly signedContractDoc?: string | null;
+  readonly transcriptDoc?: string | null;
+  readonly universityCertificate?: string | null;
+  readonly tofelILETSCertificate?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type MasterAttachment = LazyLoading extends LazyLoadingDisabled ? EagerMasterAttachment : LazyMasterAttachment
+
+export declare const MasterAttachment: (new (init: ModelInit<MasterAttachment>) => MasterAttachment) & {
+  copyOf(source: MasterAttachment, mutator: (draft: MutableModel<MasterAttachment>) => MutableModel<MasterAttachment> | void): MasterAttachment;
+}
+
+type EagerMasterscholarship = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Masterscholarship, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly status?: ScholarshipStatus | keyof typeof ScholarshipStatus | null;
+  readonly applicationID: string;
+  readonly batch?: number | null;
+  readonly isConfirmed?: boolean | null;
+  readonly application?: MasterApplication | null;
+  readonly studentCPR?: string | null;
+  readonly unsignedContractDoc?: string | null;
+  readonly signedContractDoc?: string | null;
+  readonly studentSignature?: string | null;
+  readonly guardianSignature?: string | null;
+  readonly bankName?: string | null;
+  readonly IBAN?: string | null;
+  readonly IBANLetterDoc?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyMasterscholarship = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Masterscholarship, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly status?: ScholarshipStatus | keyof typeof ScholarshipStatus | null;
+  readonly applicationID: string;
+  readonly batch?: number | null;
+  readonly isConfirmed?: boolean | null;
+  readonly application: AsyncItem<MasterApplication | undefined>;
+  readonly studentCPR?: string | null;
+  readonly unsignedContractDoc?: string | null;
+  readonly signedContractDoc?: string | null;
+  readonly studentSignature?: string | null;
+  readonly guardianSignature?: string | null;
+  readonly bankName?: string | null;
+  readonly IBAN?: string | null;
+  readonly IBANLetterDoc?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Masterscholarship = LazyLoading extends LazyLoadingDisabled ? EagerMasterscholarship : LazyMasterscholarship
+
+export declare const Masterscholarship: (new (init: ModelInit<Masterscholarship>) => Masterscholarship) & {
+  copyOf(source: Masterscholarship, mutator: (draft: MutableModel<Masterscholarship>) => MutableModel<Masterscholarship> | void): Masterscholarship;
 }

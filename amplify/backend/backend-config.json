@@ -44,12 +44,17 @@
     }
   },
   "function": {
-    "autoReject": {
+    "bulkAutoReject": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "bulkAutoReject": {
+    "deleteAdmin": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "dummyUpdate": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -70,12 +75,42 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "exportUniversityEmails": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "exportWebsiteStats": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "getApplications": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "getCprFromToken": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "getStatistics": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "revertAutoReject": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "sendSubmissionEmail": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "sendWarningEmail": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -130,22 +165,6 @@
         }
       ]
     },
-    "AMPLIFY_function_autoUpdateScore_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "autoUpdateScore"
-        }
-      ]
-    },
-    "AMPLIFY_function_autoUpdateScore_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "autoUpdateScore"
-        }
-      ]
-    },
     "AMPLIFY_function_bulkAutoReject_deploymentBucketName": {
       "usedBy": [
         {
@@ -159,6 +178,38 @@
         {
           "category": "function",
           "resourceName": "bulkAutoReject"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteAdmin_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteAdmin"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteAdmin_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteAdmin"
+        }
+      ]
+    },
+    "AMPLIFY_function_dummyUpdate_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "dummyUpdate"
+        }
+      ]
+    },
+    "AMPLIFY_function_dummyUpdate_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "dummyUpdate"
         }
       ]
     },
@@ -210,6 +261,38 @@
         }
       ]
     },
+    "AMPLIFY_function_exportUniversityEmails_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "exportUniversityEmails"
+        }
+      ]
+    },
+    "AMPLIFY_function_exportUniversityEmails_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "exportUniversityEmails"
+        }
+      ]
+    },
+    "AMPLIFY_function_exportWebsiteStats_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "exportWebsiteStats"
+        }
+      ]
+    },
+    "AMPLIFY_function_exportWebsiteStats_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "exportWebsiteStats"
+        }
+      ]
+    },
     "AMPLIFY_function_getApplications_deploymentBucketName": {
       "usedBy": [
         {
@@ -226,6 +309,22 @@
         }
       ]
     },
+    "AMPLIFY_function_getCprFromToken_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getCprFromToken"
+        }
+      ]
+    },
+    "AMPLIFY_function_getCprFromToken_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getCprFromToken"
+        }
+      ]
+    },
     "AMPLIFY_function_getStatistics_deploymentBucketName": {
       "usedBy": [
         {
@@ -239,6 +338,54 @@
         {
           "category": "function",
           "resourceName": "getStatistics"
+        }
+      ]
+    },
+    "AMPLIFY_function_revertAutoReject_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "revertAutoReject"
+        }
+      ]
+    },
+    "AMPLIFY_function_revertAutoReject_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "revertAutoReject"
+        }
+      ]
+    },
+    "AMPLIFY_function_sendSubmissionEmail_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "sendSubmissionEmail"
+        }
+      ]
+    },
+    "AMPLIFY_function_sendSubmissionEmail_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "sendSubmissionEmail"
+        }
+      ]
+    },
+    "AMPLIFY_function_sendWarningEmail_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "sendWarningEmail"
+        }
+      ]
+    },
+    "AMPLIFY_function_sendWarningEmail_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "sendWarningEmail"
         }
       ]
     },

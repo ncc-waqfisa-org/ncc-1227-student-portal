@@ -7,8 +7,12 @@ import {
   useState,
 } from "react";
 import { useAuth } from "../hooks/use-auth";
-import { Application, Batch, Status } from "../src/API";
-import { getCurrentBatch, getStudentApplications } from "../src/CustomAPI";
+import { Application, Batch, MasterBatch, Status } from "../src/API";
+import {
+  getCurrentBatch,
+  getCurrentMasterBatch,
+  getStudentApplications,
+} from "../src/CustomAPI";
 import { GraphQLError } from "graphql";
 import dayjs from "dayjs";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -20,7 +24,7 @@ interface IUseMastersContext {
   signUpEnabled: boolean;
   newApplicationsEnabled: boolean;
   editingApplicationsEnabled: boolean;
-  batch: Batch | undefined;
+  batch: MasterBatch | undefined;
   isBatchPending: boolean;
 
   applications: Application[];
@@ -72,27 +76,28 @@ function useProviderMasters() {
     defaultState.haveActiveApplication
   );
 
-  const { data: batch, isPending: isBatchPending } = useQuery<Batch | null>({
-    queryKey: ["currentBatch"],
-    queryFn: () =>
-      getCurrentBatch()
-        .then((value) => {
-          const currentBatch = value ? (value as Batch) : null;
+  const { data: batch, isPending: isBatchPending } =
+    useQuery<MasterBatch | null>({
+      queryKey: ["currentMasterBatch"],
+      queryFn: () =>
+        getCurrentMasterBatch()
+          .then((value) => {
+            const currentBatch = value ? (value as MasterBatch) : null;
 
-          return currentBatch;
-        })
-        .catch((error) => {
-          if (error.errors[0] instanceof GraphQLError) {
-            const graphQLError: GraphQLError = error.errors[0];
-            if (graphQLError.message === "Network Error") {
-              toast.error(graphQLError.message);
-              return null;
-              // throw new Error(graphQLError.message);
+            return currentBatch;
+          })
+          .catch((error) => {
+            if (error.errors[0] instanceof GraphQLError) {
+              const graphQLError: GraphQLError = error.errors[0];
+              if (graphQLError.message === "Network Error") {
+                toast.error(graphQLError.message);
+                return null;
+                // throw new Error(graphQLError.message);
+              }
             }
-          }
-          return null;
-        }),
-  });
+            return null;
+          }),
+    });
 
   /**
    * Determines if the application is in development mode.

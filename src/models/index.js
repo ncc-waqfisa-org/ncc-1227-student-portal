@@ -52,7 +52,17 @@ const ScholarshipStatus = {
   "WITHDRAWN": "WITHDRAWN"
 };
 
-const { Attachment, Application, ProgramChoice, Program, University, AdminLog, StudentLog, Admin, ParentInfo, Student, Batch, Scholarship, Statistics } = initSchema(schema);
+const ApplicantType = {
+  "STUDENT": "STUDENT",
+  "MASTER": "MASTER"
+};
+
+const Income = {
+  "LESS_THAN_1500": "LESS_THAN_1500",
+  "MORE_THAN_1500": "MORE_THAN_1500"
+};
+
+const { Attachment, Application, ProgramChoice, Program, University, AdminLog, StudentLog, Admin, ParentInfo, Student, Batch, Scholarship, Statistics, MasterBatch, MasterLog, BahrainUniversities, MasterUniversities, MasterApplication, MasterStatistics, MasterAttachment, Masterscholarship } = initSchema(schema);
 
 export {
   Attachment,
@@ -68,6 +78,14 @@ export {
   Batch,
   Scholarship,
   Statistics,
+  MasterBatch,
+  MasterLog,
+  BahrainUniversities,
+  MasterUniversities,
+  MasterApplication,
+  MasterStatistics,
+  MasterAttachment,
+  Masterscholarship,
   AdminRole,
   Status,
   Language,
@@ -75,5 +93,7 @@ export {
   SchoolType,
   Nationality,
   FamilyIncome,
-  ScholarshipStatus
+  ScholarshipStatus,
+  ApplicantType,
+  Income
 };

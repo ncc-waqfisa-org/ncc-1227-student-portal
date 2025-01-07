@@ -14,6 +14,7 @@ import { MastersProvider } from "../contexts/MastersContexts";
 import { NextPageWithLayout } from "./_app";
 import { cn } from "../src/lib/utils";
 import MasterInfoForm from "../components/account/masters/MasterInfoForm";
+import { ApplicantType } from "../src/API";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -42,7 +43,8 @@ const Page: NextPageWithLayout = () => {
   const [type, setType] = useState<"bachelor" | "masters">("bachelor");
 
   // TODO: add the correct data
-  const haveMaster = true; // student.applicantType.includes("masters")
+  const haveMaster =
+    student?.m_applicantType.includes(ApplicantType.MASTER) ?? false;
 
   useEffect(() => {
     if (haveMaster) {

@@ -12,6 +12,7 @@ import {
   CreateStudentLogMutationVariables,
   GetBatchQuery,
   GetBatchQueryVariables,
+  GetMasterBatchQuery,
   GetStudentQuery,
   GetStudentQueryVariables,
   Program,
@@ -95,6 +96,35 @@ export interface DownloadLinks {
 /*                               NEW CUSTOM API                               */
 /* -------------------------------------------------------------------------- */
 
+export async function getCurrentMasterBatch() {
+  let queryInput: GetBatchQueryVariables = {
+    batch: dayjs().year(),
+  };
+
+  const query = `
+  query GetCurrentMasterBatch {
+    getMasterBatch(batch: ${dayjs().year()}) {
+      _deleted
+      _lastChangedAt
+      _version
+      batch
+      createApplicationEndDate
+      createApplicationStartDate
+      createdAt
+      signUpEndDate
+      signUpStartDate
+      updateApplicationEndDate
+      updatedAt
+    }
+  }  
+  `;
+
+  let res = (await API.graphql(
+    graphqlOperation(query)
+  )) as GraphQLResult<GetMasterBatchQuery>;
+
+  return res.data?.getMasterBatch;
+}
 export async function getCurrentBatch() {
   let queryInput: GetBatchQueryVariables = {
     batch: dayjs().year(),
