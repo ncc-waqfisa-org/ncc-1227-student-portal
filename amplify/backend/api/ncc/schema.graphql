@@ -367,6 +367,7 @@ type MasterAttachment @model @auth(rules: [{ allow: public }]) {
   transcriptDoc: String
   universityCertificate: String
   tofelILETSCertificate: String
+  acceptanceLetterDoc: String
 }
 
 type Masterscholarship @model @auth(rules: [{ allow: public }]) {

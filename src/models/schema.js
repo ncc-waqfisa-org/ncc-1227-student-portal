@@ -3256,6 +3256,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "acceptanceLetterDoc": {
+                    "name": "acceptanceLetterDoc",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -3576,5 +3583,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "eefb771bd3bcb6acaa1e6489f21880bc"
+    "version": "471066c156077682b7d2f5c76d8cef04"
 };

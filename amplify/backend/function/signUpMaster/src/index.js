@@ -9,47 +9,24 @@ const cognito = new AWS.CognitoIdentityServiceProvider();
 const uuid = require("uuid");
 
 // Make sure to replace these values with your actual IDs/Table names
-const { USER_POOL_ID, CLIENT_ID, STUDENT_TABLE } = process.env;
-
+const {
+  UserPoolId: USER_POOL_ID,
+  ClientId: CLIENT_ID,
+  StudentTable: STUDENT_TABLE,
+} = {
+  UserPoolId: "us-east-1_79xE8d6FS",
+  ClientId: "55hv3u8tffa9qml7krg9n0cfuq",
+  StudentTable: "Student-q4lah3ddkjdd3dwtif26jdkx6e-masterdev",
+};
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = async (event) => {
-  console.log("Received event:", JSON.stringify(event, null, 2));
+  console.log(`Event Boday Recived ${event.body}`);
 
   try {
     // Parse the request body. We expect a single JSON object with all fields at the top-level.
     const requestBody = JSON.parse(event.body);
-
-    /**
-     * Example shape of requestBody (all fields at top level):
-     * {
-     *   cpr: string,
-     *   password: string,
-     *   cpr_doc: string,
-     *   first_name: string,
-     *   second_name: string,
-     *   last_name: string,
-     *   address: string,
-     *   email: string | null,
-     *   phone: string | null,
-     *   gender: string | undefined,
-     *   place_of_birth?: string | null,
-     *   nationality: string | undefined,
-     *   number_of_family_member: number,
-     *   graduation_year: string,
-     *   universityID: string | undefined,
-     *   old_program: string,
-     *   isEmployed: boolean,
-     *   place_of_employment: string | null,
-     *   income: string | undefined,
-     *   income_doc: string,
-     *   guardian_cpr: string,
-     *   guardian_full_name: string,
-     *   guardian_cpr_doc: string,
-     *   ...
-     * }
-     */
 
     /*******************************************************
      * STEP 1: Basic validations: Ensure required fields exist
@@ -57,14 +34,12 @@ exports.handler = async (event) => {
     if (!requestBody?.cpr) {
       return {
         statusCode: 400,
-        headers: getCorsHeaders(),
         body: JSON.stringify({ message: "CPR is required" }),
       };
     }
     if (!requestBody?.password) {
       return {
         statusCode: 400,
-        headers: getCorsHeaders(),
         body: JSON.stringify({ message: "Password is required" }),
       };
     }
@@ -138,7 +113,6 @@ exports.handler = async (event) => {
     if (missingFields.length > 0) {
       return {
         statusCode: 400,
-        headers: getCorsHeaders(),
         body: JSON.stringify({
           message: `Missing required field(s): ${missingFields.join(", ")}`,
         }),
@@ -162,7 +136,6 @@ exports.handler = async (event) => {
       if (emailVerifiedAttr?.Value === "true") {
         return {
           statusCode: 400,
-          headers: getCorsHeaders(),
           body: JSON.stringify({ message: "User already exists" }),
         };
       } else {
@@ -193,7 +166,6 @@ exports.handler = async (event) => {
      *******************************************************/
     return {
       statusCode: 201,
-      headers: getCorsHeaders(),
       body: JSON.stringify({ message: "Master student created successfully" }),
     };
   } catch (error) {
@@ -211,7 +183,6 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 500,
-      headers: getCorsHeaders(),
       body: JSON.stringify({ error: "Internal server error" }),
     };
   }
@@ -220,19 +191,6 @@ exports.handler = async (event) => {
 /*******************************************************
  *                     HELPERS                         *
  *******************************************************/
-
-/**
- * Get common CORS headers for returning responses
- */
-function getCorsHeaders() {
-  return {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Headers": "*",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-  };
-}
-
 /**
  * Checks Cognito for a user. Returns user if found, false if not found/404.
  */

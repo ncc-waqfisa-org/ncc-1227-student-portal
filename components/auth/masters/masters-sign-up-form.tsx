@@ -209,7 +209,17 @@ export default function MastersSignUpForm() {
     },
     async onError(error) {
       setIsLoading(false);
-      throw new Error(error.message);
+
+      console.log(
+        "🚀 ~ masters-sign-up-form -> signUpMutation -> onError ~ error:",
+        error
+      );
+
+      toast.error(
+        router.locale === "ar"
+          ? "حدث خطأ ما: فشل في التسجيل"
+          : "Something went wrong: Failed to sign up"
+      );
     },
     onSettled() {
       setIsLoading(false);

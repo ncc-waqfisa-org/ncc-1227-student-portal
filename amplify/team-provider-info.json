@@ -102,7 +102,7 @@
         },
         "signUpMaster": {
           "deploymentBucketName": "amplify-ncc-masterdev-2e2e0-deployment",
-          "s3Key": "amplify-builds/signUpMaster-54506b41502f5a493769-build.zip"
+          "s3Key": "amplify-builds/signUpMaster-436d45494a2b39613849-build.zip"
         }
       },
       "storage": {

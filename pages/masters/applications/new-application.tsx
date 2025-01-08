@@ -27,7 +27,6 @@ import {
 } from "../../../contexts/MastersContexts";
 import { NoAvailableBatch } from "../../../components/NoAvailableBatch";
 // import { MastersApplicationForm } from "../../../components/applications/MastersApplicationForm";
-// import { MastersApplicationForm } from "../../../components/applications/MastersApplicationForm";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { locale } = ctx;

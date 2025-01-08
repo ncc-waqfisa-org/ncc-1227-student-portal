@@ -2142,6 +2142,7 @@ export const getMasterApplication = /* GraphQL */ `query GetMasterApplication($i
       transcriptDoc
       universityCertificate
       tofelILETSCertificate
+      acceptanceLetterDoc
       createdAt
       updatedAt
       _version
@@ -2453,6 +2454,7 @@ export const getMasterAttachment = /* GraphQL */ `query GetMasterAttachment($id:
     transcriptDoc
     universityCertificate
     tofelILETSCertificate
+    acceptanceLetterDoc
     createdAt
     updatedAt
     _version
@@ -2478,6 +2480,7 @@ export const listMasterAttachments = /* GraphQL */ `query ListMasterAttachments(
       transcriptDoc
       universityCertificate
       tofelILETSCertificate
+      acceptanceLetterDoc
       createdAt
       updatedAt
       _version
@@ -2513,6 +2516,7 @@ export const syncMasterAttachments = /* GraphQL */ `query SyncMasterAttachments(
       transcriptDoc
       universityCertificate
       tofelILETSCertificate
+      acceptanceLetterDoc
       createdAt
       updatedAt
       _version

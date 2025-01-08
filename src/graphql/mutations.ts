@@ -2632,6 +2632,7 @@ export const createMasterApplication = /* GraphQL */ `mutation CreateMasterAppli
       transcriptDoc
       universityCertificate
       tofelILETSCertificate
+      acceptanceLetterDoc
       createdAt
       updatedAt
       _version
@@ -2749,6 +2750,7 @@ export const updateMasterApplication = /* GraphQL */ `mutation UpdateMasterAppli
       transcriptDoc
       universityCertificate
       tofelILETSCertificate
+      acceptanceLetterDoc
       createdAt
       updatedAt
       _version
@@ -2866,6 +2868,7 @@ export const deleteMasterApplication = /* GraphQL */ `mutation DeleteMasterAppli
       transcriptDoc
       universityCertificate
       tofelILETSCertificate
+      acceptanceLetterDoc
       createdAt
       updatedAt
       _version
@@ -3061,6 +3064,7 @@ export const createMasterAttachment = /* GraphQL */ `mutation CreateMasterAttach
     transcriptDoc
     universityCertificate
     tofelILETSCertificate
+    acceptanceLetterDoc
     createdAt
     updatedAt
     _version
@@ -3084,6 +3088,7 @@ export const updateMasterAttachment = /* GraphQL */ `mutation UpdateMasterAttach
     transcriptDoc
     universityCertificate
     tofelILETSCertificate
+    acceptanceLetterDoc
     createdAt
     updatedAt
     _version
@@ -3107,6 +3112,7 @@ export const deleteMasterAttachment = /* GraphQL */ `mutation DeleteMasterAttach
     transcriptDoc
     universityCertificate
     tofelILETSCertificate
+    acceptanceLetterDoc
     createdAt
     updatedAt
     _version

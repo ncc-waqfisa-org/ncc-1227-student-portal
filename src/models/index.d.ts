@@ -1031,6 +1031,7 @@ type EagerMasterAttachment = {
   readonly transcriptDoc?: string | null;
   readonly universityCertificate?: string | null;
   readonly tofelILETSCertificate?: string | null;
+  readonly acceptanceLetterDoc?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -1046,6 +1047,7 @@ type LazyMasterAttachment = {
   readonly transcriptDoc?: string | null;
   readonly universityCertificate?: string | null;
   readonly tofelILETSCertificate?: string | null;
+  readonly acceptanceLetterDoc?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

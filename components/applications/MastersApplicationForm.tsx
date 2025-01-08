@@ -12,6 +12,7 @@
 //   Student,
 //   UpdateMasterApplicationMutationVariables,
 //   UpdateMasterAttachmentMutationVariables,
+//   Major,
 // } from "../../src/API";
 // import { Status } from "../../src/models";
 // import { toast } from "react-hot-toast";
@@ -72,17 +73,38 @@
 //   income?: Income | null, //* PreFilled
 //   incomeDoc?: string | null, //* PreFilled
 // };
+
+// export type CreateMasterAttachmentInput = {
+
+//   cprDoc?: string | null, //* PreFilled
+//   signedContractDoc?: string | null,  //! Not now
+
+//   transcriptDoc?: string | null,
+//   universityCertificate?: string | null,
+//   tofelILETSCertificate?: string | null,
+
+// };
 //  *
 //  */
 
-// // ! START FROM HERE
 // interface FormValues {
+//   //   gpa: number | undefined;
+//   //   primaryProgramID: string | undefined;
+//   //   schoolCertificate: File | undefined;
+//   //   transcriptDoc: File | undefined;
+//   //   primaryAcceptanceDoc: File | undefined;
+//   //   reason: string | undefined;
 //   gpa: number | undefined;
-//   primaryProgramID: string | undefined;
-//   schoolCertificate: File | undefined;
-//   transcriptDoc: File | undefined;
-//   primaryAcceptanceDoc: File | undefined;
+//   universityID: string;
+//   major: Major | undefined;
+//   program: string | undefined;
 //   reason: string | undefined;
+
+//   acceptanceDoc?: File | undefined;
+//   transcriptDoc?: File | undefined;
+//   universityCertificate?: File | undefined;
+//   tofelILETSCertificate?: File | undefined;
+
 //   reasonForUpdate?: string | undefined;
 // }
 
@@ -109,31 +131,38 @@
 //     File | undefined
 //   >(undefined);
 
-//   const [univirsityCertificate, setUnivirsityCertificate] = useState<
+//   const [universityCertificate, setUniversityCertificate] = useState<
 //     File | undefined
 //   >(undefined);
+
 //   const [transcriptDoc, setTranscriptDoc] = useState<File | undefined>(
 //     undefined
 //   );
+
 //   // IELTS / TOEFL
-//   const [ieltsDoc, setIeltsDoc] = useState<File | undefined>(undefined);
+//   const [tofelILETSCertificate, setTofelILETSCertificate] = useState<
+//     File | undefined
+//   >(undefined);
 
-//   const oldPrimaryProgram = props.application?.programs?.items.sort(
-//     (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
-//   )[0];
+//   const oldUniversity = props.application?.university;
 
-//   const [primaryProgram, setPrimaryProgram] = useState<Program | undefined>(
-//     oldPrimaryProgram?.program ?? undefined
+//   const [university, setUniversity] = useState<MasterUniversities | undefined>(
+//     oldUniversity ?? undefined
 //   );
 
 //   const [withdrawing, setWithdrawing] = useState(false);
 //   const initialValues: FormValues = {
 //     gpa: props.application?.gpa ?? undefined,
 //     reason: props.application?.reason ?? undefined,
-//     primaryProgramID: oldPrimaryProgram?.program?.id ?? undefined,
-//     schoolCertificate: undefined,
+//     universityID: oldUniversity?.id ?? "",
+//     major: props.application?.major ?? undefined,
+//     program: props.application?.program ?? undefined,
+
+//     universityCertificate: undefined,
 //     transcriptDoc: undefined,
-//     primaryAcceptanceDoc: undefined,
+//     tofelILETSCertificate: undefined,
+//     acceptanceDoc: undefined,
+
 //     reasonForUpdate: undefined,
 //   };
 
@@ -351,14 +380,14 @@
 //       props.application
 //         ? props.application.attachment?.transcriptDoc
 //         : undefined,
-//       oldPrimaryProgram?.acceptanceLetterDoc ?? undefined,
+//       oldUniversity?.acceptanceLetterDoc ?? undefined,
 //       // oldSecondaryProgram?.acceptanceLetterDoc ?? undefined,
 //     ];
 
 //     let storageKeys = await Promise.all([
-//       univirsityCertificate &&
+//       universityCertificate &&
 //         uploadFile(
-//           univirsityCertificate,
+//           universityCertificate,
 //           DocType.SCHOOL_CERTIFICATE,
 //           `${student?.getStudent?.cpr}`
 //         ),
@@ -405,9 +434,7 @@
 //         id: values.primaryProgramID,
 //         name: `${selectedPrimaryProgram?.name}-${selectedPrimaryProgram?.university?.name}`,
 //         acceptanceLetterDoc:
-//           storageKeys?.[2] ??
-//           oldPrimaryProgram?.acceptanceLetterDoc ??
-//           undefined,
+//           storageKeys?.[2] ?? oldUniversity?.acceptanceLetterDoc ?? undefined,
 //       },
 //       attachments: {
 //         schoolCertificate: storageKeys?.[0] ?? undefined,
@@ -421,10 +448,10 @@
 //             gpa: props.application.gpa ?? undefined,
 //             reason: props.application.reason ?? undefined,
 //             primaryProgram: {
-//               id: oldPrimaryProgram?.program?.id ?? undefined,
-//               name: `${oldPrimaryProgram?.program?.name}-${oldPrimaryProgram?.program?.university?.name}`,
+//               id: oldUniversity?.program?.id ?? undefined,
+//               name: `${oldUniversity?.program?.name}-${oldUniversity?.program?.university?.name}`,
 //               acceptanceLetterDoc:
-//                 oldPrimaryProgram?.acceptanceLetterDoc ?? undefined,
+//                 oldUniversity?.acceptanceLetterDoc ?? undefined,
 //             },
 //             attachments: {
 //               schoolCertificate:
@@ -585,8 +612,8 @@
 //           programApplicationsId: values.primaryProgramID ?? "",
 //           acceptanceLetterDoc:
 //             storageKeys?.[2] ??
-//             (primaryProgram?.id === oldPrimaryProgram?.program?.id
-//               ? oldPrimaryProgram?.acceptanceLetterDoc
+//             (university?.id === oldUniversity?.program?.id
+//               ? oldUniversity?.acceptanceLetterDoc
 //               : null) ??
 //             null,
 //         },
@@ -817,7 +844,7 @@
 //                         "select-error"
 //                       }`}
 //                       onChange={(event: any) => {
-//                         setPrimaryProgram(
+//                         setUniversity(
 //                           props.programs?.find(
 //                             (p) => p.id === event.target.value
 //                           )
@@ -841,7 +868,7 @@
 //                         ?.filter(
 //                           (p) =>
 //                             p.isDeactivated !== true ||
-//                             p.id === oldPrimaryProgram?.program?.id
+//                             p.id === oldUniversity?.program?.id
 //                         )
 //                         ?.map((program) => (
 //                           <option
@@ -862,7 +889,7 @@
 //                         ))}
 //                     </Field>
 //                   </div>
-//                   {primaryProgram?.university?.isException === 1 && (
+//                   {university?.university?.isException === 1 && (
 //                     <div className="flex flex-col items-center justify-end h-full">
 //                       <p className="w-full px-4 py-3 text-center border rounded-md border-secondary">
 //                         {/* Acceptance letter not required */}
@@ -870,16 +897,15 @@
 //                       </p>
 //                     </div>
 //                   )}
-//                   {primaryProgram?.university?.isException !== 1 && (
+//                   {university?.university?.isException !== 1 && (
 //                     <div className="flex flex-col justify-start w-full">
 //                       <label className="label">
 //                         {t("acceptanceLetter")}{" "}
 //                         {props.application && (
 //                           <GetStorageLinkComponent
 //                             storageKey={
-//                               primaryProgram?.id ===
-//                               oldPrimaryProgram?.program?.id
-//                                 ? oldPrimaryProgram?.acceptanceLetterDoc
+//                               university?.id === oldUniversity?.program?.id
+//                                 ? oldUniversity?.acceptanceLetterDoc
 //                                 : undefined
 //                             }
 //                           ></GetStorageLinkComponent>
@@ -921,18 +947,18 @@
 //                     </div>
 //                   )}
 //                 </div>
-//                 {primaryProgram?.minimumGPA && (
+//                 {university?.minimumGPA && (
 //                   <div
 //                     className={cn(
 //                       "p-3 mt-2 border border-gray-300 rounded-md",
-//                       primaryProgram.minimumGPA > (values.gpa ?? 0) &&
+//                       university.minimumGPA > (values.gpa ?? 0) &&
 //                         "border-error"
 //                     )}
 //                   >
 //                     <div
 //                       className={cn(
 //                         "stat-title",
-//                         primaryProgram.minimumGPA > (values.gpa ?? 0) &&
+//                         university.minimumGPA > (values.gpa ?? 0) &&
 //                           "text-error"
 //                       )}
 //                     >
@@ -941,22 +967,21 @@
 //                     <label
 //                       className={cn(
 //                         "whitespace-pre-wrap stat-desc",
-//                         primaryProgram.minimumGPA > (values.gpa ?? 0) &&
+//                         university.minimumGPA > (values.gpa ?? 0) &&
 //                           "text-error"
 //                       )}
 //                     >
-//                       {primaryProgram.minimumGPA}
+//                       {university.minimumGPA}
 //                     </label>
 //                   </div>
 //                 )}
-//                 {(primaryProgram?.requirements ||
-//                   primaryProgram?.requirementsAr) && (
+//                 {(university?.requirements || university?.requirementsAr) && (
 //                   <div className="p-3 mt-2 border border-gray-300 rounded-md">
 //                     <div className="stat-title">{t("requirements")}</div>
 //                     <label className="whitespace-pre-wrap stat-desc">
 //                       {locale == "ar"
-//                         ? primaryProgram?.requirementsAr
-//                         : primaryProgram?.requirements}
+//                         ? university?.requirementsAr
+//                         : university?.requirements}
 //                     </label>
 //                   </div>
 //                 )}
@@ -992,7 +1017,7 @@
 
 //                   let isValid = checkIfFilesAreTooBig(file);
 //                   if (isValid) {
-//                     setUnivirsityCertificate(file);
+//                     setUniversityCertificate(file);
 //                     handleChange(event);
 //                   } else {
 //                     setFieldError("schoolCertificate", "File is too large");

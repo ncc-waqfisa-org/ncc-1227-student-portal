@@ -16,6 +16,7 @@ import { cn } from "../src/lib/utils";
 import MasterInfoForm from "../components/account/masters/MasterInfoForm";
 import { ApplicantType, BahrainUniversities } from "../src/API";
 import { listAllBahrainUniversities } from "../src/CustomAPI";
+import { BMTabs } from "../components/BMTabs";
 
 export const getServerSideProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -50,10 +51,11 @@ const Page: NextPageWithLayout<Props> = ({ universities }) => {
   const [type, setType] = useState<"bachelor" | "masters">("bachelor");
 
   const haveMaster =
-    !student?.m_applicantType.includes(ApplicantType.MASTER) ?? false;
+    student?.m_applicantType.includes(ApplicantType.MASTER) ?? false;
+  const haveBachelor =
+    student?.m_applicantType.includes(ApplicantType.STUDENT) ?? false;
 
   useEffect(() => {
-    console.log(haveMaster);
     if (haveMaster) {
       setType("masters");
     }
@@ -64,28 +66,9 @@ const Page: NextPageWithLayout<Props> = ({ universities }) => {
   return (
     <PageComponent title="Account" authRequired>
       <div className="flex flex-col gap-4 py-8 ">
-        {haveMaster && (
-          <div
-            role="tablist"
-            className={cn("w-full max-w-lg mx-auto tabs tabs-boxed")}
-          >
-            <button
-              type="button"
-              onClick={() => setType("bachelor")}
-              role="tab"
-              className={cn("tab", type === "bachelor" && "tab-active")}
-            >
-              {commonT("bachelor")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setType("masters")}
-              role="tab"
-              className={cn("tab", type === "masters" && "tab-active")}
-            >
-              {commonT("masters")}
-            </button>
-          </div>
+        {/* Only showing the picker if the applicant have both master and bachelor */}
+        {haveMaster && haveBachelor && (
+          <BMTabs onChange={setType} type={type} />
         )}
 
         {type === "bachelor" && (

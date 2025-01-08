@@ -16,6 +16,7 @@ export const SignInForm: React.FC = () => {
   const { t: tErrors } = useTranslation("errors");
   const router = useRouter();
   const { type } = router.query;
+  console.log(type);
 
   const initialValues: ISignInForm = {
     cpr: "",
@@ -90,7 +91,7 @@ export const SignInForm: React.FC = () => {
         dir="ltr"
         className="link link-secondary"
         href={
-          type === "master"
+          type === "masters"
             ? "/masters/signup"
             : type === "bachelor"
             ? "/bachelor/signup"

@@ -27,6 +27,7 @@ export default function MasterAttachmentCreateForm(props) {
     transcriptDoc: "",
     universityCertificate: "",
     tofelILETSCertificate: "",
+    acceptanceLetterDoc: "",
   };
   const [cprDoc, setCprDoc] = React.useState(initialValues.cprDoc);
   const [signedContractDoc, setSignedContractDoc] = React.useState(
@@ -41,6 +42,9 @@ export default function MasterAttachmentCreateForm(props) {
   const [tofelILETSCertificate, setTofelILETSCertificate] = React.useState(
     initialValues.tofelILETSCertificate
   );
+  const [acceptanceLetterDoc, setAcceptanceLetterDoc] = React.useState(
+    initialValues.acceptanceLetterDoc
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setCprDoc(initialValues.cprDoc);
@@ -48,6 +52,7 @@ export default function MasterAttachmentCreateForm(props) {
     setTranscriptDoc(initialValues.transcriptDoc);
     setUniversityCertificate(initialValues.universityCertificate);
     setTofelILETSCertificate(initialValues.tofelILETSCertificate);
+    setAcceptanceLetterDoc(initialValues.acceptanceLetterDoc);
     setErrors({});
   };
   const validations = {
@@ -56,6 +61,7 @@ export default function MasterAttachmentCreateForm(props) {
     transcriptDoc: [],
     universityCertificate: [],
     tofelILETSCertificate: [],
+    acceptanceLetterDoc: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -88,6 +94,7 @@ export default function MasterAttachmentCreateForm(props) {
           transcriptDoc,
           universityCertificate,
           tofelILETSCertificate,
+          acceptanceLetterDoc,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -147,6 +154,7 @@ export default function MasterAttachmentCreateForm(props) {
               transcriptDoc,
               universityCertificate,
               tofelILETSCertificate,
+              acceptanceLetterDoc,
             };
             const result = onChange(modelFields);
             value = result?.cprDoc ?? value;
@@ -175,6 +183,7 @@ export default function MasterAttachmentCreateForm(props) {
               transcriptDoc,
               universityCertificate,
               tofelILETSCertificate,
+              acceptanceLetterDoc,
             };
             const result = onChange(modelFields);
             value = result?.signedContractDoc ?? value;
@@ -205,6 +214,7 @@ export default function MasterAttachmentCreateForm(props) {
               transcriptDoc: value,
               universityCertificate,
               tofelILETSCertificate,
+              acceptanceLetterDoc,
             };
             const result = onChange(modelFields);
             value = result?.transcriptDoc ?? value;
@@ -233,6 +243,7 @@ export default function MasterAttachmentCreateForm(props) {
               transcriptDoc,
               universityCertificate: value,
               tofelILETSCertificate,
+              acceptanceLetterDoc,
             };
             const result = onChange(modelFields);
             value = result?.universityCertificate ?? value;
@@ -263,6 +274,7 @@ export default function MasterAttachmentCreateForm(props) {
               transcriptDoc,
               universityCertificate,
               tofelILETSCertificate: value,
+              acceptanceLetterDoc,
             };
             const result = onChange(modelFields);
             value = result?.tofelILETSCertificate ?? value;
@@ -278,6 +290,37 @@ export default function MasterAttachmentCreateForm(props) {
         errorMessage={errors.tofelILETSCertificate?.errorMessage}
         hasError={errors.tofelILETSCertificate?.hasError}
         {...getOverrideProps(overrides, "tofelILETSCertificate")}
+      ></TextField>
+      <TextField
+        label="Acceptance letter doc"
+        isRequired={false}
+        isReadOnly={false}
+        value={acceptanceLetterDoc}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              cprDoc,
+              signedContractDoc,
+              transcriptDoc,
+              universityCertificate,
+              tofelILETSCertificate,
+              acceptanceLetterDoc: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.acceptanceLetterDoc ?? value;
+          }
+          if (errors.acceptanceLetterDoc?.hasError) {
+            runValidationTasks("acceptanceLetterDoc", value);
+          }
+          setAcceptanceLetterDoc(value);
+        }}
+        onBlur={() =>
+          runValidationTasks("acceptanceLetterDoc", acceptanceLetterDoc)
+        }
+        errorMessage={errors.acceptanceLetterDoc?.errorMessage}
+        hasError={errors.acceptanceLetterDoc?.hasError}
+        {...getOverrideProps(overrides, "acceptanceLetterDoc")}
       ></TextField>
       <Flex
         justifyContent="space-between"

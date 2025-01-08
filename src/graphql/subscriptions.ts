@@ -2544,6 +2544,7 @@ export const onCreateMasterApplication = /* GraphQL */ `subscription OnCreateMas
       transcriptDoc
       universityCertificate
       tofelILETSCertificate
+      acceptanceLetterDoc
       createdAt
       updatedAt
       _version
@@ -2660,6 +2661,7 @@ export const onUpdateMasterApplication = /* GraphQL */ `subscription OnUpdateMas
       transcriptDoc
       universityCertificate
       tofelILETSCertificate
+      acceptanceLetterDoc
       createdAt
       updatedAt
       _version
@@ -2776,6 +2778,7 @@ export const onDeleteMasterApplication = /* GraphQL */ `subscription OnDeleteMas
       transcriptDoc
       universityCertificate
       tofelILETSCertificate
+      acceptanceLetterDoc
       createdAt
       updatedAt
       _version
@@ -2967,6 +2970,7 @@ export const onCreateMasterAttachment = /* GraphQL */ `subscription OnCreateMast
     transcriptDoc
     universityCertificate
     tofelILETSCertificate
+    acceptanceLetterDoc
     createdAt
     updatedAt
     _version
@@ -2989,6 +2993,7 @@ export const onUpdateMasterAttachment = /* GraphQL */ `subscription OnUpdateMast
     transcriptDoc
     universityCertificate
     tofelILETSCertificate
+    acceptanceLetterDoc
     createdAt
     updatedAt
     _version
@@ -3011,6 +3016,7 @@ export const onDeleteMasterAttachment = /* GraphQL */ `subscription OnDeleteMast
     transcriptDoc
     universityCertificate
     tofelILETSCertificate
+    acceptanceLetterDoc
     createdAt
     updatedAt
     _version
