@@ -2450,6 +2450,7 @@ export const onCreateMasterUniversities = /* GraphQL */ `subscription OnCreateMa
   onCreateMasterUniversities(filter: $filter) {
     id
     universityName
+    universityNameAr
     isDeactivated
     applications {
       nextToken
@@ -2474,6 +2475,7 @@ export const onUpdateMasterUniversities = /* GraphQL */ `subscription OnUpdateMa
   onUpdateMasterUniversities(filter: $filter) {
     id
     universityName
+    universityNameAr
     isDeactivated
     applications {
       nextToken
@@ -2498,6 +2500,7 @@ export const onDeleteMasterUniversities = /* GraphQL */ `subscription OnDeleteMa
   onDeleteMasterUniversities(filter: $filter) {
     id
     universityName
+    universityNameAr
     isDeactivated
     applications {
       nextToken
@@ -2556,6 +2559,7 @@ export const onCreateMasterApplication = /* GraphQL */ `subscription OnCreateMas
     university {
       id
       universityName
+      universityNameAr
       isDeactivated
       createdAt
       updatedAt
@@ -2614,6 +2618,7 @@ export const onCreateMasterApplication = /* GraphQL */ `subscription OnCreateMas
     adminPoints
     processed
     isIncomeVerified
+    major
     reason
     income
     incomeDoc
@@ -2670,6 +2675,7 @@ export const onUpdateMasterApplication = /* GraphQL */ `subscription OnUpdateMas
     university {
       id
       universityName
+      universityNameAr
       isDeactivated
       createdAt
       updatedAt
@@ -2728,6 +2734,7 @@ export const onUpdateMasterApplication = /* GraphQL */ `subscription OnUpdateMas
     adminPoints
     processed
     isIncomeVerified
+    major
     reason
     income
     incomeDoc
@@ -2784,6 +2791,7 @@ export const onDeleteMasterApplication = /* GraphQL */ `subscription OnDeleteMas
     university {
       id
       universityName
+      universityNameAr
       isDeactivated
       createdAt
       updatedAt
@@ -2842,6 +2850,7 @@ export const onDeleteMasterApplication = /* GraphQL */ `subscription OnDeleteMas
     adminPoints
     processed
     isIncomeVerified
+    major
     reason
     income
     incomeDoc
@@ -3039,6 +3048,7 @@ export const onCreateMasterscholarship = /* GraphQL */ `subscription OnCreateMas
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc
@@ -3095,6 +3105,7 @@ export const onUpdateMasterscholarship = /* GraphQL */ `subscription OnUpdateMas
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc
@@ -3151,6 +3162,7 @@ export const onDeleteMasterscholarship = /* GraphQL */ `subscription OnDeleteMas
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc

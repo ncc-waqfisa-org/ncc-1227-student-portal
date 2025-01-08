@@ -306,6 +306,7 @@ type BahrainUniversities @model @auth(rules: [{ allow: public }]) {
 type MasterUniversities @model @auth(rules: [{ allow: public }]) {
   id: ID! @primaryKey
   universityName: String!
+  universityNameAr: String!
   isDeactivated: Boolean
   applications: [MasterApplication] @hasMany(fields: ["id"])
 }
@@ -334,6 +335,7 @@ type MasterApplication @model @auth(rules: [{ allow: public }]) {
   adminPoints: Int
   processed: Int @index(name: "byMasterProcessed", sortKeyFields: ["batch"])
   isIncomeVerified: Boolean
+  major: Major
   reason: String
   income: Income
   incomeDoc: String
@@ -393,4 +395,10 @@ enum ApplicantType {
 enum Income {
   LESS_THAN_1500
   MORE_THAN_1500
+}
+
+enum Major {
+  SCIENCE
+  TECHNOLOGY
+  ENGINEERING
 }

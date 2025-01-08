@@ -8,14 +8,23 @@ const AWS = require("aws-sdk");
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const cognito = new AWS.CognitoIdentityServiceProvider();
 const uuid = require("uuid");
-const USER_POOL_ID = process.env.UserPoolId;
-const CLIENT_ID = process.env.ClientId;
-const STUDENT_TABLE = process.env.StudentTable;
-const PARENT_TABLE = process.env.ParentTable;
+const {
+  UserPoolId: USER_POOL_ID,
+  ClientId: CLIENT_ID,
+  StudentTable: STUDENT_TABLE,
+  ParentTable: PARENT_TABLE,
+} = {
+  UserPoolId: "us-east-1_79xE8d6FS",
+  ClientId: "55hv3u8tffa9qml7krg9n0cfuq",
+  StudentTable: "Student-q4lah3ddkjdd3dwtif26jdkx6e-masterdev",
+  ParentTable: "ParentInfo-q4lah3ddkjdd3dwtif26jdkx6e-masterdev",
+};
+
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = async (event) => {
+  console.log(`This is event from sign up function ${event}`);
   try {
     const requestBody = JSON.parse(event.body);
     let studentData = requestBody.student.input;
@@ -25,6 +34,7 @@ exports.handler = async (event) => {
     const password = requestBody.password;
     const user = await getUserFromCognito(username);
 
+    console.log(`This is user from SignUp function ${user}`);
     const userExists = !!user;
     if (userExists) {
       if (

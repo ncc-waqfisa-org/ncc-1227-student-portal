@@ -24,16 +24,19 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type MasterUniversitiesUpdateFormInputValues = {
     universityName?: string;
+    universityNameAr?: string;
     isDeactivated?: boolean;
 };
 export declare type MasterUniversitiesUpdateFormValidationValues = {
     universityName?: ValidationFunction<string>;
+    universityNameAr?: ValidationFunction<string>;
     isDeactivated?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MasterUniversitiesUpdateFormOverridesProps = {
     MasterUniversitiesUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     universityName?: PrimitiveOverrideProps<TextFieldProps>;
+    universityNameAr?: PrimitiveOverrideProps<TextFieldProps>;
     isDeactivated?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type MasterUniversitiesUpdateFormProps = React.PropsWithChildren<{

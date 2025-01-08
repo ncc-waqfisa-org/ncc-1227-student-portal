@@ -62,6 +62,12 @@ const Income = {
   "MORE_THAN_1500": "MORE_THAN_1500"
 };
 
+const Major = {
+  "SCIENCE": "SCIENCE",
+  "TECHNOLOGY": "TECHNOLOGY",
+  "ENGINEERING": "ENGINEERING"
+};
+
 const { Attachment, Application, ProgramChoice, Program, University, AdminLog, StudentLog, Admin, ParentInfo, Student, Batch, Scholarship, Statistics, MasterBatch, MasterLog, BahrainUniversities, MasterUniversities, MasterApplication, MasterStatistics, MasterAttachment, Masterscholarship } = initSchema(schema);
 
 export {
@@ -95,5 +101,6 @@ export {
   FamilyIncome,
   ScholarshipStatus,
   ApplicantType,
-  Income
+  Income,
+  Major
 };

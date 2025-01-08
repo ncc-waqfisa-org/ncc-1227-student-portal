@@ -178,8 +178,10 @@ export default function MastersSignUpForm() {
 
   const signUpMutation = useMutation({
     mutationFn: (values: MasterSignUpData) => {
+      // TODO: update with the correct url
       return fetch(
-        `https://ciuxdqxmol.execute-api.us-east-1.amazonaws.com/default/masters-sign-up`,
+        `https://4e5shhnddic6km63m5jiib7oru0hwcpl.lambda-url.us-east-1.on.aws`,
+        // `https://ciuxdqxmol.execute-api.us-east-1.amazonaws.com/default/masters-sign-up`,
         {
           method: "POST",
           body: JSON.stringify(values),
@@ -206,6 +208,7 @@ export default function MastersSignUpForm() {
       }
     },
     async onError(error) {
+      setIsLoading(false);
       throw new Error(error.message);
     },
     onSettled() {

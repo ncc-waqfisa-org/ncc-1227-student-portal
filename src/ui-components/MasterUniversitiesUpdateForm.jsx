@@ -30,10 +30,14 @@ export default function MasterUniversitiesUpdateForm(props) {
   } = props;
   const initialValues = {
     universityName: "",
+    universityNameAr: "",
     isDeactivated: false,
   };
   const [universityName, setUniversityName] = React.useState(
     initialValues.universityName
+  );
+  const [universityNameAr, setUniversityNameAr] = React.useState(
+    initialValues.universityNameAr
   );
   const [isDeactivated, setIsDeactivated] = React.useState(
     initialValues.isDeactivated
@@ -44,6 +48,7 @@ export default function MasterUniversitiesUpdateForm(props) {
       ? { ...initialValues, ...masterUniversitiesRecord }
       : initialValues;
     setUniversityName(cleanValues.universityName);
+    setUniversityNameAr(cleanValues.universityNameAr);
     setIsDeactivated(cleanValues.isDeactivated);
     setErrors({});
   };
@@ -61,6 +66,7 @@ export default function MasterUniversitiesUpdateForm(props) {
   React.useEffect(resetStateValues, [masterUniversitiesRecord]);
   const validations = {
     universityName: [{ type: "Required" }],
+    universityNameAr: [{ type: "Required" }],
     isDeactivated: [],
   };
   const runValidationTasks = async (
@@ -90,6 +96,7 @@ export default function MasterUniversitiesUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           universityName,
+          universityNameAr,
           isDeactivated,
         };
         const validationResponses = await Promise.all(
@@ -147,6 +154,7 @@ export default function MasterUniversitiesUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               universityName: value,
+              universityNameAr,
               isDeactivated,
             };
             const result = onChange(modelFields);
@@ -162,6 +170,32 @@ export default function MasterUniversitiesUpdateForm(props) {
         hasError={errors.universityName?.hasError}
         {...getOverrideProps(overrides, "universityName")}
       ></TextField>
+      <TextField
+        label="University name ar"
+        isRequired={true}
+        isReadOnly={false}
+        value={universityNameAr}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              universityName,
+              universityNameAr: value,
+              isDeactivated,
+            };
+            const result = onChange(modelFields);
+            value = result?.universityNameAr ?? value;
+          }
+          if (errors.universityNameAr?.hasError) {
+            runValidationTasks("universityNameAr", value);
+          }
+          setUniversityNameAr(value);
+        }}
+        onBlur={() => runValidationTasks("universityNameAr", universityNameAr)}
+        errorMessage={errors.universityNameAr?.errorMessage}
+        hasError={errors.universityNameAr?.hasError}
+        {...getOverrideProps(overrides, "universityNameAr")}
+      ></TextField>
       <SwitchField
         label="Is deactivated"
         defaultChecked={false}
@@ -172,6 +206,7 @@ export default function MasterUniversitiesUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               universityName,
+              universityNameAr,
               isDeactivated: value,
             };
             const result = onChange(modelFields);

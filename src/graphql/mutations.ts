@@ -2535,6 +2535,7 @@ export const createMasterUniversities = /* GraphQL */ `mutation CreateMasterUniv
   createMasterUniversities(input: $input, condition: $condition) {
     id
     universityName
+    universityNameAr
     isDeactivated
     applications {
       nextToken
@@ -2560,6 +2561,7 @@ export const updateMasterUniversities = /* GraphQL */ `mutation UpdateMasterUniv
   updateMasterUniversities(input: $input, condition: $condition) {
     id
     universityName
+    universityNameAr
     isDeactivated
     applications {
       nextToken
@@ -2585,6 +2587,7 @@ export const deleteMasterUniversities = /* GraphQL */ `mutation DeleteMasterUniv
   deleteMasterUniversities(input: $input, condition: $condition) {
     id
     universityName
+    universityNameAr
     isDeactivated
     applications {
       nextToken
@@ -2644,6 +2647,7 @@ export const createMasterApplication = /* GraphQL */ `mutation CreateMasterAppli
     university {
       id
       universityName
+      universityNameAr
       isDeactivated
       createdAt
       updatedAt
@@ -2702,6 +2706,7 @@ export const createMasterApplication = /* GraphQL */ `mutation CreateMasterAppli
     adminPoints
     processed
     isIncomeVerified
+    major
     reason
     income
     incomeDoc
@@ -2759,6 +2764,7 @@ export const updateMasterApplication = /* GraphQL */ `mutation UpdateMasterAppli
     university {
       id
       universityName
+      universityNameAr
       isDeactivated
       createdAt
       updatedAt
@@ -2817,6 +2823,7 @@ export const updateMasterApplication = /* GraphQL */ `mutation UpdateMasterAppli
     adminPoints
     processed
     isIncomeVerified
+    major
     reason
     income
     incomeDoc
@@ -2874,6 +2881,7 @@ export const deleteMasterApplication = /* GraphQL */ `mutation DeleteMasterAppli
     university {
       id
       universityName
+      universityNameAr
       isDeactivated
       createdAt
       updatedAt
@@ -2932,6 +2940,7 @@ export const deleteMasterApplication = /* GraphQL */ `mutation DeleteMasterAppli
     adminPoints
     processed
     isIncomeVerified
+    major
     reason
     income
     incomeDoc
@@ -3136,6 +3145,7 @@ export const createMasterscholarship = /* GraphQL */ `mutation CreateMasterschol
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc
@@ -3193,6 +3203,7 @@ export const updateMasterscholarship = /* GraphQL */ `mutation UpdateMasterschol
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc
@@ -3250,6 +3261,7 @@ export const deleteMasterscholarship = /* GraphQL */ `mutation DeleteMasterschol
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc

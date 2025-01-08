@@ -2637,6 +2637,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "universityNameAr": {
+                    "name": "universityNameAr",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "isDeactivated": {
                     "name": "isDeactivated",
                     "isArray": false,
@@ -2899,6 +2906,15 @@ export const schema = {
                     "name": "isIncomeVerified",
                     "isArray": false,
                     "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "major": {
+                    "name": "major",
+                    "isArray": false,
+                    "type": {
+                        "enum": "Major"
+                    },
                     "isRequired": false,
                     "attributes": []
                 },
@@ -3548,9 +3564,17 @@ export const schema = {
                 "LESS_THAN_1500",
                 "MORE_THAN_1500"
             ]
+        },
+        "Major": {
+            "name": "Major",
+            "values": [
+                "SCIENCE",
+                "TECHNOLOGY",
+                "ENGINEERING"
+            ]
         }
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "e5f7a614ed462fdee97f8a7f224f3a81"
+    "version": "eefb771bd3bcb6acaa1e6489f21880bc"
 };

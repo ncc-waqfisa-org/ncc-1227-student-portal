@@ -7,8 +7,6 @@
 //   MasterApplication,
 //   CreateMasterApplicationMutationVariables,
 //   CreateMasterAttachmentMutationVariables,
-
-//   // TODO: update to MasterLog
 //   CreateMasterLogMutationVariables,
 //   MasterUniversities,
 //   Student,
@@ -56,6 +54,26 @@
 //   attachment: UpdateMasterAttachmentMutationVariables;
 //   masterLog: CreateMasterLogMutationVariables;
 // }
+
+// /**
+//  *
+//  * export type CreateMasterApplicationInput = {
+//   gpa?: number | null,
+
+//   universityID: string,
+//   major?: Major | null,
+//   program?: string | null,
+
+//   reason?: string | null,
+
+//   nationalityCategory?: Nationality | null, //* PreFilled
+//   studentCPR: string, //* PreFilled
+//   batch?: number | null, //* PreFilled
+//   income?: Income | null, //* PreFilled
+//   incomeDoc?: string | null, //* PreFilled
+// };
+//  *
+//  */
 
 // // ! START FROM HERE
 // interface FormValues {

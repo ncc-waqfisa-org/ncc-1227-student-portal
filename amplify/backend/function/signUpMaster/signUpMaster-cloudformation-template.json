@@ -15,6 +15,18 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "UserPoolId": {
+      "Type": "String"
+    },
+    "ClientId": {
+      "Type": "String"
+    },
+    "StudentTable": {
+      "Type": "String"
+    },
+    "ParentTable": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -47,12 +59,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "autoReject",
+            "signUpMaster",
             {
               "Fn::Join": [
                 "",
                 [
-                  "autoReject",
+                  "signUpMaster",
                   "-",
                   {
                     "Ref": "env"
@@ -89,12 +101,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "nccLambdaRolee4cf60ca",
+            "nccLambdaRoleab2d7ae0",
             {
               "Fn::Join": [
                 "",
                 [
-                  "nccLambdaRolee4cf60ca",
+                  "nccLambdaRoleab2d7ae0",
                   "-",
                   {
                     "Ref": "env"

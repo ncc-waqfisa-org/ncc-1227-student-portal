@@ -126,6 +126,11 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "signUpMaster": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "syncApplications": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -402,6 +407,22 @@
         {
           "category": "function",
           "resourceName": "signScholarship"
+        }
+      ]
+    },
+    "AMPLIFY_function_signUpMaster_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "signUpMaster"
+        }
+      ]
+    },
+    "AMPLIFY_function_signUpMaster_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "signUpMaster"
         }
       ]
     },

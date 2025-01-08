@@ -62,6 +62,12 @@ export enum Income {
   MORE_THAN_1500 = "MORE_THAN_1500"
 }
 
+export enum Major {
+  SCIENCE = "SCIENCE",
+  TECHNOLOGY = "TECHNOLOGY",
+  ENGINEERING = "ENGINEERING"
+}
+
 
 
 type EagerAttachment = {
@@ -861,6 +867,7 @@ type EagerMasterUniversities = {
   };
   readonly id: string;
   readonly universityName: string;
+  readonly universityNameAr: string;
   readonly isDeactivated?: boolean | null;
   readonly applications?: (MasterApplication | null)[] | null;
   readonly createdAt?: string | null;
@@ -874,6 +881,7 @@ type LazyMasterUniversities = {
   };
   readonly id: string;
   readonly universityName: string;
+  readonly universityNameAr: string;
   readonly isDeactivated?: boolean | null;
   readonly applications: AsyncCollection<MasterApplication>;
   readonly createdAt?: string | null;
@@ -911,6 +919,7 @@ type EagerMasterApplication = {
   readonly adminPoints?: number | null;
   readonly processed?: number | null;
   readonly isIncomeVerified?: boolean | null;
+  readonly major?: Major | keyof typeof Major | null;
   readonly reason?: string | null;
   readonly income?: Income | keyof typeof Income | null;
   readonly incomeDoc?: string | null;
@@ -944,6 +953,7 @@ type LazyMasterApplication = {
   readonly adminPoints?: number | null;
   readonly processed?: number | null;
   readonly isIncomeVerified?: boolean | null;
+  readonly major?: Major | keyof typeof Major | null;
   readonly reason?: string | null;
   readonly income?: Income | keyof typeof Income | null;
   readonly incomeDoc?: string | null;

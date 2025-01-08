@@ -2032,6 +2032,7 @@ export const getMasterUniversities = /* GraphQL */ `query GetMasterUniversities(
   getMasterUniversities(id: $id) {
     id
     universityName
+    universityNameAr
     isDeactivated
     applications {
       nextToken
@@ -2067,6 +2068,7 @@ export const listMasterUniversities = /* GraphQL */ `query ListMasterUniversitie
     items {
       id
       universityName
+      universityNameAr
       isDeactivated
       createdAt
       updatedAt
@@ -2099,6 +2101,7 @@ export const syncMasterUniversities = /* GraphQL */ `query SyncMasterUniversitie
     items {
       id
       universityName
+      universityNameAr
       isDeactivated
       createdAt
       updatedAt
@@ -2154,6 +2157,7 @@ export const getMasterApplication = /* GraphQL */ `query GetMasterApplication($i
     university {
       id
       universityName
+      universityNameAr
       isDeactivated
       createdAt
       updatedAt
@@ -2212,6 +2216,7 @@ export const getMasterApplication = /* GraphQL */ `query GetMasterApplication($i
     adminPoints
     processed
     isIncomeVerified
+    major
     reason
     income
     incomeDoc
@@ -2254,6 +2259,7 @@ export const listMasterApplications = /* GraphQL */ `query ListMasterApplication
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc
@@ -2302,6 +2308,7 @@ export const syncMasterApplications = /* GraphQL */ `query SyncMasterApplication
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc
@@ -2545,6 +2552,7 @@ export const getMasterscholarship = /* GraphQL */ `query GetMasterscholarship($i
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc
@@ -3433,6 +3441,7 @@ export const masterApplicationsByIdAndDateTime = /* GraphQL */ `query MasterAppl
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc
@@ -3485,6 +3494,7 @@ export const masterApplicationsByNationalityCategoryAndBatch = /* GraphQL */ `qu
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc
@@ -3537,6 +3547,7 @@ export const masterApplicationsByStudentCPRAndGpa = /* GraphQL */ `query MasterA
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc
@@ -3589,6 +3600,7 @@ export const masterApplicationsByBatchAndStatus = /* GraphQL */ `query MasterApp
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc
@@ -3641,6 +3653,7 @@ export const masterApplicationsByScoreAndStatus = /* GraphQL */ `query MasterApp
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc
@@ -3693,6 +3706,7 @@ export const masterApplicationsByProcessedAndBatch = /* GraphQL */ `query Master
       adminPoints
       processed
       isIncomeVerified
+      major
       reason
       income
       incomeDoc
