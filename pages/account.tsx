@@ -14,13 +14,16 @@ import { MastersProvider } from "../contexts/MastersContexts";
 import { NextPageWithLayout } from "./_app";
 import { cn } from "../src/lib/utils";
 import MasterInfoForm from "../components/account/masters/MasterInfoForm";
-import { ApplicantType } from "../src/API";
+import { ApplicantType, BahrainUniversities } from "../src/API";
+import { listAllBahrainUniversities } from "../src/CustomAPI";
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
+export const getServerSideProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
+  const universities = await listAllBahrainUniversities();
 
   return {
     props: {
+      universities,
       ...(await serverSideTranslations(locale ?? "en", [
         "common",
         "toast",
@@ -34,7 +37,11 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   };
 };
 
-const Page: NextPageWithLayout = () => {
+interface Props {
+  universities: BahrainUniversities[];
+}
+
+const Page: NextPageWithLayout<Props> = ({ universities }) => {
   const { studentAsStudent: student } = useAppContext();
   const { t } = useTranslation("account");
   const { t: commonT } = useTranslation("common");
@@ -42,11 +49,11 @@ const Page: NextPageWithLayout = () => {
   const [isStudentInfo, setIsStudentInfo] = useState(true);
   const [type, setType] = useState<"bachelor" | "masters">("bachelor");
 
-  // TODO: add the correct data
   const haveMaster =
-    student?.m_applicantType.includes(ApplicantType.MASTER) ?? false;
+    !student?.m_applicantType.includes(ApplicantType.MASTER) ?? false;
 
   useEffect(() => {
+    console.log(haveMaster);
     if (haveMaster) {
       setType("masters");
     }
@@ -106,7 +113,7 @@ const Page: NextPageWithLayout = () => {
           </div>
         )}
 
-        {type === "masters" && <MasterInfoForm />}
+        {type === "masters" && <MasterInfoForm universities={universities} />}
       </div>
     </PageComponent>
   );

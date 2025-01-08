@@ -2,10 +2,17 @@ import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { API, graphqlOperation, Storage } from "aws-amplify";
 import {
   Application,
+  BahrainUniversities,
   CreateApplicationMutation,
   CreateApplicationMutationVariables,
   CreateAttachmentMutation,
   CreateAttachmentMutationVariables,
+  CreateMasterApplicationMutation,
+  CreateMasterApplicationMutationVariables,
+  CreateMasterAttachmentMutation,
+  CreateMasterAttachmentMutationVariables,
+  CreateMasterLogMutation,
+  CreateMasterLogMutationVariables,
   CreateProgramChoiceMutation,
   CreateProgramChoiceMutationVariables,
   CreateStudentLogMutation,
@@ -15,6 +22,8 @@ import {
   GetMasterBatchQuery,
   GetStudentQuery,
   GetStudentQueryVariables,
+  Masterscholarship,
+  MasterUniversities,
   Program,
   Scholarship,
   University,
@@ -22,6 +31,10 @@ import {
   UpdateApplicationMutationVariables,
   UpdateAttachmentMutation,
   UpdateAttachmentMutationVariables,
+  UpdateMasterApplicationMutation,
+  UpdateMasterApplicationMutationVariables,
+  UpdateMasterAttachmentMutation,
+  UpdateMasterAttachmentMutationVariables,
   UpdateParentInfoMutation,
   UpdateParentInfoMutationVariables,
   UpdateProgramChoiceMutation,
@@ -42,6 +55,11 @@ import {
   updateStudent,
   updateParentInfo,
   updateScholarship,
+  createMasterAttachment,
+  updateMasterAttachment,
+  createMasterApplication,
+  updateMasterApplication,
+  createMasterLog,
 } from "./graphql/mutations";
 
 import dayjs from "dayjs";
@@ -51,17 +69,24 @@ import { getStudent } from "./graphql/queries";
 /*                                    ENUMS                                   */
 /* -------------------------------------------------------------------------- */
 export enum DocType {
+  // Shared
   CPR,
   ACCEPTANCE,
   TRANSCRIPT,
   SIGNED_CONTRACT,
+  BANK_LETTER,
+
+  // Bachelor
   SCHOOL_CERTIFICATE,
   FAMILY_INCOME_PROOF,
   PRIMARY_PROGRAM_ACCEPTANCE,
   SECONDARY_PROGRAM_ACCEPTANCE,
-  BANK_LETTER,
+
+  // Masters
   INCOME,
   GUARDIAN,
+  UNIVERSITY_CERTIFICATE,
+  IELTS,
 }
 
 export enum SpecializationField {
@@ -492,15 +517,14 @@ export async function listAllPrograms() {
   return programs;
 }
 
-// TODO: add this
 export async function listAllMasterUniversities() {
   let q = `
   query ListAllMasterUniversities {
-    listMastersUniversities(limit: 9999999) {
+    listMasterUniversities(limit: 9999999) {
       items {
         id
-        name
-        nameAr
+        universityName
+        universityNameAr
         isDeactivated
         _version
         _deleted
@@ -510,8 +534,32 @@ export async function listAllMasterUniversities() {
 `;
 
   let res = (await API.graphql(graphqlOperation(q))) as GraphQLResult<any>; // your fetch function here
-  // TODO: update the type to the MastersUniversity
-  let universities = res.data?.listMastersUniversities.items as University[];
+
+  let universities = res.data?.listMasterUniversities
+    .items as MasterUniversities[];
+  return universities;
+}
+
+export async function listAllBahrainUniversities() {
+  let q = `
+  query ListAllBahrainUniversities {
+    listBahrainUniversities(limit: 9999999) {
+      items {
+        id
+        universityName
+        universityNameAr
+        isDeactivated
+        _version
+        _deleted
+      }
+    }
+  }
+`;
+
+  let res = (await API.graphql(graphqlOperation(q))) as GraphQLResult<any>; // your fetch function here
+
+  let universities = res.data?.listBahrainUniversities
+    .items as BahrainUniversities[];
   return universities;
 }
 
@@ -532,6 +580,17 @@ export async function createAttachmentInDB(
   return res.data;
 }
 
+export async function createMasterAttachmentInDB(
+  mutationVars: CreateMasterAttachmentMutationVariables
+): Promise<CreateMasterAttachmentMutation | undefined> {
+  let res = (await API.graphql({
+    query: createMasterAttachment,
+    variables: mutationVars,
+  })) as GraphQLResult<CreateMasterAttachmentMutation>;
+
+  return res.data;
+}
+
 /**
  * It takes in a mutation variable object, and returns a promise that resolves to the mutation result
  * @param {UpdateAttachmentMutationVariables} mutationVars - UpdateAttachmentMutationVariables
@@ -544,6 +603,17 @@ export async function updateAttachmentInDB(
     query: updateAttachment,
     variables: mutationVars,
   })) as GraphQLResult<UpdateAttachmentMutation>;
+
+  return res.data;
+}
+
+export async function updateMasterAttachmentInDB(
+  mutationVars: UpdateMasterAttachmentMutationVariables
+): Promise<UpdateMasterAttachmentMutation | undefined> {
+  let res = (await API.graphql({
+    query: updateMasterAttachment,
+    variables: mutationVars,
+  })) as GraphQLResult<UpdateMasterAttachmentMutation>;
 
   return res.data;
 }
@@ -564,6 +634,17 @@ export async function createApplicationInDB(
   return res.data;
 }
 
+export async function createMasterApplicationInDB(
+  mutationVars: CreateMasterApplicationMutationVariables
+): Promise<CreateMasterApplicationMutation | undefined> {
+  let res = (await API.graphql({
+    query: createMasterApplication,
+    variables: mutationVars,
+  })) as GraphQLResult<CreateMasterApplicationMutation>;
+
+  return res.data;
+}
+
 /**
  * It takes in a set of variables, and returns the result of the mutation
  * @param {UpdateApplicationMutationVariables} mutationVars - UpdateApplicationMutationVariables
@@ -576,6 +657,17 @@ export async function updateApplicationInDB(
     query: updateApplication,
     variables: mutationVars,
   })) as GraphQLResult<UpdateApplicationMutation>;
+
+  return res.data;
+}
+
+export async function updateMasterApplicationInDB(
+  mutationVars: UpdateMasterApplicationMutationVariables
+): Promise<UpdateMasterApplicationMutation | undefined> {
+  let res = (await API.graphql({
+    query: updateMasterApplication,
+    variables: mutationVars,
+  })) as GraphQLResult<UpdateMasterApplicationMutation>;
 
   return res.data;
 }
@@ -667,6 +759,17 @@ export async function createStudentLogInDB(
   return res.data;
 }
 
+export async function createMasterLogInDB(
+  mutationVars: CreateMasterLogMutationVariables
+): Promise<CreateMasterLogMutation | undefined> {
+  let res = (await API.graphql({
+    query: createMasterLog,
+    variables: mutationVars,
+  })) as GraphQLResult<CreateMasterLogMutation>;
+
+  return res.data;
+}
+
 /**
  * It takes a file and a document type, and uploads the file to the AWS S3 bucket, and returns the
  * key of the file
@@ -720,6 +823,34 @@ export async function listScholarshipsOfApplicationId({
   }
 
   let tempScholarshipList = res.data?.scholarshipsByApplicationID?.items;
+
+  return tempScholarshipList ?? [];
+}
+
+export async function listMasterScholarshipsOfApplicationId({
+  applicationId,
+}: {
+  applicationId: string;
+}): Promise<Masterscholarship[]> {
+  let query = `query ListMasterScholarshipsByApplicationID {
+    masterscholarshipsByApplicationID(applicationID: "${applicationId}") {
+      items {
+        id
+        signedContractDoc
+        IBANLetterDoc
+        isConfirmed
+      }
+    }
+  }  
+  `;
+
+  let res = (await API.graphql(graphqlOperation(query))) as GraphQLResult<any>;
+
+  if (res.data === null) {
+    throw new Error("Failed to get all scholarships");
+  }
+
+  let tempScholarshipList = res.data?.masterscholarshipsByApplicationID?.items;
 
   return tempScholarshipList ?? [];
 }

@@ -1,5 +1,3 @@
-import { Gender, Nationality } from "../../API";
-
 export type MasterSignUpData = {
   // Should be set in the backend
   // batch: number | null; //current year
@@ -38,7 +36,8 @@ export type MasterSignUpData = {
   guardian_full_name: string;
   guardian_cpr_doc: string;
 
-  //   applicant_type: ApplicantType[];
+  // Should be added from backend
+  // applicant_type: ApplicantType[];
   password: string;
 };
 
@@ -98,9 +97,9 @@ export type MasterUpdateData = {
   address: string;
 
   phone: string;
-  gender: string;
-  place_of_birth: string;
-  nationality: string;
+  // gender: string;
+  // place_of_birth: string;
+  // nationality: string;
   number_of_family_member: number;
 
   // Graduated from
@@ -133,9 +132,9 @@ export type MasterUpdateFormSchema = {
   address: string;
 
   phone: string;
-  gender: string;
-  place_of_birth: string;
-  nationality: string;
+  // gender: string;
+  // place_of_birth: string;
+  // nationality: string;
   number_of_family_member: number;
 
   // Graduated from

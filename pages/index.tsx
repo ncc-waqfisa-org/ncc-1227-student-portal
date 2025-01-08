@@ -9,6 +9,7 @@ import { cn } from "../src/lib/utils";
 import { DashboardHeader } from "../components/DashboardHeader";
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AppContexts";
+import { ApplicantType } from "../src/API";
 
 interface HomeProps {
   type: "bachelor" | "masters" | null;
@@ -49,19 +50,18 @@ const Home = ({ type: initialType }: HomeProps) => {
   const { push, pathname, query } = useRouter();
   const { studentAsStudent: student } = useAppContext();
 
-  // TODO add the correct check for applicantType
-  // useEffect(() => {
-  //   if (initialType === null) {
+  useEffect(() => {
+    if (initialType === null) {
+      const isMasterApplicant =
+        student?.m_applicantType.includes(ApplicantType.MASTER) ?? false; //student.applicantType.includes("masters");
 
-  //     // TODO add the correct check for applicantType
-  //     const isMasterApplicant = true; //student.applicantType.includes("masters");
-
-  //     if (isMasterApplicant) {
-  //       setType("masters");
-  //     }
-  //     // setType("bachelor"); // Default to "bachelor" if initialType is undefined
-  //   }
-  // }, [initialType, student]);
+      if (isMasterApplicant) {
+        setType("masters");
+      } else {
+        setType("bachelor"); // Default to "bachelor" if initialType is undefined
+      }
+    }
+  }, [initialType, student]);
 
   useEffect(() => {
     push(

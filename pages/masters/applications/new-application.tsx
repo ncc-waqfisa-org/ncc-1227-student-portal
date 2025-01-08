@@ -6,7 +6,7 @@ import {
   listAllMasterUniversities,
   listAllPrograms,
 } from "../../../src/CustomAPI";
-import { Program, University } from "../../../src/API";
+import { MasterUniversities, Program, University } from "../../../src/API";
 import {
   BachelorProvider,
   useBachelorContext,
@@ -26,6 +26,7 @@ import {
   useMastersContext,
 } from "../../../contexts/MastersContexts";
 import { NoAvailableBatch } from "../../../components/NoAvailableBatch";
+// import { MastersApplicationForm } from "../../../components/applications/MastersApplicationForm";
 // import { MastersApplicationForm } from "../../../components/applications/MastersApplicationForm";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -50,8 +51,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 };
 
 interface Props {
-  // TODO: Update to MastersUnivirsity
-  universities: University[];
+  universities: MasterUniversities[];
 }
 
 const NewApplicationPage: NextPageWithLayout<Props> = (props) => {

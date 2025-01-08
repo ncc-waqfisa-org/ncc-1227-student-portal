@@ -1,42 +1,39 @@
 // import { Formik, Form, Field, FormikHelpers } from "formik";
 // import { FC, useState } from "react";
 // import * as yup from "yup";
-// import { useBachelorContext } from "../../contexts/BachelorContexts";
 // import { useAuth } from "../../hooks/use-auth";
 
 // import {
-//   Application,
-//   CreateApplicationMutationVariables,
-//   CreateAttachmentMutationVariables,
-//   CreateProgramChoiceMutationVariables,
-//   CreateStudentLogMutationVariables,
-//   Program,
+//   MasterApplication,
+//   CreateMasterApplicationMutationVariables,
+//   CreateMasterAttachmentMutationVariables,
+
+//   // TODO: update to MasterLog
+//   CreateMasterLogMutationVariables,
+//   MasterUniversities,
 //   Student,
-//   University,
-//   UpdateApplicationMutationVariables,
-//   UpdateAttachmentMutationVariables,
-//   UpdateProgramChoiceMutationVariables,
+//   UpdateMasterApplicationMutationVariables,
+//   UpdateMasterAttachmentMutationVariables,
 // } from "../../src/API";
 // import { Status } from "../../src/models";
 // import { toast } from "react-hot-toast";
 // import { useRouter } from "next/router";
 
 // import {
-//   createAttachmentInDB,
-//   createApplicationInDB,
-//   createProgramChoiceInDB,
-//   updateAttachmentInDB,
-//   updateApplicationInDB,
-//   updateProgramChoiceInDB,
-//   createStudentLogInDB,
+//   createMasterAttachmentInDB,
+//   createMasterApplicationInDB,
+//   updateMasterAttachmentInDB,
+//   updateMasterApplicationInDB,
+//   createMasterLogInDB,
 //   DocType,
 //   uploadFile,
 // } from "../../src/CustomAPI";
 // import {
 //   ApplicationSnapshotInput,
 //   allDocsAreAvailable,
-//   calculateScore,
+//   calculateMasterScore,
 //   checkIfFilesAreTooBig,
+//   // TODO: change it to the master one
 //   getStudentApplicationSnapshot,
 // } from "../../src/HelperFunctions";
 // import GetStorageLinkComponent from "../get-storage-link-component";
@@ -49,18 +46,18 @@
 // import { useMastersContext } from "../../contexts/MastersContexts";
 
 // export interface CreateApplicationFormValues {
-//   application: CreateApplicationMutationVariables;
-//   primaryProgram: CreateProgramChoiceMutationVariables;
-//   attachment: CreateAttachmentMutationVariables;
-//   studentLog: CreateStudentLogMutationVariables;
+//   application: CreateMasterApplicationMutationVariables;
+
+//   attachment: CreateMasterAttachmentMutationVariables;
+//   masterLog: CreateMasterLogMutationVariables;
 // }
 // export interface UpdateApplicationFormValues {
-//   application: UpdateApplicationMutationVariables;
-//   primaryProgram: UpdateProgramChoiceMutationVariables;
-//   attachment: UpdateAttachmentMutationVariables;
-//   studentLog: CreateStudentLogMutationVariables;
+//   application: UpdateMasterApplicationMutationVariables;
+//   attachment: UpdateMasterAttachmentMutationVariables;
+//   masterLog: CreateMasterLogMutationVariables;
 // }
 
+// // ! START FROM HERE
 // interface FormValues {
 //   gpa: number | undefined;
 //   primaryProgramID: string | undefined;
@@ -72,8 +69,8 @@
 // }
 
 // interface Props {
-//   application?: Application;
-//   universities?: University[];
+//   application?: MasterApplication;
+//   universities?: MasterUniversities[];
 // }
 
 // export const MastersApplicationForm: FC<Props> = (props) => {
@@ -94,16 +91,14 @@
 //     File | undefined
 //   >(undefined);
 
-//   const [univirsityCertificate, setUnivirsityCertificate] = useState<File | undefined>(
-//     undefined
-//   );
+//   const [univirsityCertificate, setUnivirsityCertificate] = useState<
+//     File | undefined
+//   >(undefined);
 //   const [transcriptDoc, setTranscriptDoc] = useState<File | undefined>(
 //     undefined
 //   );
 //   // IELTS / TOEFL
-//   const [ieltsDoc, setIeltsDoc] = useState<File | undefined>(
-//     undefined
-//   );
+//   const [ieltsDoc, setIeltsDoc] = useState<File | undefined>(undefined);
 
 //   const oldPrimaryProgram = props.application?.programs?.items.sort(
 //     (a, b) => (a?.choiceOrder ?? 0) - (b?.choiceOrder ?? 0)
@@ -124,8 +119,8 @@
 //     reasonForUpdate: undefined,
 //   };
 
-//   async function withdrawApplication(application: Application) {
-//     let tempApplicationVar: UpdateApplicationMutationVariables = {
+//   async function withdrawApplication(application: MasterApplication) {
+//     let tempApplicationVar: UpdateMasterApplicationMutationVariables = {
 //       input: {
 //         id: application.id,
 //         status: Status.WITHDRAWN,
@@ -133,7 +128,7 @@
 //       },
 //     };
 //     setWithdrawing(true);
-//     let res = await updateApplicationInDB(tempApplicationVar);
+//     let res = await updateMasterApplicationInDB(tempApplicationVar);
 //     if (res === undefined) {
 //       throw new Error(tToast("failedToWithdraw") ?? "Failed to withdraw");
 //     }
@@ -150,7 +145,9 @@
 //    * @returns a promise that resolves to an array of two promises.
 //    */
 //   async function createApplicationProcess(data: CreateApplicationFormValues) {
-//     let createdAttachmentInDB = await createAttachmentInDB(data.attachment);
+//     let createdAttachmentInDB = await createMasterAttachmentInDB(
+//       data.attachment
+//     );
 
 //     if (createdAttachmentInDB === undefined) {
 //       throw new Error(
@@ -161,7 +158,7 @@
 //       );
 //     }
 
-//     let tempApplicationVar: CreateApplicationMutationVariables = {
+//     let tempApplicationVar: CreateMasterApplicationMutationVariables = {
 //       input: {
 //         id: undefined,
 //         gpa: data.application.input.gpa,
@@ -185,7 +182,7 @@
 //       },
 //     };
 
-//     let createdApplicationInDB = await createApplicationInDB(
+//     let createdApplicationInDB = await createMasterApplicationInDB(
 //       tempApplicationVar
 //     );
 
@@ -214,18 +211,18 @@
 //     await Promise.all([
 //       createProgramChoiceInDB(tempPrimaryProgramChoice),
 //       // createProgramChoiceInDB(tempSecondaryProgramChoice),
-//       createStudentLogInDB({
+//       createMasterLogInDB({
 //         input: {
 //           id: undefined,
 //           _version: undefined,
 //           applicationID: createdApplicationInDB.createApplication?.id ?? "",
-//           studentCPR: data.studentLog.input.studentCPR,
-//           dateTime: data.studentLog.input.dateTime,
-//           snapshot: data.studentLog.input.snapshot,
-//           reason: data.studentLog.input.reason,
+//           studentCPR: data.masterLog.input.studentCPR,
+//           dateTime: data.masterLog.input.dateTime,
+//           snapshot: data.masterLog.input.snapshot,
+//           reason: data.masterLog.input.reason,
 //           applicationStudentLogsId:
 //             createdApplicationInDB.createApplication?.id,
-//           studentStudentLogsCpr: data.studentLog.input.studentCPR,
+//           studentStudentLogsCpr: data.masterLog.input.studentCPR,
 //         },
 //       }),
 //     ])
@@ -244,7 +241,9 @@
 //   }
 
 //   async function updateApplicationProcess(data: UpdateApplicationFormValues) {
-//     let updatedAttachmentInDB = await updateAttachmentInDB(data.attachment);
+//     let updatedAttachmentInDB = await updateMasterAttachmentInDB(
+//       data.attachment
+//     );
 
 //     if (updatedAttachmentInDB === undefined) {
 //       throw new Error(
@@ -255,7 +254,7 @@
 //       );
 //     }
 
-//     let tempApplicationVar: UpdateApplicationMutationVariables = {
+//     let tempApplicationVar: UpdateMasterApplicationMutationVariables = {
 //       input: {
 //         id: data.application.input.id,
 //         gpa: data.application.input.gpa,
@@ -275,7 +274,7 @@
 //       },
 //     };
 
-//     let updatedApplicationInDB = await updateApplicationInDB(
+//     let updatedApplicationInDB = await updateMasterApplicationInDB(
 //       tempApplicationVar
 //     );
 
@@ -304,7 +303,7 @@
 //     await Promise.all([
 //       updateProgramChoiceInDB(tempPrimaryProgramChoice),
 //       // updateProgramChoiceInDB(tempSecondaryProgramChoice),
-//       createStudentLogInDB(data.studentLog),
+//       createMasterLogInDB(data.masterLog),
 //     ])
 //       .then(async (res) => {
 //         await syncStudentApplication();
@@ -426,7 +425,7 @@
 //           reason: values.reason,
 //           score:
 //             studentData.familyIncome && values.gpa
-//               ? calculateScore({
+//               ? calculateMasterScore({
 //                   familyIncome: studentData.familyIncome,
 //                   gpa: values.gpa,
 //                 })
@@ -483,7 +482,7 @@
 //         },
 //         condition: undefined,
 //       },
-//       studentLog: {
+//       masterLog: {
 //         input: {
 //           id: undefined,
 //           applicationID: "",
@@ -515,7 +514,7 @@
 //           reason: values.reason,
 //           score:
 //             studentData.familyIncome && values.gpa
-//               ? calculateScore({
+//               ? calculateMasterScore({
 //                   familyIncome: studentData.familyIncome,
 //                   gpa: props.application?.verifiedGPA ?? values.gpa,
 //                   adminScore: props.application?.adminPoints ?? 0,
@@ -587,7 +586,7 @@
 //         },
 //         condition: undefined,
 //       },
-//       studentLog: {
+//       masterLog: {
 //         input: {
 //           id: undefined,
 //           applicationID: props.application?.id ?? "",

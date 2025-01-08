@@ -1,5 +1,5 @@
 import { isEqual, round } from "lodash";
-import { FamilyIncome, Status } from "./API";
+import { FamilyIncome, Income, Status } from "./API";
 
 /**
  * It checks if a file is too big
@@ -23,6 +23,12 @@ type TCalculateScore = {
   gpa: number;
   adminScore?: number;
 };
+type TCalculateMasterScore = {
+  income: Income | null | undefined;
+  gpa: number;
+  adminScore?: number;
+};
+
 export function calculateScore({
   familyIncome,
   gpa,
@@ -32,6 +38,20 @@ export function calculateScore({
   if (familyIncome === FamilyIncome.LESS_THAN_1500) {
     score += 20;
   } else if (familyIncome === FamilyIncome.MORE_THAN_1500) {
+    score += 10;
+  }
+  return round(score, 2);
+}
+
+export function calculateMasterScore({
+  income,
+  gpa,
+  adminScore = 0,
+}: TCalculateMasterScore) {
+  let score = gpa * 0.7 + adminScore;
+  if (income === Income.LESS_THAN_1500) {
+    score += 20;
+  } else if (income === Income.MORE_THAN_1500) {
     score += 10;
   }
   return round(score, 2);
@@ -86,6 +106,7 @@ export interface ApplicationSnapshot {
   };
 }
 
+// TODO make one for master application
 export function getStudentApplicationSnapshot(inputData: {
   newApplication: ApplicationSnapshotInput;
   oldApplication?: ApplicationSnapshotInput;
@@ -107,18 +128,6 @@ export function getStudentApplicationSnapshot(inputData: {
         )
           ? undefined
           : `Changed ${inputData.oldApplication.primaryProgram.acceptanceLetterDoc} to ${inputData.newApplication.primaryProgram.acceptanceLetterDoc}`,
-        // secondaryProgram: isEqual(
-        //   inputData.newApplication.secondaryProgram.id,
-        //   inputData.oldApplication.secondaryProgram.id
-        // )
-        //   ? undefined
-        //   : `Changed ${inputData.oldApplication.secondaryProgram.name} to ${inputData.newApplication.secondaryProgram.name}`,
-        // secondaryProgramAcceptanceLetter: isEqual(
-        //   inputData.newApplication.secondaryProgram.acceptanceLetterDoc,
-        //   inputData.oldApplication.secondaryProgram.acceptanceLetterDoc
-        // )
-        //   ? undefined
-        //   : `Changed ${inputData.oldApplication.secondaryProgram.acceptanceLetterDoc} to ${inputData.newApplication.secondaryProgram.acceptanceLetterDoc}`,
         attachments: isEqual(
           inputData.newApplication.attachments,
           inputData.oldApplication.attachments
@@ -145,8 +154,6 @@ export function getStudentApplicationSnapshot(inputData: {
         gpa: `Initial submit with GPA ${inputData.newApplication.gpa}`,
         primaryProgram: `Initial submit with Primary Program ${inputData.newApplication.primaryProgram.name}`,
         primaryProgramAcceptanceLetter: `Initial submit with Primary Program Acceptance letter ${inputData.newApplication.primaryProgram.acceptanceLetterDoc}`,
-        // secondaryProgram: `Initial submit with Secondary Program ${inputData.newApplication.secondaryProgram.name}`,
-        // secondaryProgramAcceptanceLetter: `Initial submit with Secondary Program Acceptance letter ${inputData.newApplication.secondaryProgram.acceptanceLetterDoc}`,
         attachments: {
           cpr: `Initial submit with CPR ${inputData.newApplication.attachments.cpr}`,
           transcript: `Initial submit with transcript ${inputData.newApplication.attachments.transcript}`,
@@ -167,6 +174,17 @@ interface IAllDocsAreAvailable {
   primaryProgramAcceptanceLetter: string | null | undefined;
   // secondaryProgramAcceptanceLetter: string | null | undefined;
 }
+interface IAllMasterDocsAreAvailable {
+  cpr: string | null | undefined;
+  guardian: string | null | undefined;
+
+  transcript: string | null | undefined;
+  acceptance: string | null | undefined;
+  universitiyCertificate: string | null | undefined;
+  ielts: string | null | undefined;
+
+  income: string | null | undefined;
+}
 
 export function allDocsAreAvailable(props: IAllDocsAreAvailable): boolean {
   return (
@@ -178,6 +196,20 @@ export function allDocsAreAvailable(props: IAllDocsAreAvailable): boolean {
       : true) &&
     // ||typeof props.secondaryProgramAcceptanceLetter === "string"
     props.familyProofs.length > 0
+  );
+}
+
+export function allMasterDocsAreAvailable(
+  props: IAllMasterDocsAreAvailable
+): boolean {
+  return (
+    typeof props.cpr === "string" &&
+    typeof props.guardian === "string" &&
+    typeof props.transcript === "string" &&
+    typeof props.acceptance === "string" &&
+    typeof props.universitiyCertificate === "string" &&
+    typeof props.ielts === "string" &&
+    typeof props.income === "string"
   );
 }
 

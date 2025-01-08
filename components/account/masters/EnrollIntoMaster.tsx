@@ -17,8 +17,13 @@ import { cn } from "../../../src/lib/utils";
 import { PhoneNumberInput } from "../../phone";
 import * as yup from "yup";
 import "yup-phone";
+import { BahrainUniversities } from "../../../src/API";
 
-export const EnrollIntoMaster = () => {
+export const EnrollIntoMaster = ({
+  universities,
+}: {
+  universities: BahrainUniversities[];
+}) => {
   const { studentAsStudent: student, isStudentPending } = useAppContext();
   const router = useRouter();
   const { t: tAC } = useTranslation("termsAndConditions");
@@ -239,7 +244,7 @@ export const EnrollIntoMaster = () => {
   return (
     <div className="flex flex-col items-center">
       {isStudentPending && (
-        <div className="p-6 mx-auto my-8 w-full max-w-lg rounded-lg border border-gray-200 shadow-lg bg-white/30">
+        <div className="w-full max-w-lg p-6 mx-auto my-8 border border-gray-200 rounded-lg shadow-lg bg-white/30">
           <div className="flex flex-col gap-4">
             <div className="w-3/4 h-6 bg-gray-200 rounded animate-pulse"></div>
             <div className="w-1/2 h-6 bg-gray-200 rounded animate-pulse"></div>
@@ -249,7 +254,7 @@ export const EnrollIntoMaster = () => {
       )}
 
       {!student && !isStudentPending && (
-        <div className="p-6 mx-auto my-8 w-full max-w-lg rounded-lg border border-red-200 shadow-lg bg-white/30">
+        <div className="w-full max-w-lg p-6 mx-auto my-8 border border-red-200 rounded-lg shadow-lg bg-white/30">
           <div className="flex flex-col gap-4 text-center">
             <div className="text-xl font-semibold text-error">
               Applicant details could not be fetched
@@ -299,8 +304,8 @@ export const EnrollIntoMaster = () => {
 
             const thirdStepHaveError = !!errors.accepted;
             return (
-              <Form className="flex flex-col justify-center mx-auto max-w-4xl">
-                <ul dir="ltr" className="overflow-visible relative mb-6 steps">
+              <Form className="flex flex-col justify-center max-w-4xl mx-auto">
+                <ul dir="ltr" className="relative mb-6 overflow-visible steps">
                   <li
                     onClick={() => steps > 1 && setSteps(1)}
                     className={cn(
@@ -341,7 +346,7 @@ export const EnrollIntoMaster = () => {
                   >
                     {t("termsAndConditions")}
                   </li>
-                  <li className="flex absolute left-0 top-1 flex-col justify-center md:-left-8">
+                  <li className="absolute left-0 flex flex-col justify-center top-1 md:-left-8">
                     <button
                       title={t("back") ?? "Back"}
                       type="button"
@@ -488,8 +493,14 @@ export const EnrollIntoMaster = () => {
                       <option disabled selected value={undefined}>
                         {t("select")}
                       </option>
-                      <option value={"UOB"}>UOB</option>
-                      <option value={"polytechnic"}>Polytechnic</option>
+
+                      {universities?.map((uni, index) => (
+                        <option key={`uni-${index}`} value={uni.id}>
+                          {router.locale === "ar"
+                            ? uni.universityNameAr
+                            : uni.universityName}
+                        </option>
+                      ))}
                     </Field>
                     <label className="pt-2 label-text-alt text-error">
                       {errors.universityID &&
@@ -775,7 +786,7 @@ export const EnrollIntoMaster = () => {
                     steps !== 3 && "hidden"
                   )}
                 >
-                  <div className="container flex flex-col gap-3 mx-auto max-w-3xl">
+                  <div className="container flex flex-col max-w-3xl gap-3 mx-auto">
                     <h1 className="text-2xl font-semibold md:text-3xl">
                       {tAC("termsAndConditions")}
                     </h1>
@@ -790,7 +801,7 @@ export const EnrollIntoMaster = () => {
                       </div>
                     </div>
                     {/* Accepted */}
-                    <div className="flex flex-wrap gap-3 justify-start items-center w-full">
+                    <div className="flex flex-wrap items-center justify-start w-full gap-3">
                       <label
                         className={cn(
                           "label",
@@ -1111,7 +1122,7 @@ const LabelField: FC<TLabelField> = ({
 
 export const FormSeparator = ({ title }: { title: string }) => {
   return (
-    <div className="flex gap-4 items-center md:col-span-2">
+    <div className="flex items-center gap-4 md:col-span-2">
       <div className="h-[1px] bg-zinc-300 flex-1"></div>
       <p>{title}</p>
       <div className="h-[1px] bg-zinc-300 flex-1"></div>

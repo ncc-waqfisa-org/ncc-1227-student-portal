@@ -18,13 +18,17 @@ import "yup-phone";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { cn } from "../../../src/lib/utils";
 import { PhoneNumberInput } from "../../phone";
-import { Gender, Nationality } from "../../../src/API";
+import { BahrainUniversities, Gender, Nationality } from "../../../src/API";
 import { useAppContext } from "../../../contexts/AppContexts";
 import GetStorageLinkComponent from "../../get-storage-link-component";
 import { useMastersContext } from "../../../contexts/MastersContexts";
 
 // Add an optional readOnly that will disable all fields and remove the update button
-export default function MasterInfoForm() {
+export default function MasterInfoForm({
+  universities,
+}: {
+  universities: BahrainUniversities[];
+}) {
   const router = useRouter();
   const { t: tErrors } = useTranslation("errors");
   const { t: tToast } = useTranslation("toast");
@@ -41,36 +45,34 @@ export default function MasterInfoForm() {
     income_doc: null,
   });
 
-  //   TODO prefill the data with student/applicant data
   const initialValues: MasterUpdateFormSchema = {
-    // TODO: fill with new student names
-    first_name: student?.fullName ?? "", // student.firstName
-    second_name: student?.fullName ?? "", // student.secondName
-    last_name: student?.fullName ?? "", // student.lastName
+    first_name: student?.m_firstName ?? "",
+    second_name: student?.m_secondName ?? "",
+    last_name: student?.m_lastName ?? "",
 
     address: student?.address ?? "",
     phone: student?.phone ?? "",
 
-    number_of_family_member: 1, // student?.numberOfFamilyMember
-    graduation_year: "",
-    old_program: "",
+    number_of_family_member: student?.m_numberOfFamilyMembers ?? 1,
+    graduation_year: student?.m_graduationYear ?? "",
+    old_program: student?.m_oldProgram ?? "",
 
-    isEmployed: false,
-    place_of_employment: "",
-    income: Income.LESS_THAN_1500,
+    isEmployed: student?.m_isEmployeed ?? false,
+    place_of_employment: student?.m_placeOfEmployment ?? "",
+    income: student?.m_income ?? Income.LESS_THAN_1500,
 
     // Files are not prefilled
     cpr_doc: undefined,
     income_doc: undefined,
     guardian_cpr_doc: undefined,
 
-    gender: student?.gender ?? "",
-    place_of_birth: student?.placeOfBirth ?? "",
-    nationality: student?.nationalityCategory ?? "",
-    universityID: "",
+    // gender: student?.gender ?? "",
+    // place_of_birth: student?.placeOfBirth ?? "",
+    // nationality: student?.nationalityCategory ?? "",
+    universityID: student?.m_universityID ?? "",
 
-    guardian_cpr: "", // student?.guardianCpr
-    guardian_full_name: "", // student?.guardianFullName
+    guardian_cpr: student?.m_guardianCPR ?? "",
+    guardian_full_name: student?.m_guardianFullName ?? "",
   };
 
   const formValidationSchema = yup.object({
@@ -89,9 +91,9 @@ export default function MasterInfoForm() {
         value ? isValidPhoneNumber(value.toString()) : false
       )
       .required(`${tErrors("requiredField")}`),
-    gender: yup.string().required(`${tErrors("requiredField")}`),
-    place_of_birth: yup.string().required(`${tErrors("requiredField")}`),
-    nationality: yup.string().required(`${tErrors("requiredField")}`),
+    // gender: yup.string().required(`${tErrors("requiredField")}`),
+    // place_of_birth: yup.string().required(`${tErrors("requiredField")}`),
+    // nationality: yup.string().required(`${tErrors("requiredField")}`),
     number_of_family_member: yup
       .number()
       .required(`${tErrors("requiredField")}`),
@@ -182,13 +184,12 @@ export default function MasterInfoForm() {
       docs.cpr_doc
         ? uploadFile(docs.cpr_doc, DocType.CPR, student.cpr)
         : student.cprDoc,
-      // TODO: update with the correct fields
       docs.income_doc
         ? uploadFile(docs.income_doc, DocType.INCOME, student.cpr)
-        : "", //student.incomeDoc,
+        : student.m_incomeDoc,
       docs.guardian_cpr_doc
         ? uploadFile(docs.guardian_cpr_doc, DocType.GUARDIAN, student.cpr)
-        : "", //student.guardianCprDoc,
+        : student.m_guardianCPRDoc,
     ]);
 
     if (cpr_doc == null) {
@@ -254,9 +255,9 @@ export default function MasterInfoForm() {
             !!errors.last_name ||
             !!errors.address ||
             !!errors.phone ||
-            !!errors.gender ||
-            !!errors.place_of_birth ||
-            !!errors.nationality ||
+            // !!errors.gender ||
+            // !!errors.place_of_birth ||
+            // !!errors.nationality ||
             !!errors.number_of_family_member ||
             !!errors.graduation_year ||
             !!errors.universityID ||
@@ -413,7 +414,7 @@ export default function MasterInfoForm() {
                   setFieldValue={setFieldValue}
                   disabled={!editingApplicationsEnabled}
                 />
-                <div className="flex flex-col justify-start w-full">
+                {/* <div className="flex flex-col justify-start w-full">
                   <div className="flex items-center">
                     <label className="label">{t("gender")}</label>
                     <label className="text-error label">*</label>{" "}
@@ -440,9 +441,25 @@ export default function MasterInfoForm() {
                   <label className="pt-2 label-text-alt text-error">
                     {errors.gender && touched.gender && errors.gender}
                   </label>
+                </div> */}
+
+                <div className="flex flex-col justify-start w-full">
+                  <div className="flex items-center">
+                    <label className="label">{t("gender")}</label>
+                  </div>
+                  <Field
+                    dir="ltr"
+                    disabled
+                    className={`input disabled input-bordered input-primary`}
+                    value={
+                      student?.gender
+                        ? t(student?.gender.toLowerCase())
+                        : student?.gender
+                    }
+                  />
                 </div>
 
-                <LabelField
+                {/* <LabelField
                   title={t("placeOfBirth")}
                   value={values.place_of_birth}
                   errors={errors.place_of_birth}
@@ -453,9 +470,21 @@ export default function MasterInfoForm() {
                   setFieldError={setFieldError}
                   setFieldValue={setFieldValue}
                   disabled={!editingApplicationsEnabled}
-                />
+                /> */}
 
                 <div className="flex flex-col justify-start w-full">
+                  <div className="flex items-center">
+                    <label className="label">{t("placeOfBirth")}</label>
+                  </div>
+                  <Field
+                    dir="ltr"
+                    disabled
+                    className={`input disabled input-bordered input-primary`}
+                    value={student?.placeOfBirth}
+                  />
+                </div>
+
+                {/* <div className="flex flex-col justify-start w-full">
                   <div className="flex items-center">
                     <label className="label">{t("nationality")}</label>
                     <label className="text-error label">*</label>{" "}
@@ -489,6 +518,22 @@ export default function MasterInfoForm() {
                       touched.nationality &&
                       errors.nationality}
                   </label>
+                </div> */}
+
+                <div className="flex flex-col justify-start w-full">
+                  <div className="flex items-center">
+                    <label className="label">{t("nationality")}</label>
+                  </div>
+                  <Field
+                    dir="ltr"
+                    disabled
+                    className={`input disabled input-bordered input-primary`}
+                    value={
+                      student?.nationalityCategory
+                        ? t(student?.nationalityCategory)
+                        : student?.nationalityCategory
+                    }
+                  />
                 </div>
 
                 <div className="flex flex-col justify-start w-full">
@@ -543,8 +588,13 @@ export default function MasterInfoForm() {
                     <option disabled selected value={undefined}>
                       {t("select")}
                     </option>
-                    <option value={"UOB"}>UOB</option>
-                    <option value={"polytechnic"}>Polytechnic</option>
+                    {universities?.map((uni, index) => (
+                      <option key={`uni-${index}`} value={uni.id}>
+                        {router.locale === "ar"
+                          ? uni.universityNameAr
+                          : uni.universityName}
+                      </option>
+                    ))}
                   </Field>
                   <label className="pt-2 label-text-alt text-error">
                     {errors.universityID &&
@@ -699,8 +749,7 @@ export default function MasterInfoForm() {
                       disabled={!editingApplicationsEnabled}
                       labelComponent={
                         <GetStorageLinkComponent
-                          // TODO: update it with the correct field
-                          storageKey={null} // student?.incomeDoc
+                          storageKey={student?.m_incomeDoc}
                         ></GetStorageLinkComponent>
                       }
                     />
@@ -754,8 +803,7 @@ export default function MasterInfoForm() {
                   setFieldValue={setFieldValue}
                   labelComponent={
                     <GetStorageLinkComponent
-                      // TODO: update it with the correct field
-                      storageKey={null} // student?.guardianCprDoc
+                      storageKey={student?.m_guardianCPRDoc}
                     ></GetStorageLinkComponent>
                   }
                 />
@@ -816,8 +864,7 @@ export default function MasterInfoForm() {
                       setFieldValue={setFieldValue}
                       labelComponent={
                         <GetStorageLinkComponent
-                          // TODO: update it with the correct field
-                          storageKey={null} // student?.incomeDoc
+                          storageKey={student?.m_incomeDoc}
                         ></GetStorageLinkComponent>
                       }
                     />
@@ -881,7 +928,7 @@ export default function MasterInfoForm() {
                             <strong>{t("phone")}:</strong> {errors.phone}
                           </li>
                         )}
-                        {errors.gender && (
+                        {/* {errors.gender && (
                           <li className="text-red-600">
                             <strong>{t("gender")}:</strong> {errors.gender}
                           </li>
@@ -897,7 +944,7 @@ export default function MasterInfoForm() {
                             <strong>{t("nationality")}:</strong>{" "}
                             {errors.nationality}
                           </li>
-                        )}
+                        )} */}
                         {errors.number_of_family_member && (
                           <li className="text-red-600">
                             <strong>{t("numberOfFamilyMembers")}:</strong>{" "}

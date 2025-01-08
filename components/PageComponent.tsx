@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FC, PropsWithChildren, ReactNode } from "react";
+import { FC, PropsWithChildren, ReactNode, useMemo } from "react";
 import { Toaster } from "react-hot-toast";
 import { useAuth } from "../hooks/use-auth";
 import { SignInForm } from "./auth/sign-in-form";
@@ -16,6 +16,7 @@ import { LangSwitcher } from "./langSwitcher";
 import { RegPeriod, RegPeriodDialog } from "./reg-period";
 import { cn } from "../src/lib/utils";
 import { useAppContext } from "../contexts/AppContexts";
+import { ApplicantType } from "../src/API";
 
 interface Props {
   title: string;
@@ -33,6 +34,16 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
   const isInitializing = init ?? true;
 
   const isHomePage = pathname === "/";
+
+  const applicantName = useMemo(
+    () =>
+      student
+        ? student.m_applicantType.includes(ApplicantType.MASTER)
+          ? `${student.m_firstName} ${student.m_lastName}`
+          : student.fullName ?? null
+        : null,
+    [student]
+  );
 
   async function signUserOut() {
     await signOut().then(() => {
@@ -86,10 +97,7 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
 
                       <div className="text-white">
                         <p>{user?.getUsername()}</p>
-                        {
-                          // TODO: add master name
-                          student && <p>{student.fullName ?? ""}</p> //student.m_firstName ?? ""
-                        }
+                        {applicantName && <p>{applicantName}</p>}
                       </div>
                     </div>
                     <ul

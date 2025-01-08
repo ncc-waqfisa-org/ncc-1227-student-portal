@@ -36,9 +36,7 @@ export const MastersHomeComponent: FC = () => {
     queryFn: () => (cpr ? getStudentScholarships(cpr) : []),
   });
 
-  // TODO: change this back to number of scholarships
-  const haveScholarships = false;
-  // const haveScholarships = (scholarships?.length ?? 0) > 0;
+  const haveScholarships = (scholarships?.length ?? 0) > 0;
 
   const canApply =
     signUpEnabled ||

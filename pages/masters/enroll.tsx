@@ -16,14 +16,18 @@ import {
   MastersProvider,
   useMastersContext,
 } from "../../contexts/MastersContexts";
-import MastersSignUpForm from "../../components/auth/masters/masters-sign-up-form";
-import { EnrollIntoMaster } from "../../components/account/masters/EnrollIntoMaster";
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
+import { EnrollIntoMaster } from "../../components/account/masters/EnrollIntoMaster";
+import { listAllBahrainUniversities } from "../../src/CustomAPI";
+import { BahrainUniversities } from "../../src/API";
+
+export const getServerSideProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
+  const universities = await listAllBahrainUniversities();
 
   return {
     props: {
+      universities,
       ...(await serverSideTranslations(locale ?? "en", [
         "common",
         "toast",
@@ -39,17 +43,17 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   };
 };
 
-interface Props {}
+interface Props {
+  universities: BahrainUniversities[];
+}
 
-const EnrollIntoMasters: NextPageWithLayout<Props> = () => {
+const EnrollIntoMasters: NextPageWithLayout<Props> = ({ universities }) => {
   const { isSignedIn, isAuthedUserPending } = useAuth();
   const router = useRouter();
 
   const { signUpEnabled, isBatchPending, batch } = useMastersContext();
 
   useEffect(() => {
-    console.log({ isSignedIn, isAuthedUserPending });
-    // TODO: check if this redirect before the value is set to signed in, if so then use it to control hiding the page
     if (!isSignedIn && !isAuthedUserPending) {
       router.replace("/");
     }
@@ -65,7 +69,7 @@ const EnrollIntoMasters: NextPageWithLayout<Props> = () => {
         <>
           {signUpEnabled ? (
             <div>
-              <EnrollIntoMaster />
+              <EnrollIntoMaster universities={universities} />
               {/* <MastersSignUpForm></MastersSignUpForm> */}
             </div>
           ) : // if registration period is over
