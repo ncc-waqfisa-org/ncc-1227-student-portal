@@ -30,7 +30,7 @@ export const MastersHomeComponent: FC = () => {
     editingApplicationsEnabled,
   } = useMastersContext();
 
-  const { cpr, isAuthedUserPending, isSignedIn } = useAuth();
+  const { cpr, isSignedIn } = useAuth();
   const { data: scholarships } = useQuery<Scholarship[]>({
     queryKey: ["scholarships", cpr],
     queryFn: () => (cpr ? getStudentScholarships(cpr) : []),

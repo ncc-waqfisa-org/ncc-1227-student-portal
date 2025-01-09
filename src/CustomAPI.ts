@@ -86,7 +86,7 @@ export enum DocType {
   INCOME,
   GUARDIAN,
   UNIVERSITY_CERTIFICATE,
-  IELTS,
+  TOFEL_ILETS,
 }
 
 export enum SpecializationField {

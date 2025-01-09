@@ -2658,6 +2658,7 @@ export const createMasterApplication = /* GraphQL */ `mutation CreateMasterAppli
       __typename
     }
     studentCPR
+    studentName
     student {
       cpr
       cprDoc
@@ -2776,6 +2777,7 @@ export const updateMasterApplication = /* GraphQL */ `mutation UpdateMasterAppli
       __typename
     }
     studentCPR
+    studentName
     student {
       cpr
       cprDoc
@@ -2894,6 +2896,7 @@ export const deleteMasterApplication = /* GraphQL */ `mutation DeleteMasterAppli
       __typename
     }
     studentCPR
+    studentName
     student {
       cpr
       cprDoc
@@ -3146,6 +3149,7 @@ export const createMasterscholarship = /* GraphQL */ `mutation CreateMasterschol
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints
@@ -3204,6 +3208,7 @@ export const updateMasterscholarship = /* GraphQL */ `mutation UpdateMasterschol
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints
@@ -3262,6 +3267,7 @@ export const deleteMasterscholarship = /* GraphQL */ `mutation DeleteMasterschol
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints

@@ -913,6 +913,7 @@ type EagerMasterApplication = {
   readonly universityID: string;
   readonly university?: MasterUniversities | null;
   readonly studentCPR: string;
+  readonly studentName?: string | null;
   readonly student?: Student | null;
   readonly batch?: number | null;
   readonly score?: number | null;
@@ -947,6 +948,7 @@ type LazyMasterApplication = {
   readonly universityID: string;
   readonly university: AsyncItem<MasterUniversities | undefined>;
   readonly studentCPR: string;
+  readonly studentName?: string | null;
   readonly student: AsyncItem<Student | undefined>;
   readonly batch?: number | null;
   readonly score?: number | null;

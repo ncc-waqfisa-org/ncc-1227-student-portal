@@ -329,6 +329,7 @@ type MasterApplication @model @auth(rules: [{ allow: public }]) {
   universityID: ID! # Make this required since @belongsTo relies on it
   university: MasterUniversities @belongsTo(fields: ["universityID"])
   studentCPR: String! @index(name: "byMasterStudentCPR", sortKeyFields: ["gpa"])
+  studentName: String
   student: Student @belongsTo(fields: ["studentCPR"])
   batch: Int @index(name: "byMasterBatch", sortKeyFields: ["status"])
   score: Float @index(name: "byMasterScore", sortKeyFields: ["status"])

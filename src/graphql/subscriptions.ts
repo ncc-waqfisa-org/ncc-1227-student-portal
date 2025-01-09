@@ -2570,6 +2570,7 @@ export const onCreateMasterApplication = /* GraphQL */ `subscription OnCreateMas
       __typename
     }
     studentCPR
+    studentName
     student {
       cpr
       cprDoc
@@ -2687,6 +2688,7 @@ export const onUpdateMasterApplication = /* GraphQL */ `subscription OnUpdateMas
       __typename
     }
     studentCPR
+    studentName
     student {
       cpr
       cprDoc
@@ -2804,6 +2806,7 @@ export const onDeleteMasterApplication = /* GraphQL */ `subscription OnDeleteMas
       __typename
     }
     studentCPR
+    studentName
     student {
       cpr
       cprDoc
@@ -3049,6 +3052,7 @@ export const onCreateMasterscholarship = /* GraphQL */ `subscription OnCreateMas
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints
@@ -3106,6 +3110,7 @@ export const onUpdateMasterscholarship = /* GraphQL */ `subscription OnUpdateMas
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints
@@ -3163,6 +3168,7 @@ export const onDeleteMasterscholarship = /* GraphQL */ `subscription OnDeleteMas
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints

@@ -2859,6 +2859,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "studentName": {
+                    "name": "studentName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "student": {
                     "name": "student",
                     "isArray": false,
@@ -3583,5 +3590,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "471066c156077682b7d2f5c76d8cef04"
+    "version": "842afba756fe6b37f62a87abdae632e0"
 };

@@ -181,7 +181,7 @@ interface IAllMasterDocsAreAvailable {
   transcript: string | null | undefined;
   acceptance: string | null | undefined;
   universitiyCertificate: string | null | undefined;
-  ielts: string | null | undefined;
+  tofelILETS: string | null | undefined;
 
   income: string | null | undefined;
 }
@@ -208,7 +208,7 @@ export function allMasterDocsAreAvailable(
     typeof props.transcript === "string" &&
     typeof props.acceptance === "string" &&
     typeof props.universitiyCertificate === "string" &&
-    typeof props.ielts === "string" &&
+    typeof props.tofelILETS === "string" &&
     typeof props.income === "string"
   );
 }

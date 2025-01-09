@@ -2,9 +2,11 @@ import "../styles/globals.css";
 import "@aws-amplify/ui-react/styles.css";
 import type { AppProps } from "next/app";
 import { Amplify, API, Auth, Storage } from "aws-amplify";
+import { Auth as atAuth } from "@aws-amplify/auth";
+import atAPIG from "@aws-amplify/api-graphql";
+
 import config from "../src/aws-exports";
 
-import { BachelorProvider } from "../contexts/BachelorContexts";
 import { AuthProvider } from "../hooks/use-auth";
 import { appWithTranslation } from "next-i18next";
 import { useRouter } from "next/router";
@@ -33,6 +35,9 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   Auth.configure({ ...config, ssr: true });
   API.configure({ ...config, ssr: true });
   Storage.configure({ ...config, ssr: true });
+  atAuth.configure({ ...config, ssr: true });
+
+  atAPIG.configure({ ...config, ssr: true });
 
   const queryClient = new QueryClient({
     defaultOptions: {

@@ -28,6 +28,25 @@
   "accessDenied": "Access denied",
   "fullName": "Full Name",
   "studentGPA": "Student GPA",
+  "applicantGPA": "Applicant GPA",
+  "applicantGPAD": "Applicant GPA out of 4",
+
+  "university": "University",
+  "universityCertificate": "University Certificate",
+  "universityCertificateD": "The university certificate graduated from.",
+  "theUniversityYouWantToApplyTo": "The university that you want to apply to.",
+
+  "transcriptDoc": "Transcript Document",
+  "transcriptDocD": "The transcript document of the university you graduated from.",
+
+  "major": "Major",
+
+  "acceptanceLetterDoc": "Acceptance Letter Document",
+  "acceptanceLetterDocD": "The acceptance letter for the university you want to apply for.",
+
+  "tofelILETSCertificateDoc": "TOFEL/ILETS Certificate",
+  "tofelILETSCertificateDocD": "A TOFEL or ILETS Certificate",
+
   "minimumGPA": "Minimum GPA",
   "reasonForUpdate": "Reason For Update",
   "update": "Update",

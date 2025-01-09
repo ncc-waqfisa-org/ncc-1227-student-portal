@@ -1,21 +1,14 @@
-import React, { FC, ReactElement } from "react";
-import { ApplicationForm } from "../../../components/applications/ApplicationForm";
+import React, { ReactElement } from "react";
 import { PageComponent } from "../../../components/PageComponent";
 import { GetServerSideProps } from "next";
-import {
-  listAllMasterUniversities,
-  listAllPrograms,
-} from "../../../src/CustomAPI";
-import { MasterUniversities, Program, University } from "../../../src/API";
-import {
-  BachelorProvider,
-  useBachelorContext,
-} from "../../../contexts/BachelorContexts";
+import { listAllMasterUniversities } from "../../../src/CustomAPI";
+import { ApplicantType, MasterUniversities } from "../../../src/API";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import arLocale from "dayjs/locale/ar";
 import enLocale from "dayjs/locale/en";
+import logs from "public/svg/logs.svg";
 
 import { CardInfoComponent } from "../../../components/CardInfo";
 import info from "public/svg/info.svg";
@@ -26,12 +19,14 @@ import {
   useMastersContext,
 } from "../../../contexts/MastersContexts";
 import { NoAvailableBatch } from "../../../components/NoAvailableBatch";
-// import { MastersApplicationForm } from "../../../components/applications/MastersApplicationForm";
+import { MastersApplicationForm } from "../../../components/applications/MastersApplicationForm";
+import { useAppContext } from "../../../contexts/AppContexts";
+import { useRouter } from "next/router";
+import { Skeleton } from "../../../components/Skeleton";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { locale } = ctx;
   const universities = await listAllMasterUniversities();
-  // const programs = await listAllPrograms();
 
   return {
     props: {
@@ -57,64 +52,93 @@ const NewApplicationPage: NextPageWithLayout<Props> = (props) => {
   const { haveActiveApplication, newApplicationsEnabled, batch } =
     useMastersContext();
 
+  const router = useRouter();
+
+  const { studentAsStudent: student, isStudentPending } = useAppContext();
+
   const { t } = useTranslation("applicationPage");
+  const { t: tCommon } = useTranslation("common");
+
+  const isMasterApplicant = student?.m_applicantType.includes(
+    ApplicantType.MASTER
+  );
 
   return (
     <PageComponent title={t("MNewApplication")} authRequired>
-      {newApplicationsEnabled ? (
+      {isStudentPending && (
+        <Skeleton className="w-full max-w-md mx-auto h-72 rounded-2xl"></Skeleton>
+      )}
+
+      {!isMasterApplicant && !isStudentPending && (
+        <div className="flex justify-center py-10">
+          <CardInfoComponent
+            icon={logs}
+            title={tCommon("applyForScholarshipMasters")}
+            description={tCommon("applyForScholarshipDescription")}
+            action={() => router.push("/masters/enroll")}
+            actionTitle={tCommon("enrollNow") ?? "Enroll Now"}
+          ></CardInfoComponent>
+        </div>
+      )}
+
+      {isMasterApplicant && !isStudentPending && (
         <div>
-          {!haveActiveApplication && (
-            // <MastersApplicationForm
-            //   universities={props.universities}
-            // ></MastersApplicationForm>
-            <></>
-          )}
-          {haveActiveApplication && (
-            <div className="rounded-2xl bg-zinc-200 text-zinc-500 flex flex-col p-4 border border-zinc-300 text-center justify-center items-center min-h-[5rem]">
-              <div>{t("youAlreadyHaveAnActiveApplication")}</div>
-              <Link href="/applications" className="link link-primary">
-                {t("goToApplications")}
-              </Link>
+          {newApplicationsEnabled ? (
+            <div>
+              {!haveActiveApplication && (
+                <MastersApplicationForm
+                  universities={props.universities}
+                ></MastersApplicationForm>
+                // <></>
+              )}
+              {haveActiveApplication && (
+                <div className="rounded-2xl bg-zinc-200 text-zinc-500 flex flex-col p-4 border border-zinc-300 text-center justify-center items-center min-h-[5rem]">
+                  <div>{t("youAlreadyHaveAnActiveApplication")}</div>
+                  <Link href="/applications" className="link link-primary">
+                    {t("goToApplications")}
+                  </Link>
+                </div>
+              )}
+            </div>
+          ) : !batch ? (
+            <NoAvailableBatch type="masters" />
+          ) : dayjs().isAfter(
+              dayjs(batch?.createApplicationEndDate).endOf("day")
+            ) ? (
+            <div className="flex flex-wrap justify-center gap-10">
+              <CardInfoComponent
+                icon={info}
+                title={"Applying"}
+                description={"Applying period is over"}
+              ></CardInfoComponent>
+              <CardInfoComponent
+                icon={info}
+                title={"التقديم"}
+                description={"فترة التقديم إنتهت"}
+              ></CardInfoComponent>
+            </div>
+          ) : (
+            <div className="flex flex-wrap justify-center gap-10">
+              <CardInfoComponent
+                icon={info}
+                title={"التقديم"}
+                description={`سيتم فتح التقديم في ${dayjs(
+                  batch?.createApplicationStartDate
+                )
+                  .locale(arLocale)
+                  .format("MMM DD, YYYY")}`}
+              ></CardInfoComponent>
+              <CardInfoComponent
+                icon={info}
+                title={"Applying"}
+                description={`Applying will open in ${dayjs(
+                  batch?.createApplicationStartDate
+                )
+                  .locale(enLocale)
+                  .format("MMM DD, YYYY")}`}
+              ></CardInfoComponent>
             </div>
           )}
-        </div>
-      ) : !batch ? (
-        <NoAvailableBatch type="masters" />
-      ) : dayjs().isAfter(
-          dayjs(batch?.createApplicationEndDate).endOf("day")
-        ) ? (
-        <div className="flex flex-wrap justify-center gap-10">
-          <CardInfoComponent
-            icon={info}
-            title={"Applying"}
-            description={"Applying period is over"}
-          ></CardInfoComponent>
-          <CardInfoComponent
-            icon={info}
-            title={"التقديم"}
-            description={"فترة التقديم إنتهت"}
-          ></CardInfoComponent>
-        </div>
-      ) : (
-        <div className="flex flex-wrap justify-center gap-10">
-          <CardInfoComponent
-            icon={info}
-            title={"التقديم"}
-            description={`سيتم فتح التقديم في ${dayjs(
-              batch?.createApplicationStartDate
-            )
-              .locale(arLocale)
-              .format("MMM DD, YYYY")}`}
-          ></CardInfoComponent>
-          <CardInfoComponent
-            icon={info}
-            title={"Applying"}
-            description={`Applying will open in ${dayjs(
-              batch?.createApplicationStartDate
-            )
-              .locale(enLocale)
-              .format("MMM DD, YYYY")}`}
-          ></CardInfoComponent>
         </div>
       )}
     </PageComponent>

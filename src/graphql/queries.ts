@@ -2168,6 +2168,7 @@ export const getMasterApplication = /* GraphQL */ `query GetMasterApplication($i
       __typename
     }
     studentCPR
+    studentName
     student {
       cpr
       cprDoc
@@ -2255,6 +2256,7 @@ export const listMasterApplications = /* GraphQL */ `query ListMasterApplication
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints
@@ -2304,6 +2306,7 @@ export const syncMasterApplications = /* GraphQL */ `query SyncMasterApplication
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints
@@ -2551,6 +2554,7 @@ export const getMasterscholarship = /* GraphQL */ `query GetMasterscholarship($i
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints
@@ -3440,6 +3444,7 @@ export const masterApplicationsByIdAndDateTime = /* GraphQL */ `query MasterAppl
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints
@@ -3493,6 +3498,7 @@ export const masterApplicationsByNationalityCategoryAndBatch = /* GraphQL */ `qu
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints
@@ -3546,6 +3552,7 @@ export const masterApplicationsByStudentCPRAndGpa = /* GraphQL */ `query MasterA
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints
@@ -3599,6 +3606,7 @@ export const masterApplicationsByBatchAndStatus = /* GraphQL */ `query MasterApp
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints
@@ -3652,6 +3660,7 @@ export const masterApplicationsByScoreAndStatus = /* GraphQL */ `query MasterApp
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints
@@ -3705,6 +3714,7 @@ export const masterApplicationsByProcessedAndBatch = /* GraphQL */ `query Master
       nationalityCategory
       universityID
       studentCPR
+      studentName
       batch
       score
       adminPoints
