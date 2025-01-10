@@ -180,7 +180,8 @@ export default function MastersSignUpForm() {
     mutationFn: (values: MasterSignUpData) => {
       // TODO: update with the correct url
       return fetch(
-        `https://4e5shhnddic6km63m5jiib7oru0hwcpl.lambda-url.us-east-1.on.aws`,
+        process.env.LAMBDA_MASTERS_SIGN_UP ??
+          `https://4e5shhnddic6km63m5jiib7oru0hwcpl.lambda-url.us-east-1.on.aws`,
         // `https://ciuxdqxmol.execute-api.us-east-1.amazonaws.com/default/masters-sign-up`,
         {
           method: "POST",
@@ -351,8 +352,8 @@ export default function MastersSignUpForm() {
 
           const thirdStepHaveError = !!errors.accepted;
           return (
-            <Form className="flex flex-col justify-center max-w-4xl mx-auto">
-              <ul dir="ltr" className="relative mb-6 overflow-visible steps">
+            <Form className="flex flex-col justify-center mx-auto max-w-4xl">
+              <ul dir="ltr" className="overflow-visible relative mb-6 steps">
                 <li
                   onClick={() => steps > 1 && setSteps(1)}
                   className={cn(
@@ -393,7 +394,7 @@ export default function MastersSignUpForm() {
                 >
                   {t("termsAndConditions")}
                 </li>
-                <li className="absolute left-0 flex flex-col justify-center top-1 md:-left-8">
+                <li className="flex absolute left-0 top-1 flex-col justify-center md:-left-8">
                   <button
                     title={t("back") ?? "Back"}
                     type="button"
@@ -631,7 +632,7 @@ export default function MastersSignUpForm() {
                   </label>
                 </div>
 
-                <FormSeparator title={t("graduation")} />
+                <FormSeparator title={t("graduationUniversity")} />
                 <div className="flex flex-col justify-start w-full">
                   <div className="flex items-center">
                     <label className="label">{t("university")}</label>
@@ -834,7 +835,7 @@ export default function MastersSignUpForm() {
                     />
                     <div
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 right-0 flex items-center px-3 text-sm leading-5 hover:cursor-pointer"
+                      className="flex absolute inset-y-0 right-0 items-center px-3 text-sm leading-5 hover:cursor-pointer"
                     >
                       <svg
                         className={`h-6  text-gray-700 ${
@@ -898,7 +899,7 @@ export default function MastersSignUpForm() {
                       onClick={() =>
                         setShowConfirmPassword(!showConfirmPassword)
                       }
-                      className="absolute inset-y-0 right-0 flex items-center px-3 text-sm leading-5 hover:cursor-pointer"
+                      className="flex absolute inset-y-0 right-0 items-center px-3 text-sm leading-5 hover:cursor-pointer"
                     >
                       <svg
                         className={`h-6  text-gray-700 ${
@@ -1066,7 +1067,7 @@ export default function MastersSignUpForm() {
                   steps !== 3 && "hidden"
                 )}
               >
-                <div className="container flex flex-col max-w-3xl gap-3 mx-auto">
+                <div className="container flex flex-col gap-3 mx-auto max-w-3xl">
                   <h1 className="text-2xl font-semibold md:text-3xl">
                     {tAC("termsAndConditions")}
                   </h1>
@@ -1081,7 +1082,7 @@ export default function MastersSignUpForm() {
                     </div>
                   </div>
                   {/* Accepted */}
-                  <div className="flex flex-wrap items-center justify-start w-full gap-3">
+                  <div className="flex flex-wrap gap-3 justify-start items-center w-full">
                     <label
                       className={cn(
                         "label",
@@ -1131,95 +1132,95 @@ export default function MastersSignUpForm() {
                   {/* Step 1 Errors */}
                   {steps >= 1 && firstStepHaveError && (
                     <div className="mb-4">
-                      <h3 className="font-semibold text-red-600 text-md">
+                      <h3 className="font-semibold text-error text-md">
                         {t("applicantInfo")}
                       </h3>
                       <ul className="pl-5 list-disc">
                         {errors.cpr && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("cpr")}:</strong> {errors.cpr}
                           </li>
                         )}
                         {errors.cpr_doc && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("cprDoc")}:</strong> {errors.cpr_doc}
                           </li>
                         )}
                         {errors.first_name && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("firstName")}:</strong>{" "}
                             {errors.first_name}
                           </li>
                         )}
                         {errors.second_name && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("secondName")}:</strong>{" "}
                             {errors.second_name}
                           </li>
                         )}
                         {errors.last_name && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("lastName")}:</strong> {errors.last_name}
                           </li>
                         )}
                         {errors.address && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("address")}:</strong> {errors.address}
                           </li>
                         )}
                         {errors.email && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("email")}:</strong> {errors.email}
                           </li>
                         )}
                         {errors.phone && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("phone")}:</strong> {errors.phone}
                           </li>
                         )}
                         {errors.gender && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("gender")}:</strong> {errors.gender}
                           </li>
                         )}
                         {errors.place_of_birth && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("placeOfBirth")}:</strong>{" "}
                             {errors.place_of_birth}
                           </li>
                         )}
                         {errors.nationality && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("nationality")}:</strong>{" "}
                             {errors.nationality}
                           </li>
                         )}
                         {errors.number_of_family_member && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("numberOfFamilyMembers")}:</strong>{" "}
                             {errors.number_of_family_member}
                           </li>
                         )}
                         {errors.graduation_year && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("graduationYear")}:</strong>{" "}
                             {errors.graduation_year}
                           </li>
                         )}
                         {errors.universityID && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("university")}:</strong>{" "}
                             {errors.universityID}
                           </li>
                         )}
                         {errors.old_program && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("graduationProgram")}:</strong>{" "}
                             {errors.old_program}
                           </li>
                         )}
                         {errors.isEmployed && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("employment")}:</strong>{" "}
                             {errors.isEmployed}
                           </li>
@@ -1227,18 +1228,18 @@ export default function MastersSignUpForm() {
                         {values.isEmployed && (
                           <>
                             {errors.place_of_employment && (
-                              <li className="text-red-600">
+                              <li className="text-error">
                                 <strong>{t("placeOfEmployment")}:</strong>{" "}
                                 {errors.place_of_employment}
                               </li>
                             )}
                             {errors.income && (
-                              <li className="text-red-600">
+                              <li className="text-error">
                                 <strong>{t("income")}:</strong> {errors.income}
                               </li>
                             )}
                             {errors.income_doc && (
-                              <li className="text-red-600">
+                              <li className="text-error">
                                 <strong>{t("incomeDoc")}:</strong>{" "}
                                 {errors.income_doc}
                               </li>
@@ -1246,12 +1247,12 @@ export default function MastersSignUpForm() {
                           </>
                         )}
                         {errors.password && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("password")}:</strong> {errors.password}
                           </li>
                         )}
                         {errors.confirm_password && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("confirmPassword")}:</strong>{" "}
                             {errors.confirm_password}
                           </li>
@@ -1263,24 +1264,24 @@ export default function MastersSignUpForm() {
                   {/* Step 2 Errors */}
                   {steps >= 2 && secondStepHaveError && (
                     <div className="mb-4">
-                      <h3 className="font-semibold text-red-600 text-md">
+                      <h3 className="font-semibold text-error text-md">
                         {t("guardianInfo")}
                       </h3>
                       <ul className="pl-5 list-disc">
                         {errors.guardian_full_name && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("guardianFullName")}:</strong>{" "}
                             {errors.guardian_full_name}
                           </li>
                         )}
                         {errors.guardian_cpr && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("guardianCpr")}:</strong>{" "}
                             {errors.guardian_cpr}
                           </li>
                         )}
                         {errors.guardian_cpr_doc && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("guardianCprDoc")}:</strong>{" "}
                             {errors.guardian_cpr_doc}
                           </li>
@@ -1288,12 +1289,12 @@ export default function MastersSignUpForm() {
                         {!values.isEmployed && (
                           <>
                             {errors.income && (
-                              <li className="text-red-600">
+                              <li className="text-error">
                                 <strong>{t("income")}:</strong> {errors.income}
                               </li>
                             )}
                             {errors.income_doc && (
-                              <li className="text-red-600">
+                              <li className="text-error">
                                 <strong>{t("incomeDoc")}:</strong>{" "}
                                 {errors.income_doc}
                               </li>
@@ -1307,12 +1308,12 @@ export default function MastersSignUpForm() {
                   {/* Step 3 Errors */}
                   {steps >= 3 && thirdStepHaveError && (
                     <div className="mb-4">
-                      <h3 className="font-semibold text-red-600 text-md">
+                      <h3 className="font-semibold text-error text-md">
                         {t("termsAndConditions")}
                       </h3>
                       <ul className="pl-5 list-disc">
                         {errors.accepted && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{tAC("termsAndConditions")}:</strong>{" "}
                             {errors["accepted"]}
                           </li>
@@ -1456,7 +1457,7 @@ const LabelField: FC<TLabelField> = ({
 
 export const FormSeparator = ({ title }: { title: string }) => {
   return (
-    <div className="flex items-center gap-4 md:col-span-2">
+    <div className="flex gap-4 items-center md:col-span-2">
       <div className="h-[1px] bg-zinc-300 flex-1"></div>
       <p>{title}</p>
       <div className="h-[1px] bg-zinc-300 flex-1"></div>

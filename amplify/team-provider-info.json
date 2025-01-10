@@ -99,10 +99,6 @@
         "sendWarningEmail": {
           "deploymentBucketName": "amplify-ncc-masterdev-2e2e0-deployment",
           "s3Key": "amplify-builds/sendWarningEmail-73496742593133514f37-build.zip"
-        },
-        "signUpMaster": {
-          "deploymentBucketName": "amplify-ncc-masterdev-2e2e0-deployment",
-          "s3Key": "amplify-builds/signUpMaster-436d45494a2b39613849-build.zip"
         }
       },
       "storage": {

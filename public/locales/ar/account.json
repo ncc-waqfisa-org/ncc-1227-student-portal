@@ -88,6 +88,7 @@
   "lastName": "الاسم الأخير",
   "university": "الجامعة",
   "graduation": "التخرج",
+  "graduationUniversity": "جامعة التخرج",
   "graduationYear": "سنة التخرج",
   "graduationProgram": "برنامج التخرج",
   "employment": "التوظيف",

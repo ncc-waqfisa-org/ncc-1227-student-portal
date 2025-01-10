@@ -40,6 +40,9 @@
   "transcriptDocD": "The transcript document of the university you graduated from.",
 
   "major": "Major",
+  "ENGINEERING": "Engineering",
+  "SCIENCE": "Science",
+  "TECHNOLOGY": "Technology",
 
   "acceptanceLetterDoc": "Acceptance Letter Document",
   "acceptanceLetterDocD": "The acceptance letter for the university you want to apply for.",

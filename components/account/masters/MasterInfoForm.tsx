@@ -273,7 +273,7 @@ export default function MasterInfoForm({
 
           if (isStudentPending) {
             return (
-              <div className="w-full max-w-lg p-6 mx-auto my-8 border border-gray-200 rounded-lg shadow-lg bg-white/30">
+              <div className="p-6 mx-auto my-8 w-full max-w-lg rounded-lg border border-gray-200 shadow-lg bg-white/30">
                 <div className="flex flex-col gap-4">
                   <div className="w-3/4 h-6 bg-gray-200 rounded animate-pulse"></div>
                   <div className="w-1/2 h-6 bg-gray-200 rounded animate-pulse"></div>
@@ -285,7 +285,7 @@ export default function MasterInfoForm({
 
           if (!student && !isStudentPending) {
             return (
-              <div className="w-full max-w-lg p-6 mx-auto my-8 border border-red-200 rounded-lg shadow-lg bg-white/30">
+              <div className="p-6 mx-auto my-8 w-full max-w-lg rounded-lg border border-red-200 shadow-lg bg-white/30">
                 <div className="flex flex-col gap-4 text-center">
                   <div className="text-xl font-semibold text-error">
                     Applicant details could not be fetched
@@ -299,8 +299,8 @@ export default function MasterInfoForm({
           }
 
           return (
-            <Form className="flex flex-col justify-center max-w-4xl mx-auto">
-              <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-4")}>
+            <Form className="flex flex-col justify-center mx-auto max-w-4xl">
+              <div className={cn("grid grid-cols-1 gap-4 md:grid-cols-2")}>
                 <div className="flex flex-col justify-start w-full">
                   <div className="flex items-center">
                     <label className="label">{t("cpr")}</label>
@@ -563,7 +563,7 @@ export default function MasterInfoForm({
                   </label>
                 </div>
 
-                <FormSeparator title={t("graduation")} />
+                <FormSeparator title={t("graduationUniversity")} />
                 <div className="flex flex-col justify-start w-full">
                   <div className="flex items-center">
                     <label className="label">{t("university")}</label>
@@ -891,86 +891,86 @@ export default function MasterInfoForm({
                   {/*  Errors */}
                   {formErrors && (
                     <div className="mb-4">
-                      <h3 className="font-semibold text-red-600 text-md">
+                      <h3 className="font-semibold text-error text-md">
                         {t("applicantInfo")}
                       </h3>
                       <ul className="pl-5 list-disc">
                         {errors.cpr_doc && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("cprDoc")}:</strong> {errors.cpr_doc}
                           </li>
                         )}
                         {errors.first_name && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("firstName")}:</strong>{" "}
                             {errors.first_name}
                           </li>
                         )}
                         {errors.second_name && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("secondName")}:</strong>{" "}
                             {errors.second_name}
                           </li>
                         )}
                         {errors.last_name && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("lastName")}:</strong> {errors.last_name}
                           </li>
                         )}
                         {errors.address && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("address")}:</strong> {errors.address}
                           </li>
                         )}
 
                         {errors.phone && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("phone")}:</strong> {errors.phone}
                           </li>
                         )}
                         {/* {errors.gender && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("gender")}:</strong> {errors.gender}
                           </li>
                         )}
                         {errors.place_of_birth && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("placeOfBirth")}:</strong>{" "}
                             {errors.place_of_birth}
                           </li>
                         )}
                         {errors.nationality && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("nationality")}:</strong>{" "}
                             {errors.nationality}
                           </li>
                         )} */}
                         {errors.number_of_family_member && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("numberOfFamilyMembers")}:</strong>{" "}
                             {errors.number_of_family_member}
                           </li>
                         )}
                         {errors.graduation_year && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("graduationYear")}:</strong>{" "}
                             {errors.graduation_year}
                           </li>
                         )}
                         {errors.universityID && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("university")}:</strong>{" "}
                             {errors.universityID}
                           </li>
                         )}
                         {errors.old_program && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("graduationProgram")}:</strong>{" "}
                             {errors.old_program}
                           </li>
                         )}
                         {errors.isEmployed && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("employment")}:</strong>{" "}
                             {errors.isEmployed}
                           </li>
@@ -978,18 +978,18 @@ export default function MasterInfoForm({
                         {values.isEmployed && (
                           <>
                             {errors.place_of_employment && (
-                              <li className="text-red-600">
+                              <li className="text-error">
                                 <strong>{t("placeOfEmployment")}:</strong>{" "}
                                 {errors.place_of_employment}
                               </li>
                             )}
                             {errors.income && (
-                              <li className="text-red-600">
+                              <li className="text-error">
                                 <strong>{t("income")}:</strong> {errors.income}
                               </li>
                             )}
                             {errors.income_doc && (
-                              <li className="text-red-600">
+                              <li className="text-error">
                                 <strong>{t("incomeDoc")}:</strong>{" "}
                                 {errors.income_doc}
                               </li>
@@ -997,19 +997,19 @@ export default function MasterInfoForm({
                           </>
                         )}
                         {errors.guardian_full_name && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("guardianFullName")}:</strong>{" "}
                             {errors.guardian_full_name}
                           </li>
                         )}
                         {errors.guardian_cpr && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("guardianCpr")}:</strong>{" "}
                             {errors.guardian_cpr}
                           </li>
                         )}
                         {errors.guardian_cpr_doc && (
-                          <li className="text-red-600">
+                          <li className="text-error">
                             <strong>{t("guardianCprDoc")}:</strong>{" "}
                             {errors.guardian_cpr_doc}
                           </li>
@@ -1017,12 +1017,12 @@ export default function MasterInfoForm({
                         {!values.isEmployed && (
                           <>
                             {errors.income && (
-                              <li className="text-red-600">
+                              <li className="text-error">
                                 <strong>{t("income")}:</strong> {errors.income}
                               </li>
                             )}
                             {errors.income_doc && (
-                              <li className="text-red-600">
+                              <li className="text-error">
                                 <strong>{t("incomeDoc")}:</strong>{" "}
                                 {errors.income_doc}
                               </li>
@@ -1087,7 +1087,7 @@ const LabelField: FC<TLabelField> = ({
     <div className="flex flex-col justify-start w-full">
       <div className="flex items-center">
         <label className="w-full h-10 label">
-          <div className="flex justify-between w-full gap-2">
+          <div className="flex gap-2 justify-between w-full">
             <p className="inline-flex gap-1">
               {title}
 
@@ -1182,7 +1182,7 @@ const LabelField: FC<TLabelField> = ({
 
 export const FormSeparator = ({ title }: { title: string }) => {
   return (
-    <div className="flex items-center gap-4 md:col-span-2">
+    <div className="flex gap-4 items-center md:col-span-2">
       <div className="h-[1px] bg-zinc-300 flex-1"></div>
       <p>{title}</p>
       <div className="h-[1px] bg-zinc-300 flex-1"></div>

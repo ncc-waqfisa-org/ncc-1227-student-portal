@@ -1,12 +1,12 @@
 import React, { FC, useState } from "react";
-
+import logs from "public/svg/logs.svg";
 import { useAppContext } from "../../../contexts/AppContexts";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import { useMutation } from "@tanstack/react-query";
 import { Formik, Form, Field } from "formik";
 import toast from "react-hot-toast";
-import { uploadFile, DocType } from "../../../src/CustomAPI";
+import { uploadFile, DocType, updateStudentInDB } from "../../../src/CustomAPI";
 import { checkIfFilesAreTooBig } from "../../../src/HelperFunctions";
 import {
   Income,
@@ -17,16 +17,23 @@ import { cn } from "../../../src/lib/utils";
 import { PhoneNumberInput } from "../../phone";
 import * as yup from "yup";
 import "yup-phone";
-import { BahrainUniversities } from "../../../src/API";
+import { ApplicantType, BahrainUniversities } from "../../../src/API";
+import { CardInfoComponent } from "../../CardInfo";
 
 export const EnrollIntoMaster = ({
   universities,
 }: {
   universities: BahrainUniversities[];
 }) => {
-  const { studentAsStudent: student, isStudentPending } = useAppContext();
+  const {
+    student: studentAppsync,
+    studentAsStudent: student,
+    isStudentPending,
+    syncStudent,
+  } = useAppContext();
   const router = useRouter();
   const { t: tAC } = useTranslation("termsAndConditions");
+  const { t: tCommon } = useTranslation("common");
   const { t: tErrors } = useTranslation("errors");
   const { t: tToast } = useTranslation("toast");
   const { t } = useTranslation("account");
@@ -136,10 +143,48 @@ export const EnrollIntoMaster = ({
   const [masterSignUpData, setMasterSignUpData] =
     useState<MasterEnrollFormSchema>(initialValues);
 
+  // isEmployed: boolean;
+
+  // place_of_employment: string | null;
+
+  // // Personal income or guardian income based on employment
+
+  // income: Income | undefined;
+
+  // income_doc: string;
+
+  // // Guardian data
+
+  // guardian_cpr: string;
+
+  // guardian_full_name: string;
+
+  // guardian_cpr_doc: string;
+
   const enrollMutation = useMutation({
     mutationFn: (values: MasterEnrollData) => {
-      // TODO: update student using graphQL
-      return fetch("");
+      return updateStudentInDB({
+        input: {
+          _version: studentAppsync?.getStudent?._version,
+          cpr: student?.cpr ?? "",
+          m_firstName: values.first_name,
+          m_secondName: values.second_name,
+          m_lastName: values.last_name,
+          m_graduationYear: values.graduation_year,
+          m_universityID: values.universityID,
+          m_oldProgram: values.old_program,
+          m_isEmployeed: values.isEmployed,
+          m_placeOfEmployment: values.place_of_employment,
+          m_income: values.income,
+          m_incomeDoc: values.income_doc,
+          m_guardianCPR: values.guardian_cpr,
+          m_guardianFullName: values.guardian_full_name,
+          m_guardianCPRDoc: values.guardian_cpr_doc,
+        },
+      });
+      //
+
+      // TODO: sync student data using GraphQL
 
       //   return fetch(
       //     `https://ciuxdqxmol.execute-api.us-east-1.amazonaws.com/default/masters-sign-up`,
@@ -154,22 +199,35 @@ export const EnrollIntoMaster = ({
       //   );
     },
     async onSuccess(data) {
-      if (data.ok) {
-        const { message } = await data.json();
+      if (data?.updateStudent?.m_firstName) {
+        syncStudent();
 
-        toast.success(message);
+        toast.success(
+          router.locale === "ar"
+            ? "التحق في الماجستير بنجاح"
+            : "Enrolled into masters successfully"
+        );
 
         router.push({
           pathname: "/masters/applications",
           query: { cpr: student?.cpr },
         });
       } else {
-        const { message } = await data.json();
-        throw new Error(message);
+        throw new Error(
+          router.locale === "ar"
+            ? "فشل في التسجيل في الماجستير"
+            : "Failed to enroll into masters"
+        );
       }
     },
     async onError(error) {
-      throw new Error(error.message);
+      console.log(error.message);
+      toast.error(
+        router.locale === "ar"
+          ? "فشل في التسجيل في الماجستير"
+          : "Failed to enroll into masters"
+      );
+      setIsLoading(false);
     },
     onSettled() {
       setIsLoading(false);
@@ -244,7 +302,7 @@ export const EnrollIntoMaster = ({
   return (
     <div className="flex flex-col items-center">
       {isStudentPending && (
-        <div className="w-full max-w-lg p-6 mx-auto my-8 border border-gray-200 rounded-lg shadow-lg bg-white/30">
+        <div className="p-6 mx-auto my-8 w-full max-w-lg rounded-lg border border-gray-200 shadow-lg bg-white/30">
           <div className="flex flex-col gap-4">
             <div className="w-3/4 h-6 bg-gray-200 rounded animate-pulse"></div>
             <div className="w-1/2 h-6 bg-gray-200 rounded animate-pulse"></div>
@@ -254,7 +312,7 @@ export const EnrollIntoMaster = ({
       )}
 
       {!student && !isStudentPending && (
-        <div className="w-full max-w-lg p-6 mx-auto my-8 border border-red-200 rounded-lg shadow-lg bg-white/30">
+        <div className="p-6 mx-auto my-8 w-full max-w-lg rounded-lg border border-red-200 shadow-lg bg-white/30">
           <div className="flex flex-col gap-4 text-center">
             <div className="text-xl font-semibold text-error">
               Applicant details could not be fetched
@@ -266,7 +324,19 @@ export const EnrollIntoMaster = ({
         </div>
       )}
 
-      {student && (
+      {student && student.m_applicantType.includes(ApplicantType.MASTER) && (
+        <div className="py-6">
+          <CardInfoComponent
+            icon={logs}
+            title={tCommon("applyForScholarshipMasters")}
+            description={tCommon("applyForScholarshipDescription")}
+            action={() => router.push("/masters/applications?type=masters")}
+            actionTitle={tCommon("applyNow") ?? "Apply Now"}
+          />
+        </div>
+      )}
+
+      {student && !student.m_applicantType.includes(ApplicantType.MASTER) && (
         <Formik
           initialValues={initialValues}
           validationSchema={formValidationSchema}
@@ -304,8 +374,8 @@ export const EnrollIntoMaster = ({
 
             const thirdStepHaveError = !!errors.accepted;
             return (
-              <Form className="flex flex-col justify-center max-w-4xl mx-auto">
-                <ul dir="ltr" className="relative mb-6 overflow-visible steps">
+              <Form className="flex flex-col justify-center mx-auto max-w-4xl">
+                <ul dir="ltr" className="overflow-visible relative mb-6 steps">
                   <li
                     onClick={() => steps > 1 && setSteps(1)}
                     className={cn(
@@ -346,7 +416,7 @@ export const EnrollIntoMaster = ({
                   >
                     {t("termsAndConditions")}
                   </li>
-                  <li className="absolute left-0 flex flex-col justify-center top-1 md:-left-8">
+                  <li className="flex absolute left-0 top-1 flex-col justify-center md:-left-8">
                     <button
                       title={t("back") ?? "Back"}
                       type="button"
@@ -469,7 +539,7 @@ export const EnrollIntoMaster = ({
                     />
                   </div>
 
-                  <FormSeparator title={t("graduation")} />
+                  <FormSeparator title={t("graduationUniversity")} />
                   <div className="flex flex-col justify-start w-full">
                     <div className="flex items-center">
                       <label className="label">{t("university")}</label>
@@ -786,7 +856,7 @@ export const EnrollIntoMaster = ({
                     steps !== 3 && "hidden"
                   )}
                 >
-                  <div className="container flex flex-col max-w-3xl gap-3 mx-auto">
+                  <div className="container flex flex-col gap-3 mx-auto max-w-3xl">
                     <h1 className="text-2xl font-semibold md:text-3xl">
                       {tAC("termsAndConditions")}
                     </h1>
@@ -801,7 +871,7 @@ export const EnrollIntoMaster = ({
                       </div>
                     </div>
                     {/* Accepted */}
-                    <div className="flex flex-wrap items-center justify-start w-full gap-3">
+                    <div className="flex flex-wrap gap-3 justify-start items-center w-full">
                       <label
                         className={cn(
                           "label",
@@ -851,49 +921,49 @@ export const EnrollIntoMaster = ({
                     {/* Step 1 Errors */}
                     {steps >= 1 && firstStepHaveError && (
                       <div className="mb-4">
-                        <h3 className="font-semibold text-red-600 text-md">
+                        <h3 className="font-semibold text-error text-md">
                           {t("applicantInfo")}
                         </h3>
                         <ul className="pl-5 list-disc">
                           {errors.first_name && (
-                            <li className="text-red-600">
+                            <li className="text-error">
                               <strong>{t("firstName")}:</strong>{" "}
                               {errors.first_name}
                             </li>
                           )}
                           {errors.second_name && (
-                            <li className="text-red-600">
+                            <li className="text-error">
                               <strong>{t("secondName")}:</strong>{" "}
                               {errors.second_name}
                             </li>
                           )}
                           {errors.last_name && (
-                            <li className="text-red-600">
+                            <li className="text-error">
                               <strong>{t("lastName")}:</strong>{" "}
                               {errors.last_name}
                             </li>
                           )}
 
                           {errors.graduation_year && (
-                            <li className="text-red-600">
+                            <li className="text-error">
                               <strong>{t("graduationYear")}:</strong>{" "}
                               {errors.graduation_year}
                             </li>
                           )}
                           {errors.universityID && (
-                            <li className="text-red-600">
+                            <li className="text-error">
                               <strong>{t("university")}:</strong>{" "}
                               {errors.universityID}
                             </li>
                           )}
                           {errors.old_program && (
-                            <li className="text-red-600">
+                            <li className="text-error">
                               <strong>{t("graduationProgram")}:</strong>{" "}
                               {errors.old_program}
                             </li>
                           )}
                           {errors.isEmployed && (
-                            <li className="text-red-600">
+                            <li className="text-error">
                               <strong>{t("employment")}:</strong>{" "}
                               {errors.isEmployed}
                             </li>
@@ -901,19 +971,19 @@ export const EnrollIntoMaster = ({
                           {values.isEmployed && (
                             <>
                               {errors.place_of_employment && (
-                                <li className="text-red-600">
+                                <li className="text-error">
                                   <strong>{t("placeOfEmployment")}:</strong>{" "}
                                   {errors.place_of_employment}
                                 </li>
                               )}
                               {errors.income && (
-                                <li className="text-red-600">
+                                <li className="text-error">
                                   <strong>{t("income")}:</strong>{" "}
                                   {errors.income}
                                 </li>
                               )}
                               {errors.income_doc && (
-                                <li className="text-red-600">
+                                <li className="text-error">
                                   <strong>{t("incomeDoc")}:</strong>{" "}
                                   {errors.income_doc}
                                 </li>
@@ -927,24 +997,24 @@ export const EnrollIntoMaster = ({
                     {/* Step 2 Errors */}
                     {steps >= 2 && secondStepHaveError && (
                       <div className="mb-4">
-                        <h3 className="font-semibold text-red-600 text-md">
+                        <h3 className="font-semibold text-error text-md">
                           {t("guardianInfo")}
                         </h3>
                         <ul className="pl-5 list-disc">
                           {errors.guardian_full_name && (
-                            <li className="text-red-600">
+                            <li className="text-error">
                               <strong>{t("guardianFullName")}:</strong>{" "}
                               {errors.guardian_full_name}
                             </li>
                           )}
                           {errors.guardian_cpr && (
-                            <li className="text-red-600">
+                            <li className="text-error">
                               <strong>{t("guardianCpr")}:</strong>{" "}
                               {errors.guardian_cpr}
                             </li>
                           )}
                           {errors.guardian_cpr_doc && (
-                            <li className="text-red-600">
+                            <li className="text-error">
                               <strong>{t("guardianCprDoc")}:</strong>{" "}
                               {errors.guardian_cpr_doc}
                             </li>
@@ -952,13 +1022,13 @@ export const EnrollIntoMaster = ({
                           {!values.isEmployed && (
                             <>
                               {errors.income && (
-                                <li className="text-red-600">
+                                <li className="text-error">
                                   <strong>{t("income")}:</strong>{" "}
                                   {errors.income}
                                 </li>
                               )}
                               {errors.income_doc && (
-                                <li className="text-red-600">
+                                <li className="text-error">
                                   <strong>{t("incomeDoc")}:</strong>{" "}
                                   {errors.income_doc}
                                 </li>
@@ -972,12 +1042,12 @@ export const EnrollIntoMaster = ({
                     {/* Step 3 Errors */}
                     {steps >= 3 && thirdStepHaveError && (
                       <div className="mb-4">
-                        <h3 className="font-semibold text-red-600 text-md">
+                        <h3 className="font-semibold text-error text-md">
                           {t("termsAndConditions")}
                         </h3>
                         <ul className="pl-5 list-disc">
                           {errors.accepted && (
-                            <li className="text-red-600">
+                            <li className="text-error">
                               <strong>{tAC("termsAndConditions")}:</strong>{" "}
                               {errors["accepted"]}
                             </li>
@@ -1122,7 +1192,7 @@ const LabelField: FC<TLabelField> = ({
 
 export const FormSeparator = ({ title }: { title: string }) => {
   return (
-    <div className="flex items-center gap-4 md:col-span-2">
+    <div className="flex gap-4 items-center md:col-span-2">
       <div className="h-[1px] bg-zinc-300 flex-1"></div>
       <p>{title}</p>
       <div className="h-[1px] bg-zinc-300 flex-1"></div>

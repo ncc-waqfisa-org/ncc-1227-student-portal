@@ -7,10 +7,17 @@ import {
   useState,
 } from "react";
 import { useAuth } from "../hooks/use-auth";
-import { Application, Batch, MasterBatch, Status } from "../src/API";
+import {
+  Application,
+  Batch,
+  MasterApplication,
+  MasterBatch,
+  Status,
+} from "../src/API";
 import {
   getCurrentBatch,
   getCurrentMasterBatch,
+  getMasterApplications,
   getStudentApplications,
 } from "../src/CustomAPI";
 import { GraphQLError } from "graphql";
@@ -27,7 +34,7 @@ interface IUseMastersContext {
   batch: MasterBatch | undefined;
   isBatchPending: boolean;
 
-  applications: Application[];
+  applications: MasterApplication[];
   haveActiveApplication: boolean;
   syncStudentApplication: () => Promise<void>;
   syncStudent: () => Promise<void>;
@@ -69,7 +76,7 @@ function useProviderMasters() {
   const queryClient = useQueryClient();
   const { syncStudent } = useAppContext();
 
-  const [applications, setApplications] = useState<Application[]>(
+  const [applications, setApplications] = useState<MasterApplication[]>(
     defaultState.applications
   );
   const [haveActiveApplication, setHaveActiveApplication] = useState(
@@ -137,11 +144,11 @@ function useProviderMasters() {
   useEffect(() => {
     let cpr = user?.getUsername();
     if (cpr) {
-      getStudentApplications(cpr).then((allStudentApplications) => {
-        setApplications(allStudentApplications);
+      getMasterApplications(cpr).then((allMasterApplications) => {
+        setApplications(allMasterApplications);
 
         /* Checking if the student has an active application. */
-        let active = allStudentApplications.find(
+        let active = allMasterApplications.find(
           (application) =>
             (application.status === Status.REVIEW ||
               application.status === Status.APPROVED ||
@@ -169,11 +176,11 @@ function useProviderMasters() {
     let cpr = user?.getUsername();
 
     if (cpr) {
-      getStudentApplications(cpr).then((allStudentApplications) => {
-        setApplications(allStudentApplications);
+      getMasterApplications(cpr).then((allMasterApplications) => {
+        setApplications(allMasterApplications);
 
-        /* Checking if the student has an active application. */
-        let active = allStudentApplications.find(
+        /* Checking if the Master has an active application. */
+        let active = allMasterApplications.find(
           (application) =>
             (application.status === Status.REVIEW ||
               application.status === Status.APPROVED ||

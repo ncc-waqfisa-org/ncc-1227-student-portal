@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import { FC } from "react";
 import { useAuth } from "../../hooks/use-auth";
-import { Scholarship } from "../../src/API";
+import { ApplicantType, Scholarship } from "../../src/API";
 import { useQuery } from "@tanstack/react-query";
 import { getStudentScholarships } from "../../src/CustomAPI";
 import dayjs from "dayjs";
@@ -17,6 +17,7 @@ import enLocale from "dayjs/locale/en";
 import { Skeleton } from "./../Skeleton";
 import { useMastersContext } from "../../contexts/MastersContexts";
 import { NoAvailableBatch } from "../NoAvailableBatch";
+import { useAppContext } from "../../contexts/AppContexts";
 
 export const MastersHomeComponent: FC = () => {
   const router = useRouter();
@@ -29,6 +30,7 @@ export const MastersHomeComponent: FC = () => {
     newApplicationsEnabled,
     editingApplicationsEnabled,
   } = useMastersContext();
+  const { studentAsStudent: student } = useAppContext();
 
   const { cpr, isSignedIn } = useAuth();
   const { data: scholarships } = useQuery<Scholarship[]>({
@@ -49,10 +51,10 @@ export const MastersHomeComponent: FC = () => {
 
   if (isBatchPending) {
     return (
-      <div className="flex flex-col w-full max-w-4xl gap-10 mx-auto">
+      <div className="flex flex-col gap-10 mx-auto w-full max-w-4xl">
         <div className="grid gap-10 md:grid-cols-2">
-          <Skeleton className="w-full max-w-md mx-auto h-72 rounded-2xl"></Skeleton>
-          <Skeleton className="w-full max-w-md mx-auto h-72 rounded-2xl"></Skeleton>
+          <Skeleton className="mx-auto w-full max-w-md h-72 rounded-2xl"></Skeleton>
+          <Skeleton className="mx-auto w-full max-w-md h-72 rounded-2xl"></Skeleton>
         </div>
       </div>
     );
@@ -61,7 +63,7 @@ export const MastersHomeComponent: FC = () => {
   return (
     <div className="flex flex-col gap-8">
       {/* Have scholarships or applications */}
-      <div className="flex flex-wrap justify-center gap-10">
+      <div className="flex flex-wrap gap-10 justify-center">
         {haveScholarships && (
           <CardInfoComponent
             icon={check}
@@ -91,7 +93,7 @@ export const MastersHomeComponent: FC = () => {
         <div className="flex flex-col gap-10 mx-auto">
           {!canApply &&
             (isRegistrationClosed ? (
-              <div className="flex flex-wrap justify-center gap-10">
+              <div className="flex flex-wrap gap-10 justify-center">
                 <CardInfoComponent
                   icon={info}
                   title={"Registration"}
@@ -104,7 +106,7 @@ export const MastersHomeComponent: FC = () => {
                 ></CardInfoComponent>
               </div>
             ) : (
-              <div className="flex flex-wrap justify-center gap-10">
+              <div className="flex flex-wrap gap-10 justify-center">
                 <CardInfoComponent
                   icon={info}
                   title={"التسجيل"}
@@ -123,7 +125,7 @@ export const MastersHomeComponent: FC = () => {
             ))}
 
           {canApply && (
-            <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto place-items-center md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-10 items-stretch place-items-center mx-auto w-full max-w-4xl md:grid-cols-2">
               {!haveActiveApplication && (
                 <CardInfoComponent
                   icon={logs}
@@ -132,7 +134,11 @@ export const MastersHomeComponent: FC = () => {
                   action={() =>
                     router.push(
                       isSignedIn
-                        ? "/masters/enroll"
+                        ? student?.m_applicantType.includes(
+                            ApplicantType.MASTER
+                          )
+                          ? "/masters/applications?type=masters"
+                          : "/masters/enroll"
                         : "/masters/applications?type=masters"
                     )
                   }
@@ -156,7 +162,7 @@ export const MastersHomeComponent: FC = () => {
 
 // const NoAvailableBatch = () => {
 //   return (
-//     <div className="flex flex-wrap justify-center gap-10">
+//     <div className="flex flex-wrap gap-10 justify-center">
 //       <CardInfoComponent
 //         icon={info}
 //         title={"Registration"}

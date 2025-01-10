@@ -22,7 +22,10 @@ import {
   GetMasterBatchQuery,
   GetStudentQuery,
   GetStudentQueryVariables,
+  MasterApplication,
   Masterscholarship,
+  MasterscholarshipsByApplicationIDQuery,
+  MasterscholarshipsByApplicationIDQueryVariables,
   MasterUniversities,
   Program,
   Scholarship,
@@ -63,7 +66,10 @@ import {
 } from "./graphql/mutations";
 
 import dayjs from "dayjs";
-import { getStudent } from "./graphql/queries";
+import {
+  getStudent,
+  masterscholarshipsByApplicationID,
+} from "./graphql/queries";
 
 /* -------------------------------------------------------------------------- */
 /*                                    ENUMS                                   */
@@ -299,6 +305,82 @@ export async function getApplicationData(
   return application;
 }
 
+export async function getMasterApplicationData(
+  id: string
+): Promise<MasterApplication | undefined> {
+  let q = `query MyQuery {
+        getMasterApplication(id: "${id}") {
+                _version
+      _deleted
+      id
+      gpa
+      dateTime
+      batch
+      createdAt
+      adminPoints
+      income
+      incomeDoc
+      isEmailSent
+      isIncomeVerified
+      major
+      masterApplicationAttachmentId
+      nationalityCategory
+      processed
+      program
+      reason
+      score
+      status
+      studentCPR
+      studentName
+      universityID
+      university {
+      _version
+      id
+      universityName
+      universityNameAr
+      isDeactivated
+    }
+      verifiedGPA
+      attachment {
+        _version
+        id
+        acceptanceLetterDoc
+        cprDoc
+        signedContractDoc
+        tofelILETSCertificate
+        transcriptDoc
+        universityCertificate
+      }
+      masterLogs {
+        items {
+          id
+          _version
+          _deleted
+          applicationID
+          createdAt
+          dateTime
+          masterApplicationMasterLogsId
+          reason
+          snapshot
+          studentCPR
+          studentM_MasterLogsCpr
+        }
+      }
+              }
+      }
+      `;
+
+  const res = (await API.graphql(graphqlOperation(q))) as GraphQLResult<any>;
+
+  if (res.data === undefined || res.data === null) {
+    return undefined;
+  }
+
+  let application = res.data?.getMasterApplication as MasterApplication;
+
+  return application;
+}
+
 export async function getScholarship(id: string): Promise<Scholarship | null> {
   let q = `query GetScholarship {
     getScholarship(id:"${id}") {
@@ -467,6 +549,79 @@ export async function getStudentApplications(
 
   return (res.data?.applicationsByStudentCPRAndGpa?.items ??
     []) as Application[];
+}
+
+export async function getMasterApplications(
+  cpr: string
+): Promise<MasterApplication[]> {
+  let q = `
+  query MyQuery {
+  masterApplicationsByStudentCPRAndGpa(studentCPR: "${cpr}") {
+    items {
+      _version
+      _deleted
+      id
+      gpa
+      dateTime
+      batch
+      createdAt
+      adminPoints
+      income
+      incomeDoc
+      isEmailSent
+      isIncomeVerified
+      major
+      masterApplicationAttachmentId
+      nationalityCategory
+      processed
+      program
+      reason
+      score
+      status
+      studentCPR
+      studentName
+      universityID
+      university {
+      _version
+      id
+      universityName
+      universityNameAr
+      isDeactivated
+    }
+      verifiedGPA
+      attachment {
+        _version
+        id
+        acceptanceLetterDoc
+        cprDoc
+        signedContractDoc
+        tofelILETSCertificate
+        transcriptDoc
+        universityCertificate
+      }
+      masterLogs {
+        items {
+          id
+          _version
+          _deleted
+          applicationID
+          createdAt
+          dateTime
+          masterApplicationMasterLogsId
+          reason
+          snapshot
+          studentCPR
+          studentM_MasterLogsCpr
+        }
+      }
+    }
+  }
+}`;
+
+  let res = (await API.graphql(graphqlOperation(q))) as GraphQLResult<any>;
+
+  return (res.data?.masterApplicationsByStudentCPRAndGpa?.items ??
+    []) as MasterApplication[];
 }
 
 /**
@@ -827,30 +982,43 @@ export async function listScholarshipsOfApplicationId({
   return tempScholarshipList ?? [];
 }
 
-export async function listMasterScholarshipsOfApplicationId({
-  applicationId,
-}: {
-  applicationId: string;
-}): Promise<Masterscholarship[]> {
-  let query = `query ListMasterScholarshipsByApplicationID {
-    masterscholarshipsByApplicationID(applicationID: "${applicationId}") {
-      items {
-        id
-        signedContractDoc
-        IBANLetterDoc
-        isConfirmed
-      }
-    }
-  }  
-  `;
+export async function listMasterScholarshipsOfApplicationId(
+  queryVariables: MasterscholarshipsByApplicationIDQueryVariables
+): Promise<Masterscholarship[]> {
+  let res = (await API.graphql({
+    query: masterscholarshipsByApplicationID,
+    variables: queryVariables,
+  })) as GraphQLResult<MasterscholarshipsByApplicationIDQuery>;
 
-  let res = (await API.graphql(graphqlOperation(query))) as GraphQLResult<any>;
-
-  if (res.data === null) {
-    throw new Error("Failed to get all scholarships");
-  }
-
-  let tempScholarshipList = res.data?.masterscholarshipsByApplicationID?.items;
-
-  return tempScholarshipList ?? [];
+  return (res.data?.masterscholarshipsByApplicationID?.items ??
+    []) as Masterscholarship[];
 }
+
+// export async function listMasterScholarshipsOfApplicationId({
+//   applicationId,
+// }: {
+//   applicationId: string;
+// }): Promise<Masterscholarship[]> {
+//   // let query = `query ListMasterScholarshipsByApplicationID {
+//   //   masterscholarshipsByApplicationID(applicationID: "${applicationId}") {
+//   //     items {
+//   //       id
+//   //       signedContractDoc
+//   //       IBANLetterDoc
+//   //       isConfirmed
+//   //     }
+//   //   }
+//   // }
+//   // `;
+//   let query = masterscholarshipsByApplicationID;
+
+//   let res = (await API.graphql(graphqlOperation(query))) as GraphQLResult<any>;
+
+//   if (res.data === null) {
+//     throw new Error("Failed to get all scholarships");
+//   }
+
+//   let tempScholarshipList = res.data?.masterscholarshipsByApplicationID?.items;
+
+//   return tempScholarshipList ?? [];
+// }

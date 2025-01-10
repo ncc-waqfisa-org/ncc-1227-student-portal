@@ -7,7 +7,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import { ApplicationCard } from "../../../components/applications/ApplicationCard";
 import { getStatusOrder } from "../../../src/HelperFunctions";
-import { NewApplicationCard } from "../../../components/applications/NewApplicationCard";
+import { NewMasterApplicationCard } from "../../../components/applications/NewMasterApplicationCard";
 import { Status } from "../../../src/API";
 import { CardInfoComponent } from "../../../components/CardInfo";
 import info from "public/svg/info.svg";
@@ -22,6 +22,7 @@ import {
 } from "../../../contexts/MastersContexts";
 import { SkeletonApplicationCard } from "../../../components/applications/SkeletonApplicationCard";
 import { NoAvailableBatch } from "../../../components/NoAvailableBatch";
+import { MasterApplicationCard } from "../../../components/applications/MasterApplicationCard";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -75,7 +76,7 @@ const Page: NextPageWithLayout = () => {
         </div>
       )}
 
-      {!mastersContext.batch && (
+      {!mastersContext.batch && !mastersContext.isBatchPending && (
         <div className="flex justify-center py-4">
           <NoAvailableBatch type="masters" />
         </div>
@@ -83,8 +84,9 @@ const Page: NextPageWithLayout = () => {
 
       {mastersContext.applications.length === 0 &&
         !mastersContext.newApplicationsEnabled &&
-        mastersContext.batch && (
-          <div className="flex flex-wrap justify-center gap-10">
+        mastersContext.batch &&
+        !mastersContext.isBatchPending && (
+          <div className="flex flex-wrap gap-10 justify-center">
             <CardInfoComponent
               icon={info}
               title={"الطلبات الجديدة"}
@@ -106,7 +108,7 @@ const Page: NextPageWithLayout = () => {
           </div>
         )}
 
-      {student && (
+      {student && !mastersContext.isBatchPending && (
         <div className="container mx-auto">
           {!mastersContext.haveActiveApplication &&
             mastersContext.newApplicationsEnabled && (
@@ -126,7 +128,7 @@ const Page: NextPageWithLayout = () => {
             {!mastersContext.haveActiveApplication &&
               mastersContext.newApplicationsEnabled && (
                 <Link href={"../masters/applications/new-application"}>
-                  <NewApplicationCard></NewApplicationCard>
+                  <NewMasterApplicationCard></NewMasterApplicationCard>
                 </Link>
               )}
             {mastersContext.haveActiveApplication &&
@@ -141,7 +143,7 @@ const Page: NextPageWithLayout = () => {
                   return 0;
                 })
                 .map((application) => (
-                  <ApplicationCard
+                  <MasterApplicationCard
                     key={application.id}
                     application={application}
                     student={student}
@@ -168,7 +170,7 @@ const Page: NextPageWithLayout = () => {
                   return 0;
                 })
                 .map((application) => (
-                  <ApplicationCard
+                  <MasterApplicationCard
                     key={application.id}
                     application={application}
                     student={student}

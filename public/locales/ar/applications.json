@@ -9,6 +9,7 @@
   "Applications": "الطلبات",
   "submitDate": "تاريخ التقديم",
   "selectedPrograms": "البرامج المختارة",
+  "selectedProgram": "البرامج المختار",
   "notCompleted": "غير مكتمل",
   "uploadedAttachments": "المرفقات التي تم تحميلها",
   "requiredAttachments": "المرفقات المطلوبة",
@@ -24,6 +25,13 @@
   "secondaryProgramAcceptanceLetter": "رسالة القبول للبرنامج الثانوي",
   "familyIncomeProofDocs": "مستندات إثبات دخل الأسرة",
   "select": "اختيار",
+  "guardianCPR": "الرقم الشخصي للوصي",
+
+  "incomeDoc": "وثائق الدخل",
+  "universityCertificate": "شهادة جامعية",
+  "acceptanceLetterDoc": "وثيقة خطاب القبول",
+  "toeflIELTSCertificate": "شهادة التوفل / الأيلتس",
+
   "myApplications": "تطبيقاتي",
   "schoolCertificate": "الشهادة المدرسية"
 }

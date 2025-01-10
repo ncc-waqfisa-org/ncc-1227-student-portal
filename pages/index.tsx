@@ -61,7 +61,7 @@ const Home = ({ type: initialType }: HomeProps) => {
   useEffect(() => {
     if (initialType === null) {
       const isMasterApplicant =
-        student?.m_applicantType.includes(ApplicantType.MASTER) ?? false; //student.applicantType.includes("masters");
+        student?.m_applicantType.includes(ApplicantType.MASTER) ?? false;
 
       if (isMasterApplicant) {
         setType("masters");
@@ -98,7 +98,7 @@ const Home = ({ type: initialType }: HomeProps) => {
         </div>
       }
     >
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 py-6 md:py-10">
         {/* Only showing the picker if the applicant is bachelor or not signed in */}
         {((!isAuthedUserPending && !isSignedIn) || haveBachelor) && (
           <BMTabs onChange={setType} type={type} />

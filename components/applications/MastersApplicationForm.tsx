@@ -142,9 +142,9 @@ export const MastersApplicationForm: FC<Props> = (props) => {
 
   const oldUniversity = props.application?.university;
 
-  const [university, setUniversity] = useState<MasterUniversities | undefined>(
-    oldUniversity ?? undefined
-  );
+  // const [university, setUniversity] = useState<MasterUniversities | undefined>(
+  //   oldUniversity ?? undefined
+  // );
 
   const [withdrawing, setWithdrawing] = useState(false);
   const initialValues: FormValues = {
@@ -420,7 +420,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
       sk_TranscriptDoc = new_sk_transcriptDoc;
     }
 
-    // Acceptanc doc storage key
+    // Acceptance doc storage key
     if (new_sk_acceptanceDoc) {
       sk_AcceptanceLetterDoc = new_sk_acceptanceDoc;
     }
@@ -473,6 +473,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
           id: undefined,
           gpa: values.gpa,
           reason: values.reason,
+          major: values.major,
           score:
             studentData.m_income && values.gpa
               ? calculateMasterScore({
@@ -547,6 +548,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
           id: props.application?.id ?? "",
           gpa: values.gpa,
           reason: values.reason,
+          major: values.major,
           score:
             studentData.m_income && values.gpa
               ? calculateMasterScore({
@@ -727,7 +729,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
             setFieldValue,
             setFieldError,
           }) => (
-            <Form className="container grid max-w-3xl grid-cols-1 gap-3 mx-auto md:grid-cols-2">
+            <Form className="container grid grid-cols-1 gap-3 mx-auto max-w-3xl md:grid-cols-2">
               {/* FullName */}
               <div className="flex flex-col justify-start w-full">
                 <label className="label">{t("fullName")}</label>
@@ -762,7 +764,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
               <div className="divider md:col-span-2"></div>
               {/* GPA */}
               <div className="flex flex-col justify-start w-full md:col-span-2">
-                <div className="flex items-center justify-between">
+                <div className="flex justify-between items-center">
                   <label className="label">{t("applicantGPA")}</label>
                   <label className="label-text-alt text-error">
                     {errors.gpa && touched.gpa && errors.gpa}
@@ -792,7 +794,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                 </p>
               </div>
               <div className="flex flex-col justify-start w-full md:col-span-2">
-                <div className="flex items-center justify-between">
+                <div className="flex justify-between items-center">
                   <label className="label">{t("reason")}</label>
                   <label className="label-text-alt text-error">
                     {errors.reason && touched.reason && errors.reason}
@@ -824,9 +826,9 @@ export const MastersApplicationForm: FC<Props> = (props) => {
               {/* Master Universite */}
               {
                 <div className="flex flex-col justify-start w-full md:col-span-2">
-                  <div className="grid items-start grid-cols-1 gap-3 md:grid-cols-2">
+                  <div className="grid grid-cols-1 gap-3 items-start md:grid-cols-2">
                     <div className="w-full">
-                      <div className="flex items-center justify-between">
+                      <div className="flex justify-between items-center">
                         <label className="label">{t("university")}</label>
                         <label className="label-text-alt text-error">
                           {errors.universityID &&
@@ -846,15 +848,19 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                           "select-error"
                         }`}
                         onChange={(event: any) => {
-                          setUniversity(
-                            props.universities?.find(
-                              (u) => u.id === event.target.value
-                            )
-                          );
+                          // setUniversity(
+                          //   props.universities?.find(
+                          //     (u) => u.id === event.target.value
+                          //   )
+                          // );
                           handleChange(event);
                         }}
                         onBlur={handleBlur}
-                        value={values.universityID}
+                        value={
+                          values.universityID === ""
+                            ? undefined
+                            : values.universityID
+                        }
                         disabled={
                           applicationIsEligible || !editingApplicationsEnabled
                         }
@@ -891,7 +897,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                       </p>
                     </div>
                     <div className="w-full">
-                      <div className="flex items-center justify-between">
+                      <div className="flex justify-between items-center">
                         <label className="label">{t("major")}</label>
                         <label className="label-text-alt text-error">
                           {errors.major && touched.major && errors.major}
@@ -934,8 +940,8 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                         </option>
                       </Field>
                     </div>
-                    <div className="flex flex-col justify-start w-full ">
-                      <div className="flex items-center justify-between">
+                    <div className="flex flex-col justify-start w-full">
+                      <div className="flex justify-between items-center">
                         <label className="label">{t("program")}</label>
                         <label className="label-text-alt text-error">
                           {errors.program && touched.program && errors.program}
@@ -989,7 +995,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                   )} */}
                   {/* TODO: see if there is requirements have to be met for master universities */}
                   {/* {(university?.requirements || university?.requirementsAr) && (
-                    <div className="p-3 mt-2 border border-gray-300 rounded-md">
+                    <div className="p-3 mt-2 rounded-md border border-gray-300">
                       <div className="stat-title">{t("requirements")}</div>
                       <label className="whitespace-pre-wrap stat-desc">
                         {locale == "ar"
@@ -1129,7 +1135,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
 
                     let isValid = checkIfFilesAreTooBig(file);
                     if (isValid) {
-                      setTranscriptDoc(file);
+                      setAcceptanceDoc(file);
                       handleChange(event);
                     } else {
                       setFieldError("acceptanceDoc", "File is too large");
@@ -1178,7 +1184,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
 
                     let isValid = checkIfFilesAreTooBig(file);
                     if (isValid) {
-                      setTranscriptDoc(file);
+                      setTofelILETSCertificate(file);
                       handleChange(event);
                     } else {
                       setFieldError(

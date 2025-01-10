@@ -229,7 +229,8 @@ export async function getCprFromToken(token: string | null): Promise<{
   username: string;
 }> {
   return fetch(
-    "https://g7niieicpa.execute-api.us-east-1.amazonaws.com/default/cpr",
+    process.env.LAMBDA_GET_CPR_FROM_TOKEN ??
+      "https://g7niieicpa.execute-api.us-east-1.amazonaws.com/default/cpr",
     {
       headers: {
         "Content-Type": "application/json",

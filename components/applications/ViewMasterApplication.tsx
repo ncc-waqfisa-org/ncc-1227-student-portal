@@ -1,24 +1,22 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Application, Status } from "../../src/API";
+import { Application, MasterApplication, Status } from "../../src/API";
 import GetStorageLinkComponent from "../get-storage-link-component";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { cn } from "../../src/lib/utils";
 
 interface Props {
-  application: Application;
+  application: MasterApplication;
   haveScholarship: boolean;
 }
 
-export default function ViewApplication({
+export default function ViewMasterApplication({
   application,
   haveScholarship,
 }: Props) {
   const { t } = useTranslation("applicationPage");
   const { locale } = useRouter();
-
-  const primaryProgram = application.programs?.items[0];
 
   return (
     <div className="overflow-x-auto">
@@ -46,8 +44,6 @@ export default function ViewApplication({
               <div
                 className={cn(
                   "badge badge-warning w-fit",
-                  // application.status === Status.REJECTED &&
-                  //   "!badge-error text-white",
                   application.status === Status.APPROVED && "!badge-success"
                 )}
               >
@@ -66,7 +62,7 @@ export default function ViewApplication({
                 <div className="w-fit">
                   <Link
                     className="brightness-75 btn btn-ghost btn-sm text-success hover:bg-success/20"
-                    href={`/bachelor/scholarship`}
+                    href={`/masters/scholarship`}
                   >
                     {t("goToScholarship")}
                   </Link>
@@ -81,58 +77,62 @@ export default function ViewApplication({
           </tr>
 
           <tr>
-            <td>{t("program")}</td>
-            <td className="flex flex-col gap-3">
-              <div>
-                {locale === "ar"
-                  ? `${primaryProgram?.program?.nameAr ?? "-"}-${
-                      primaryProgram?.program?.university?.nameAr ?? "-"
-                    }`
-                  : `${primaryProgram?.program?.name}-${primaryProgram?.program?.university?.name}`}
-              </div>
-              {primaryProgram?.program?.minimumGPA && (
-                <div className="stat-desc">
-                  {`${t("minimumGPA")} : ${
-                    primaryProgram?.program?.minimumGPA
-                  }`}
-                </div>
-              )}
-              {primaryProgram?.program?.requirements && (
-                <div className="stat-desc">
-                  {`${t("requirements")} : ${
-                    locale === "ar"
-                      ? primaryProgram?.program?.requirementsAr
-                      : primaryProgram?.program?.requirements
-                  }`}
-                </div>
-              )}
-              {primaryProgram?.program?.university?.isException !== 1 && (
-                <div className="flex gap-4 items-center">
-                  <p className="text-xs stat-desc">{t("acceptanceLetter")}</p>
-                  <GetStorageLinkComponent
-                    storageKey={primaryProgram?.acceptanceLetterDoc}
-                  ></GetStorageLinkComponent>
-                </div>
-              )}
+            <td>{t("university")}</td>
+            <td>
+              {locale === "ar"
+                ? application.university?.universityNameAr
+                : application.university?.universityName}
             </td>
           </tr>
           <tr>
+            <td>{t("major")}</td>
             <td>
-              {t("schoolCertificate")} {t("document")}
+              {application.major ? t(application.major) : application.major}
+            </td>
+          </tr>
+          <tr>
+            <td>{t("program")}</td>
+            <td>{application.program}</td>
+          </tr>
+          <tr>
+            <td className="flex gap-2 rtl:justify-end rtl:flex-row-reverse">
+              <span>{t("universityCertificate")}</span>{" "}
+              <span>{t("document")}</span>
             </td>
             <td>
               <GetStorageLinkComponent
-                storageKey={application.attachment?.schoolCertificate}
+                storageKey={application.attachment?.universityCertificate}
               ></GetStorageLinkComponent>
             </td>
           </tr>
           <tr>
+            <td className="flex gap-2 rtl:justify-end rtl:flex-row-reverse">
+              <span>{t("acceptanceLetter")}</span> <span>{t("document")}</span>
+            </td>
             <td>
-              {t("transcript")} {t("document")}
+              <GetStorageLinkComponent
+                storageKey={application.attachment?.acceptanceLetterDoc}
+              ></GetStorageLinkComponent>
+            </td>
+          </tr>
+          <tr>
+            <td className="flex gap-2 rtl:justify-end rtl:flex-row-reverse">
+              <span>{t("transcript")}</span> <p>{t("document")}</p>
             </td>
             <td>
               <GetStorageLinkComponent
                 storageKey={application.attachment?.transcriptDoc}
+              ></GetStorageLinkComponent>
+            </td>
+          </tr>
+          <tr>
+            <td className="flex gap-2 rtl:justify-end rtl:flex-row-reverse">
+              <span>{t("tofelILETSCertificateDoc")}</span>{" "}
+              <p>{t("document")}</p>
+            </td>
+            <td>
+              <GetStorageLinkComponent
+                storageKey={application.attachment?.tofelILETSCertificate}
               ></GetStorageLinkComponent>
             </td>
           </tr>

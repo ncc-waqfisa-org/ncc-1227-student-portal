@@ -64,36 +64,42 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
       />
       <div className="flex flex-col justify-between min-h-screen">
         {isInitializing ? (
-          <div className="flex items-center justify-center w-full h-full min-h-screen bg-gray-200 animate-pulse">
-            <div dir="ltr" className="btn btn-ghost hover:bg-transparent ">
+          <div className="flex justify-center items-center w-full h-full min-h-screen bg-gray-200 animate-pulse">
+            <div dir="ltr" className="btn btn-ghost hover:bg-transparent">
               {<span className="loading"></span>}
               {titleTranslation.t("loading")}
             </div>
           </div>
         ) : (
-          <div className="relative bg-secondary md:m-10 rounded-b-5xl md:rounded-b-2xl md:rounded-t-2xl ">
+          <div className="relative bg-secondary md:m-10 rounded-b-5xl md:rounded-b-2xl md:rounded-t-2xl">
             <div
-              className="relative object-cover w-full rounded-b-5xl md:rounded-b-2xl md:rounded-t-2xl overflow-clip"
+              className="object-cover relative w-full overflow-clip rounded-b-5xl md:rounded-b-2xl md:rounded-t-2xl"
               style={{
                 backgroundImage: `url(${background.src})`,
                 backgroundSize: "cover",
                 backgroundPosition: "0% 100%",
               }}
             >
-              <div className="relative flex flex-col items-center w-full gap-3 bg-secondary/20 text-secondary-content p-11 md:p-20 md:pt-10">
+              <div className="flex relative flex-col gap-3 items-center p-11 w-full bg-secondary/20 text-secondary-content md:p-20 md:pt-10">
                 <Image
                   className="w-40 md:w-52 hover:cursor-pointer"
                   src={logo}
                   alt="logo"
-                  onClick={() => push("/")}
+                  onClick={() =>
+                    push(
+                      student?.m_applicantType.includes(ApplicantType.MASTER)
+                        ? "/?type=masters"
+                        : "/?type=bachelor"
+                    )
+                  }
                 />
                 {user ? (
                   <div
                     tabIndex={0}
-                    className="z-50 flex flex-col items-center p-2 rounded-lg hover:cursor-pointer dropdown dropdown-bottom md:dropdown-end md:items-end md:absolute md:right-4 md:top-4 glass"
+                    className="flex z-50 flex-col items-center p-2 rounded-lg hover:cursor-pointer dropdown dropdown-bottom md:dropdown-end md:items-end md:absolute md:right-4 md:top-4 glass"
                   >
                     <div className="flex items-center">
-                      <Image className="w-10 p-2" src={account} alt="account" />
+                      <Image className="p-2 w-10" src={account} alt="account" />
 
                       <div className="text-white">
                         <p>{user?.getUsername()}</p>
@@ -102,7 +108,7 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                     </div>
                     <ul
                       tabIndex={0}
-                      className="p-2 mt-2 shadow rtl:md:-translate-x-14 dropdown-content text-secondary menu bg-base-100 rounded-box w-52"
+                      className="p-2 mt-2 w-52 shadow rtl:md:-translate-x-14 dropdown-content text-secondary menu bg-base-100 rounded-box"
                     >
                       <li>
                         <Link href={"/account"}>
@@ -119,11 +125,11 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                 ) : (
                   <div
                     onClick={() => push(`/${locale}/signIn`)}
-                    className="z-50 flex flex-col items-center p-2 rounded-lg hover:cursor-pointer md:items-end md:absolute md:right-4 md:top-4 glass"
+                    className="flex z-50 flex-col items-center p-2 rounded-lg hover:cursor-pointer md:items-end md:absolute md:right-4 md:top-4 glass"
                   >
                     <div className="flex items-center">
                       <Image
-                        className="w-10 p-2 "
+                        className="p-2 w-10"
                         src={account}
                         alt="account"
                       />
@@ -161,7 +167,7 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
                     {titleTranslation.t("Back")}
                   </button>
                 )}
-                <div className="w-full mt-10 md:mt-16">{props.header}</div>
+                <div className="mt-10 w-full md:mt-16">{props.header}</div>
                 {!props.header && (
                   <div className="prose prose-headings:text-white">
                     <h1 className="font-semibold">
@@ -198,9 +204,9 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
           }}
         >
           <footer className="justify-center p-10 md:justify-around footer text-secondary-content">
-            <div className="flex flex-col justify-center h-full mx-auto">
+            <div className="flex flex-col justify-center mx-auto h-full">
               <Image
-                className="w-40 md:w-52 max-h-24 hover:cursor-pointer"
+                className="w-40 max-h-24 md:w-52 hover:cursor-pointer"
                 src={logo}
                 alt="logo"
                 onClick={() => push("/")}
@@ -257,7 +263,7 @@ export const PageComponent: FC<PropsWithChildren<Props>> = (props) => {
           </footer>
           <div
             dir="ltr"
-            className="justify-center px-10 py-4 text-center text-base-100 footer "
+            className="justify-center px-10 py-4 text-center text-base-100 footer"
           >
             <p>
               © {new Date().getFullYear()} isa bin salman education charitable

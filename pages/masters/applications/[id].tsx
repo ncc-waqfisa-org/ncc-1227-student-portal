@@ -4,7 +4,9 @@ import { PageComponent } from "../../../components/PageComponent";
 import {
   Application,
   Batch,
+  MasterApplication,
   MasterBatch,
+  MasterUniversities,
   Program,
   Status,
   Student,
@@ -28,6 +30,8 @@ import {
   MastersProvider,
   useMastersContext,
 } from "../../../contexts/MastersContexts";
+import { MastersApplicationForm } from "../../../components/applications/MastersApplicationForm";
+import ViewMasterApplication from "../../../components/applications/ViewMasterApplication";
 
 interface Props {
   id: string | null;
@@ -84,13 +88,13 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
   const { token } = useAuth();
 
   const { data, isPending } = useQuery<{
-    application: Application | null;
-    programs: Program[];
+    application: MasterApplication | null;
+    universities: MasterUniversities[];
     haveScholarship: boolean;
   }>({
-    queryKey: ["applicationData", token, id],
+    queryKey: ["masterApplicationData", token, id],
     queryFn: () =>
-      fetch(`/api/get-student-application`, {
+      fetch(`/api/get-masters-application`, {
         method: "POST",
         body: JSON.stringify({
           id: id,
@@ -102,8 +106,8 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
   if (isPending) {
     return (
       <PageComponent title={"MApplication"} authRequired>
-        <div className="flex flex-col items-center justify-center">
-          <p className="flex items-center gap-2">
+        <div className="flex flex-col justify-center items-center">
+          <p className="flex gap-2 items-center">
             <span className="loading"></span>
             {t("loading")}
           </p>
@@ -112,55 +116,14 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
     );
   }
 
-  function checkIfEnabledEditingAfterExtension(
-    application: Application,
-    batch: Batch | MasterBatch
-  ) {
-    const university = application?.programs?.items[0]?.program?.university;
-
-    if (!university) {
-      return false;
-    }
-
-    const isExtended = university?.isExtended === 1;
-    if (!isExtended) {
-      return false;
-    }
-
-    const extensionDays = university?.extensionDuration;
-    if (!extensionDays) {
-      return false;
-    }
-
-    if (!batch.updateApplicationEndDate) {
-      return false;
-    }
-
-    const lastDayToUpdateInBatch = dayjs(batch.updateApplicationEndDate).endOf(
-      "day"
-    );
-
-    const lastDayToUpdateAfterExtension = lastDayToUpdateInBatch.add(
-      extensionDays,
-      "days"
-    );
-
-    return dayjs().isBefore(lastDayToUpdateAfterExtension.endOf("day"));
-  }
-
   return (
     <PageComponent title={"MApplication"} authRequired>
-      <div className="max-w-3xl mx-auto">
+      <div className="mx-auto max-w-3xl">
         {(data?.application?.status === Status.REVIEW ||
           data?.application?.status === Status.NOT_COMPLETED ||
           data?.application?.status === Status.ELIGIBLE) &&
           (data?.application?.batch ?? -1) >= (batch?.batch ?? 0) &&
-          (editingApplicationsEnabled ||
-            (batch &&
-              checkIfEnabledEditingAfterExtension(
-                data.application,
-                batch
-              ))) && (
+          editingApplicationsEnabled && (
             <div className="flex justify-end mb-3">
               <button
                 className="btn btn-sm btn-outline btn-primary"
@@ -172,39 +135,32 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
             </div>
           )}
       </div>
-      <div className="max-w-3xl mx-auto">
+      <div className="mx-auto max-w-3xl">
         {data?.application && !isEdit && (
-          <ViewApplication
+          <ViewMasterApplication
             application={data?.application}
             haveScholarship={data?.haveScholarship ?? false}
           />
         )}
       </div>
 
-      <div className="max-w-3xl mx-auto">
-        {data?.application &&
-          isEdit &&
-          (editingApplicationsEnabled ||
-            (batch &&
-              checkIfEnabledEditingAfterExtension(
-                data.application,
-                batch
-              ))) && (
-            <ApplicationForm
-              application={data?.application}
-              programs={data?.programs}
-            />
-          )}
+      <div className="mx-auto max-w-3xl">
+        {data?.application && batch && isEdit && editingApplicationsEnabled && (
+          <MastersApplicationForm
+            application={data?.application}
+            universities={data?.universities}
+          />
+        )}
       </div>
 
-      <div className="max-w-3xl mx-auto">
+      <div className="mx-auto max-w-3xl">
         {data?.application && student && (
           <AccountDocs student={student}></AccountDocs>
         )}
       </div>
 
       {!data?.application && (
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col justify-center items-center">
           <div className="prose">
             <h1 className="text-error">{t("accessDenied")}</h1>
           </div>
@@ -222,8 +178,8 @@ function AccountDocs({ student }: AccountDocs) {
   const { t } = useTranslation("account");
   return (
     <div className="w-full">
-      <div className="container flex flex-col items-end gap-3 mt-8">
-        <div className="flex items-center justify-between w-full">
+      <div className="container flex flex-col gap-3 items-end mt-8">
+        <div className="flex justify-between items-center w-full">
           <p className="w-full text-xl stat-value">{t("accountTitle")}</p>
           <Link
             className="btn btn-primary btn-sm btn-outline w-fit"
@@ -232,7 +188,7 @@ function AccountDocs({ student }: AccountDocs) {
             {t("editAccount")}
           </Link>
         </div>
-        <div className="w-full overflow-x-scroll">
+        <div className="overflow-x-scroll w-full">
           <table className="table w-full">
             <thead>
               <tr>
@@ -250,24 +206,19 @@ function AccountDocs({ student }: AccountDocs) {
                 </td>
               </tr>
               <tr className="">
-                <td>{t("familyIncomeProofDocs")}</td>
-                <td className="">
-                  <div className="">
-                    {(student.familyIncomeProofDocs ?? [])?.length > 0 && (
-                      <div className="flex flex-col p-3 mb-3 bg-gray-200 rounded-lg">
-                        <div className="flex items-center gap-2">
-                          {student.familyIncomeProofDocs?.map((doc, index) => (
-                            <div key={index} className="overflow-x-scroll">
-                              <GetStorageLinkComponent
-                                storageKey={doc}
-                                showName
-                              ></GetStorageLinkComponent>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                <td>{t("income")}</td>
+                <td className="label">
+                  <GetStorageLinkComponent
+                    storageKey={student.m_income}
+                  ></GetStorageLinkComponent>
+                </td>
+              </tr>
+              <tr className="">
+                <td>{t("guardianCprDoc")}</td>
+                <td className="label">
+                  <GetStorageLinkComponent
+                    storageKey={student.m_guardianCPRDoc}
+                  ></GetStorageLinkComponent>
                 </td>
               </tr>
             </tbody>

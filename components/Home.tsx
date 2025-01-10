@@ -49,10 +49,10 @@ export const HomeComponent: FC = () => {
 
   if (isBatchPending) {
     return (
-      <div className="flex flex-col w-full max-w-4xl gap-10 mx-auto">
+      <div className="flex flex-col gap-10 mx-auto w-full max-w-4xl">
         <div className="grid gap-10 md:grid-cols-2">
-          <Skeleton className="w-full max-w-md mx-auto h-72 rounded-2xl"></Skeleton>
-          <Skeleton className="w-full max-w-md mx-auto h-72 rounded-2xl"></Skeleton>
+          <Skeleton className="mx-auto w-full max-w-md h-72 rounded-2xl"></Skeleton>
+          <Skeleton className="mx-auto w-full max-w-md h-72 rounded-2xl"></Skeleton>
         </div>
       </div>
     );
@@ -61,7 +61,7 @@ export const HomeComponent: FC = () => {
   return (
     <div className="flex flex-col gap-8">
       {/* Have scholarships or applications */}
-      <div className="flex flex-wrap justify-center gap-10">
+      <div className="flex flex-wrap gap-10 justify-center">
         {haveScholarships && (
           <CardInfoComponent
             icon={check}
@@ -91,7 +91,7 @@ export const HomeComponent: FC = () => {
         <div className="flex flex-col gap-10 mx-auto">
           {!canApply &&
             (isRegistrationClosed ? (
-              <div className="flex flex-wrap justify-center gap-10">
+              <div className="flex flex-wrap gap-10 justify-center">
                 <CardInfoComponent
                   icon={info}
                   title={"Registration"}
@@ -104,7 +104,7 @@ export const HomeComponent: FC = () => {
                 ></CardInfoComponent>
               </div>
             ) : (
-              <div className="flex flex-wrap justify-center gap-10">
+              <div className="flex flex-wrap gap-10 justify-center">
                 <CardInfoComponent
                   icon={info}
                   title={"التسجيل"}
@@ -123,7 +123,7 @@ export const HomeComponent: FC = () => {
             ))}
 
           {canApply && (
-            <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto place-items-center md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-10 items-stretch place-items-center mx-auto w-full max-w-4xl md:grid-cols-2">
               {!haveActiveApplication && (
                 <CardInfoComponent
                   icon={logs}
@@ -152,7 +152,7 @@ export const HomeComponent: FC = () => {
 
 // const NoAvailableBatch = () => {
 //   return (
-//     <div className="flex flex-wrap justify-center gap-10">
+//     <div className="flex flex-wrap gap-10 justify-center">
 //       <CardInfoComponent
 //         icon={info}
 //         title={"Registration"}
