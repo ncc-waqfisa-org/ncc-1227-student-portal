@@ -180,23 +180,9 @@ export const EnrollIntoMaster = ({
           m_guardianCPR: values.guardian_cpr,
           m_guardianFullName: values.guardian_full_name,
           m_guardianCPRDoc: values.guardian_cpr_doc,
+          m_applicantType: [ApplicantType.STUDENT, ApplicantType.MASTER],
         },
       });
-      //
-
-      // TODO: sync student data using GraphQL
-
-      //   return fetch(
-      //     `https://ciuxdqxmol.execute-api.us-east-1.amazonaws.com/default/masters-sign-up`,
-      //     {
-      //       method: "POST",
-      //       body: JSON.stringify(values),
-      //       headers: {
-      //         ...(router.locale && { "Accept-Language": router.locale }),
-      //         "Content-Type": "application/json",
-      //       },
-      //     }
-      //   );
     },
     async onSuccess(data) {
       if (data?.updateStudent?.m_firstName) {
