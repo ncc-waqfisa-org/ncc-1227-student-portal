@@ -8,9 +8,9 @@ import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import { FC } from "react";
 import { useAuth } from "../../hooks/use-auth";
-import { ApplicantType, Scholarship } from "../../src/API";
+import { ApplicantType, Masterscholarship, Scholarship } from "../../src/API";
 import { useQuery } from "@tanstack/react-query";
-import { getStudentScholarships } from "../../src/CustomAPI";
+import { getMasterScholarships } from "../../src/CustomAPI";
 import dayjs from "dayjs";
 import arLocale from "dayjs/locale/ar";
 import enLocale from "dayjs/locale/en";
@@ -33,9 +33,10 @@ export const MastersHomeComponent: FC = () => {
   const { studentAsStudent: student } = useAppContext();
 
   const { cpr, isSignedIn } = useAuth();
-  const { data: scholarships } = useQuery<Scholarship[]>({
-    queryKey: ["scholarships", cpr],
-    queryFn: () => (cpr ? getStudentScholarships(cpr) : []),
+  const { data: scholarships } = useQuery<Masterscholarship[]>({
+    queryKey: ["masterScholarships", cpr],
+    queryFn: () => (cpr ? getMasterScholarships({ studentCPR: cpr }) : []),
+    // queryFn: () => (cpr ? getStudentScholarships(cpr) : []),
   });
 
   const haveScholarships = (scholarships?.length ?? 0) > 0;

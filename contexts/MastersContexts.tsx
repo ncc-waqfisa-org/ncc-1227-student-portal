@@ -7,19 +7,8 @@ import {
   useState,
 } from "react";
 import { useAuth } from "../hooks/use-auth";
-import {
-  Application,
-  Batch,
-  MasterApplication,
-  MasterBatch,
-  Status,
-} from "../src/API";
-import {
-  getCurrentBatch,
-  getCurrentMasterBatch,
-  getMasterApplications,
-  getStudentApplications,
-} from "../src/CustomAPI";
+import { MasterApplication, MasterBatch, Status } from "../src/API";
+import { getCurrentMasterBatch, getMasterApplications } from "../src/CustomAPI";
 import { GraphQLError } from "graphql";
 import dayjs from "dayjs";
 import { useQuery, useQueryClient } from "@tanstack/react-query";

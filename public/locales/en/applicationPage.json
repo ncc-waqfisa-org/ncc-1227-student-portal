@@ -47,8 +47,8 @@
   "acceptanceLetterDoc": "Acceptance Letter Document",
   "acceptanceLetterDocD": "The acceptance letter for the university you want to apply for.",
 
-  "tofelILETSCertificateDoc": "TOFEL/ILETS Certificate",
-  "tofelILETSCertificateDocD": "A TOFEL or ILETS Certificate",
+  "TOEFLIELTSCertificateDoc": "TOEFL/IELTS Certificate",
+  "TOEFLIELTSCertificateDocD": "A TOEFL or IELTS Certificate",
 
   "minimumGPA": "Minimum GPA",
   "reasonForUpdate": "Reason For Update",

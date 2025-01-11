@@ -4,7 +4,7 @@ import React from "react";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
-import { MyScholarships } from "../../../components/scholarship/MyScholarships";
+import { MyMastersScholarships } from "../../../components/scholarship/MyMastersScholarships";
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { locale } = ctx;
@@ -24,12 +24,12 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   };
 };
 
-export default function ScholarshipsPage() {
+export default function MastersScholarshipsPage() {
   // const appContext = useAppContext();
   const { t } = useTranslation("scholarships");
 
   return (
-    <PageComponent title={"BScholarships"} authRequired>
+    <PageComponent title={"MScholarships"} authRequired>
       <div className="container mx-auto">
         {
           <div className="container mx-auto">
@@ -40,7 +40,7 @@ export default function ScholarshipsPage() {
             </div>
           </div>
         }
-        {<MyScholarships />}
+        {<MyMastersScholarships />}
       </div>
     </PageComponent>
   );

@@ -1,11 +1,16 @@
 import React, { FC, useState } from "react";
-import { Scholarship, UpdateScholarshipMutationVariables } from "../../src/API";
+import {
+  Masterscholarship,
+  UpdateMasterscholarshipMutationVariables,
+  UpdateScholarshipMutationVariables,
+} from "../../src/API";
 import { Formik, Form, Field } from "formik";
 import MultiUpload from "../MultiUpload";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import {
   DocType,
+  updateMasterScholarshipInDB,
   updateScholarshipInDB,
   uploadFile,
 } from "../../src/CustomAPI";
@@ -15,10 +20,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "../../src/lib/utils";
 
 type TBankDetails = {
-  scholarship: Scholarship;
+  scholarship: Masterscholarship;
 };
 
-export const BankDetails: FC<TBankDetails> = ({ scholarship }) => {
+export const MastersBankDetails: FC<TBankDetails> = ({ scholarship }) => {
   const [IBANLetterDocsFile, setIBANLetterDocsFile] = useState<File[]>([]);
   const [IBANLetterInvalid, setIBANLetterInvalid] = useState(
     IBANLetterDocsFile.length === 0
@@ -37,26 +42,28 @@ export const BankDetails: FC<TBankDetails> = ({ scholarship }) => {
 
   const { cpr } = useAuth();
 
-  const updateBankDetailsMutation = useMutation({
+  const updateMasterBankDetailsMutation = useMutation({
     mutationFn: (values: {
       bankName: string;
       IBAN: string;
       IBANLetterDoc: string;
     }) => {
-      const vars: UpdateScholarshipMutationVariables = {
+      const vars: UpdateMasterscholarshipMutationVariables = {
         input: {
           id: scholarship.id,
           _version: scholarship._version,
           ...values,
         },
       };
-      return updateScholarshipInDB(vars);
+      return updateMasterScholarshipInDB(vars);
     },
     async onSuccess(data) {
       if (data) {
-        queryClient.invalidateQueries({ queryKey: ["scholarships"] });
         queryClient.invalidateQueries({
-          queryKey: [`bachelor/scholarships/${scholarship.id}`],
+          queryKey: ["mastersScholarships", scholarship.studentCPR],
+        });
+        queryClient.invalidateQueries({
+          queryKey: [`masters/scholarships/${scholarship.id}`],
         });
       } else {
         throw Error(`EB0001 ${tToast("failedToSubmit") ?? "Failed to submit"}`);
@@ -96,13 +103,13 @@ export const BankDetails: FC<TBankDetails> = ({ scholarship }) => {
     };
 
     if (ibanLetterDocStorage) {
-      await updateBankDetailsMutation.mutateAsync(dataToCall);
+      await updateMasterBankDetailsMutation.mutateAsync(dataToCall);
     }
   }
 
   return (
     <div className="flex flex-col gap-4 mx-auto max-w-3xl">
-      <h3 className="text-xl font-medium">{t("bankDetails")}</h3>
+      <h3 className="text-xl font-medium">{t("bankDetailsForApplicant")}</h3>
       <Formik
         initialValues={initialValues}
         onSubmit={async (values, actions) => {
@@ -209,12 +216,12 @@ export const BankDetails: FC<TBankDetails> = ({ scholarship }) => {
               className={cn("my-3 text-white btn btn-primary")}
               type="submit"
               disabled={
-                updateBankDetailsMutation.isPending ||
+                updateMasterBankDetailsMutation.isPending ||
                 isSubmitting ||
                 IBANLetterDocsFile.length === 0
               }
             >
-              {(updateBankDetailsMutation.isPending || isSubmitting) && (
+              {(updateMasterBankDetailsMutation.isPending || isSubmitting) && (
                 <span className="loading"></span>
               )}
               {t("submit")}

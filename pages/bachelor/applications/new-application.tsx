@@ -60,7 +60,7 @@ const NewApplicationPage: NextPageWithLayout<Props> = (props) => {
           {haveActiveApplication && (
             <div className="rounded-2xl bg-zinc-200 text-zinc-500 flex flex-col p-4 border border-zinc-300 text-center justify-center items-center min-h-[5rem]">
               <div>{t("youAlreadyHaveAnActiveApplication")}</div>
-              <Link href="/applications" className="link link-primary">
+              <Link href="/bachelor/applications" className="link link-primary">
                 {t("goToApplications")}
               </Link>
             </div>
@@ -71,7 +71,7 @@ const NewApplicationPage: NextPageWithLayout<Props> = (props) => {
       ) : dayjs().isAfter(
           dayjs(batch?.createApplicationEndDate).endOf("day")
         ) ? (
-        <div className="flex flex-wrap justify-center gap-10">
+        <div className="flex flex-wrap gap-10 justify-center">
           <CardInfoComponent
             icon={info}
             title={"Applying"}
@@ -84,7 +84,7 @@ const NewApplicationPage: NextPageWithLayout<Props> = (props) => {
           ></CardInfoComponent>
         </div>
       ) : (
-        <div className="flex flex-wrap justify-center gap-10">
+        <div className="flex flex-wrap gap-10 justify-center">
           <CardInfoComponent
             icon={info}
             title={"التقديم"}

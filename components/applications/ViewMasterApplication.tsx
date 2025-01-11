@@ -127,7 +127,7 @@ export default function ViewMasterApplication({
           </tr>
           <tr>
             <td className="flex gap-2 rtl:justify-end rtl:flex-row-reverse">
-              <span>{t("tofelILETSCertificateDoc")}</span>{" "}
+              <span>{t("TOEFLIELTSCertificateDoc")}</span>{" "}
               <p>{t("document")}</p>
             </td>
             <td>

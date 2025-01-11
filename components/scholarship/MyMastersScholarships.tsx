@@ -1,7 +1,9 @@
 import React, { FC, useRef } from "react";
 import {
+  Masterscholarship,
   Scholarship,
   ScholarshipStatus,
+  UpdateMasterscholarshipMutation,
   UpdateScholarshipMutation,
 } from "../../src/API";
 import Link from "next/link";
@@ -12,10 +14,16 @@ import glasses from "../../public/svg/glasses.svg";
 import check from "../../public/svg/check.svg";
 import { useAuth } from "../../hooks/use-auth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getStudentScholarships } from "../../src/CustomAPI";
+import {
+  getMasterScholarships,
+  getStudentScholarships,
+} from "../../src/CustomAPI";
 import { Skeleton } from "../Skeleton";
 import { API } from "aws-amplify";
-import { updateScholarship } from "../../src/graphql/mutations";
+import {
+  updateMasterscholarship,
+  updateScholarship,
+} from "../../src/graphql/mutations";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import toast from "react-hot-toast";
 import { cn } from "../../src/lib/utils";
@@ -24,23 +32,26 @@ type TMyScholarships = {
   // scholarships: Scholarship[];
 };
 
-export const MyScholarships: FC<TMyScholarships> = () => {
+export const MyMastersScholarships: FC<TMyScholarships> = () => {
   const { locale } = useRouter();
   const { t } = useTranslation("scholarships");
-  const { user } = useAuth();
+  const { cpr } = useAuth();
   const queryClient = useQueryClient();
-  const cpr = user?.getSignInUserSession()?.getAccessToken().payload.username;
+
+  // const cpr = user?.getSignInUserSession()?.getAccessToken().payload.username;
 
   const declineDialog = useRef<HTMLDialogElement>(null);
 
   const { data: scholarships, isPending: isScholarshipsPending } = useQuery<
-    Scholarship[]
+    Masterscholarship[]
   >({
-    queryKey: ["scholarships"],
-    queryFn: () => (cpr ? getStudentScholarships(cpr) : []),
+    queryKey: ["masterScholarships", cpr],
+    queryFn: () => (cpr ? getMasterScholarships({ studentCPR: cpr }) : []),
   });
 
-  const updateScholarshipStatus = async ({
+  console.log(scholarships);
+
+  const updateMasterScholarshipStatus = async ({
     id,
     status,
     _version,
@@ -49,8 +60,8 @@ export const MyScholarships: FC<TMyScholarships> = () => {
     status: ScholarshipStatus;
     _version: number;
   }) => {
-    const updatedScholarship = (await API.graphql({
-      query: updateScholarship,
+    const updatedMasterScholarship = (await API.graphql({
+      query: updateMasterscholarship,
       variables: {
         input: {
           id,
@@ -58,21 +69,26 @@ export const MyScholarships: FC<TMyScholarships> = () => {
           _version,
         },
       },
-    })) as GraphQLResult<UpdateScholarshipMutation>;
-    return updatedScholarship;
+    })) as GraphQLResult<UpdateMasterscholarshipMutation>;
+    return updatedMasterScholarship;
   };
 
-  const updateScholarshipMutation = useMutation({
+  const updateMasterScholarshipMutation = useMutation({
     mutationFn: (values: {
       id: string;
       status: ScholarshipStatus;
       _version: number;
     }) => {
-      return updateScholarshipStatus(values);
+      return updateMasterScholarshipStatus(values);
     },
     async onSuccess(data) {
-      if (data.data?.updateScholarship) {
-        queryClient.invalidateQueries({ queryKey: ["scholarships"] });
+      if (data.data?.updateMasterscholarship) {
+        queryClient.invalidateQueries({
+          queryKey: [
+            "masterScholarships",
+            data.data.updateMasterscholarship.studentCPR,
+          ],
+        });
       } else {
       }
     },
@@ -80,16 +96,21 @@ export const MyScholarships: FC<TMyScholarships> = () => {
       toast.error(error.message, { duration: 6000 });
     },
   });
-  const declineScholarshipMutation = useMutation({
+  const declineMasterScholarshipMutation = useMutation({
     mutationFn: (values: { id: string; _version: number }) => {
-      return updateScholarshipStatus({
+      return updateMasterScholarshipStatus({
         ...values,
         status: ScholarshipStatus.WITHDRAWN,
       });
     },
     async onSuccess(data) {
-      if (data.data?.updateScholarship) {
-        queryClient.invalidateQueries({ queryKey: ["scholarships"] });
+      if (data.data?.updateMasterscholarship) {
+        queryClient.invalidateQueries({
+          queryKey: [
+            "masterScholarships",
+            data.data?.updateMasterscholarship.studentCPR,
+          ],
+        });
       } else {
       }
     },
@@ -103,14 +124,19 @@ export const MyScholarships: FC<TMyScholarships> = () => {
 
       _version: number;
     }) => {
-      return updateScholarshipStatus({
+      return updateMasterScholarshipStatus({
         ...values,
         status: ScholarshipStatus.APPROVED,
       });
     },
     async onSuccess(data) {
-      if (data.data?.updateScholarship) {
-        queryClient.invalidateQueries({ queryKey: ["scholarships"] });
+      if (data.data?.updateMasterscholarship) {
+        queryClient.invalidateQueries({
+          queryKey: [
+            "masterScholarships",
+            data.data?.updateMasterscholarship.studentCPR,
+          ],
+        });
       } else {
       }
     },
@@ -159,7 +185,7 @@ export const MyScholarships: FC<TMyScholarships> = () => {
                     <div className="flex flex-wrap justify-between items-baseline">
                       <h3
                         onClick={() =>
-                          updateScholarshipMutation.mutate({
+                          updateMasterScholarshipMutation.mutate({
                             id: scholarship.id,
                             _version: scholarship._version,
                             status: ScholarshipStatus.PENDING,
@@ -196,35 +222,41 @@ export const MyScholarships: FC<TMyScholarships> = () => {
                         ScholarshipStatus.REJECTED,
                       ].includes(scholarship.status) && (
                         <div className="flex flex-col justify-between grow">
-                          <div>
-                            {/* Selected Program */}
-                            <div className="-mt-2 mb-2 text-sm stat-title">
-                              {t("selectedProgram")}
+                          <div className="flex flex-col gap-3">
+                            <div>
+                              {/* Selected University */}
+                              <div className="flex gap-1 text-sm flex-cpl stat-title">
+                                {t("university")}
+                              </div>
+                              {locale === "ar"
+                                ? scholarship.application?.university
+                                    ?.universityNameAr
+                                : scholarship.application?.university
+                                    ?.universityName}
                             </div>
-                            {scholarship.application?.programs?.items.map(
-                              (program) => (
-                                <div
-                                  key={program?.id}
-                                  className="whitespace-pre-wrap stat-desc"
-                                >
-                                  {program?.choiceOrder}
-                                  {"- "}
-                                  {locale == "ar"
-                                    ? `${program?.program?.nameAr ?? "-"}-${
-                                        program?.program?.university?.nameAr ??
-                                        "-"
-                                      }`
-                                    : `${program?.program?.name}-${program?.program?.university?.name}`}
-                                </div>
-                              )
-                            )}
+                            <div>
+                              {/* Selected Program */}
+                              <div className="flex gap-1 text-sm flex-cpl stat-title">
+                                {t("major")}
+                              </div>
+                              {scholarship.application?.major
+                                ? t(scholarship.application?.major)
+                                : "Not available"}
+                            </div>
+                            <div>
+                              {/* Selected Program */}
+                              <div className="flex gap-1 text-sm flex-cpl stat-title">
+                                {t("selectedProgram")}
+                              </div>
+                              {scholarship.application?.program}
+                            </div>
                           </div>
                           {scholarship.status === ScholarshipStatus.PENDING && (
                             <div className="flex gap-3 justify-end">
                               <button
                                 type="button"
                                 disabled={
-                                  declineScholarshipMutation.isPending ||
+                                  declineMasterScholarshipMutation.isPending ||
                                   approveScholarshipMutation.isPending
                                 }
                                 onClick={() =>
@@ -238,7 +270,7 @@ export const MyScholarships: FC<TMyScholarships> = () => {
                                 }
                                 className={cn("btn btn-ghost")}
                               >
-                                {declineScholarshipMutation.isPending && (
+                                {declineMasterScholarshipMutation.isPending && (
                                   <span className="loading"></span>
                                 )}{" "}
                                 {t("decline")}
@@ -272,18 +304,20 @@ export const MyScholarships: FC<TMyScholarships> = () => {
                                     <button
                                       // type="button"
                                       disabled={
-                                        declineScholarshipMutation.isPending ||
+                                        declineMasterScholarshipMutation.isPending ||
                                         approveScholarshipMutation.isPending
                                       }
                                       onClick={() =>
-                                        declineScholarshipMutation.mutate({
-                                          id: scholarship.id,
-                                          _version: scholarship._version,
-                                        })
+                                        declineMasterScholarshipMutation.mutate(
+                                          {
+                                            id: scholarship.id,
+                                            _version: scholarship._version,
+                                          }
+                                        )
                                       }
                                       className={cn("btn btn-primary")}
                                     >
-                                      {declineScholarshipMutation.isPending && (
+                                      {declineMasterScholarshipMutation.isPending && (
                                         <span className="loading"></span>
                                       )}
                                       {t("decline")}
@@ -298,7 +332,7 @@ export const MyScholarships: FC<TMyScholarships> = () => {
                                 type="button"
                                 disabled={
                                   approveScholarshipMutation.isPending ||
-                                  declineScholarshipMutation.isPending
+                                  declineMasterScholarshipMutation.isPending
                                 }
                                 onClick={() =>
                                   approveScholarshipMutation.mutate({
@@ -349,7 +383,7 @@ export const MyScholarships: FC<TMyScholarships> = () => {
                         <div className="flex gap-3 justify-end">
                           {/* Complete/View Application */}
                           <Link
-                            href={`/bachelor/scholarship/${scholarship.id}`}
+                            href={`/masters/scholarship/${scholarship.id}`}
                             className={cn(
                               "text-white btn btn-secondary",
                               scholarship.isConfirmed && "btn-success"

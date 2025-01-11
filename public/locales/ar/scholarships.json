@@ -65,5 +65,12 @@
   "previous": "السابق",
   "complete": "مكتمل",
   "incomplete": "غير مكتمل",
+  "major": "التخصص",
+  "missingSignatures": "يرجى تقديم كل من توقيعات مقدم الطلب والوصي",
+  "bankDetailsForApplicant": "تفاصيل البنك لمقدم الطلب",
+  "ENGINEERING": "الهندسة",
+  "SCIENCE": "العلوم",
+  "TECHNOLOGY": "التقنية",
+  "university": "الجامعة",
   "scholarships": "المنح الدراسية"
 }

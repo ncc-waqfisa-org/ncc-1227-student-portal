@@ -397,7 +397,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
       tofelILETSCertificate &&
         (await uploadFile(
           tofelILETSCertificate,
-          DocType.TOFEL_ILETS,
+          DocType.TOEFL_IELTS,
           studentData.cpr
         )),
     ])
@@ -841,7 +841,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                         as="select"
                         name="universityID"
                         title="universityID"
-                        placeholder="Program"
+                        placeholder={t("university")}
                         className={`select select-bordered w-full select-primary ${
                           errors.universityID &&
                           touched.universityID &&
@@ -948,10 +948,9 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                         </label>
                       </div>
                       <Field
-                        dir="ltr"
                         name="program"
                         title="program"
-                        placeholder="Program"
+                        placeholder={t("program")}
                         className={`input input-bordered input-primary ${
                           errors.program && touched.program && "input-error"
                         }`}
@@ -1160,7 +1159,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
               {/* tofelILETSCertificate */}
               <div className="flex flex-col justify-start w-full">
                 <label className="label">
-                  {t("tofelILETSCertificateDoc")}{" "}
+                  {t("TOEFLIELTSCertificateDoc")}{" "}
                   {props.application && (
                     <GetStorageLinkComponent
                       storageKey={
@@ -1200,7 +1199,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                   }
                 />
                 <p className="py-2 italic whitespace-pre-wrap stat-desc">
-                  {t(`tofelILETSCertificateDocD`)}
+                  {t(`TOEFLIELTSCertificateDocD`)}
                 </p>
                 <label className="label-text-alt text-error">
                   {errors.tofelILETSCertificate &&

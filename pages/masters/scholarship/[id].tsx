@@ -1,16 +1,16 @@
 import { GetServerSideProps } from "next";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { PageComponent } from "../../../components/PageComponent";
-import { Scholarship } from "../../../src/API";
-import { getScholarship } from "../../../src/CustomAPI";
+import { Masterscholarship } from "../../../src/API";
+import { getMasterScholarship } from "../../../src/CustomAPI";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
-import { Contract } from "../../../components/scholarship/Contract";
-import { ScholarshipPreview } from "../../../components/scholarship/ScholarshipPreview";
-import { BankDetails } from "../../../components/scholarship/BankDetails";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../../hooks/use-auth";
 import { Skeleton } from "../../../components/Skeleton";
+import { MastersScholarshipPreview } from "../../../components/scholarship/MasterScholarshipPreview";
+import { MastersContract } from "../../../components/scholarship/MastersContract";
+import { MastersBankDetails } from "../../../components/scholarship/MastersBankDetails";
 
 interface Props {
   scholarshipId: string | null;
@@ -39,14 +39,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 };
 
-export default function ScholarshipPage({ scholarshipId }: Props) {
+export default function MastersScholarshipPage({ scholarshipId }: Props) {
   const { t } = useTranslation("scholarships");
   const { cpr } = useAuth();
 
   const { data: scholarship, isPending: isScholarshipPending } =
-    useQuery<Scholarship | null>({
-      queryKey: [`bachelor/scholarships/${scholarshipId}`],
-      queryFn: () => (scholarshipId ? getScholarship(scholarshipId) : null),
+    useQuery<Masterscholarship | null>({
+      queryKey: [`masters/scholarships/${scholarshipId}`],
+      queryFn: () =>
+        scholarshipId ? getMasterScholarship({ id: scholarshipId }) : null,
       select: (data) => {
         return cpr === data?.studentCPR ? data : null;
       },
@@ -55,22 +56,28 @@ export default function ScholarshipPage({ scholarshipId }: Props) {
   const [showContract, setShowContract] = useState(false);
   const [showBankDetails, setShowBankDetails] = useState(false);
 
-  useEffect(() => {
-    setShowContract(!Boolean(scholarship?.signedContractDoc));
-    setShowBankDetails(
+  const showBankDetailsDefault = useMemo(
+    () =>
       Boolean(scholarship?.signedContractDoc) &&
-        !Boolean(
-          scholarship?.bankName &&
-            scholarship?.IBAN &&
-            scholarship?.IBANLetterDoc
-        )
-    );
+      !Boolean(
+        scholarship?.bankName && scholarship?.IBAN && scholarship?.IBANLetterDoc
+      ),
+    [scholarship]
+  );
+  const showContractDefault = useMemo(
+    () => !Boolean(scholarship?.signedContractDoc),
+    [scholarship]
+  );
+
+  useEffect(() => {
+    setShowContract(showContractDefault);
+    setShowBankDetails(showBankDetailsDefault);
     return () => {};
-  }, [scholarship]);
+  }, [showContractDefault, showBankDetailsDefault]);
 
   if (isScholarshipPending) {
     return (
-      <PageComponent title={"BScholarships"} authRequired>
+      <PageComponent title={"MScholarships"} authRequired>
         <Skeleton className="w-full max-w-3xl h-96 rounded-md bg-slate-200" />
       </PageComponent>
     );
@@ -78,7 +85,7 @@ export default function ScholarshipPage({ scholarshipId }: Props) {
 
   if (!scholarship) {
     return (
-      <PageComponent title={"BScholarships"} authRequired>
+      <PageComponent title={"MScholarships"} authRequired>
         <div>
           <p>{t("notFound")}</p>
         </div>
@@ -87,23 +94,27 @@ export default function ScholarshipPage({ scholarshipId }: Props) {
   }
 
   return (
-    <PageComponent title={"BScholarships"} authRequired>
+    <PageComponent title={"MScholarships"} authRequired>
       {scholarship && !isScholarshipPending && (
-        <div className="flex flex-col gap-10">
-          <ScholarshipPreview
+        <div className="flex flex-col gap-10 py-8">
+          <MastersScholarshipPreview
             scholarship={scholarship}
             toggleShowContract={() => {
               setShowContract(!showContract);
-              setShowBankDetails(false);
+              setShowBankDetails(
+                showBankDetailsDefault ? !showBankDetails : false
+              );
             }}
             toggleShowBankDetails={() => {
               setShowBankDetails(!showBankDetails);
-              setShowContract(false);
+              setShowContract(showBankDetailsDefault ? !showContract : false);
             }}
           />
           <div>
-            {showContract && <Contract scholarship={scholarship} />}
-            {showBankDetails && <BankDetails scholarship={scholarship} />}
+            {showContract && <MastersContract scholarship={scholarship} />}
+            {showBankDetails && (
+              <MastersBankDetails scholarship={scholarship} />
+            )}
           </div>
         </div>
       )}
