@@ -57,7 +57,7 @@ export default function MasterInfoForm({
     graduation_year: student?.m_graduationYear ?? "",
     old_program: student?.m_oldProgram ?? "",
 
-    isEmployed: student?.m_isEmployeed ?? false,
+    isEmployed: student?.m_isEmployed ?? false,
     place_of_employment: student?.m_placeOfEmployment ?? "",
     income: student?.m_income ?? Income.LESS_THAN_1500,
 

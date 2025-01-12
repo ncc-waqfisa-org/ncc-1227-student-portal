@@ -50,7 +50,7 @@ export declare type StudentUpdateFormInputValues = {
     m_graduationYear?: string;
     m_oldProgram?: string;
     m_applicantType?: string[];
-    m_isEmployeed?: boolean;
+    m_isEmployed?: boolean;
     m_placeOfEmployment?: string;
     m_income?: string;
     m_incomeDoc?: string;
@@ -86,7 +86,7 @@ export declare type StudentUpdateFormValidationValues = {
     m_graduationYear?: ValidationFunction<string>;
     m_oldProgram?: ValidationFunction<string>;
     m_applicantType?: ValidationFunction<string>;
-    m_isEmployeed?: ValidationFunction<boolean>;
+    m_isEmployed?: ValidationFunction<boolean>;
     m_placeOfEmployment?: ValidationFunction<string>;
     m_income?: ValidationFunction<string>;
     m_incomeDoc?: ValidationFunction<string>;
@@ -124,7 +124,7 @@ export declare type StudentUpdateFormOverridesProps = {
     m_graduationYear?: PrimitiveOverrideProps<TextFieldProps>;
     m_oldProgram?: PrimitiveOverrideProps<TextFieldProps>;
     m_applicantType?: PrimitiveOverrideProps<SelectFieldProps>;
-    m_isEmployeed?: PrimitiveOverrideProps<SwitchFieldProps>;
+    m_isEmployed?: PrimitiveOverrideProps<SwitchFieldProps>;
     m_placeOfEmployment?: PrimitiveOverrideProps<TextFieldProps>;
     m_income?: PrimitiveOverrideProps<SelectFieldProps>;
     m_incomeDoc?: PrimitiveOverrideProps<TextFieldProps>;

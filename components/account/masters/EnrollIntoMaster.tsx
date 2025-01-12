@@ -173,7 +173,7 @@ export const EnrollIntoMaster = ({
           m_graduationYear: values.graduation_year,
           m_universityID: values.universityID,
           m_oldProgram: values.old_program,
-          m_isEmployeed: values.isEmployed,
+          m_isEmployed: values.isEmployed,
           m_placeOfEmployment: values.place_of_employment,
           m_income: values.income,
           m_incomeDoc: values.income_doc,

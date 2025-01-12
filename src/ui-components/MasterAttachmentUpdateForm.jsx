@@ -27,7 +27,7 @@ export default function MasterAttachmentUpdateForm(props) {
     signedContractDoc: "",
     transcriptDoc: "",
     universityCertificate: "",
-    tofelILETSCertificate: "",
+    toeflIELTSCertificate: "",
     acceptanceLetterDoc: "",
   };
   const [cprDoc, setCprDoc] = React.useState(initialValues.cprDoc);
@@ -40,8 +40,8 @@ export default function MasterAttachmentUpdateForm(props) {
   const [universityCertificate, setUniversityCertificate] = React.useState(
     initialValues.universityCertificate
   );
-  const [tofelILETSCertificate, setTofelILETSCertificate] = React.useState(
-    initialValues.tofelILETSCertificate
+  const [toeflIELTSCertificate, setToeflIELTSCertificate] = React.useState(
+    initialValues.toeflIELTSCertificate
   );
   const [acceptanceLetterDoc, setAcceptanceLetterDoc] = React.useState(
     initialValues.acceptanceLetterDoc
@@ -55,7 +55,7 @@ export default function MasterAttachmentUpdateForm(props) {
     setSignedContractDoc(cleanValues.signedContractDoc);
     setTranscriptDoc(cleanValues.transcriptDoc);
     setUniversityCertificate(cleanValues.universityCertificate);
-    setTofelILETSCertificate(cleanValues.tofelILETSCertificate);
+    setToeflIELTSCertificate(cleanValues.toeflIELTSCertificate);
     setAcceptanceLetterDoc(cleanValues.acceptanceLetterDoc);
     setErrors({});
   };
@@ -77,7 +77,7 @@ export default function MasterAttachmentUpdateForm(props) {
     signedContractDoc: [],
     transcriptDoc: [],
     universityCertificate: [],
-    tofelILETSCertificate: [],
+    toeflIELTSCertificate: [],
     acceptanceLetterDoc: [],
   };
   const runValidationTasks = async (
@@ -110,7 +110,7 @@ export default function MasterAttachmentUpdateForm(props) {
           signedContractDoc,
           transcriptDoc,
           universityCertificate,
-          tofelILETSCertificate,
+          toeflIELTSCertificate,
           acceptanceLetterDoc,
         };
         const validationResponses = await Promise.all(
@@ -171,7 +171,7 @@ export default function MasterAttachmentUpdateForm(props) {
               signedContractDoc,
               transcriptDoc,
               universityCertificate,
-              tofelILETSCertificate,
+              toeflIELTSCertificate,
               acceptanceLetterDoc,
             };
             const result = onChange(modelFields);
@@ -200,7 +200,7 @@ export default function MasterAttachmentUpdateForm(props) {
               signedContractDoc: value,
               transcriptDoc,
               universityCertificate,
-              tofelILETSCertificate,
+              toeflIELTSCertificate,
               acceptanceLetterDoc,
             };
             const result = onChange(modelFields);
@@ -231,7 +231,7 @@ export default function MasterAttachmentUpdateForm(props) {
               signedContractDoc,
               transcriptDoc: value,
               universityCertificate,
-              tofelILETSCertificate,
+              toeflIELTSCertificate,
               acceptanceLetterDoc,
             };
             const result = onChange(modelFields);
@@ -260,7 +260,7 @@ export default function MasterAttachmentUpdateForm(props) {
               signedContractDoc,
               transcriptDoc,
               universityCertificate: value,
-              tofelILETSCertificate,
+              toeflIELTSCertificate,
               acceptanceLetterDoc,
             };
             const result = onChange(modelFields);
@@ -279,10 +279,10 @@ export default function MasterAttachmentUpdateForm(props) {
         {...getOverrideProps(overrides, "universityCertificate")}
       ></TextField>
       <TextField
-        label="Tofel ilets certificate"
+        label="Toefl ielts certificate"
         isRequired={false}
         isReadOnly={false}
-        value={tofelILETSCertificate}
+        value={toeflIELTSCertificate}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -291,23 +291,23 @@ export default function MasterAttachmentUpdateForm(props) {
               signedContractDoc,
               transcriptDoc,
               universityCertificate,
-              tofelILETSCertificate: value,
+              toeflIELTSCertificate: value,
               acceptanceLetterDoc,
             };
             const result = onChange(modelFields);
-            value = result?.tofelILETSCertificate ?? value;
+            value = result?.toeflIELTSCertificate ?? value;
           }
-          if (errors.tofelILETSCertificate?.hasError) {
-            runValidationTasks("tofelILETSCertificate", value);
+          if (errors.toeflIELTSCertificate?.hasError) {
+            runValidationTasks("toeflIELTSCertificate", value);
           }
-          setTofelILETSCertificate(value);
+          setToeflIELTSCertificate(value);
         }}
         onBlur={() =>
-          runValidationTasks("tofelILETSCertificate", tofelILETSCertificate)
+          runValidationTasks("toeflIELTSCertificate", toeflIELTSCertificate)
         }
-        errorMessage={errors.tofelILETSCertificate?.errorMessage}
-        hasError={errors.tofelILETSCertificate?.hasError}
-        {...getOverrideProps(overrides, "tofelILETSCertificate")}
+        errorMessage={errors.toeflIELTSCertificate?.errorMessage}
+        hasError={errors.toeflIELTSCertificate?.hasError}
+        {...getOverrideProps(overrides, "toeflIELTSCertificate")}
       ></TextField>
       <TextField
         label="Acceptance letter doc"
@@ -322,7 +322,7 @@ export default function MasterAttachmentUpdateForm(props) {
               signedContractDoc,
               transcriptDoc,
               universityCertificate,
-              tofelILETSCertificate,
+              toeflIELTSCertificate,
               acceptanceLetterDoc: value,
             };
             const result = onChange(modelFields);

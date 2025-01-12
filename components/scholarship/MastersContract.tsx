@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { FC, useRef, useState } from "react";
 import { Storage } from "aws-amplify";
 import SignatureCanvas from "react-signature-canvas";
-import { Masterscholarship, Scholarship } from "../../src/API";
+import { MasterScholarship, Scholarship } from "../../src/API";
 import { Skeleton } from "../Skeleton";
 import Link from "next/link";
 // import PDFPreview from "./PDFViewer";
@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 
 type TContract = {
-  scholarship: Masterscholarship;
+  scholarship: MasterScholarship;
 };
 type TContractForm = {
   studentSignature: string | null;

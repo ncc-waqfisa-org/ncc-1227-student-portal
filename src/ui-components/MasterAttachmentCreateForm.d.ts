@@ -26,7 +26,7 @@ export declare type MasterAttachmentCreateFormInputValues = {
     signedContractDoc?: string;
     transcriptDoc?: string;
     universityCertificate?: string;
-    tofelILETSCertificate?: string;
+    toeflIELTSCertificate?: string;
     acceptanceLetterDoc?: string;
 };
 export declare type MasterAttachmentCreateFormValidationValues = {
@@ -34,7 +34,7 @@ export declare type MasterAttachmentCreateFormValidationValues = {
     signedContractDoc?: ValidationFunction<string>;
     transcriptDoc?: ValidationFunction<string>;
     universityCertificate?: ValidationFunction<string>;
-    tofelILETSCertificate?: ValidationFunction<string>;
+    toeflIELTSCertificate?: ValidationFunction<string>;
     acceptanceLetterDoc?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
@@ -44,7 +44,7 @@ export declare type MasterAttachmentCreateFormOverridesProps = {
     signedContractDoc?: PrimitiveOverrideProps<TextFieldProps>;
     transcriptDoc?: PrimitiveOverrideProps<TextFieldProps>;
     universityCertificate?: PrimitiveOverrideProps<TextFieldProps>;
-    tofelILETSCertificate?: PrimitiveOverrideProps<TextFieldProps>;
+    toeflIELTSCertificate?: PrimitiveOverrideProps<TextFieldProps>;
     acceptanceLetterDoc?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type MasterAttachmentCreateFormProps = React.PropsWithChildren<{

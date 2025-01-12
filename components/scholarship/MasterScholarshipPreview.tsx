@@ -1,11 +1,11 @@
 import React, { FC } from "react";
-import { Masterscholarship } from "../../src/API";
+import { MasterScholarship } from "../../src/API";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import GetStorageLinkComponent from "../get-storage-link-component";
 
 type TScholarshipPreview = {
-  scholarship: Masterscholarship;
+  scholarship: MasterScholarship;
   toggleShowContract?: () => void;
   toggleShowBankDetails?: () => void;
 };

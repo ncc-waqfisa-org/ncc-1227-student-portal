@@ -1,10 +1,22 @@
-import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier, CustomIdentifier, OptionallyManagedIdentifier } from "@aws-amplify/datastore";
+import {
+  ModelInit,
+  MutableModel,
+  __modelMeta__,
+  ManagedIdentifier,
+  CustomIdentifier,
+  OptionallyManagedIdentifier,
+} from "@aws-amplify/datastore";
 // @ts-ignore
-import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@aws-amplify/datastore";
+import {
+  LazyLoading,
+  LazyLoadingDisabled,
+  AsyncCollection,
+  AsyncItem,
+} from "@aws-amplify/datastore";
 
 export enum AdminRole {
   ADMIN = "ADMIN",
-  SUPER_ADMIN = "SUPER_ADMIN"
+  SUPER_ADMIN = "SUPER_ADMIN",
 }
 
 export enum Status {
@@ -13,27 +25,27 @@ export enum Status {
   REVIEW = "REVIEW",
   NOT_COMPLETED = "NOT_COMPLETED",
   REJECTED = "REJECTED",
-  WITHDRAWN = "WITHDRAWN"
+  WITHDRAWN = "WITHDRAWN",
 }
 
 export enum Language {
   ARABIC = "ARABIC",
-  ENGLISH = "ENGLISH"
+  ENGLISH = "ENGLISH",
 }
 
 export enum Gender {
   FEMALE = "FEMALE",
-  MALE = "MALE"
+  MALE = "MALE",
 }
 
 export enum SchoolType {
   PRIVATE = "PRIVATE",
-  PUBLIC = "PUBLIC"
+  PUBLIC = "PUBLIC",
 }
 
 export enum Nationality {
   BAHRAINI = "BAHRAINI",
-  NON_BAHRAINI = "NON_BAHRAINI"
+  NON_BAHRAINI = "NON_BAHRAINI",
 }
 
 export enum FamilyIncome {
@@ -42,38 +54,36 @@ export enum FamilyIncome {
   BETWEEN_700_AND_1000 = "BETWEEN_700_AND_1000",
   LESS_THAN_1500 = "LESS_THAN_1500",
   MORE_THAN_1500 = "MORE_THAN_1500",
-  OVER_1000 = "OVER_1000"
+  OVER_1000 = "OVER_1000",
 }
 
 export enum ScholarshipStatus {
   APPROVED = "APPROVED",
   PENDING = "PENDING",
   REJECTED = "REJECTED",
-  WITHDRAWN = "WITHDRAWN"
+  WITHDRAWN = "WITHDRAWN",
 }
 
 export enum ApplicantType {
   STUDENT = "STUDENT",
-  MASTER = "MASTER"
+  MASTER = "MASTER",
 }
 
 export enum Income {
   LESS_THAN_1500 = "LESS_THAN_1500",
-  MORE_THAN_1500 = "MORE_THAN_1500"
+  MORE_THAN_1500 = "MORE_THAN_1500",
 }
 
 export enum Major {
   SCIENCE = "SCIENCE",
   TECHNOLOGY = "TECHNOLOGY",
-  ENGINEERING = "ENGINEERING"
+  ENGINEERING = "ENGINEERING",
 }
-
-
 
 type EagerAttachment = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Attachment, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<Attachment, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly cprDoc?: string | null;
@@ -82,12 +92,12 @@ type EagerAttachment = {
   readonly schoolCertificate?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
 type LazyAttachment = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Attachment, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<Attachment, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly cprDoc?: string | null;
@@ -96,18 +106,27 @@ type LazyAttachment = {
   readonly schoolCertificate?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-export declare type Attachment = LazyLoading extends LazyLoadingDisabled ? EagerAttachment : LazyAttachment
+export declare type Attachment = LazyLoading extends LazyLoadingDisabled
+  ? EagerAttachment
+  : LazyAttachment;
 
-export declare const Attachment: (new (init: ModelInit<Attachment>) => Attachment) & {
-  copyOf(source: Attachment, mutator: (draft: MutableModel<Attachment>) => MutableModel<Attachment> | void): Attachment;
-}
+export declare const Attachment: (new (
+  init: ModelInit<Attachment>
+) => Attachment) & {
+  copyOf(
+    source: Attachment,
+    mutator: (
+      draft: MutableModel<Attachment>
+    ) => MutableModel<Attachment> | void
+  ): Attachment;
+};
 
 type EagerApplication = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Application, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<Application, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly gpa?: number | null;
@@ -142,12 +161,12 @@ type EagerApplication = {
   readonly applicationAttachmentId?: string | null;
   readonly programApplicationId?: string | null;
   readonly universityApplicationsId?: string | null;
-}
+};
 
 type LazyApplication = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Application, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<Application, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly gpa?: number | null;
@@ -182,18 +201,27 @@ type LazyApplication = {
   readonly applicationAttachmentId?: string | null;
   readonly programApplicationId?: string | null;
   readonly universityApplicationsId?: string | null;
-}
+};
 
-export declare type Application = LazyLoading extends LazyLoadingDisabled ? EagerApplication : LazyApplication
+export declare type Application = LazyLoading extends LazyLoadingDisabled
+  ? EagerApplication
+  : LazyApplication;
 
-export declare const Application: (new (init: ModelInit<Application>) => Application) & {
-  copyOf(source: Application, mutator: (draft: MutableModel<Application>) => MutableModel<Application> | void): Application;
-}
+export declare const Application: (new (
+  init: ModelInit<Application>
+) => Application) & {
+  copyOf(
+    source: Application,
+    mutator: (
+      draft: MutableModel<Application>
+    ) => MutableModel<Application> | void
+  ): Application;
+};
 
 type EagerProgramChoice = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<ProgramChoice, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<ProgramChoice, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly programID: string;
@@ -206,12 +234,12 @@ type EagerProgramChoice = {
   readonly updatedAt?: string | null;
   readonly applicationProgramsId?: string | null;
   readonly programApplicationsId?: string | null;
-}
+};
 
 type LazyProgramChoice = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<ProgramChoice, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<ProgramChoice, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly programID: string;
@@ -224,18 +252,27 @@ type LazyProgramChoice = {
   readonly updatedAt?: string | null;
   readonly applicationProgramsId?: string | null;
   readonly programApplicationsId?: string | null;
-}
+};
 
-export declare type ProgramChoice = LazyLoading extends LazyLoadingDisabled ? EagerProgramChoice : LazyProgramChoice
+export declare type ProgramChoice = LazyLoading extends LazyLoadingDisabled
+  ? EagerProgramChoice
+  : LazyProgramChoice;
 
-export declare const ProgramChoice: (new (init: ModelInit<ProgramChoice>) => ProgramChoice) & {
-  copyOf(source: ProgramChoice, mutator: (draft: MutableModel<ProgramChoice>) => MutableModel<ProgramChoice> | void): ProgramChoice;
-}
+export declare const ProgramChoice: (new (
+  init: ModelInit<ProgramChoice>
+) => ProgramChoice) & {
+  copyOf(
+    source: ProgramChoice,
+    mutator: (
+      draft: MutableModel<ProgramChoice>
+    ) => MutableModel<ProgramChoice> | void
+  ): ProgramChoice;
+};
 
 type EagerProgram = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Program, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<Program, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly name?: string | null;
@@ -253,12 +290,12 @@ type EagerProgram = {
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly universityProgramsId?: string | null;
-}
+};
 
 type LazyProgram = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Program, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<Program, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly name?: string | null;
@@ -276,18 +313,23 @@ type LazyProgram = {
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly universityProgramsId?: string | null;
-}
+};
 
-export declare type Program = LazyLoading extends LazyLoadingDisabled ? EagerProgram : LazyProgram
+export declare type Program = LazyLoading extends LazyLoadingDisabled
+  ? EagerProgram
+  : LazyProgram;
 
 export declare const Program: (new (init: ModelInit<Program>) => Program) & {
-  copyOf(source: Program, mutator: (draft: MutableModel<Program>) => MutableModel<Program> | void): Program;
-}
+  copyOf(
+    source: Program,
+    mutator: (draft: MutableModel<Program>) => MutableModel<Program> | void
+  ): Program;
+};
 
 type EagerUniversity = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<University, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<University, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly name?: string | null;
@@ -302,12 +344,12 @@ type EagerUniversity = {
   readonly applications?: (Application | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
 type LazyUniversity = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<University, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<University, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly name?: string | null;
@@ -322,18 +364,27 @@ type LazyUniversity = {
   readonly applications: AsyncCollection<Application>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-export declare type University = LazyLoading extends LazyLoadingDisabled ? EagerUniversity : LazyUniversity
+export declare type University = LazyLoading extends LazyLoadingDisabled
+  ? EagerUniversity
+  : LazyUniversity;
 
-export declare const University: (new (init: ModelInit<University>) => University) & {
-  copyOf(source: University, mutator: (draft: MutableModel<University>) => MutableModel<University> | void): University;
-}
+export declare const University: (new (
+  init: ModelInit<University>
+) => University) & {
+  copyOf(
+    source: University,
+    mutator: (
+      draft: MutableModel<University>
+    ) => MutableModel<University> | void
+  ): University;
+};
 
 type EagerAdminLog = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<AdminLog, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<AdminLog, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly applicationID: string;
@@ -347,12 +398,12 @@ type EagerAdminLog = {
   readonly applicationAdminLogsId?: string | null;
   readonly adminAdminLogsCpr?: string | null;
   readonly masterApplicationAdminLogsId?: string | null;
-}
+};
 
 type LazyAdminLog = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<AdminLog, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<AdminLog, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly applicationID: string;
@@ -366,18 +417,23 @@ type LazyAdminLog = {
   readonly applicationAdminLogsId?: string | null;
   readonly adminAdminLogsCpr?: string | null;
   readonly masterApplicationAdminLogsId?: string | null;
-}
+};
 
-export declare type AdminLog = LazyLoading extends LazyLoadingDisabled ? EagerAdminLog : LazyAdminLog
+export declare type AdminLog = LazyLoading extends LazyLoadingDisabled
+  ? EagerAdminLog
+  : LazyAdminLog;
 
 export declare const AdminLog: (new (init: ModelInit<AdminLog>) => AdminLog) & {
-  copyOf(source: AdminLog, mutator: (draft: MutableModel<AdminLog>) => MutableModel<AdminLog> | void): AdminLog;
-}
+  copyOf(
+    source: AdminLog,
+    mutator: (draft: MutableModel<AdminLog>) => MutableModel<AdminLog> | void
+  ): AdminLog;
+};
 
 type EagerStudentLog = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<StudentLog, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<StudentLog, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly applicationID: string;
@@ -390,12 +446,12 @@ type EagerStudentLog = {
   readonly updatedAt?: string | null;
   readonly applicationStudentLogsId?: string | null;
   readonly studentStudentLogsCpr?: string | null;
-}
+};
 
 type LazyStudentLog = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<StudentLog, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<StudentLog, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly applicationID: string;
@@ -408,18 +464,27 @@ type LazyStudentLog = {
   readonly updatedAt?: string | null;
   readonly applicationStudentLogsId?: string | null;
   readonly studentStudentLogsCpr?: string | null;
-}
+};
 
-export declare type StudentLog = LazyLoading extends LazyLoadingDisabled ? EagerStudentLog : LazyStudentLog
+export declare type StudentLog = LazyLoading extends LazyLoadingDisabled
+  ? EagerStudentLog
+  : LazyStudentLog;
 
-export declare const StudentLog: (new (init: ModelInit<StudentLog>) => StudentLog) & {
-  copyOf(source: StudentLog, mutator: (draft: MutableModel<StudentLog>) => MutableModel<StudentLog> | void): StudentLog;
-}
+export declare const StudentLog: (new (
+  init: ModelInit<StudentLog>
+) => StudentLog) & {
+  copyOf(
+    source: StudentLog,
+    mutator: (
+      draft: MutableModel<StudentLog>
+    ) => MutableModel<StudentLog> | void
+  ): StudentLog;
+};
 
 type EagerAdmin = {
   readonly [__modelMeta__]: {
-    identifier: CustomIdentifier<Admin, 'cpr'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: CustomIdentifier<Admin, "cpr">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly cpr: string;
   readonly fullName?: string | null;
@@ -429,12 +494,12 @@ type EagerAdmin = {
   readonly isDeactivated?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
 type LazyAdmin = {
   readonly [__modelMeta__]: {
-    identifier: CustomIdentifier<Admin, 'cpr'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: CustomIdentifier<Admin, "cpr">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly cpr: string;
   readonly fullName?: string | null;
@@ -444,18 +509,23 @@ type LazyAdmin = {
   readonly isDeactivated?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-export declare type Admin = LazyLoading extends LazyLoadingDisabled ? EagerAdmin : LazyAdmin
+export declare type Admin = LazyLoading extends LazyLoadingDisabled
+  ? EagerAdmin
+  : LazyAdmin;
 
 export declare const Admin: (new (init: ModelInit<Admin>) => Admin) & {
-  copyOf(source: Admin, mutator: (draft: MutableModel<Admin>) => MutableModel<Admin> | void): Admin;
-}
+  copyOf(
+    source: Admin,
+    mutator: (draft: MutableModel<Admin>) => MutableModel<Admin> | void
+  ): Admin;
+};
 
 type EagerParentInfo = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<ParentInfo, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<ParentInfo, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly guardianFullName?: string | null;
@@ -471,12 +541,12 @@ type EagerParentInfo = {
   readonly address?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
 type LazyParentInfo = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<ParentInfo, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<ParentInfo, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly guardianFullName?: string | null;
@@ -492,18 +562,27 @@ type LazyParentInfo = {
   readonly address?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-export declare type ParentInfo = LazyLoading extends LazyLoadingDisabled ? EagerParentInfo : LazyParentInfo
+export declare type ParentInfo = LazyLoading extends LazyLoadingDisabled
+  ? EagerParentInfo
+  : LazyParentInfo;
 
-export declare const ParentInfo: (new (init: ModelInit<ParentInfo>) => ParentInfo) & {
-  copyOf(source: ParentInfo, mutator: (draft: MutableModel<ParentInfo>) => MutableModel<ParentInfo> | void): ParentInfo;
-}
+export declare const ParentInfo: (new (
+  init: ModelInit<ParentInfo>
+) => ParentInfo) & {
+  copyOf(
+    source: ParentInfo,
+    mutator: (
+      draft: MutableModel<ParentInfo>
+    ) => MutableModel<ParentInfo> | void
+  ): ParentInfo;
+};
 
 type EagerStudent = {
   readonly [__modelMeta__]: {
-    identifier: CustomIdentifier<Student, 'cpr'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: CustomIdentifier<Student, "cpr">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly cpr: string;
   readonly cprDoc?: string | null;
@@ -539,7 +618,7 @@ type EagerStudent = {
   readonly m_universityID?: string | null;
   readonly m_oldProgram?: string | null;
   readonly m_applicantType: ApplicantType[] | Array<keyof typeof ApplicantType>;
-  readonly m_isEmployeed?: boolean | null;
+  readonly m_isEmployed?: boolean | null;
   readonly m_placeOfEmployment?: string | null;
   readonly m_income?: Income | keyof typeof Income | null;
   readonly m_incomeDoc?: string | null;
@@ -549,12 +628,12 @@ type EagerStudent = {
   readonly m_masterApplications?: (MasterApplication | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
 type LazyStudent = {
   readonly [__modelMeta__]: {
-    identifier: CustomIdentifier<Student, 'cpr'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: CustomIdentifier<Student, "cpr">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly cpr: string;
   readonly cprDoc?: string | null;
@@ -590,7 +669,7 @@ type LazyStudent = {
   readonly m_universityID?: string | null;
   readonly m_oldProgram?: string | null;
   readonly m_applicantType: ApplicantType[] | Array<keyof typeof ApplicantType>;
-  readonly m_isEmployeed?: boolean | null;
+  readonly m_isEmployed?: boolean | null;
   readonly m_placeOfEmployment?: string | null;
   readonly m_income?: Income | keyof typeof Income | null;
   readonly m_incomeDoc?: string | null;
@@ -600,18 +679,23 @@ type LazyStudent = {
   readonly m_masterApplications: AsyncCollection<MasterApplication>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-export declare type Student = LazyLoading extends LazyLoadingDisabled ? EagerStudent : LazyStudent
+export declare type Student = LazyLoading extends LazyLoadingDisabled
+  ? EagerStudent
+  : LazyStudent;
 
 export declare const Student: (new (init: ModelInit<Student>) => Student) & {
-  copyOf(source: Student, mutator: (draft: MutableModel<Student>) => MutableModel<Student> | void): Student;
-}
+  copyOf(
+    source: Student,
+    mutator: (draft: MutableModel<Student>) => MutableModel<Student> | void
+  ): Student;
+};
 
 type EagerBatch = {
   readonly [__modelMeta__]: {
-    identifier: CustomIdentifier<Batch, 'batch'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: CustomIdentifier<Batch, "batch">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly batch: number;
   readonly createApplicationStartDate?: string | null;
@@ -621,12 +705,12 @@ type EagerBatch = {
   readonly signUpEndDate?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
 type LazyBatch = {
   readonly [__modelMeta__]: {
-    identifier: CustomIdentifier<Batch, 'batch'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: CustomIdentifier<Batch, "batch">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly batch: number;
   readonly createApplicationStartDate?: string | null;
@@ -636,18 +720,23 @@ type LazyBatch = {
   readonly signUpEndDate?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-export declare type Batch = LazyLoading extends LazyLoadingDisabled ? EagerBatch : LazyBatch
+export declare type Batch = LazyLoading extends LazyLoadingDisabled
+  ? EagerBatch
+  : LazyBatch;
 
 export declare const Batch: (new (init: ModelInit<Batch>) => Batch) & {
-  copyOf(source: Batch, mutator: (draft: MutableModel<Batch>) => MutableModel<Batch> | void): Batch;
-}
+  copyOf(
+    source: Batch,
+    mutator: (draft: MutableModel<Batch>) => MutableModel<Batch> | void
+  ): Batch;
+};
 
 type EagerScholarship = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Scholarship, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<Scholarship, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly status?: ScholarshipStatus | keyof typeof ScholarshipStatus | null;
@@ -665,12 +754,12 @@ type EagerScholarship = {
   readonly IBANLetterDoc?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
 type LazyScholarship = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Scholarship, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<Scholarship, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly status?: ScholarshipStatus | keyof typeof ScholarshipStatus | null;
@@ -688,18 +777,27 @@ type LazyScholarship = {
   readonly IBANLetterDoc?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-export declare type Scholarship = LazyLoading extends LazyLoadingDisabled ? EagerScholarship : LazyScholarship
+export declare type Scholarship = LazyLoading extends LazyLoadingDisabled
+  ? EagerScholarship
+  : LazyScholarship;
 
-export declare const Scholarship: (new (init: ModelInit<Scholarship>) => Scholarship) & {
-  copyOf(source: Scholarship, mutator: (draft: MutableModel<Scholarship>) => MutableModel<Scholarship> | void): Scholarship;
-}
+export declare const Scholarship: (new (
+  init: ModelInit<Scholarship>
+) => Scholarship) & {
+  copyOf(
+    source: Scholarship,
+    mutator: (
+      draft: MutableModel<Scholarship>
+    ) => MutableModel<Scholarship> | void
+  ): Scholarship;
+};
 
 type EagerStatistics = {
   readonly [__modelMeta__]: {
-    identifier: OptionallyManagedIdentifier<Statistics, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: OptionallyManagedIdentifier<Statistics, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: number;
   readonly batch: number;
@@ -717,12 +815,12 @@ type EagerStatistics = {
   readonly today?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
 type LazyStatistics = {
   readonly [__modelMeta__]: {
-    identifier: OptionallyManagedIdentifier<Statistics, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: OptionallyManagedIdentifier<Statistics, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: number;
   readonly batch: number;
@@ -740,18 +838,27 @@ type LazyStatistics = {
   readonly today?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-export declare type Statistics = LazyLoading extends LazyLoadingDisabled ? EagerStatistics : LazyStatistics
+export declare type Statistics = LazyLoading extends LazyLoadingDisabled
+  ? EagerStatistics
+  : LazyStatistics;
 
-export declare const Statistics: (new (init: ModelInit<Statistics>) => Statistics) & {
-  copyOf(source: Statistics, mutator: (draft: MutableModel<Statistics>) => MutableModel<Statistics> | void): Statistics;
-}
+export declare const Statistics: (new (
+  init: ModelInit<Statistics>
+) => Statistics) & {
+  copyOf(
+    source: Statistics,
+    mutator: (
+      draft: MutableModel<Statistics>
+    ) => MutableModel<Statistics> | void
+  ): Statistics;
+};
 
 type EagerMasterBatch = {
   readonly [__modelMeta__]: {
-    identifier: CustomIdentifier<MasterBatch, 'batch'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: CustomIdentifier<MasterBatch, "batch">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly batch: number;
   readonly createApplicationStartDate?: string | null;
@@ -761,12 +868,12 @@ type EagerMasterBatch = {
   readonly signUpEndDate?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
 type LazyMasterBatch = {
   readonly [__modelMeta__]: {
-    identifier: CustomIdentifier<MasterBatch, 'batch'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: CustomIdentifier<MasterBatch, "batch">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly batch: number;
   readonly createApplicationStartDate?: string | null;
@@ -776,18 +883,27 @@ type LazyMasterBatch = {
   readonly signUpEndDate?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-export declare type MasterBatch = LazyLoading extends LazyLoadingDisabled ? EagerMasterBatch : LazyMasterBatch
+export declare type MasterBatch = LazyLoading extends LazyLoadingDisabled
+  ? EagerMasterBatch
+  : LazyMasterBatch;
 
-export declare const MasterBatch: (new (init: ModelInit<MasterBatch>) => MasterBatch) & {
-  copyOf(source: MasterBatch, mutator: (draft: MutableModel<MasterBatch>) => MutableModel<MasterBatch> | void): MasterBatch;
-}
+export declare const MasterBatch: (new (
+  init: ModelInit<MasterBatch>
+) => MasterBatch) & {
+  copyOf(
+    source: MasterBatch,
+    mutator: (
+      draft: MutableModel<MasterBatch>
+    ) => MutableModel<MasterBatch> | void
+  ): MasterBatch;
+};
 
 type EagerMasterLog = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<MasterLog, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<MasterLog, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly applicationID: string;
@@ -800,12 +916,12 @@ type EagerMasterLog = {
   readonly updatedAt?: string | null;
   readonly studentM_MasterLogsCpr?: string | null;
   readonly masterApplicationMasterLogsId?: string | null;
-}
+};
 
 type LazyMasterLog = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<MasterLog, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<MasterLog, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly applicationID: string;
@@ -818,18 +934,25 @@ type LazyMasterLog = {
   readonly updatedAt?: string | null;
   readonly studentM_MasterLogsCpr?: string | null;
   readonly masterApplicationMasterLogsId?: string | null;
-}
+};
 
-export declare type MasterLog = LazyLoading extends LazyLoadingDisabled ? EagerMasterLog : LazyMasterLog
+export declare type MasterLog = LazyLoading extends LazyLoadingDisabled
+  ? EagerMasterLog
+  : LazyMasterLog;
 
-export declare const MasterLog: (new (init: ModelInit<MasterLog>) => MasterLog) & {
-  copyOf(source: MasterLog, mutator: (draft: MutableModel<MasterLog>) => MutableModel<MasterLog> | void): MasterLog;
-}
+export declare const MasterLog: (new (
+  init: ModelInit<MasterLog>
+) => MasterLog) & {
+  copyOf(
+    source: MasterLog,
+    mutator: (draft: MutableModel<MasterLog>) => MutableModel<MasterLog> | void
+  ): MasterLog;
+};
 
 type EagerBahrainUniversities = {
   readonly [__modelMeta__]: {
-    identifier: OptionallyManagedIdentifier<BahrainUniversities, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: OptionallyManagedIdentifier<BahrainUniversities, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly universityName?: string | null;
@@ -838,12 +961,12 @@ type EagerBahrainUniversities = {
   readonly students?: (Student | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
 type LazyBahrainUniversities = {
   readonly [__modelMeta__]: {
-    identifier: OptionallyManagedIdentifier<BahrainUniversities, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: OptionallyManagedIdentifier<BahrainUniversities, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly universityName?: string | null;
@@ -852,18 +975,28 @@ type LazyBahrainUniversities = {
   readonly students: AsyncCollection<Student>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-export declare type BahrainUniversities = LazyLoading extends LazyLoadingDisabled ? EagerBahrainUniversities : LazyBahrainUniversities
+export declare type BahrainUniversities =
+  LazyLoading extends LazyLoadingDisabled
+    ? EagerBahrainUniversities
+    : LazyBahrainUniversities;
 
-export declare const BahrainUniversities: (new (init: ModelInit<BahrainUniversities>) => BahrainUniversities) & {
-  copyOf(source: BahrainUniversities, mutator: (draft: MutableModel<BahrainUniversities>) => MutableModel<BahrainUniversities> | void): BahrainUniversities;
-}
+export declare const BahrainUniversities: (new (
+  init: ModelInit<BahrainUniversities>
+) => BahrainUniversities) & {
+  copyOf(
+    source: BahrainUniversities,
+    mutator: (
+      draft: MutableModel<BahrainUniversities>
+    ) => MutableModel<BahrainUniversities> | void
+  ): BahrainUniversities;
+};
 
 type EagerMasterUniversities = {
   readonly [__modelMeta__]: {
-    identifier: OptionallyManagedIdentifier<MasterUniversities, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: OptionallyManagedIdentifier<MasterUniversities, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly universityName: string;
@@ -872,12 +1005,12 @@ type EagerMasterUniversities = {
   readonly applications?: (MasterApplication | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
 type LazyMasterUniversities = {
   readonly [__modelMeta__]: {
-    identifier: OptionallyManagedIdentifier<MasterUniversities, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: OptionallyManagedIdentifier<MasterUniversities, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly universityName: string;
@@ -886,18 +1019,27 @@ type LazyMasterUniversities = {
   readonly applications: AsyncCollection<MasterApplication>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-export declare type MasterUniversities = LazyLoading extends LazyLoadingDisabled ? EagerMasterUniversities : LazyMasterUniversities
+export declare type MasterUniversities = LazyLoading extends LazyLoadingDisabled
+  ? EagerMasterUniversities
+  : LazyMasterUniversities;
 
-export declare const MasterUniversities: (new (init: ModelInit<MasterUniversities>) => MasterUniversities) & {
-  copyOf(source: MasterUniversities, mutator: (draft: MutableModel<MasterUniversities>) => MutableModel<MasterUniversities> | void): MasterUniversities;
-}
+export declare const MasterUniversities: (new (
+  init: ModelInit<MasterUniversities>
+) => MasterUniversities) & {
+  copyOf(
+    source: MasterUniversities,
+    mutator: (
+      draft: MutableModel<MasterUniversities>
+    ) => MutableModel<MasterUniversities> | void
+  ): MasterUniversities;
+};
 
 type EagerMasterApplication = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<MasterApplication, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<MasterApplication, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly gpa?: number | null;
@@ -927,12 +1069,12 @@ type EagerMasterApplication = {
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly masterApplicationAttachmentId?: string | null;
-}
+};
 
 type LazyMasterApplication = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<MasterApplication, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<MasterApplication, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly gpa?: number | null;
@@ -962,18 +1104,27 @@ type LazyMasterApplication = {
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly masterApplicationAttachmentId?: string | null;
-}
+};
 
-export declare type MasterApplication = LazyLoading extends LazyLoadingDisabled ? EagerMasterApplication : LazyMasterApplication
+export declare type MasterApplication = LazyLoading extends LazyLoadingDisabled
+  ? EagerMasterApplication
+  : LazyMasterApplication;
 
-export declare const MasterApplication: (new (init: ModelInit<MasterApplication>) => MasterApplication) & {
-  copyOf(source: MasterApplication, mutator: (draft: MutableModel<MasterApplication>) => MutableModel<MasterApplication> | void): MasterApplication;
-}
+export declare const MasterApplication: (new (
+  init: ModelInit<MasterApplication>
+) => MasterApplication) & {
+  copyOf(
+    source: MasterApplication,
+    mutator: (
+      draft: MutableModel<MasterApplication>
+    ) => MutableModel<MasterApplication> | void
+  ): MasterApplication;
+};
 
 type EagerMasterStatistics = {
   readonly [__modelMeta__]: {
-    identifier: OptionallyManagedIdentifier<MasterStatistics, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: OptionallyManagedIdentifier<MasterStatistics, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: number;
   readonly batch: number;
@@ -991,12 +1142,12 @@ type EagerMasterStatistics = {
   readonly today?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
 type LazyMasterStatistics = {
   readonly [__modelMeta__]: {
-    identifier: OptionallyManagedIdentifier<MasterStatistics, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: OptionallyManagedIdentifier<MasterStatistics, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: number;
   readonly batch: number;
@@ -1014,56 +1165,74 @@ type LazyMasterStatistics = {
   readonly today?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-export declare type MasterStatistics = LazyLoading extends LazyLoadingDisabled ? EagerMasterStatistics : LazyMasterStatistics
+export declare type MasterStatistics = LazyLoading extends LazyLoadingDisabled
+  ? EagerMasterStatistics
+  : LazyMasterStatistics;
 
-export declare const MasterStatistics: (new (init: ModelInit<MasterStatistics>) => MasterStatistics) & {
-  copyOf(source: MasterStatistics, mutator: (draft: MutableModel<MasterStatistics>) => MutableModel<MasterStatistics> | void): MasterStatistics;
-}
+export declare const MasterStatistics: (new (
+  init: ModelInit<MasterStatistics>
+) => MasterStatistics) & {
+  copyOf(
+    source: MasterStatistics,
+    mutator: (
+      draft: MutableModel<MasterStatistics>
+    ) => MutableModel<MasterStatistics> | void
+  ): MasterStatistics;
+};
 
 type EagerMasterAttachment = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<MasterAttachment, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<MasterAttachment, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly cprDoc?: string | null;
   readonly signedContractDoc?: string | null;
   readonly transcriptDoc?: string | null;
   readonly universityCertificate?: string | null;
-  readonly tofelILETSCertificate?: string | null;
+  readonly toeflIELTSCertificate?: string | null;
   readonly acceptanceLetterDoc?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
 type LazyMasterAttachment = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<MasterAttachment, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<MasterAttachment, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly cprDoc?: string | null;
   readonly signedContractDoc?: string | null;
   readonly transcriptDoc?: string | null;
   readonly universityCertificate?: string | null;
-  readonly tofelILETSCertificate?: string | null;
+  readonly toeflIELTSCertificate?: string | null;
   readonly acceptanceLetterDoc?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-export declare type MasterAttachment = LazyLoading extends LazyLoadingDisabled ? EagerMasterAttachment : LazyMasterAttachment
+export declare type MasterAttachment = LazyLoading extends LazyLoadingDisabled
+  ? EagerMasterAttachment
+  : LazyMasterAttachment;
 
-export declare const MasterAttachment: (new (init: ModelInit<MasterAttachment>) => MasterAttachment) & {
-  copyOf(source: MasterAttachment, mutator: (draft: MutableModel<MasterAttachment>) => MutableModel<MasterAttachment> | void): MasterAttachment;
-}
+export declare const MasterAttachment: (new (
+  init: ModelInit<MasterAttachment>
+) => MasterAttachment) & {
+  copyOf(
+    source: MasterAttachment,
+    mutator: (
+      draft: MutableModel<MasterAttachment>
+    ) => MutableModel<MasterAttachment> | void
+  ): MasterAttachment;
+};
 
-type EagerMasterscholarship = {
+type EagerMasterScholarship = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Masterscholarship, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<MasterScholarship, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly status?: ScholarshipStatus | keyof typeof ScholarshipStatus | null;
@@ -1081,12 +1250,12 @@ type EagerMasterscholarship = {
   readonly IBANLetterDoc?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-type LazyMasterscholarship = {
+type LazyMasterScholarship = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Masterscholarship, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    identifier: ManagedIdentifier<MasterScholarship, "id">;
+    readOnlyFields: "createdAt" | "updatedAt";
   };
   readonly id: string;
   readonly status?: ScholarshipStatus | keyof typeof ScholarshipStatus | null;
@@ -1104,10 +1273,19 @@ type LazyMasterscholarship = {
   readonly IBANLetterDoc?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-}
+};
 
-export declare type Masterscholarship = LazyLoading extends LazyLoadingDisabled ? EagerMasterscholarship : LazyMasterscholarship
+export declare type MasterScholarship = LazyLoading extends LazyLoadingDisabled
+  ? EagerMasterScholarship
+  : LazyMasterScholarship;
 
-export declare const Masterscholarship: (new (init: ModelInit<Masterscholarship>) => Masterscholarship) & {
-  copyOf(source: Masterscholarship, mutator: (draft: MutableModel<Masterscholarship>) => MutableModel<Masterscholarship> | void): Masterscholarship;
-}
+export declare const MasterScholarship: (new (
+  init: ModelInit<MasterScholarship>
+) => MasterScholarship) & {
+  copyOf(
+    source: MasterScholarship,
+    mutator: (
+      draft: MutableModel<MasterScholarship>
+    ) => MutableModel<MasterScholarship> | void
+  ): MasterScholarship;
+};

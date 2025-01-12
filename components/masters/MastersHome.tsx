@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import { FC } from "react";
 import { useAuth } from "../../hooks/use-auth";
-import { ApplicantType, Masterscholarship, Scholarship } from "../../src/API";
+import { ApplicantType, MasterScholarship, Scholarship } from "../../src/API";
 import { useQuery } from "@tanstack/react-query";
 import { getMasterScholarships } from "../../src/CustomAPI";
 import dayjs from "dayjs";
@@ -33,8 +33,8 @@ export const MastersHomeComponent: FC = () => {
   const { studentAsStudent: student } = useAppContext();
 
   const { cpr, isSignedIn } = useAuth();
-  const { data: scholarships } = useQuery<Masterscholarship[]>({
-    queryKey: ["masterScholarships", cpr],
+  const { data: scholarships } = useQuery<MasterScholarship[]>({
+    queryKey: ["MasterScholarships", cpr],
     queryFn: () => (cpr ? getMasterScholarships({ studentCPR: cpr }) : []),
     // queryFn: () => (cpr ? getStudentScholarships(cpr) : []),
   });

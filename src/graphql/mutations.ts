@@ -188,7 +188,7 @@ export const createApplication = /* GraphQL */ `mutation CreateApplication(
       m_universityID
       m_oldProgram
       m_applicantType
-      m_isEmployeed
+      m_isEmployed
       m_placeOfEmployment
       m_income
       m_incomeDoc
@@ -337,7 +337,7 @@ export const updateApplication = /* GraphQL */ `mutation UpdateApplication(
       m_universityID
       m_oldProgram
       m_applicantType
-      m_isEmployeed
+      m_isEmployed
       m_placeOfEmployment
       m_income
       m_incomeDoc
@@ -486,7 +486,7 @@ export const deleteApplication = /* GraphQL */ `mutation DeleteApplication(
       m_universityID
       m_oldProgram
       m_applicantType
-      m_isEmployeed
+      m_isEmployed
       m_placeOfEmployment
       m_income
       m_incomeDoc
@@ -1177,7 +1177,7 @@ export const createStudentLog = /* GraphQL */ `mutation CreateStudentLog(
       m_universityID
       m_oldProgram
       m_applicantType
-      m_isEmployeed
+      m_isEmployed
       m_placeOfEmployment
       m_income
       m_incomeDoc
@@ -1246,7 +1246,7 @@ export const updateStudentLog = /* GraphQL */ `mutation UpdateStudentLog(
       m_universityID
       m_oldProgram
       m_applicantType
-      m_isEmployeed
+      m_isEmployed
       m_placeOfEmployment
       m_income
       m_incomeDoc
@@ -1315,7 +1315,7 @@ export const deleteStudentLog = /* GraphQL */ `mutation DeleteStudentLog(
       m_universityID
       m_oldProgram
       m_applicantType
-      m_isEmployeed
+      m_isEmployed
       m_placeOfEmployment
       m_income
       m_incomeDoc
@@ -1592,7 +1592,7 @@ export const createStudent = /* GraphQL */ `mutation CreateStudent(
     m_universityID
     m_oldProgram
     m_applicantType
-    m_isEmployeed
+    m_isEmployed
     m_placeOfEmployment
     m_income
     m_incomeDoc
@@ -1697,7 +1697,7 @@ export const updateStudent = /* GraphQL */ `mutation UpdateStudent(
     m_universityID
     m_oldProgram
     m_applicantType
-    m_isEmployeed
+    m_isEmployed
     m_placeOfEmployment
     m_income
     m_incomeDoc
@@ -1802,7 +1802,7 @@ export const deleteStudent = /* GraphQL */ `mutation DeleteStudent(
     m_universityID
     m_oldProgram
     m_applicantType
-    m_isEmployeed
+    m_isEmployed
     m_placeOfEmployment
     m_income
     m_incomeDoc
@@ -2284,7 +2284,7 @@ export const createMasterLog = /* GraphQL */ `mutation CreateMasterLog(
       m_universityID
       m_oldProgram
       m_applicantType
-      m_isEmployeed
+      m_isEmployed
       m_placeOfEmployment
       m_income
       m_incomeDoc
@@ -2353,7 +2353,7 @@ export const updateMasterLog = /* GraphQL */ `mutation UpdateMasterLog(
       m_universityID
       m_oldProgram
       m_applicantType
-      m_isEmployeed
+      m_isEmployed
       m_placeOfEmployment
       m_income
       m_incomeDoc
@@ -2422,7 +2422,7 @@ export const deleteMasterLog = /* GraphQL */ `mutation DeleteMasterLog(
       m_universityID
       m_oldProgram
       m_applicantType
-      m_isEmployeed
+      m_isEmployed
       m_placeOfEmployment
       m_income
       m_incomeDoc
@@ -2450,7 +2450,8 @@ export const deleteMasterLog = /* GraphQL */ `mutation DeleteMasterLog(
   APITypes.DeleteMasterLogMutationVariables,
   APITypes.DeleteMasterLogMutation
 >;
-export const createBahrainUniversities = /* GraphQL */ `mutation CreateBahrainUniversities(
+export const createBahrainUniversities =
+  /* GraphQL */ `mutation CreateBahrainUniversities(
   $input: CreateBahrainUniversitiesInput!
   $condition: ModelBahrainUniversitiesConditionInput
 ) {
@@ -2473,10 +2474,11 @@ export const createBahrainUniversities = /* GraphQL */ `mutation CreateBahrainUn
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateBahrainUniversitiesMutationVariables,
-  APITypes.CreateBahrainUniversitiesMutation
->;
-export const updateBahrainUniversities = /* GraphQL */ `mutation UpdateBahrainUniversities(
+    APITypes.CreateBahrainUniversitiesMutationVariables,
+    APITypes.CreateBahrainUniversitiesMutation
+  >;
+export const updateBahrainUniversities =
+  /* GraphQL */ `mutation UpdateBahrainUniversities(
   $input: UpdateBahrainUniversitiesInput!
   $condition: ModelBahrainUniversitiesConditionInput
 ) {
@@ -2499,10 +2501,11 @@ export const updateBahrainUniversities = /* GraphQL */ `mutation UpdateBahrainUn
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateBahrainUniversitiesMutationVariables,
-  APITypes.UpdateBahrainUniversitiesMutation
->;
-export const deleteBahrainUniversities = /* GraphQL */ `mutation DeleteBahrainUniversities(
+    APITypes.UpdateBahrainUniversitiesMutationVariables,
+    APITypes.UpdateBahrainUniversitiesMutation
+  >;
+export const deleteBahrainUniversities =
+  /* GraphQL */ `mutation DeleteBahrainUniversities(
   $input: DeleteBahrainUniversitiesInput!
   $condition: ModelBahrainUniversitiesConditionInput
 ) {
@@ -2525,10 +2528,11 @@ export const deleteBahrainUniversities = /* GraphQL */ `mutation DeleteBahrainUn
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteBahrainUniversitiesMutationVariables,
-  APITypes.DeleteBahrainUniversitiesMutation
->;
-export const createMasterUniversities = /* GraphQL */ `mutation CreateMasterUniversities(
+    APITypes.DeleteBahrainUniversitiesMutationVariables,
+    APITypes.DeleteBahrainUniversitiesMutation
+  >;
+export const createMasterUniversities =
+  /* GraphQL */ `mutation CreateMasterUniversities(
   $input: CreateMasterUniversitiesInput!
   $condition: ModelMasterUniversitiesConditionInput
 ) {
@@ -2551,10 +2555,11 @@ export const createMasterUniversities = /* GraphQL */ `mutation CreateMasterUniv
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateMasterUniversitiesMutationVariables,
-  APITypes.CreateMasterUniversitiesMutation
->;
-export const updateMasterUniversities = /* GraphQL */ `mutation UpdateMasterUniversities(
+    APITypes.CreateMasterUniversitiesMutationVariables,
+    APITypes.CreateMasterUniversitiesMutation
+  >;
+export const updateMasterUniversities =
+  /* GraphQL */ `mutation UpdateMasterUniversities(
   $input: UpdateMasterUniversitiesInput!
   $condition: ModelMasterUniversitiesConditionInput
 ) {
@@ -2577,10 +2582,11 @@ export const updateMasterUniversities = /* GraphQL */ `mutation UpdateMasterUniv
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateMasterUniversitiesMutationVariables,
-  APITypes.UpdateMasterUniversitiesMutation
->;
-export const deleteMasterUniversities = /* GraphQL */ `mutation DeleteMasterUniversities(
+    APITypes.UpdateMasterUniversitiesMutationVariables,
+    APITypes.UpdateMasterUniversitiesMutation
+  >;
+export const deleteMasterUniversities =
+  /* GraphQL */ `mutation DeleteMasterUniversities(
   $input: DeleteMasterUniversitiesInput!
   $condition: ModelMasterUniversitiesConditionInput
 ) {
@@ -2603,10 +2609,11 @@ export const deleteMasterUniversities = /* GraphQL */ `mutation DeleteMasterUniv
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteMasterUniversitiesMutationVariables,
-  APITypes.DeleteMasterUniversitiesMutation
->;
-export const createMasterApplication = /* GraphQL */ `mutation CreateMasterApplication(
+    APITypes.DeleteMasterUniversitiesMutationVariables,
+    APITypes.DeleteMasterUniversitiesMutation
+  >;
+export const createMasterApplication =
+  /* GraphQL */ `mutation CreateMasterApplication(
   $input: CreateMasterApplicationInput!
   $condition: ModelMasterApplicationConditionInput
 ) {
@@ -2631,7 +2638,7 @@ export const createMasterApplication = /* GraphQL */ `mutation CreateMasterAppli
       signedContractDoc
       transcriptDoc
       universityCertificate
-      tofelILETSCertificate
+      toeflIELTSCertificate
       acceptanceLetterDoc
       createdAt
       updatedAt
@@ -2689,7 +2696,7 @@ export const createMasterApplication = /* GraphQL */ `mutation CreateMasterAppli
       m_universityID
       m_oldProgram
       m_applicantType
-      m_isEmployeed
+      m_isEmployed
       m_placeOfEmployment
       m_income
       m_incomeDoc
@@ -2722,10 +2729,11 @@ export const createMasterApplication = /* GraphQL */ `mutation CreateMasterAppli
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateMasterApplicationMutationVariables,
-  APITypes.CreateMasterApplicationMutation
->;
-export const updateMasterApplication = /* GraphQL */ `mutation UpdateMasterApplication(
+    APITypes.CreateMasterApplicationMutationVariables,
+    APITypes.CreateMasterApplicationMutation
+  >;
+export const updateMasterApplication =
+  /* GraphQL */ `mutation UpdateMasterApplication(
   $input: UpdateMasterApplicationInput!
   $condition: ModelMasterApplicationConditionInput
 ) {
@@ -2750,7 +2758,7 @@ export const updateMasterApplication = /* GraphQL */ `mutation UpdateMasterAppli
       signedContractDoc
       transcriptDoc
       universityCertificate
-      tofelILETSCertificate
+      toeflIELTSCertificate
       acceptanceLetterDoc
       createdAt
       updatedAt
@@ -2808,7 +2816,7 @@ export const updateMasterApplication = /* GraphQL */ `mutation UpdateMasterAppli
       m_universityID
       m_oldProgram
       m_applicantType
-      m_isEmployeed
+      m_isEmployed
       m_placeOfEmployment
       m_income
       m_incomeDoc
@@ -2841,10 +2849,11 @@ export const updateMasterApplication = /* GraphQL */ `mutation UpdateMasterAppli
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateMasterApplicationMutationVariables,
-  APITypes.UpdateMasterApplicationMutation
->;
-export const deleteMasterApplication = /* GraphQL */ `mutation DeleteMasterApplication(
+    APITypes.UpdateMasterApplicationMutationVariables,
+    APITypes.UpdateMasterApplicationMutation
+  >;
+export const deleteMasterApplication =
+  /* GraphQL */ `mutation DeleteMasterApplication(
   $input: DeleteMasterApplicationInput!
   $condition: ModelMasterApplicationConditionInput
 ) {
@@ -2869,7 +2878,7 @@ export const deleteMasterApplication = /* GraphQL */ `mutation DeleteMasterAppli
       signedContractDoc
       transcriptDoc
       universityCertificate
-      tofelILETSCertificate
+      toeflIELTSCertificate
       acceptanceLetterDoc
       createdAt
       updatedAt
@@ -2927,7 +2936,7 @@ export const deleteMasterApplication = /* GraphQL */ `mutation DeleteMasterAppli
       m_universityID
       m_oldProgram
       m_applicantType
-      m_isEmployeed
+      m_isEmployed
       m_placeOfEmployment
       m_income
       m_incomeDoc
@@ -2960,10 +2969,11 @@ export const deleteMasterApplication = /* GraphQL */ `mutation DeleteMasterAppli
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteMasterApplicationMutationVariables,
-  APITypes.DeleteMasterApplicationMutation
->;
-export const createMasterStatistics = /* GraphQL */ `mutation CreateMasterStatistics(
+    APITypes.DeleteMasterApplicationMutationVariables,
+    APITypes.DeleteMasterApplicationMutation
+  >;
+export const createMasterStatistics =
+  /* GraphQL */ `mutation CreateMasterStatistics(
   $input: CreateMasterStatisticsInput!
   $condition: ModelMasterStatisticsConditionInput
 ) {
@@ -2991,10 +3001,11 @@ export const createMasterStatistics = /* GraphQL */ `mutation CreateMasterStatis
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateMasterStatisticsMutationVariables,
-  APITypes.CreateMasterStatisticsMutation
->;
-export const updateMasterStatistics = /* GraphQL */ `mutation UpdateMasterStatistics(
+    APITypes.CreateMasterStatisticsMutationVariables,
+    APITypes.CreateMasterStatisticsMutation
+  >;
+export const updateMasterStatistics =
+  /* GraphQL */ `mutation UpdateMasterStatistics(
   $input: UpdateMasterStatisticsInput!
   $condition: ModelMasterStatisticsConditionInput
 ) {
@@ -3022,10 +3033,11 @@ export const updateMasterStatistics = /* GraphQL */ `mutation UpdateMasterStatis
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateMasterStatisticsMutationVariables,
-  APITypes.UpdateMasterStatisticsMutation
->;
-export const deleteMasterStatistics = /* GraphQL */ `mutation DeleteMasterStatistics(
+    APITypes.UpdateMasterStatisticsMutationVariables,
+    APITypes.UpdateMasterStatisticsMutation
+  >;
+export const deleteMasterStatistics =
+  /* GraphQL */ `mutation DeleteMasterStatistics(
   $input: DeleteMasterStatisticsInput!
   $condition: ModelMasterStatisticsConditionInput
 ) {
@@ -3053,10 +3065,11 @@ export const deleteMasterStatistics = /* GraphQL */ `mutation DeleteMasterStatis
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteMasterStatisticsMutationVariables,
-  APITypes.DeleteMasterStatisticsMutation
->;
-export const createMasterAttachment = /* GraphQL */ `mutation CreateMasterAttachment(
+    APITypes.DeleteMasterStatisticsMutationVariables,
+    APITypes.DeleteMasterStatisticsMutation
+  >;
+export const createMasterAttachment =
+  /* GraphQL */ `mutation CreateMasterAttachment(
   $input: CreateMasterAttachmentInput!
   $condition: ModelMasterAttachmentConditionInput
 ) {
@@ -3066,7 +3079,7 @@ export const createMasterAttachment = /* GraphQL */ `mutation CreateMasterAttach
     signedContractDoc
     transcriptDoc
     universityCertificate
-    tofelILETSCertificate
+    toeflIELTSCertificate
     acceptanceLetterDoc
     createdAt
     updatedAt
@@ -3077,10 +3090,11 @@ export const createMasterAttachment = /* GraphQL */ `mutation CreateMasterAttach
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateMasterAttachmentMutationVariables,
-  APITypes.CreateMasterAttachmentMutation
->;
-export const updateMasterAttachment = /* GraphQL */ `mutation UpdateMasterAttachment(
+    APITypes.CreateMasterAttachmentMutationVariables,
+    APITypes.CreateMasterAttachmentMutation
+  >;
+export const updateMasterAttachment =
+  /* GraphQL */ `mutation UpdateMasterAttachment(
   $input: UpdateMasterAttachmentInput!
   $condition: ModelMasterAttachmentConditionInput
 ) {
@@ -3090,7 +3104,7 @@ export const updateMasterAttachment = /* GraphQL */ `mutation UpdateMasterAttach
     signedContractDoc
     transcriptDoc
     universityCertificate
-    tofelILETSCertificate
+    toeflIELTSCertificate
     acceptanceLetterDoc
     createdAt
     updatedAt
@@ -3101,10 +3115,11 @@ export const updateMasterAttachment = /* GraphQL */ `mutation UpdateMasterAttach
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateMasterAttachmentMutationVariables,
-  APITypes.UpdateMasterAttachmentMutation
->;
-export const deleteMasterAttachment = /* GraphQL */ `mutation DeleteMasterAttachment(
+    APITypes.UpdateMasterAttachmentMutationVariables,
+    APITypes.UpdateMasterAttachmentMutation
+  >;
+export const deleteMasterAttachment =
+  /* GraphQL */ `mutation DeleteMasterAttachment(
   $input: DeleteMasterAttachmentInput!
   $condition: ModelMasterAttachmentConditionInput
 ) {
@@ -3114,7 +3129,7 @@ export const deleteMasterAttachment = /* GraphQL */ `mutation DeleteMasterAttach
     signedContractDoc
     transcriptDoc
     universityCertificate
-    tofelILETSCertificate
+    toeflIELTSCertificate
     acceptanceLetterDoc
     createdAt
     updatedAt
@@ -3125,14 +3140,15 @@ export const deleteMasterAttachment = /* GraphQL */ `mutation DeleteMasterAttach
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteMasterAttachmentMutationVariables,
-  APITypes.DeleteMasterAttachmentMutation
->;
-export const createMasterscholarship = /* GraphQL */ `mutation CreateMasterscholarship(
-  $input: CreateMasterscholarshipInput!
-  $condition: ModelMasterscholarshipConditionInput
+    APITypes.DeleteMasterAttachmentMutationVariables,
+    APITypes.DeleteMasterAttachmentMutation
+  >;
+export const createMasterScholarship =
+  /* GraphQL */ `mutation CreateMasterScholarship(
+  $input: CreateMasterScholarshipInput!
+  $condition: ModelMasterScholarshipConditionInput
 ) {
-  createMasterscholarship(input: $input, condition: $condition) {
+  createMasterScholarship(input: $input, condition: $condition) {
     id
     status
     applicationID
@@ -3184,14 +3200,15 @@ export const createMasterscholarship = /* GraphQL */ `mutation CreateMasterschol
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateMasterscholarshipMutationVariables,
-  APITypes.CreateMasterscholarshipMutation
->;
-export const updateMasterscholarship = /* GraphQL */ `mutation UpdateMasterscholarship(
-  $input: UpdateMasterscholarshipInput!
-  $condition: ModelMasterscholarshipConditionInput
+    APITypes.CreateMasterScholarshipMutationVariables,
+    APITypes.CreateMasterScholarshipMutation
+  >;
+export const updateMasterScholarship =
+  /* GraphQL */ `mutation UpdateMasterScholarship(
+  $input: UpdateMasterScholarshipInput!
+  $condition: ModelMasterScholarshipConditionInput
 ) {
-  updateMasterscholarship(input: $input, condition: $condition) {
+  updateMasterScholarship(input: $input, condition: $condition) {
     id
     status
     applicationID
@@ -3243,14 +3260,15 @@ export const updateMasterscholarship = /* GraphQL */ `mutation UpdateMasterschol
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateMasterscholarshipMutationVariables,
-  APITypes.UpdateMasterscholarshipMutation
->;
-export const deleteMasterscholarship = /* GraphQL */ `mutation DeleteMasterscholarship(
-  $input: DeleteMasterscholarshipInput!
-  $condition: ModelMasterscholarshipConditionInput
+    APITypes.UpdateMasterScholarshipMutationVariables,
+    APITypes.UpdateMasterScholarshipMutation
+  >;
+export const deleteMasterScholarship =
+  /* GraphQL */ `mutation DeleteMasterScholarship(
+  $input: DeleteMasterScholarshipInput!
+  $condition: ModelMasterScholarshipConditionInput
 ) {
-  deleteMasterscholarship(input: $input, condition: $condition) {
+  deleteMasterScholarship(input: $input, condition: $condition) {
     id
     status
     applicationID
@@ -3302,6 +3320,6 @@ export const deleteMasterscholarship = /* GraphQL */ `mutation DeleteMasterschol
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteMasterscholarshipMutationVariables,
-  APITypes.DeleteMasterscholarshipMutation
->;
+    APITypes.DeleteMasterScholarshipMutationVariables,
+    APITypes.DeleteMasterScholarshipMutation
+  >;

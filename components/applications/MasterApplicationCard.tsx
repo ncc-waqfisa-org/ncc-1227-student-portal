@@ -78,7 +78,7 @@ export const MasterApplicationCard: FC<IApplicationCard> = ({
                 student.m_incomeDoc === (undefined || null) ||
                 student.m_guardianCPRDoc === (undefined || null) ||
                 application.attachment?.transcriptDoc === (undefined || null) ||
-                application.attachment?.tofelILETSCertificate ===
+                application.attachment?.toeflIELTSCertificate ===
                   (undefined || null) ||
                 application.attachment?.universityCertificate ===
                   (undefined || null) ||
@@ -139,7 +139,7 @@ export const MasterApplicationCard: FC<IApplicationCard> = ({
               </div>
               <div
                 className={`badge  badge-ghost h-fit bg-[#e7e7e7] border-0 ${
-                  !application.attachment?.tofelILETSCertificate &&
+                  !application.attachment?.toeflIELTSCertificate &&
                   "badge-error !badge-outline !border"
                 }`}
               >

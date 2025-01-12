@@ -405,6 +405,22 @@
         }
       ]
     },
+    "AMPLIFY_function_signUpMaster_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "signUpMaster"
+        }
+      ]
+    },
+    "AMPLIFY_function_signUpMaster_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "signUpMaster"
+        }
+      ]
+    },
     "AMPLIFY_function_signUp_deploymentBucketName": {
       "usedBy": [
         {

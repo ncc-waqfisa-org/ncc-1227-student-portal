@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import {
-  Masterscholarship,
-  UpdateMasterscholarshipMutationVariables,
+  MasterScholarship,
+  UpdateMasterScholarshipMutationVariables,
   UpdateScholarshipMutationVariables,
 } from "../../src/API";
 import { Formik, Form, Field } from "formik";
@@ -20,7 +20,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "../../src/lib/utils";
 
 type TBankDetails = {
-  scholarship: Masterscholarship;
+  scholarship: MasterScholarship;
 };
 
 export const MastersBankDetails: FC<TBankDetails> = ({ scholarship }) => {
@@ -48,7 +48,7 @@ export const MastersBankDetails: FC<TBankDetails> = ({ scholarship }) => {
       IBAN: string;
       IBANLetterDoc: string;
     }) => {
-      const vars: UpdateMasterscholarshipMutationVariables = {
+      const vars: UpdateMasterScholarshipMutationVariables = {
         input: {
           id: scholarship.id,
           _version: scholarship._version,

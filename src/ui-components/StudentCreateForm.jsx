@@ -217,7 +217,7 @@ export default function StudentCreateForm(props) {
     m_graduationYear: "",
     m_oldProgram: "",
     m_applicantType: [],
-    m_isEmployeed: false,
+    m_isEmployed: false,
     m_placeOfEmployment: "",
     m_income: "",
     m_incomeDoc: "",
@@ -283,8 +283,8 @@ export default function StudentCreateForm(props) {
   const [m_applicantType, setM_applicantType] = React.useState(
     initialValues.m_applicantType
   );
-  const [m_isEmployeed, setM_isEmployeed] = React.useState(
-    initialValues.m_isEmployeed
+  const [m_isEmployed, setM_isEmployed] = React.useState(
+    initialValues.m_isEmployed
   );
   const [m_placeOfEmployment, setM_placeOfEmployment] = React.useState(
     initialValues.m_placeOfEmployment
@@ -333,7 +333,7 @@ export default function StudentCreateForm(props) {
     setM_oldProgram(initialValues.m_oldProgram);
     setM_applicantType(initialValues.m_applicantType);
     setCurrentM_applicantTypeValue("");
-    setM_isEmployeed(initialValues.m_isEmployeed);
+    setM_isEmployed(initialValues.m_isEmployed);
     setM_placeOfEmployment(initialValues.m_placeOfEmployment);
     setM_income(initialValues.m_income);
     setM_incomeDoc(initialValues.m_incomeDoc);
@@ -387,7 +387,7 @@ export default function StudentCreateForm(props) {
     m_graduationYear: [],
     m_oldProgram: [],
     m_applicantType: [{ type: "Required" }],
-    m_isEmployeed: [],
+    m_isEmployed: [],
     m_placeOfEmployment: [],
     m_income: [],
     m_incomeDoc: [],
@@ -448,7 +448,7 @@ export default function StudentCreateForm(props) {
           m_graduationYear,
           m_oldProgram,
           m_applicantType,
-          m_isEmployeed,
+          m_isEmployed,
           m_placeOfEmployment,
           m_income,
           m_incomeDoc,
@@ -536,7 +536,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -593,7 +593,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -650,7 +650,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -711,7 +711,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -768,7 +768,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -825,7 +825,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -882,7 +882,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -950,7 +950,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1020,7 +1020,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1077,7 +1077,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1134,7 +1134,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1202,7 +1202,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1259,7 +1259,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1320,7 +1320,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1382,7 +1382,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1470,7 +1470,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1525,7 +1525,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1615,7 +1615,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1686,7 +1686,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1743,7 +1743,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1800,7 +1800,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1857,7 +1857,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1914,7 +1914,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -1975,7 +1975,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -2034,7 +2034,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear: value,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -2091,7 +2091,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram: value,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -2144,7 +2144,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType: values,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -2208,10 +2208,10 @@ export default function StudentCreateForm(props) {
         </SelectField>
       </ArrayField>
       <SwitchField
-        label="M is employeed"
+        label="M is employed"
         defaultChecked={false}
         isDisabled={false}
-        isChecked={m_isEmployeed}
+        isChecked={m_isEmployed}
         onChange={(e) => {
           let value = e.target.checked;
           if (onChange) {
@@ -2243,7 +2243,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed: value,
+              m_isEmployed: value,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -2252,17 +2252,17 @@ export default function StudentCreateForm(props) {
               m_guardianCPRDoc,
             };
             const result = onChange(modelFields);
-            value = result?.m_isEmployeed ?? value;
+            value = result?.m_isEmployed ?? value;
           }
-          if (errors.m_isEmployeed?.hasError) {
-            runValidationTasks("m_isEmployeed", value);
+          if (errors.m_isEmployed?.hasError) {
+            runValidationTasks("m_isEmployed", value);
           }
-          setM_isEmployeed(value);
+          setM_isEmployed(value);
         }}
-        onBlur={() => runValidationTasks("m_isEmployeed", m_isEmployeed)}
-        errorMessage={errors.m_isEmployeed?.errorMessage}
-        hasError={errors.m_isEmployeed?.hasError}
-        {...getOverrideProps(overrides, "m_isEmployeed")}
+        onBlur={() => runValidationTasks("m_isEmployed", m_isEmployed)}
+        errorMessage={errors.m_isEmployed?.errorMessage}
+        hasError={errors.m_isEmployed?.hasError}
+        {...getOverrideProps(overrides, "m_isEmployed")}
       ></SwitchField>
       <TextField
         label="M place of employment"
@@ -2300,7 +2300,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment: value,
               m_income,
               m_incomeDoc,
@@ -2359,7 +2359,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income: value,
               m_incomeDoc,
@@ -2427,7 +2427,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc: value,
@@ -2484,7 +2484,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -2541,7 +2541,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,
@@ -2600,7 +2600,7 @@ export default function StudentCreateForm(props) {
               m_graduationYear,
               m_oldProgram,
               m_applicantType,
-              m_isEmployeed,
+              m_isEmployed,
               m_placeOfEmployment,
               m_income,
               m_incomeDoc,

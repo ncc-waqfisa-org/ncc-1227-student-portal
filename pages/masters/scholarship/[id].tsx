@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import React, { useEffect, useMemo, useState } from "react";
 import { PageComponent } from "../../../components/PageComponent";
-import { Masterscholarship } from "../../../src/API";
+import { MasterScholarship } from "../../../src/API";
 import { getMasterScholarship } from "../../../src/CustomAPI";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
@@ -44,7 +44,7 @@ export default function MastersScholarshipPage({ scholarshipId }: Props) {
   const { cpr } = useAuth();
 
   const { data: scholarship, isPending: isScholarshipPending } =
-    useQuery<Masterscholarship | null>({
+    useQuery<MasterScholarship | null>({
       queryKey: [`masters/scholarships/${scholarshipId}`],
       queryFn: () =>
         scholarshipId ? getMasterScholarship({ id: scholarshipId }) : null,

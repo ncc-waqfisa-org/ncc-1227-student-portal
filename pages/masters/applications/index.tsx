@@ -36,6 +36,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
         "pageTitles",
         "applications",
         "signIn",
+        "errors",
       ])),
     },
   };

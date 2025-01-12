@@ -1,9 +1,9 @@
 import React, { FC, useRef } from "react";
 import {
-  Masterscholarship,
+  MasterScholarship,
   Scholarship,
   ScholarshipStatus,
-  UpdateMasterscholarshipMutation,
+  UpdateMasterScholarshipMutation,
   UpdateScholarshipMutation,
 } from "../../src/API";
 import Link from "next/link";
@@ -21,7 +21,7 @@ import {
 import { Skeleton } from "../Skeleton";
 import { API } from "aws-amplify";
 import {
-  updateMasterscholarship,
+  updateMasterScholarship,
   updateScholarship,
 } from "../../src/graphql/mutations";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
@@ -43,9 +43,9 @@ export const MyMastersScholarships: FC<TMyScholarships> = () => {
   const declineDialog = useRef<HTMLDialogElement>(null);
 
   const { data: scholarships, isPending: isScholarshipsPending } = useQuery<
-    Masterscholarship[]
+    MasterScholarship[]
   >({
-    queryKey: ["masterScholarships", cpr],
+    queryKey: ["MasterScholarships", cpr],
     queryFn: () => (cpr ? getMasterScholarships({ studentCPR: cpr }) : []),
   });
 
@@ -61,7 +61,7 @@ export const MyMastersScholarships: FC<TMyScholarships> = () => {
     _version: number;
   }) => {
     const updatedMasterScholarship = (await API.graphql({
-      query: updateMasterscholarship,
+      query: updateMasterScholarship,
       variables: {
         input: {
           id,
@@ -69,7 +69,7 @@ export const MyMastersScholarships: FC<TMyScholarships> = () => {
           _version,
         },
       },
-    })) as GraphQLResult<UpdateMasterscholarshipMutation>;
+    })) as GraphQLResult<UpdateMasterScholarshipMutation>;
     return updatedMasterScholarship;
   };
 
@@ -82,11 +82,11 @@ export const MyMastersScholarships: FC<TMyScholarships> = () => {
       return updateMasterScholarshipStatus(values);
     },
     async onSuccess(data) {
-      if (data.data?.updateMasterscholarship) {
+      if (data.data?.updateMasterScholarship) {
         queryClient.invalidateQueries({
           queryKey: [
-            "masterScholarships",
-            data.data.updateMasterscholarship.studentCPR,
+            "MasterScholarships",
+            data.data.updateMasterScholarship.studentCPR,
           ],
         });
       } else {
@@ -104,11 +104,11 @@ export const MyMastersScholarships: FC<TMyScholarships> = () => {
       });
     },
     async onSuccess(data) {
-      if (data.data?.updateMasterscholarship) {
+      if (data.data?.updateMasterScholarship) {
         queryClient.invalidateQueries({
           queryKey: [
-            "masterScholarships",
-            data.data?.updateMasterscholarship.studentCPR,
+            "MasterScholarships",
+            data.data?.updateMasterScholarship.studentCPR,
           ],
         });
       } else {
@@ -130,11 +130,11 @@ export const MyMastersScholarships: FC<TMyScholarships> = () => {
       });
     },
     async onSuccess(data) {
-      if (data.data?.updateMasterscholarship) {
+      if (data.data?.updateMasterScholarship) {
         queryClient.invalidateQueries({
           queryKey: [
-            "masterScholarships",
-            data.data?.updateMasterscholarship.studentCPR,
+            "MasterScholarships",
+            data.data?.updateMasterScholarship.studentCPR,
           ],
         });
       } else {

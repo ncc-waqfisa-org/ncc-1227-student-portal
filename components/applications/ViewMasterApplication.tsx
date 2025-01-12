@@ -132,7 +132,7 @@ export default function ViewMasterApplication({
             </td>
             <td>
               <GetStorageLinkComponent
-                storageKey={application.attachment?.tofelILETSCertificate}
+                storageKey={application.attachment?.toeflIELTSCertificate}
               ></GetStorageLinkComponent>
             </td>
           </tr>

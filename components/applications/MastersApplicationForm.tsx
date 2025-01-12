@@ -82,7 +82,7 @@ export type CreateMasterAttachmentInput = {
 
   transcriptDoc?: string | null,
   universityCertificate?: string | null,
-  tofelILETSCertificate?: string | null,
+  toeflIELTSCertificate?: string | null,
   acceptanceDoc?: string | undefined;
 
 };
@@ -99,7 +99,7 @@ interface FormValues {
   acceptanceDoc?: File | undefined;
   transcriptDoc?: File | undefined;
   universityCertificate?: File | undefined;
-  tofelILETSCertificate?: File | undefined;
+  toeflIELTSCertificate?: File | undefined;
 
   reasonForUpdate?: string | undefined;
 }
@@ -136,7 +136,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
   );
 
   // IELTS / TOEFL
-  const [tofelILETSCertificate, setTofelILETSCertificate] = useState<
+  const [toeflIELTSCertificate, settoeflIELTSCertificate] = useState<
     File | undefined
   >(undefined);
 
@@ -156,7 +156,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
 
     universityCertificate: undefined,
     transcriptDoc: undefined,
-    tofelILETSCertificate: undefined,
+    toeflIELTSCertificate: undefined,
     acceptanceDoc: undefined,
 
     reasonForUpdate: undefined,
@@ -366,19 +366,19 @@ export const MastersApplicationForm: FC<Props> = (props) => {
       sk_UniversityCertificate,
       sk_TranscriptDoc,
       sk_AcceptanceLetterDoc,
-      sk_TofelILETSCertificate,
+      sk_toeflIELTSCertificate,
     ]: (string | null | undefined)[] = [
       props.application?.attachment?.universityCertificate,
       props.application?.attachment?.transcriptDoc,
       props.application?.attachment?.acceptanceLetterDoc,
-      props.application?.attachment?.tofelILETSCertificate,
+      props.application?.attachment?.toeflIELTSCertificate,
     ];
 
     let [
       new_sk_universityCertificate,
       new_sk_transcriptDoc,
       new_sk_acceptanceDoc,
-      new_sk_tofelILETSCertificate,
+      new_sk_toeflIELTSCertificate,
     ] = await Promise.all([
       universityCertificate &&
         uploadFile(
@@ -394,9 +394,9 @@ export const MastersApplicationForm: FC<Props> = (props) => {
           DocType.PRIMARY_PROGRAM_ACCEPTANCE,
           studentData.cpr
         )),
-      tofelILETSCertificate &&
+      toeflIELTSCertificate &&
         (await uploadFile(
-          tofelILETSCertificate,
+          toeflIELTSCertificate,
           DocType.TOEFL_IELTS,
           studentData.cpr
         )),
@@ -425,9 +425,9 @@ export const MastersApplicationForm: FC<Props> = (props) => {
       sk_AcceptanceLetterDoc = new_sk_acceptanceDoc;
     }
 
-    // TofelILETSCertificate doc storage key
-    if (new_sk_tofelILETSCertificate) {
-      sk_TofelILETSCertificate = new_sk_tofelILETSCertificate;
+    // toeflIELTSCertificate doc storage key
+    if (new_sk_toeflIELTSCertificate) {
+      sk_toeflIELTSCertificate = new_sk_toeflIELTSCertificate;
     }
 
     // TODO: make a master application snapshot
@@ -489,7 +489,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
             transcript: sk_TranscriptDoc,
             universitiyCertificate: sk_UniversityCertificate,
             acceptance: sk_AcceptanceLetterDoc,
-            tofelILETS: sk_TofelILETSCertificate,
+            tofelILETS: sk_toeflIELTSCertificate,
           })
             ? Status.REVIEW
             : Status.NOT_COMPLETED,
@@ -512,7 +512,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
           universityCertificate: sk_UniversityCertificate,
           transcriptDoc: sk_TranscriptDoc,
           acceptanceLetterDoc: sk_AcceptanceLetterDoc,
-          tofelILETSCertificate: sk_TofelILETSCertificate,
+          toeflIELTSCertificate: sk_toeflIELTSCertificate,
           _version: undefined,
         },
         condition: undefined,
@@ -564,7 +564,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
             transcript: sk_TranscriptDoc,
             universitiyCertificate: sk_UniversityCertificate,
             acceptance: sk_AcceptanceLetterDoc,
-            tofelILETS: sk_TofelILETSCertificate,
+            tofelILETS: sk_toeflIELTSCertificate,
           })
             ? applicationIsEligible
               ? props.application?.status
@@ -591,7 +591,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
           universityCertificate: sk_UniversityCertificate,
           transcriptDoc: sk_TranscriptDoc,
           acceptanceLetterDoc: sk_AcceptanceLetterDoc,
-          tofelILETSCertificate: sk_TofelILETSCertificate,
+          toeflIELTSCertificate: sk_toeflIELTSCertificate,
           _version: props.application?.attachment?._version,
         },
         condition: undefined,
@@ -635,7 +635,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
   //   reason?: string | null,
   //   transcriptDoc?: string | null,
   //   universityCertificate?: string | null,
-  //   tofelILETSCertificate?: string | null,
+  //   toeflIELTSCertificate?: string | null,
 
   return (
     <div>
@@ -695,7 +695,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                   universityCertificate: yup.mixed(),
                   transcriptDoc: yup.mixed(),
                   acceptanceDoc: yup.mixed(),
-                  tofelILETSCertificate: yup.mixed(),
+                  toeflIELTSCertificate: yup.mixed(),
 
                   reason: yup
                     .string()
@@ -1156,14 +1156,14 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                 </label>
               </div>
 
-              {/* tofelILETSCertificate */}
+              {/* toeflIELTSCertificate */}
               <div className="flex flex-col justify-start w-full">
                 <label className="label">
                   {t("TOEFLIELTSCertificateDoc")}{" "}
                   {props.application && (
                     <GetStorageLinkComponent
                       storageKey={
-                        props.application?.attachment?.tofelILETSCertificate
+                        props.application?.attachment?.toeflIELTSCertificate
                       }
                     ></GetStorageLinkComponent>
                   )}
@@ -1171,29 +1171,29 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                 <Field
                   type="file"
                   accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps,application/msword"
-                  id="tofelILETSCertificate"
-                  name="tofelILETSCertificate"
-                  title="tofelILETSCertificate"
+                  id="toeflIELTSCertificate"
+                  name="toeflIELTSCertificate"
+                  title="toeflIELTSCertificate"
                   placeholder="TOFEL/ILETS"
                   className={`file-input file-input-bordered file-input-secondary bg-secondary text-secondary-content ${
-                    errors.tofelILETSCertificate && "input-error"
+                    errors.toeflIELTSCertificate && "input-error"
                   }`}
                   onChange={(event: any) => {
                     let file: File | undefined = event.currentTarget.files[0];
 
                     let isValid = checkIfFilesAreTooBig(file);
                     if (isValid) {
-                      setTofelILETSCertificate(file);
+                      settoeflIELTSCertificate(file);
                       handleChange(event);
                     } else {
                       setFieldError(
-                        "tofelILETSCertificate",
+                        "toeflIELTSCertificate",
                         "File is too large"
                       );
                     }
                   }}
                   onBlur={handleBlur}
-                  value={values.tofelILETSCertificate ?? ""}
+                  value={values.toeflIELTSCertificate ?? ""}
                   disabled={
                     applicationIsEligible || !editingApplicationsEnabled
                   }
@@ -1202,9 +1202,9 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                   {t(`TOEFLIELTSCertificateDocD`)}
                 </p>
                 <label className="label-text-alt text-error">
-                  {errors.tofelILETSCertificate &&
-                    touched.tofelILETSCertificate &&
-                    errors.tofelILETSCertificate}
+                  {errors.toeflIELTSCertificate &&
+                    touched.toeflIELTSCertificate &&
+                    errors.toeflIELTSCertificate}
                 </label>
               </div>
 
