@@ -44,7 +44,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
 const Page: NextPageWithLayout = () => {
   const mastersContext = useMastersContext();
-  const { studentAsStudent: student } = useAppContext();
+  const { studentAsStudent: student, isStudentPending } = useAppContext();
   // const regDialog = useRef<HTMLDialogElement>(null);
 
   // end of batches rules
@@ -70,12 +70,13 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <PageComponent title={"MApplications"} authRequired>
-      {mastersContext.isBatchPending && (
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 [grid-auto-rows:1fr] py-8">
-          <SkeletonApplicationCard />
-          <SkeletonApplicationCard />
-        </div>
-      )}
+      {mastersContext.isBatchPending ||
+        (isStudentPending && (
+          <div className=" container mx-auto grid grid-cols-1 gap-5 w-full md:grid-cols-2 [grid-auto-rows:1fr] py-8">
+            <SkeletonApplicationCard />
+            <SkeletonApplicationCard />
+          </div>
+        ))}
 
       {!mastersContext.batch && !mastersContext.isBatchPending && (
         <div className="flex justify-center py-4">
@@ -109,7 +110,7 @@ const Page: NextPageWithLayout = () => {
           </div>
         )}
 
-      {student && !mastersContext.isBatchPending && (
+      {!isStudentPending && student && !mastersContext.isBatchPending && (
         <div className="container mx-auto">
           {!mastersContext.haveActiveApplication &&
             mastersContext.newApplicationsEnabled && (

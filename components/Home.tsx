@@ -79,6 +79,7 @@ export const HomeComponent: FC = () => {
                   icon={info}
                   title={"التسجيل"}
                   description={"فترة التسجيل إنتهت"}
+                  haveMaxWidth={false}
                 ></CardInfoComponent>
               </div>
             ) : (
@@ -111,6 +112,7 @@ export const HomeComponent: FC = () => {
                     router.push("/bachelor/applications?type=bachelor")
                   }
                   actionTitle={t("track") ?? "Track"}
+                  haveMaxWidth={false}
                 ></CardInfoComponent>
               )}
 
@@ -123,6 +125,7 @@ export const HomeComponent: FC = () => {
                     router.push("/bachelor/scholarship?type=bachelor")
                   }
                   actionTitle={t("myScholarships") ?? "My Scholarships"}
+                  haveMaxWidth={false}
                 ></CardInfoComponent>
               )}
 
@@ -135,6 +138,7 @@ export const HomeComponent: FC = () => {
                     router.push("/bachelor/applications?type=bachelor")
                   }
                   actionTitle={t("enrollNow") ?? "Enroll Now"}
+                  haveMaxWidth={false}
                 ></CardInfoComponent>
               )}
 
@@ -144,6 +148,7 @@ export const HomeComponent: FC = () => {
                 description={t("informationCenterDescription")}
                 action={() => router.push("/contact")}
                 actionTitle={t("getInfo") ?? "Get Info"}
+                haveMaxWidth={false}
               ></CardInfoComponent>
             </div>
           )}

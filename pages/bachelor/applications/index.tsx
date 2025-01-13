@@ -43,7 +43,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
 const Page: NextPageWithLayout = () => {
   const bachelorContext = useBachelorContext();
-  const { studentAsStudent: student } = useAppContext();
+  const { studentAsStudent: student, isStudentPending } = useAppContext();
   // const regDialog = useRef<HTMLDialogElement>(null);
 
   // end of batches rules
@@ -69,20 +69,21 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <PageComponent title={"BApplications"} authRequired>
-      {bachelorContext.isBatchPending && (
+      {bachelorContext.isBatchPending && isStudentPending && (
         <div className=" container mx-auto grid grid-cols-1 gap-5 w-full md:grid-cols-2 [grid-auto-rows:1fr] py-8">
           <SkeletonApplicationCard />
           <SkeletonApplicationCard />
         </div>
       )}
 
-      {!bachelorContext.batch && (
+      {!bachelorContext.isBatchPending && !bachelorContext.batch && (
         <div className="flex justify-center py-4">
           <NoAvailableBatch type="bachelor" />
         </div>
       )}
 
-      {bachelorContext.applications.length === 0 &&
+      {!bachelorContext.isBatchPending &&
+        bachelorContext.applications.length === 0 &&
         !bachelorContext.newApplicationsEnabled &&
         bachelorContext.batch && (
           <div className="flex flex-wrap justify-center gap-10">
@@ -107,7 +108,7 @@ const Page: NextPageWithLayout = () => {
           </div>
         )}
 
-      {student && (
+      {!bachelorContext.isBatchPending && !isStudentPending && student && (
         <div className="container mx-auto">
           {!bachelorContext.haveActiveApplication &&
             bachelorContext.newApplicationsEnabled && (

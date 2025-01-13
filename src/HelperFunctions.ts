@@ -228,14 +228,10 @@ export async function getCprFromToken(token: string | null): Promise<{
   isAdmin?: boolean;
   username: string;
 }> {
-  return fetch(
-    process.env.NEXT_PUBLIC_LAMBDA_GET_CPR_FROM_TOKEN ??
-      "https://g7niieicpa.execute-api.us-east-1.amazonaws.com/default/cpr",
-    {
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
-    }
-  ).then((data) => data.json());
+  return fetch(process.env.NEXT_PUBLIC_LAMBDA_GET_CPR_FROM_TOKEN ?? "", {
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  }).then((data) => data.json());
 }

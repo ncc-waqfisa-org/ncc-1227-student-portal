@@ -7,12 +7,12 @@ import {
   Program,
 } from "../../src/API";
 import {
-  getApplicationData,
+  // getApplicationData,
   getMasterApplicationData,
   listAllMasterUniversities,
-  listAllPrograms,
+  // listAllPrograms,
   listMasterScholarshipsOfApplicationId,
-  listScholarshipsOfApplicationId,
+  // listScholarshipsOfApplicationId,
 } from "../../src/CustomAPI";
 import { getCprFromToken } from "../../src/HelperFunctions";
 import { API } from "aws-amplify";
@@ -40,6 +40,7 @@ export default async function handler(
 
   API.configure({ ...config, ssr: true });
   const { id, token } = JSON.parse(req.body);
+
   // const { id, token } = req.query;/
 
   // Immediately respond with an error if the necessary parameters are not provided.
@@ -51,10 +52,11 @@ export default async function handler(
     });
   }
 
-  // TODO: create a getCprFromToken for masterDev env
   // TODO: use the correct method
-  // const { username: cpr } = await getCprFromToken(token ? `${token}` : null);
-  const cpr = true;
+  const { username: cpr } = await getCprFromToken(token ? `${token}` : null);
+  // const cpr = true;
+
+  console.log(`cpr ${cpr}`);
 
   if (!cpr) {
     return res.status(422).json({
@@ -69,12 +71,15 @@ export default async function handler(
     getMasterApplicationData(`${id}`).then((app) => {
       // TODO: check CPR to verify the ownership of the application
 
-      return app ?? null;
-      // return app ? (app.studentCPR === cpr ? app : null) : null;
+      console.log(app);
+      // return app ?? null;
+      return app ? (app.studentCPR === cpr ? app : null) : null;
     }),
     listMasterScholarshipsOfApplicationId({ applicationID: `${id}` }),
     listAllMasterUniversities(),
   ]);
+
+  console.log(applicationData);
 
   // Determine if scholarships are available for the application.
   const haveScholarship = scholarships ? scholarships.length > 0 : false;

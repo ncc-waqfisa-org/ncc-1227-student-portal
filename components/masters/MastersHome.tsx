@@ -30,7 +30,7 @@ export const MastersHomeComponent: FC = () => {
     newApplicationsEnabled,
     editingApplicationsEnabled,
   } = useMastersContext();
-  const { studentAsStudent: student } = useAppContext();
+  const { studentAsStudent: student, isStudentPending } = useAppContext();
 
   const { cpr, isSignedIn } = useAuth();
   const { data: scholarships } = useQuery<MasterScholarship[]>({
@@ -50,7 +50,7 @@ export const MastersHomeComponent: FC = () => {
   );
   const registrationDate = dayjs(batch?.signUpStartDate);
 
-  if (isBatchPending) {
+  if (isBatchPending || isStudentPending) {
     return (
       <div className="flex flex-col gap-10 mx-auto w-full max-w-4xl">
         <div className="grid gap-10 md:grid-cols-2">
@@ -63,35 +63,13 @@ export const MastersHomeComponent: FC = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Have scholarships or applications */}
-      {/* <div className="flex flex-wrap gap-10 justify-center">
-        {haveScholarships && (
-          <CardInfoComponent
-            icon={check}
-            title={t("scholarships")}
-            description={t("trackApplicationDescription")}
-            action={() => router.push("/masters/scholarship?type=masters")}
-            actionTitle={t("myScholarships") ?? "My Scholarships"}
-          ></CardInfoComponent>
-        )}
-        {haveActiveApplication && (
-          <CardInfoComponent
-            icon={search}
-            title={t("trackApplication")}
-            description={t("trackApplicationDescription")}
-            action={() => router.push("/masters/applications?type=masters")}
-            actionTitle={t("track") ?? "Track"}
-          ></CardInfoComponent>
-        )}
-      </div> */}
-
       {/* Check if batch available */}
-      {!isBatchPending && !batch ? (
+      {!isBatchPending && !batch && !isStudentPending ? (
         <div className="flex justify-center">
           <NoAvailableBatch type="masters" />
         </div>
       ) : (
-        <div className="flex flex-col gap-10 mx-auto">
+        <div className="flex flex-col gap-10 items-center ">
           {!canApply &&
             (isRegistrationClosed ? (
               <div className="flex flex-wrap gap-10 justify-center">
@@ -136,6 +114,7 @@ export const MastersHomeComponent: FC = () => {
                     router.push("/masters/applications?type=masters")
                   }
                   actionTitle={t("track") ?? "Track"}
+                  haveMaxWidth={false}
                 ></CardInfoComponent>
               )}
 
@@ -148,6 +127,7 @@ export const MastersHomeComponent: FC = () => {
                     router.push("/masters/scholarship?type=masters")
                   }
                   actionTitle={t("myScholarships") ?? "My Scholarships"}
+                  haveMaxWidth={false}
                 ></CardInfoComponent>
               )}
 
@@ -168,6 +148,7 @@ export const MastersHomeComponent: FC = () => {
                     )
                   }
                   actionTitle={t("enrollNow") ?? "Enroll Now"}
+                  haveMaxWidth={false}
                 ></CardInfoComponent>
               )}
 
@@ -177,6 +158,7 @@ export const MastersHomeComponent: FC = () => {
                 description={t("informationCenterDescription")}
                 action={() => router.push("/contact")}
                 actionTitle={t("getInfo") ?? "Get Info"}
+                haveMaxWidth={false}
               ></CardInfoComponent>
             </div>
           )}

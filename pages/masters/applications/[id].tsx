@@ -15,10 +15,6 @@ import ViewApplication from "../../../components/applications/ViewApplication";
 import { ApplicationForm } from "../../../components/applications/ApplicationForm";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
-import {
-  BachelorProvider,
-  useBachelorContext,
-} from "../../../contexts/BachelorContexts";
 import GetStorageLinkComponent from "../../../components/get-storage-link-component";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
@@ -32,6 +28,7 @@ import {
 } from "../../../contexts/MastersContexts";
 import { MastersApplicationForm } from "../../../components/applications/MastersApplicationForm";
 import ViewMasterApplication from "../../../components/applications/ViewMasterApplication";
+import { stringify } from "querystring";
 
 interface Props {
   id: string | null;

@@ -59,16 +59,22 @@ const Home = ({ type: initialType }: HomeProps) => {
   );
 
   useEffect(() => {
-    if (initialType === null) {
-      const isMasterApplicant =
-        student?.m_applicantType.includes(ApplicantType.MASTER) ?? false;
+    if (!isStudentPending && !isAuthedUserPending) {
+      if (initialType === null) {
+        const isMasterApplicant =
+          student?.m_applicantType.includes(ApplicantType.MASTER) ?? false;
 
-      console.log(`isMasterApplicant ${isMasterApplicant}`);
+        console.log(`isMasterApplicant ${isMasterApplicant}`);
 
-      if (isMasterApplicant) {
+        if (isMasterApplicant) {
+          setType("masters");
+        } else {
+          setType("bachelor"); // Default to "bachelor" if initialType is undefined
+        }
+      }
+
+      if (isSignedIn && !haveBachelor) {
         setType("masters");
-      } else {
-        setType("bachelor"); // Default to "bachelor" if initialType is undefined
       }
     }
   }, [initialType, student]);
