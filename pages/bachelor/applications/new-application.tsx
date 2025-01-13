@@ -58,7 +58,7 @@ const NewApplicationPage: NextPageWithLayout<Props> = (props) => {
             <ApplicationForm programs={props.programs}></ApplicationForm>
           )}
           {haveActiveApplication && (
-            <div className="rounded-2xl bg-zinc-200 text-zinc-500 flex flex-col p-4 border border-zinc-300 text-center justify-center items-center min-h-[5rem]">
+            <div className=" my-3 rounded-2xl bg-zinc-200 text-zinc-500 flex flex-col p-4 border border-zinc-300 text-center justify-center items-center min-h-[5rem]">
               <div>{t("youAlreadyHaveAnActiveApplication")}</div>
               <Link href="/bachelor/applications" className="link link-primary">
                 {t("goToApplications")}

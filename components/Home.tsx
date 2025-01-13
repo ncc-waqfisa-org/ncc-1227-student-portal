@@ -20,6 +20,7 @@ import { NoAvailableBatch } from "./NoAvailableBatch";
 export const HomeComponent: FC = () => {
   const router = useRouter();
   const { t } = useTranslation("common");
+
   const {
     haveActiveApplication,
     batch,
@@ -66,7 +67,7 @@ export const HomeComponent: FC = () => {
           <NoAvailableBatch type="bachelor" />
         </div>
       ) : (
-        <div className="flex flex-col gap-10 mx-auto">
+        <div className="flex flex-col gap-10 items-center ">
           {!canApply &&
             (isRegistrationClosed ? (
               <div className="flex flex-wrap gap-10 justify-center">

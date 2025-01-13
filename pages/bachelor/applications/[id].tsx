@@ -139,7 +139,7 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
 
   return (
     <PageComponent title={"BApplication"} authRequired>
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-3xl mx-auto my-3">
         {(data?.application?.status === Status.REVIEW ||
           data?.application?.status === Status.NOT_COMPLETED ||
           data?.application?.status === Status.ELIGIBLE) &&

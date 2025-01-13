@@ -1160,14 +1160,11 @@ export async function listScholarshipsOfApplicationId({
 export async function listMasterScholarshipsOfApplicationId(
   queryVariables: MasterScholarshipsByApplicationIDQueryVariables
 ): Promise<MasterScholarship[]> {
-  console.log("here: listMasterScholarshipsOfApplicationId");
   let res = (await API.graphql({
     query: MasterScholarshipsByApplicationID,
     variables: queryVariables,
   })) as GraphQLResult<MasterScholarshipsByApplicationIDQuery>;
 
-  console.log(`res ${res.data}`);
-  console.log("ran listMasterScholarshipsOfApplicationId");
   return (res.data?.MasterScholarshipsByApplicationID?.items ??
     []) as MasterScholarship[];
 }
