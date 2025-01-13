@@ -50,7 +50,7 @@ const Home = ({ type: initialType }: HomeProps) => {
   );
   const { t: commonT } = useTranslation("common");
   const { push, pathname, query } = useRouter();
-  const { studentAsStudent: student } = useAppContext();
+  const { studentAsStudent: student, isStudentPending } = useAppContext();
   const { isSignedIn, isAuthedUserPending } = useAuth();
 
   const haveBachelor = useMemo(
@@ -62,6 +62,8 @@ const Home = ({ type: initialType }: HomeProps) => {
     if (initialType === null) {
       const isMasterApplicant =
         student?.m_applicantType.includes(ApplicantType.MASTER) ?? false;
+
+      console.log(`isMasterApplicant ${isMasterApplicant}`);
 
       if (isMasterApplicant) {
         setType("masters");

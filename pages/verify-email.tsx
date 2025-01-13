@@ -26,7 +26,9 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 const VerifyEmailPage = () => {
   return (
     <PageComponent title="VerifyEmail">
-      <VerifyEmail />
+      <div className=" my-3">
+        <VerifyEmail />
+      </div>
     </PageComponent>
   );
 };

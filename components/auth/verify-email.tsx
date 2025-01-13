@@ -125,7 +125,7 @@ export const VerifyEmail = () => {
   return loading ? (
     <AppLoader></AppLoader>
   ) : (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 container mx-auto">
       <h2 className="flex flex-wrap gap-1 items-center">
         {t("verificationCode")}
         <span className="text-goblin-500">{partialEmail}</span>

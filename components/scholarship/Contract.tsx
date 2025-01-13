@@ -116,7 +116,8 @@ export const Contract: FC<TContract> = ({ scholarship }) => {
             await toast
               .promise(
                 fetch(
-                  "https://ve2qneezfb.execute-api.us-east-1.amazonaws.com/default/scholarships/sign",
+                  process.env
+                    .NEXT_PUBLIC_LAMBDA_POST_SCHOLARSHIPS_SIGN_BACHELOR ?? "",
                   {
                     method: "POST",
                     headers: {

@@ -19,10 +19,14 @@ import { isValidPhoneNumber } from "react-phone-number-input";
 import { cn } from "../../../src/lib/utils";
 import { checkIfFilesAreTooBig } from "../../../src/HelperFunctions";
 import { PhoneNumberInput } from "../../phone";
-import { Gender, Nationality } from "../../../src/API";
+import { BahrainUniversities, Gender, Nationality } from "../../../src/API";
 import { TermsAndConditions } from "../t-and-c";
 
-export default function MastersSignUpForm() {
+export default function MastersSignUpForm({
+  universities,
+}: {
+  universities: BahrainUniversities[];
+}) {
   const router = useRouter();
   const { t: tAC } = useTranslation("termsAndConditions");
   const { t: tErrors } = useTranslation("errors");
@@ -178,10 +182,10 @@ export default function MastersSignUpForm() {
 
   const signUpMutation = useMutation({
     mutationFn: (values: MasterSignUpData) => {
-      // TODO: update with the correct url
+      // TODO: TEST
       return fetch(
-        process.env.LAMBDA_MASTERS_SIGN_UP ??
-          `https://4e5shhnddic6km63m5jiib7oru0hwcpl.lambda-url.us-east-1.on.aws`,
+        process.env.NEXT_PUBLIC_LAMBDA_POST_MASTERS_SIGN_UP ?? "",
+        // `https://4e5shhnddic6km63m5jiib7oru0hwcpl.lambda-url.us-east-1.on.aws`,
         // `https://ciuxdqxmol.execute-api.us-east-1.amazonaws.com/default/masters-sign-up`,
         {
           method: "POST",
@@ -324,6 +328,7 @@ export default function MastersSignUpForm() {
         }) => {
           const firstStepHaveError =
             !!errors.cpr ||
+            !!errors.cpr_doc ||
             !!errors.first_name ||
             !!errors.second_name ||
             !!errors.last_name ||
@@ -656,8 +661,13 @@ export default function MastersSignUpForm() {
                     <option disabled selected value={undefined}>
                       {t("select")}
                     </option>
-                    <option value={"UOB"}>UOB</option>
-                    <option value={"polytechnic"}>Polytechnic</option>
+                    {universities?.map((uni, index) => (
+                      <option key={`uni-${index}`} value={uni.id}>
+                        {router.locale === "ar"
+                          ? uni.universityNameAr
+                          : uni.universityName}
+                      </option>
+                    ))}
                   </Field>
                   <label className="pt-2 label-text-alt text-error">
                     {errors.universityID &&

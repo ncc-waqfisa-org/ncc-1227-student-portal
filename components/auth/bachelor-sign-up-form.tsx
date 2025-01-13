@@ -84,9 +84,9 @@ export default function BachelorSignUpForm() {
   const signUpMutation = useMutation({
     mutationFn: (values: any) => {
       return fetch(
-        process.env.LAMBDA_BACHELOR_SIGN_UP ??
-          // `https://6tviwvcyjf3tousfqqxyoftige0ueqev.lambda-url.us-east-1.on.aws`,
-          `https://ciuxdqxmol.execute-api.us-east-1.amazonaws.com/default/sign-up`,
+        process.env.NEXT_PUBLIC_LAMBDA_POST_BACHELOR_SIGN_UP ?? "",
+        // `https://6tviwvcyjf3tousfqqxyoftige0ueqev.lambda-url.us-east-1.on.aws`,
+        // `https://ciuxdqxmol.execute-api.us-east-1.amazonaws.com/default/sign-up`,
         {
           method: "POST",
           body: JSON.stringify(values),

@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { ReactElement, useEffect } from "react";
 import { PageComponent } from "../../components/PageComponent";
 import { useAuth } from "../../hooks/use-auth";
-import { GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { CardInfoComponent } from "../../components/CardInfo";
 
@@ -21,7 +21,7 @@ import { EnrollIntoMaster } from "../../components/account/masters/EnrollIntoMas
 import { listAllBahrainUniversities } from "../../src/CustomAPI";
 import { BahrainUniversities } from "../../src/API";
 
-export const getServerSideProps: GetStaticProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { locale } = ctx;
   const universities = await listAllBahrainUniversities();
 

@@ -58,8 +58,7 @@ export const MastersContract: FC<TContract> = ({ scholarship }) => {
       guardianSignature: string;
     }) => {
       return fetch(
-        process.env.LAMBDA_SIGN_MASTERS_CONTRACT ??
-          "https://ve2qneezfb.execute-api.us-east-1.amazonaws.com/default/scholarships/sign",
+        process.env.NEXT_PUBLIC_LAMBDA_POST_SCHOLARSHIPS_SIGN_MASTER ?? "",
         {
           method: "POST",
           headers: {

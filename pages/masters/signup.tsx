@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { ReactElement, useEffect } from "react";
 import { PageComponent } from "../../components/PageComponent";
 import { useAuth } from "../../hooks/use-auth";
-import { GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { CardInfoComponent } from "../../components/CardInfo";
 
@@ -18,12 +18,15 @@ import {
 } from "../../contexts/MastersContexts";
 import MastersSignUpForm from "../../components/auth/masters/masters-sign-up-form";
 import { NoAvailableBatch } from "../../components/NoAvailableBatch";
+import { listAllBahrainUniversities } from "../../src/CustomAPI";
+import { BahrainUniversities } from "../../src/API";
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { locale } = ctx;
-
+  const universities = await listAllBahrainUniversities();
   return {
     props: {
+      universities,
       ...(await serverSideTranslations(locale ?? "en", [
         "common",
         "toast",
@@ -39,9 +42,11 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   };
 };
 
-interface Props {}
+interface Props {
+  universities: BahrainUniversities[];
+}
 
-const SignUpPage: NextPageWithLayout<Props> = () => {
+const SignUpPage: NextPageWithLayout<Props> = ({ universities }) => {
   const auth = useAuth();
   const router = useRouter();
 
@@ -66,8 +71,8 @@ const SignUpPage: NextPageWithLayout<Props> = () => {
       ) : (
         <>
           {signUpEnabled ? (
-            <div>
-              <MastersSignUpForm></MastersSignUpForm>
+            <div className=" my-3">
+              <MastersSignUpForm universities={universities} />
             </div>
           ) : // if registration period is over
           dayjs().isAfter(dayjs(batch?.signUpEndDate).endOf("day")) ? (
