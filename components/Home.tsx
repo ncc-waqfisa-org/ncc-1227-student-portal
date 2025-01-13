@@ -60,28 +60,6 @@ export const HomeComponent: FC = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Have scholarships or applications */}
-      <div className="flex flex-wrap gap-10 justify-center">
-        {haveScholarships && (
-          <CardInfoComponent
-            icon={check}
-            title={t("scholarships")}
-            description={t("trackApplicationDescription")}
-            action={() => router.push("/bachelor/scholarship?type=bachelor")}
-            actionTitle={t("myScholarships") ?? "My Scholarships"}
-          ></CardInfoComponent>
-        )}
-        {haveActiveApplication && (
-          <CardInfoComponent
-            icon={search}
-            title={t("trackApplication")}
-            description={t("trackApplicationDescription")}
-            action={() => router.push("/bachelor/applications?type=bachelor")}
-            actionTitle={t("track") ?? "Track"}
-          ></CardInfoComponent>
-        )}
-      </div>
-
       {/* Check if batch available */}
       {!isBatchPending && !batch ? (
         <div className="flex justify-center">
@@ -124,6 +102,30 @@ export const HomeComponent: FC = () => {
 
           {canApply && (
             <div className="grid grid-cols-1 gap-10 items-stretch place-items-center mx-auto w-full max-w-4xl md:grid-cols-2">
+              {haveActiveApplication && (
+                <CardInfoComponent
+                  icon={search}
+                  title={t("trackApplication")}
+                  description={t("trackApplicationDescription")}
+                  action={() =>
+                    router.push("/bachelor/applications?type=bachelor")
+                  }
+                  actionTitle={t("track") ?? "Track"}
+                ></CardInfoComponent>
+              )}
+
+              {haveScholarships && (
+                <CardInfoComponent
+                  icon={check}
+                  title={t("scholarships")}
+                  description={t("trackApplicationDescription")}
+                  action={() =>
+                    router.push("/bachelor/scholarship?type=bachelor")
+                  }
+                  actionTitle={t("myScholarships") ?? "My Scholarships"}
+                ></CardInfoComponent>
+              )}
+
               {!haveActiveApplication && (
                 <CardInfoComponent
                   icon={logs}
@@ -135,6 +137,7 @@ export const HomeComponent: FC = () => {
                   actionTitle={t("enrollNow") ?? "Enroll Now"}
                 ></CardInfoComponent>
               )}
+
               <CardInfoComponent
                 icon={info}
                 title={t("informationCenter")}

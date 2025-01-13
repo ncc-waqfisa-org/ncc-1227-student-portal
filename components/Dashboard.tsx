@@ -28,7 +28,7 @@ export const Dashboard: FC<TDashboard> = ({ type }) => {
 };
 
 const BachelorDashboard = () => {
-  return <HomeComponent></HomeComponent>;
+  return <HomeComponent />;
 };
 
 const MastersDashboard = () => {

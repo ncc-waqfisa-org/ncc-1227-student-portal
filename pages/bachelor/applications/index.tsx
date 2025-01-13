@@ -70,7 +70,7 @@ const Page: NextPageWithLayout = () => {
   return (
     <PageComponent title={"BApplications"} authRequired>
       {bachelorContext.isBatchPending && (
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 [grid-auto-rows:1fr] py-8">
+        <div className=" container mx-auto grid grid-cols-1 gap-5 w-full md:grid-cols-2 [grid-auto-rows:1fr] py-8">
           <SkeletonApplicationCard />
           <SkeletonApplicationCard />
         </div>

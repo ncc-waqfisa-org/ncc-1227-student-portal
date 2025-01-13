@@ -72,6 +72,8 @@ function useProviderBachelor() {
     defaultState.haveActiveApplication
   );
 
+  // TODO - check if user has active applications & scholarships
+  // TODO - set is pending based on if batch, applications and scholarships is being fetched
   const { data: batch, isPending: isBatchPending } = useQuery<Batch | null>({
     queryKey: ["currentBatch"],
     queryFn: () =>

@@ -138,6 +138,7 @@ export const CreateStudentForm = (props: ICreateStudentForm) => {
               parentInfoID: props.student.input.parentInfoID,
               _version: props.student.input._version,
               m_applicantType: [ApplicantType.STUDENT],
+              m_isEmployed: props.student.input.m_isEmployed,
             },
             condition: props.student.condition,
           },

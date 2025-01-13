@@ -64,7 +64,7 @@ export const MastersHomeComponent: FC = () => {
   return (
     <div className="flex flex-col gap-8">
       {/* Have scholarships or applications */}
-      <div className="flex flex-wrap gap-10 justify-center">
+      {/* <div className="flex flex-wrap gap-10 justify-center">
         {haveScholarships && (
           <CardInfoComponent
             icon={check}
@@ -83,7 +83,7 @@ export const MastersHomeComponent: FC = () => {
             actionTitle={t("track") ?? "Track"}
           ></CardInfoComponent>
         )}
-      </div>
+      </div> */}
 
       {/* Check if batch available */}
       {!isBatchPending && !batch ? (
@@ -127,6 +127,30 @@ export const MastersHomeComponent: FC = () => {
 
           {canApply && (
             <div className="grid grid-cols-1 gap-10 items-stretch place-items-center mx-auto w-full max-w-4xl md:grid-cols-2">
+              {haveActiveApplication && (
+                <CardInfoComponent
+                  icon={search}
+                  title={t("trackApplication")}
+                  description={t("trackApplicationDescription")}
+                  action={() =>
+                    router.push("/masters/applications?type=masters")
+                  }
+                  actionTitle={t("track") ?? "Track"}
+                ></CardInfoComponent>
+              )}
+
+              {haveScholarships && (
+                <CardInfoComponent
+                  icon={check}
+                  title={t("scholarships")}
+                  description={t("trackApplicationDescription")}
+                  action={() =>
+                    router.push("/masters/scholarship?type=masters")
+                  }
+                  actionTitle={t("myScholarships") ?? "My Scholarships"}
+                ></CardInfoComponent>
+              )}
+
               {!haveActiveApplication && (
                 <CardInfoComponent
                   icon={logs}
@@ -146,6 +170,7 @@ export const MastersHomeComponent: FC = () => {
                   actionTitle={t("enrollNow") ?? "Enroll Now"}
                 ></CardInfoComponent>
               )}
+
               <CardInfoComponent
                 icon={info}
                 title={t("informationCenter")}

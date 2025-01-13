@@ -11,7 +11,6 @@ import toast from "react-hot-toast";
 import { useAuth } from "../../hooks/use-auth";
 import { Skeleton } from "../Skeleton";
 
-// TODO: Make a change email functionality
 // end-point: https://sb87s08fch.execute-api.us-east-1.amazonaws.com/default/email
 
 type TChangeEmail = {

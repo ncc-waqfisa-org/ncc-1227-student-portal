@@ -53,7 +53,7 @@ export const TermsAndConditions: FC<ITermsAndConditions> = ({
             <div className="mx-auto prose">
               <h3>{t("title")}</h3>
               <ul className="">
-                {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                   <li key={i}>{t(`b${i}`)}</li>
                 ))}
               </ul>

@@ -4,10 +4,16 @@ import React, { FC, ReactNode, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
-import { DocType, uploadFile } from "../../../src/CustomAPI";
+import {
+  DocType,
+  updateMasterApplicationInDB,
+  updateStudentInDB,
+  uploadFile,
+} from "../../../src/CustomAPI";
 
 import { useMutation } from "@tanstack/react-query";
 import {
+  ApplicantType,
   Income,
   MasterUpdateData,
   MasterUpdateFormSchema,
@@ -18,7 +24,13 @@ import "yup-phone";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { cn } from "../../../src/lib/utils";
 import { PhoneNumberInput } from "../../phone";
-import { BahrainUniversities, Gender, Nationality } from "../../../src/API";
+import {
+  BahrainUniversities,
+  Gender,
+  Nationality,
+  UpdateMasterApplicationMutationVariables,
+  UpdateStudentMutationVariables,
+} from "../../../src/API";
 import { useAppContext } from "../../../contexts/AppContexts";
 import GetStorageLinkComponent from "../../get-storage-link-component";
 import { useMastersContext } from "../../../contexts/MastersContexts";
@@ -33,7 +45,11 @@ export default function MasterInfoForm({
   const { t: tErrors } = useTranslation("errors");
   const { t: tToast } = useTranslation("toast");
   const { t } = useTranslation("account");
-  const { studentAsStudent: student, isStudentPending } = useAppContext();
+  const {
+    studentAsStudent: student,
+    isStudentPending,
+    syncStudent,
+  } = useAppContext();
   const { editingApplicationsEnabled } = useMastersContext();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -131,29 +147,79 @@ export default function MasterInfoForm({
 
   const updateMutation = useMutation({
     mutationFn: (values: MasterUpdateData) => {
-      //   TODO: update with graphql
+      // Personal data
+      // id: string;
+      // version: number;
+      // cpr_doc?: string;
 
-      return fetch(``, {
-        method: "POST",
-        body: JSON.stringify(values),
-        headers: {
-          ...(router.locale && { "Accept-Language": router.locale }),
-          "Content-Type": "application/json",
+      // first_name: string;
+      // second_name: string;
+      // last_name: string;
+      // address: string;
+
+      // phone: string;
+      // // gender: string;
+      // // place_of_birth: string;
+      // // nationality: string;
+      // number_of_family_member: number;
+
+      // // Graduated from
+      // graduation_year: string;
+      // universityID: string;
+      // old_program: string;
+
+      // // Employment info
+      // isEmployed: boolean;
+      // place_of_employment: string | null;
+
+      // // Personal income or guardian income based on employment
+      // income: Income;
+      // income_doc?: string;
+
+      // // Guardian data
+      // guardian_cpr: string;
+      // guardian_full_name: string;
+      // guardian_cpr_doc?: string;
+
+      //   TODO: update with graphql
+      let studentData: UpdateStudentMutationVariables = {
+        input: {
+          // prefilled
+          cpr: student?.cpr ?? "",
+          _version: student?._version,
+
+          m_firstName: values.first_name,
+          m_secondName: values.second_name,
+          m_lastName: values.last_name,
+          m_isEmployed: values.isEmployed,
+          m_graduationYear: values.graduation_year,
+          m_guardianCPR: values.guardian_cpr,
+          m_guardianCPRDoc: values.guardian_cpr_doc,
+          m_guardianFullName: values.guardian_full_name,
+          address: values.address,
+          m_income: values.income,
+          // m_incomeDoc: values.income_doc,
+          m_numberOfFamilyMembers: values.number_of_family_member,
+          m_oldProgram: values.old_program,
+          m_placeOfEmployment: values.place_of_employment,
+          m_universityID: values.universityID,
         },
-      });
+      };
+
+      let res = updateStudentInDB(studentData);
+
+      return res;
     },
     async onSuccess(data) {
-      if (data.ok) {
-        const { message } = await data.json();
-
-        toast.success(message);
+      if (data?.updateStudent?.cpr) {
+        syncStudent();
+        toast.success(`${tToast("processComplete")}`);
       } else {
-        const { message } = await data.json();
-        throw new Error(message);
+        throw new Error(`${tErrors("somethingWentWrong")}`);
       }
     },
     async onError(error) {
-      throw new Error(error.message);
+      toast.error(error.message, { duration: 6000 });
     },
     onSettled() {
       setIsLoading(false);
@@ -167,15 +233,17 @@ export default function MasterInfoForm({
       throw new Error(`CODE:00098 ${"Applicant data is missing"}`);
     }
 
-    if (data.cpr_doc == undefined || docs.cpr_doc == undefined) {
-    }
-    if (data.income_doc == undefined || docs.income_doc == undefined) {
-    }
-    if (
-      data.guardian_cpr_doc == undefined ||
-      docs.guardian_cpr_doc == undefined
-    ) {
-    }
+    // if (data.cpr_doc == undefined || docs.cpr_doc == undefined) {
+    // }
+    // if (data.income_doc == undefined || docs.income_doc == undefined) {
+    // }
+    // if (
+    //   data.guardian_cpr_doc == undefined ||
+    //   docs.guardian_cpr_doc == undefined
+    // ) {
+    // }
+
+    // TODO test update doc
 
     /**
      * Upload all documents to S3 with the applicant CPR

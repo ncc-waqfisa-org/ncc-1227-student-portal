@@ -131,6 +131,7 @@ export default function ViewAccount({ student }: Props) {
         preferredLanguage: values.preferredLanguage,
         graduationDate: values.graduationDate,
         address: values.address,
+        m_isEmployed: student.m_isEmployed,
         _version: student._version,
       },
     };
