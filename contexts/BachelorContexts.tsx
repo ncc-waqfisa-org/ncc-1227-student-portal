@@ -63,7 +63,7 @@ export const BachelorProvider: FC<PropsWithChildren> = ({ children }) => {
 function useProviderBachelor() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const { syncStudent } = useAppContext();
+  const { syncStudent, isStudentPending } = useAppContext();
 
   const [applications, setApplications] = useState<Application[]>(
     defaultState.applications
