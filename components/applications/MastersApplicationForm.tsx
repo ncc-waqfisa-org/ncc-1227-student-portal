@@ -8,7 +8,7 @@ import {
   CreateMasterApplicationMutationVariables,
   CreateMasterAttachmentMutationVariables,
   CreateMasterLogMutationVariables,
-  MasterUniversities,
+  MasterAppliedUniversities,
   Student,
   UpdateMasterApplicationMutationVariables,
   UpdateMasterAttachmentMutationVariables,
@@ -28,13 +28,11 @@ import {
   uploadFile,
 } from "../../src/CustomAPI";
 import {
-  ApplicationSnapshotInput,
-  allDocsAreAvailable,
+  MasterApplicationSnapshotInput,
   allMasterDocsAreAvailable,
   calculateMasterScore,
   checkIfFilesAreTooBig,
-  // TODO: change it to the master one
-  getStudentApplicationSnapshot,
+  getMasterStudentApplicationSnapshot,
 } from "../../src/HelperFunctions";
 import GetStorageLinkComponent from "../get-storage-link-component";
 import { useTranslation } from "react-i18next";
@@ -106,7 +104,7 @@ interface FormValues {
 
 interface Props {
   application?: MasterApplication;
-  universities?: MasterUniversities[];
+  universities?: MasterAppliedUniversities[];
 }
 
 export const MastersApplicationForm: FC<Props> = (props) => {
@@ -430,42 +428,42 @@ export const MastersApplicationForm: FC<Props> = (props) => {
       sk_toeflIELTSCertificate = new_sk_toeflIELTSCertificate;
     }
 
-    // TODO: make a master application snapshot
-    // let newApplicationSnapshotInput: ApplicationSnapshotInput = {
-    //   gpa: values.gpa,
-    //   reason: values.reason,
-    //   primaryProgram: {
-    //     id: values.primaryProgramID,
-    //     name: `${selectedPrimaryProgram?.name}-${selectedPrimaryProgram?.university?.name}`,
-    //     acceptanceLetterDoc:
-    //       storageKeys?.[2] ?? oldUniversity?.acceptanceLetterDoc ?? undefined,
-    //   },
-    //   attachments: {
-    //     schoolCertificate: storageKeys?.[0] ?? undefined,
-    //     transcript: storageKeys?.[1] ?? undefined,
-    //   },
-    // };
+    // TODO: TEST
+    let newApplicationSnapshotInput: MasterApplicationSnapshotInput = {
+      gpa: values.gpa,
+      reason: values.reason,
+      university: values.universityID,
+      major: values.major,
+      program: values.program,
+      attachments: {
+        universityCertificate: sk_UniversityCertificate ?? undefined,
+        transcript: sk_TranscriptDoc ?? undefined,
+        acceptanceLetter: sk_AcceptanceLetterDoc ?? undefined,
+        toeflIELTSCertificate: sk_toeflIELTSCertificate ?? undefined,
+      },
+    };
 
-    // TODO: make a master application snapshot and assign the old application to it
-    // let oldApplicationSnapshotInput: ApplicationSnapshotInput | undefined =
-    //   props.application
-    //     ? {
-    //         gpa: props.application.gpa ?? undefined,
-    //         reason: props.application.reason ?? undefined,
-    //         primaryProgram: {
-    //           id: oldUniversity?.program?.id ?? undefined,
-    //           name: `${oldUniversity?.program?.name}-${oldUniversity?.program?.university?.name}`,
-    //           acceptanceLetterDoc:
-    //             oldUniversity?.acceptanceLetterDoc ?? undefined,
-    //         },
-    //         attachments: {
-    //           schoolCertificate:
-    //             props.application?.attachment?.schoolCertificate ?? undefined,
-    //           transcript:
-    //             props.application?.attachment?.transcriptDoc ?? undefined,
-    //         },
-    //       }
-    //     : undefined;
+    let oldApplicationSnapshotInput:
+      | MasterApplicationSnapshotInput
+      | undefined = props.application
+      ? {
+          gpa: props.application.gpa ?? undefined,
+          reason: props.application.reason ?? undefined,
+          university: props.application.universityID ?? undefined,
+          major: props.application.major ?? undefined,
+          program: props.application.program ?? undefined,
+          attachments: {
+            universityCertificate:
+              props.application?.attachment?.universityCertificate ?? undefined,
+            transcript:
+              props.application?.attachment?.transcriptDoc ?? undefined,
+            acceptanceLetter:
+              props.application?.attachment?.acceptanceLetterDoc ?? undefined,
+            toeflIELTSCertificate:
+              props.application?.attachment?.toeflIELTSCertificate ?? undefined,
+          },
+        }
+      : undefined;
 
     const createValues: CreateMasterApplicationFormValues = {
       application: {
@@ -524,11 +522,10 @@ export const MastersApplicationForm: FC<Props> = (props) => {
           studentCPR: studentData.cpr,
           dateTime: new Date().toISOString(),
 
-          //  TODO: add measter snapshots
-          //   snapshot: getStudentApplicationSnapshot({
-          //     newApplication:  newApplicationSnapshotInput,
-          //     oldApplication: oldApplicationSnapshotInput,
-          //   }),
+          snapshot: getMasterStudentApplicationSnapshot({
+            newApplication: newApplicationSnapshotInput,
+            oldApplication: oldApplicationSnapshotInput,
+          }),
 
           reason: "Initial Submit",
           _version: undefined,
@@ -603,11 +600,10 @@ export const MastersApplicationForm: FC<Props> = (props) => {
           studentCPR: user?.getUsername() ?? "",
           dateTime: new Date().toISOString(),
 
-          //  TODO: add measter snapshots
-          //   snapshot: getStudentApplicationSnapshot({
-          //     newApplication: newApplicationSnapshotInput,
-          //     oldApplication: oldApplicationSnapshotInput,
-          //   }),
+          snapshot: getMasterStudentApplicationSnapshot({
+            newApplication: newApplicationSnapshotInput,
+            oldApplication: oldApplicationSnapshotInput,
+          }),
 
           reason: values.reasonForUpdate,
           _version: undefined,
@@ -823,7 +819,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                 <p className="pt-3 text-sm text-gray-400">{t("reasonD")}</p>
               </div>
               <div className="divider md:col-span-2"></div>
-              {/* Master Universite */}
+              {/* Master Universities */}
               {
                 <div className="flex flex-col justify-start w-full md:col-span-2">
                   <div className="grid grid-cols-1 gap-3 items-start md:grid-cols-2">

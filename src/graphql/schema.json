@@ -1867,133 +1867,6 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "getMasterUniversities",
-          "description" : null,
-          "args" : [ {
-            "name" : "id",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "SCALAR",
-                "name" : "ID",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          } ],
-          "type" : {
-            "kind" : "OBJECT",
-            "name" : "MasterUniversities",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "listMasterUniversities",
-          "description" : null,
-          "args" : [ {
-            "name" : "id",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "ID",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "filter",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelMasterUniversitiesFilterInput",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "limit",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "Int",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "nextToken",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "sortDirection",
-            "description" : null,
-            "type" : {
-              "kind" : "ENUM",
-              "name" : "ModelSortDirection",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
-          "type" : {
-            "kind" : "OBJECT",
-            "name" : "ModelMasterUniversitiesConnection",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "syncMasterUniversities",
-          "description" : null,
-          "args" : [ {
-            "name" : "filter",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelMasterUniversitiesFilterInput",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "limit",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "Int",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "nextToken",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "lastSync",
-            "description" : null,
-            "type" : {
-              "kind" : "SCALAR",
-              "name" : "AWSTimestamp",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
-          "type" : {
-            "kind" : "OBJECT",
-            "name" : "ModelMasterUniversitiesConnection",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
           "name" : "getMasterApplication",
           "description" : null,
           "args" : [ {
@@ -2334,6 +2207,133 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "ModelMasterAttachmentConnection",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "getMasterAppliedUniversities",
+          "description" : null,
+          "args" : [ {
+            "name" : "id",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "SCALAR",
+                "name" : "ID",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "MasterAppliedUniversities",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "listMasterAppliedUniversities",
+          "description" : null,
+          "args" : [ {
+            "name" : "id",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "ID",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "filter",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelMasterAppliedUniversitiesFilterInput",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "limit",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "Int",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "nextToken",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "sortDirection",
+            "description" : null,
+            "type" : {
+              "kind" : "ENUM",
+              "name" : "ModelSortDirection",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "ModelMasterAppliedUniversitiesConnection",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "syncMasterAppliedUniversities",
+          "description" : null,
+          "args" : [ {
+            "name" : "filter",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelMasterAppliedUniversitiesFilterInput",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "limit",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "Int",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "nextToken",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "lastSync",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "AWSTimestamp",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "ModelMasterAppliedUniversitiesConnection",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -3870,7 +3870,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "MasterScholarshipsByApplicationID",
+          "name" : "masterScholarshipsByApplicationID",
           "description" : null,
           "args" : [ {
             "name" : "applicationID",
@@ -3930,7 +3930,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "MasterScholarshipsByBatchAndStatus",
+          "name" : "masterScholarshipsByBatchAndStatus",
           "description" : null,
           "args" : [ {
             "name" : "batch",
@@ -3999,7 +3999,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "MasterScholarshipsByStudentCPRAndStatus",
+          "name" : "masterScholarshipsByStudentCPRAndStatus",
           "description" : null,
           "args" : [ {
             "name" : "studentCPR",
@@ -6845,7 +6845,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "m_isEmployed,
+          "name" : "m_isEmployed",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -9112,7 +9112,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "m_isEmployed,
+          "name" : "m_isEmployed",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -9671,7 +9671,7 @@
           "args" : [ ],
           "type" : {
             "kind" : "OBJECT",
-            "name" : "MasterUniversities",
+            "name" : "MasterAppliedUniversities",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -10062,7 +10062,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "MasterUniversities",
+        "name" : "MasterAppliedUniversities",
         "description" : null,
         "fields" : [ {
           "name" : "id",
@@ -14234,163 +14234,6 @@
         "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
-        "name" : "ModelMasterUniversitiesConnection",
-        "description" : null,
-        "fields" : [ {
-          "name" : "items",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "NON_NULL",
-            "name" : null,
-            "ofType" : {
-              "kind" : "LIST",
-              "name" : null,
-              "ofType" : {
-                "kind" : "OBJECT",
-                "name" : "MasterUniversities",
-                "ofType" : null
-              }
-            }
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "nextToken",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "startedAt",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "AWSTimestamp",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        } ],
-        "inputFields" : null,
-        "interfaces" : [ ],
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "INPUT_OBJECT",
-        "name" : "ModelMasterUniversitiesFilterInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "id",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelIDInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "universityName",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "universityNameAr",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "isDeactivated",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelBooleanInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "createdAt",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "updatedAt",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "and",
-          "description" : null,
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelMasterUniversitiesFilterInput",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "or",
-          "description" : null,
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelMasterUniversitiesFilterInput",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "not",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelMasterUniversitiesFilterInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "_deleted",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelBooleanInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        } ],
-        "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "OBJECT",
         "name" : "MasterStatistics",
         "description" : null,
         "fields" : [ {
@@ -15046,6 +14889,163 @@
           "type" : {
             "kind" : "INPUT_OBJECT",
             "name" : "ModelMasterAttachmentFilterInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "_deleted",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelBooleanInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "OBJECT",
+        "name" : "ModelMasterAppliedUniversitiesConnection",
+        "description" : null,
+        "fields" : [ {
+          "name" : "items",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "LIST",
+              "name" : null,
+              "ofType" : {
+                "kind" : "OBJECT",
+                "name" : "MasterAppliedUniversities",
+                "ofType" : null
+              }
+            }
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "nextToken",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "startedAt",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "AWSTimestamp",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "inputFields" : null,
+        "interfaces" : [ ],
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "ModelMasterAppliedUniversitiesFilterInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "id",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelIDInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "universityName",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "universityNameAr",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "isDeactivated",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelBooleanInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "createdAt",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "updatedAt",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "and",
+          "description" : null,
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelMasterAppliedUniversitiesFilterInput",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "or",
+          "description" : null,
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelMasterAppliedUniversitiesFilterInput",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "not",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelMasterAppliedUniversitiesFilterInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -17274,105 +17274,6 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "createMasterUniversities",
-          "description" : null,
-          "args" : [ {
-            "name" : "input",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "CreateMasterUniversitiesInput",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "condition",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelMasterUniversitiesConditionInput",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
-          "type" : {
-            "kind" : "OBJECT",
-            "name" : "MasterUniversities",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "updateMasterUniversities",
-          "description" : null,
-          "args" : [ {
-            "name" : "input",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "UpdateMasterUniversitiesInput",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "condition",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelMasterUniversitiesConditionInput",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
-          "type" : {
-            "kind" : "OBJECT",
-            "name" : "MasterUniversities",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "deleteMasterUniversities",
-          "description" : null,
-          "args" : [ {
-            "name" : "input",
-            "description" : null,
-            "type" : {
-              "kind" : "NON_NULL",
-              "name" : null,
-              "ofType" : {
-                "kind" : "INPUT_OBJECT",
-                "name" : "DeleteMasterUniversitiesInput",
-                "ofType" : null
-              }
-            },
-            "defaultValue" : null
-          }, {
-            "name" : "condition",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelMasterUniversitiesConditionInput",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
-          "type" : {
-            "kind" : "OBJECT",
-            "name" : "MasterUniversities",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
           "name" : "createMasterApplication",
           "description" : null,
           "args" : [ {
@@ -17665,6 +17566,105 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "MasterAttachment",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "createMasterAppliedUniversities",
+          "description" : null,
+          "args" : [ {
+            "name" : "input",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "CreateMasterAppliedUniversitiesInput",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "condition",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelMasterAppliedUniversitiesConditionInput",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "MasterAppliedUniversities",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "updateMasterAppliedUniversities",
+          "description" : null,
+          "args" : [ {
+            "name" : "input",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "UpdateMasterAppliedUniversitiesInput",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "condition",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelMasterAppliedUniversitiesConditionInput",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "MasterAppliedUniversities",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "deleteMasterAppliedUniversities",
+          "description" : null,
+          "args" : [ {
+            "name" : "input",
+            "description" : null,
+            "type" : {
+              "kind" : "NON_NULL",
+              "name" : null,
+              "ofType" : {
+                "kind" : "INPUT_OBJECT",
+                "name" : "DeleteMasterAppliedUniversitiesInput",
+                "ofType" : null
+              }
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "condition",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelMasterAppliedUniversitiesConditionInput",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "MasterAppliedUniversities",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -21727,7 +21727,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "m_isEmployed,
+          "name" : "m_isEmployed",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -22060,7 +22060,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "m_isEmployed,
+          "name" : "m_isEmployed",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -22471,7 +22471,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "m_isEmployed,
+          "name" : "m_isEmployed",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -24782,255 +24782,6 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "CreateMasterUniversitiesInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "id",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "universityName",
-          "description" : null,
-          "type" : {
-            "kind" : "NON_NULL",
-            "name" : null,
-            "ofType" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "universityNameAr",
-          "description" : null,
-          "type" : {
-            "kind" : "NON_NULL",
-            "name" : null,
-            "ofType" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "isDeactivated",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "Boolean",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "_version",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "Int",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        } ],
-        "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "INPUT_OBJECT",
-        "name" : "ModelMasterUniversitiesConditionInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "universityName",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "universityNameAr",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "isDeactivated",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelBooleanInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "and",
-          "description" : null,
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelMasterUniversitiesConditionInput",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "or",
-          "description" : null,
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelMasterUniversitiesConditionInput",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "not",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelMasterUniversitiesConditionInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "_deleted",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelBooleanInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "createdAt",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "updatedAt",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        } ],
-        "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "INPUT_OBJECT",
-        "name" : "UpdateMasterUniversitiesInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "id",
-          "description" : null,
-          "type" : {
-            "kind" : "NON_NULL",
-            "name" : null,
-            "ofType" : {
-              "kind" : "SCALAR",
-              "name" : "ID",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "universityName",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "universityNameAr",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "isDeactivated",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "Boolean",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "_version",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "Int",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        } ],
-        "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "INPUT_OBJECT",
-        "name" : "DeleteMasterUniversitiesInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "id",
-          "description" : null,
-          "type" : {
-            "kind" : "NON_NULL",
-            "name" : null,
-            "ofType" : {
-              "kind" : "SCALAR",
-              "name" : "ID",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "_version",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "Int",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        } ],
-        "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "INPUT_OBJECT",
         "name" : "CreateMasterApplicationInput",
         "description" : null,
         "fields" : null,
@@ -26584,6 +26335,255 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
+        "name" : "CreateMasterAppliedUniversitiesInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "id",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "ID",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "universityName",
+          "description" : null,
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "universityNameAr",
+          "description" : null,
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "isDeactivated",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Boolean",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "_version",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Int",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "ModelMasterAppliedUniversitiesConditionInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "universityName",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "universityNameAr",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "isDeactivated",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelBooleanInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "and",
+          "description" : null,
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelMasterAppliedUniversitiesConditionInput",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "or",
+          "description" : null,
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelMasterAppliedUniversitiesConditionInput",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "not",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelMasterAppliedUniversitiesConditionInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "_deleted",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelBooleanInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "createdAt",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "updatedAt",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "UpdateMasterAppliedUniversitiesInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "id",
+          "description" : null,
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "ID",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "universityName",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "universityNameAr",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "isDeactivated",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Boolean",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "_version",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Int",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "DeleteMasterAppliedUniversitiesInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "id",
+          "description" : null,
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "ID",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "_version",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Int",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
         "name" : "CreateMasterScholarshipInput",
         "description" : null,
         "fields" : null,
@@ -28035,66 +28035,6 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "onCreateMasterUniversities",
-          "description" : null,
-          "args" : [ {
-            "name" : "filter",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelSubscriptionMasterUniversitiesFilterInput",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
-          "type" : {
-            "kind" : "OBJECT",
-            "name" : "MasterUniversities",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "onUpdateMasterUniversities",
-          "description" : null,
-          "args" : [ {
-            "name" : "filter",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelSubscriptionMasterUniversitiesFilterInput",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
-          "type" : {
-            "kind" : "OBJECT",
-            "name" : "MasterUniversities",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "onDeleteMasterUniversities",
-          "description" : null,
-          "args" : [ {
-            "name" : "filter",
-            "description" : null,
-            "type" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelSubscriptionMasterUniversitiesFilterInput",
-              "ofType" : null
-            },
-            "defaultValue" : null
-          } ],
-          "type" : {
-            "kind" : "OBJECT",
-            "name" : "MasterUniversities",
-            "ofType" : null
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
           "name" : "onCreateMasterApplication",
           "description" : null,
           "args" : [ {
@@ -28270,6 +28210,66 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "MasterAttachment",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "onCreateMasterAppliedUniversities",
+          "description" : null,
+          "args" : [ {
+            "name" : "filter",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelSubscriptionMasterAppliedUniversitiesFilterInput",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "MasterAppliedUniversities",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "onUpdateMasterAppliedUniversities",
+          "description" : null,
+          "args" : [ {
+            "name" : "filter",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelSubscriptionMasterAppliedUniversitiesFilterInput",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "MasterAppliedUniversities",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "onDeleteMasterAppliedUniversities",
+          "description" : null,
+          "args" : [ {
+            "name" : "filter",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelSubscriptionMasterAppliedUniversitiesFilterInput",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "MasterAppliedUniversities",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -30454,7 +30454,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "m_isEmployed,
+          "name" : "m_isEmployed",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -31433,104 +31433,6 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "ModelSubscriptionMasterUniversitiesFilterInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "id",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelSubscriptionIDInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "universityName",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelSubscriptionStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "universityNameAr",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelSubscriptionStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "isDeactivated",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelSubscriptionBooleanInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "createdAt",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelSubscriptionStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "updatedAt",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelSubscriptionStringInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "and",
-          "description" : null,
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelSubscriptionMasterUniversitiesFilterInput",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "or",
-          "description" : null,
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelSubscriptionMasterUniversitiesFilterInput",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "_deleted",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelBooleanInput",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        } ],
-        "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "INPUT_OBJECT",
         "name" : "ModelSubscriptionMasterApplicationFilterInput",
         "description" : null,
         "fields" : null,
@@ -32094,6 +31996,104 @@
             "ofType" : {
               "kind" : "INPUT_OBJECT",
               "name" : "ModelSubscriptionMasterAttachmentFilterInput",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "_deleted",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelBooleanInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "ModelSubscriptionMasterAppliedUniversitiesFilterInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "id",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelSubscriptionIDInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "universityName",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelSubscriptionStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "universityNameAr",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelSubscriptionStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "isDeactivated",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelSubscriptionBooleanInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "createdAt",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelSubscriptionStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "updatedAt",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelSubscriptionStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "and",
+          "description" : null,
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelSubscriptionMasterAppliedUniversitiesFilterInput",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "or",
+          "description" : null,
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelSubscriptionMasterAppliedUniversitiesFilterInput",
               "ofType" : null
             }
           },
@@ -33074,73 +33074,6 @@
         "onFragment" : false,
         "onField" : true
       }, {
-        "name" : "aws_publish",
-        "description" : "Tells the service which subscriptions will be published to when this mutation is called. This directive is deprecated use @aws_susbscribe directive instead.",
-        "locations" : [ "FIELD_DEFINITION" ],
-        "args" : [ {
-          "name" : "subscriptions",
-          "description" : "List of subscriptions which will be published to when this mutation is called.",
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        } ],
-        "onOperation" : false,
-        "onFragment" : false,
-        "onField" : false
-      }, {
-        "name" : "aws_auth",
-        "description" : "Directs the schema to enforce authorization on a field",
-        "locations" : [ "FIELD_DEFINITION" ],
-        "args" : [ {
-          "name" : "cognito_groups",
-          "description" : "List of cognito user pool groups which have access on this field",
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "SCALAR",
-              "name" : "String",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        } ],
-        "onOperation" : false,
-        "onFragment" : false,
-        "onField" : false
-      }, {
-        "name" : "deprecated",
-        "description" : null,
-        "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
-        "args" : [ {
-          "name" : "reason",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : "\"No longer supported\""
-        } ],
-        "onOperation" : false,
-        "onFragment" : false,
-        "onField" : false
-      }, {
-        "name" : "aws_api_key",
-        "description" : "Tells the service this field/object has access authorized by an API key.",
-        "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
-        "args" : [ ],
-        "onOperation" : false,
-        "onFragment" : false,
-        "onField" : false
-      }, {
         "name" : "aws_iam",
         "description" : "Tells the service this field/object has access authorized by sigv4 signing.",
         "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
@@ -33170,10 +33103,56 @@
         "onFragment" : false,
         "onField" : false
       }, {
+        "name" : "aws_api_key",
+        "description" : "Tells the service this field/object has access authorized by an API key.",
+        "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
+        "args" : [ ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
+        "name" : "deprecated",
+        "description" : null,
+        "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
+        "args" : [ {
+          "name" : "reason",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : "\"No longer supported\""
+        } ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
         "name" : "aws_oidc",
         "description" : "Tells the service this field/object has access authorized by an OIDC token.",
         "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
         "args" : [ ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
+        "name" : "aws_auth",
+        "description" : "Directs the schema to enforce authorization on a field",
+        "locations" : [ "FIELD_DEFINITION" ],
+        "args" : [ {
+          "name" : "cognito_groups",
+          "description" : "List of cognito user pool groups which have access on this field",
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        } ],
         "onOperation" : false,
         "onFragment" : false,
         "onField" : false
@@ -33203,6 +33182,27 @@
         "description" : "Tells the service this field/object has access authorized by a Lambda Authorizer.",
         "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
         "args" : [ ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
+        "name" : "aws_publish",
+        "description" : "Tells the service which subscriptions will be published to when this mutation is called. This directive is deprecated use @aws_susbscribe directive instead.",
+        "locations" : [ "FIELD_DEFINITION" ],
+        "args" : [ {
+          "name" : "subscriptions",
+          "description" : "List of subscriptions which will be published to when this mutation is called.",
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        } ],
         "onOperation" : false,
         "onFragment" : false,
         "onField" : false

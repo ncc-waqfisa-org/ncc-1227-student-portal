@@ -335,8 +335,7 @@ export const syncApplications = /* GraphQL */ `query SyncApplications(
   APITypes.SyncApplicationsQueryVariables,
   APITypes.SyncApplicationsQuery
 >;
-export const getProgramChoice =
-  /* GraphQL */ `query GetProgramChoice($id: ID!) {
+export const getProgramChoice = /* GraphQL */ `query GetProgramChoice($id: ID!) {
   getProgramChoice(id: $id) {
     id
     programID
@@ -405,9 +404,9 @@ export const getProgramChoice =
   }
 }
 ` as GeneratedQuery<
-    APITypes.GetProgramChoiceQueryVariables,
-    APITypes.GetProgramChoiceQuery
-  >;
+  APITypes.GetProgramChoiceQueryVariables,
+  APITypes.GetProgramChoiceQuery
+>;
 export const listProgramChoices = /* GraphQL */ `query ListProgramChoices(
   $filter: ModelProgramChoiceFilterInput
   $limit: Int
@@ -1712,8 +1711,7 @@ export const syncStatistics = /* GraphQL */ `query SyncStatistics(
   APITypes.SyncStatisticsQueryVariables,
   APITypes.SyncStatisticsQuery
 >;
-export const getMasterBatch =
-  /* GraphQL */ `query GetMasterBatch($batch: Int!) {
+export const getMasterBatch = /* GraphQL */ `query GetMasterBatch($batch: Int!) {
   getMasterBatch(batch: $batch) {
     batch
     createApplicationStartDate
@@ -1730,9 +1728,9 @@ export const getMasterBatch =
   }
 }
 ` as GeneratedQuery<
-    APITypes.GetMasterBatchQueryVariables,
-    APITypes.GetMasterBatchQuery
-  >;
+  APITypes.GetMasterBatchQueryVariables,
+  APITypes.GetMasterBatchQuery
+>;
 export const listMasterBatches = /* GraphQL */ `query ListMasterBatches(
   $batch: Int
   $filter: ModelMasterBatchFilterInput
@@ -1939,8 +1937,7 @@ export const syncMasterLogs = /* GraphQL */ `query SyncMasterLogs(
   APITypes.SyncMasterLogsQueryVariables,
   APITypes.SyncMasterLogsQuery
 >;
-export const getBahrainUniversities =
-  /* GraphQL */ `query GetBahrainUniversities($id: ID!) {
+export const getBahrainUniversities = /* GraphQL */ `query GetBahrainUniversities($id: ID!) {
   getBahrainUniversities(id: $id) {
     id
     universityName
@@ -1960,11 +1957,10 @@ export const getBahrainUniversities =
   }
 }
 ` as GeneratedQuery<
-    APITypes.GetBahrainUniversitiesQueryVariables,
-    APITypes.GetBahrainUniversitiesQuery
-  >;
-export const listBahrainUniversities =
-  /* GraphQL */ `query ListBahrainUniversities(
+  APITypes.GetBahrainUniversitiesQueryVariables,
+  APITypes.GetBahrainUniversitiesQuery
+>;
+export const listBahrainUniversities = /* GraphQL */ `query ListBahrainUniversities(
   $id: ID
   $filter: ModelBahrainUniversitiesFilterInput
   $limit: Int
@@ -1996,11 +1992,10 @@ export const listBahrainUniversities =
   }
 }
 ` as GeneratedQuery<
-    APITypes.ListBahrainUniversitiesQueryVariables,
-    APITypes.ListBahrainUniversitiesQuery
-  >;
-export const syncBahrainUniversities =
-  /* GraphQL */ `query SyncBahrainUniversities(
+  APITypes.ListBahrainUniversitiesQueryVariables,
+  APITypes.ListBahrainUniversitiesQuery
+>;
+export const syncBahrainUniversities = /* GraphQL */ `query SyncBahrainUniversities(
   $filter: ModelBahrainUniversitiesFilterInput
   $limit: Int
   $nextToken: String
@@ -2030,105 +2025,10 @@ export const syncBahrainUniversities =
   }
 }
 ` as GeneratedQuery<
-    APITypes.SyncBahrainUniversitiesQueryVariables,
-    APITypes.SyncBahrainUniversitiesQuery
-  >;
-export const getMasterUniversities =
-  /* GraphQL */ `query GetMasterUniversities($id: ID!) {
-  getMasterUniversities(id: $id) {
-    id
-    universityName
-    universityNameAr
-    isDeactivated
-    applications {
-      nextToken
-      startedAt
-      __typename
-    }
-    createdAt
-    updatedAt
-    _version
-    _deleted
-    _lastChangedAt
-    __typename
-  }
-}
-` as GeneratedQuery<
-    APITypes.GetMasterUniversitiesQueryVariables,
-    APITypes.GetMasterUniversitiesQuery
-  >;
-export const listMasterUniversities =
-  /* GraphQL */ `query ListMasterUniversities(
-  $id: ID
-  $filter: ModelMasterUniversitiesFilterInput
-  $limit: Int
-  $nextToken: String
-  $sortDirection: ModelSortDirection
-) {
-  listMasterUniversities(
-    id: $id
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    sortDirection: $sortDirection
-  ) {
-    items {
-      id
-      universityName
-      universityNameAr
-      isDeactivated
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      __typename
-    }
-    nextToken
-    startedAt
-    __typename
-  }
-}
-` as GeneratedQuery<
-    APITypes.ListMasterUniversitiesQueryVariables,
-    APITypes.ListMasterUniversitiesQuery
-  >;
-export const syncMasterUniversities =
-  /* GraphQL */ `query SyncMasterUniversities(
-  $filter: ModelMasterUniversitiesFilterInput
-  $limit: Int
-  $nextToken: String
-  $lastSync: AWSTimestamp
-) {
-  syncMasterUniversities(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    lastSync: $lastSync
-  ) {
-    items {
-      id
-      universityName
-      universityNameAr
-      isDeactivated
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      __typename
-    }
-    nextToken
-    startedAt
-    __typename
-  }
-}
-` as GeneratedQuery<
-    APITypes.SyncMasterUniversitiesQueryVariables,
-    APITypes.SyncMasterUniversitiesQuery
-  >;
-export const getMasterApplication =
-  /* GraphQL */ `query GetMasterApplication($id: ID!) {
+  APITypes.SyncBahrainUniversitiesQueryVariables,
+  APITypes.SyncBahrainUniversitiesQuery
+>;
+export const getMasterApplication = /* GraphQL */ `query GetMasterApplication($id: ID!) {
   getMasterApplication(id: $id) {
     id
     gpa
@@ -2241,11 +2141,10 @@ export const getMasterApplication =
   }
 }
 ` as GeneratedQuery<
-    APITypes.GetMasterApplicationQueryVariables,
-    APITypes.GetMasterApplicationQuery
-  >;
-export const listMasterApplications =
-  /* GraphQL */ `query ListMasterApplications(
+  APITypes.GetMasterApplicationQueryVariables,
+  APITypes.GetMasterApplicationQuery
+>;
+export const listMasterApplications = /* GraphQL */ `query ListMasterApplications(
   $filter: ModelMasterApplicationFilterInput
   $limit: Int
   $nextToken: String
@@ -2290,11 +2189,10 @@ export const listMasterApplications =
   }
 }
 ` as GeneratedQuery<
-    APITypes.ListMasterApplicationsQueryVariables,
-    APITypes.ListMasterApplicationsQuery
-  >;
-export const syncMasterApplications =
-  /* GraphQL */ `query SyncMasterApplications(
+  APITypes.ListMasterApplicationsQueryVariables,
+  APITypes.ListMasterApplicationsQuery
+>;
+export const syncMasterApplications = /* GraphQL */ `query SyncMasterApplications(
   $filter: ModelMasterApplicationFilterInput
   $limit: Int
   $nextToken: String
@@ -2341,11 +2239,10 @@ export const syncMasterApplications =
   }
 }
 ` as GeneratedQuery<
-    APITypes.SyncMasterApplicationsQueryVariables,
-    APITypes.SyncMasterApplicationsQuery
-  >;
-export const getMasterStatistics =
-  /* GraphQL */ `query GetMasterStatistics($id: Int!) {
+  APITypes.SyncMasterApplicationsQueryVariables,
+  APITypes.SyncMasterApplicationsQuery
+>;
+export const getMasterStatistics = /* GraphQL */ `query GetMasterStatistics($id: Int!) {
   getMasterStatistics(id: $id) {
     id
     batch
@@ -2370,9 +2267,9 @@ export const getMasterStatistics =
   }
 }
 ` as GeneratedQuery<
-    APITypes.GetMasterStatisticsQueryVariables,
-    APITypes.GetMasterStatisticsQuery
-  >;
+  APITypes.GetMasterStatisticsQueryVariables,
+  APITypes.GetMasterStatisticsQuery
+>;
 export const listMasterStatistics = /* GraphQL */ `query ListMasterStatistics(
   $id: Int
   $filter: ModelMasterStatisticsFilterInput
@@ -2461,8 +2358,7 @@ export const syncMasterStatistics = /* GraphQL */ `query SyncMasterStatistics(
   APITypes.SyncMasterStatisticsQueryVariables,
   APITypes.SyncMasterStatisticsQuery
 >;
-export const getMasterAttachment =
-  /* GraphQL */ `query GetMasterAttachment($id: ID!) {
+export const getMasterAttachment = /* GraphQL */ `query GetMasterAttachment($id: ID!) {
   getMasterAttachment(id: $id) {
     id
     cprDoc
@@ -2480,9 +2376,9 @@ export const getMasterAttachment =
   }
 }
 ` as GeneratedQuery<
-    APITypes.GetMasterAttachmentQueryVariables,
-    APITypes.GetMasterAttachmentQuery
-  >;
+  APITypes.GetMasterAttachmentQueryVariables,
+  APITypes.GetMasterAttachmentQuery
+>;
 export const listMasterAttachments = /* GraphQL */ `query ListMasterAttachments(
   $filter: ModelMasterAttachmentFilterInput
   $limit: Int
@@ -2549,8 +2445,98 @@ export const syncMasterAttachments = /* GraphQL */ `query SyncMasterAttachments(
   APITypes.SyncMasterAttachmentsQueryVariables,
   APITypes.SyncMasterAttachmentsQuery
 >;
-export const getMasterScholarship =
-  /* GraphQL */ `query GetMasterScholarship($id: ID!) {
+export const getMasterAppliedUniversities = /* GraphQL */ `query GetMasterAppliedUniversities($id: ID!) {
+  getMasterAppliedUniversities(id: $id) {
+    id
+    universityName
+    universityNameAr
+    isDeactivated
+    applications {
+      nextToken
+      startedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetMasterAppliedUniversitiesQueryVariables,
+  APITypes.GetMasterAppliedUniversitiesQuery
+>;
+export const listMasterAppliedUniversities = /* GraphQL */ `query ListMasterAppliedUniversities(
+  $id: ID
+  $filter: ModelMasterAppliedUniversitiesFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listMasterAppliedUniversities(
+    id: $id
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      id
+      universityName
+      universityNameAr
+      isDeactivated
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListMasterAppliedUniversitiesQueryVariables,
+  APITypes.ListMasterAppliedUniversitiesQuery
+>;
+export const syncMasterAppliedUniversities = /* GraphQL */ `query SyncMasterAppliedUniversities(
+  $filter: ModelMasterAppliedUniversitiesFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncMasterAppliedUniversities(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      universityName
+      universityNameAr
+      isDeactivated
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncMasterAppliedUniversitiesQueryVariables,
+  APITypes.SyncMasterAppliedUniversitiesQuery
+>;
+export const getMasterScholarship = /* GraphQL */ `query GetMasterScholarship($id: ID!) {
   getMasterScholarship(id: $id) {
     id
     status
@@ -2603,11 +2589,10 @@ export const getMasterScholarship =
   }
 }
 ` as GeneratedQuery<
-    APITypes.GetMasterScholarshipQueryVariables,
-    APITypes.GetMasterScholarshipQuery
-  >;
-export const listMasterScholarships =
-  /* GraphQL */ `query ListMasterScholarships(
+  APITypes.GetMasterScholarshipQueryVariables,
+  APITypes.GetMasterScholarshipQuery
+>;
+export const listMasterScholarships = /* GraphQL */ `query ListMasterScholarships(
   $filter: ModelMasterScholarshipFilterInput
   $limit: Int
   $nextToken: String
@@ -2644,11 +2629,10 @@ export const listMasterScholarships =
   }
 }
 ` as GeneratedQuery<
-    APITypes.ListMasterScholarshipsQueryVariables,
-    APITypes.ListMasterScholarshipsQuery
-  >;
-export const syncMasterScholarships =
-  /* GraphQL */ `query SyncMasterScholarships(
+  APITypes.ListMasterScholarshipsQueryVariables,
+  APITypes.ListMasterScholarshipsQuery
+>;
+export const syncMasterScholarships = /* GraphQL */ `query SyncMasterScholarships(
   $filter: ModelMasterScholarshipFilterInput
   $limit: Int
   $nextToken: String
@@ -2687,11 +2671,10 @@ export const syncMasterScholarships =
   }
 }
 ` as GeneratedQuery<
-    APITypes.SyncMasterScholarshipsQueryVariables,
-    APITypes.SyncMasterScholarshipsQuery
-  >;
-export const applicationsByIdAndDateTime =
-  /* GraphQL */ `query ApplicationsByIdAndDateTime(
+  APITypes.SyncMasterScholarshipsQueryVariables,
+  APITypes.SyncMasterScholarshipsQuery
+>;
+export const applicationsByIdAndDateTime = /* GraphQL */ `query ApplicationsByIdAndDateTime(
   $id: ID!
   $dateTime: ModelStringKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -2745,11 +2728,10 @@ export const applicationsByIdAndDateTime =
   }
 }
 ` as GeneratedQuery<
-    APITypes.ApplicationsByIdAndDateTimeQueryVariables,
-    APITypes.ApplicationsByIdAndDateTimeQuery
-  >;
-export const applicationsByNationalityCategoryAndBatch =
-  /* GraphQL */ `query ApplicationsByNationalityCategoryAndBatch(
+  APITypes.ApplicationsByIdAndDateTimeQueryVariables,
+  APITypes.ApplicationsByIdAndDateTimeQuery
+>;
+export const applicationsByNationalityCategoryAndBatch = /* GraphQL */ `query ApplicationsByNationalityCategoryAndBatch(
   $nationalityCategory: Nationality!
   $batch: ModelIntKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -2803,11 +2785,10 @@ export const applicationsByNationalityCategoryAndBatch =
   }
 }
 ` as GeneratedQuery<
-    APITypes.ApplicationsByNationalityCategoryAndBatchQueryVariables,
-    APITypes.ApplicationsByNationalityCategoryAndBatchQuery
-  >;
-export const applicationsByStudentCPRAndGpa =
-  /* GraphQL */ `query ApplicationsByStudentCPRAndGpa(
+  APITypes.ApplicationsByNationalityCategoryAndBatchQueryVariables,
+  APITypes.ApplicationsByNationalityCategoryAndBatchQuery
+>;
+export const applicationsByStudentCPRAndGpa = /* GraphQL */ `query ApplicationsByStudentCPRAndGpa(
   $studentCPR: String!
   $gpa: ModelFloatKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -2861,11 +2842,10 @@ export const applicationsByStudentCPRAndGpa =
   }
 }
 ` as GeneratedQuery<
-    APITypes.ApplicationsByStudentCPRAndGpaQueryVariables,
-    APITypes.ApplicationsByStudentCPRAndGpaQuery
-  >;
-export const applicationsByBatchAndStatus =
-  /* GraphQL */ `query ApplicationsByBatchAndStatus(
+  APITypes.ApplicationsByStudentCPRAndGpaQueryVariables,
+  APITypes.ApplicationsByStudentCPRAndGpaQuery
+>;
+export const applicationsByBatchAndStatus = /* GraphQL */ `query ApplicationsByBatchAndStatus(
   $batch: Int!
   $status: ModelStringKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -2919,11 +2899,10 @@ export const applicationsByBatchAndStatus =
   }
 }
 ` as GeneratedQuery<
-    APITypes.ApplicationsByBatchAndStatusQueryVariables,
-    APITypes.ApplicationsByBatchAndStatusQuery
-  >;
-export const applicationsByScoreAndStatus =
-  /* GraphQL */ `query ApplicationsByScoreAndStatus(
+  APITypes.ApplicationsByBatchAndStatusQueryVariables,
+  APITypes.ApplicationsByBatchAndStatusQuery
+>;
+export const applicationsByScoreAndStatus = /* GraphQL */ `query ApplicationsByScoreAndStatus(
   $score: Float!
   $status: ModelStringKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -2977,11 +2956,10 @@ export const applicationsByScoreAndStatus =
   }
 }
 ` as GeneratedQuery<
-    APITypes.ApplicationsByScoreAndStatusQueryVariables,
-    APITypes.ApplicationsByScoreAndStatusQuery
-  >;
-export const applicationsByProcessedAndBatch =
-  /* GraphQL */ `query ApplicationsByProcessedAndBatch(
+  APITypes.ApplicationsByScoreAndStatusQueryVariables,
+  APITypes.ApplicationsByScoreAndStatusQuery
+>;
+export const applicationsByProcessedAndBatch = /* GraphQL */ `query ApplicationsByProcessedAndBatch(
   $processed: Int!
   $batch: ModelIntKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3035,11 +3013,10 @@ export const applicationsByProcessedAndBatch =
   }
 }
 ` as GeneratedQuery<
-    APITypes.ApplicationsByProcessedAndBatchQueryVariables,
-    APITypes.ApplicationsByProcessedAndBatchQuery
-  >;
-export const universitiesByIsExtendedAndName =
-  /* GraphQL */ `query UniversitiesByIsExtendedAndName(
+  APITypes.ApplicationsByProcessedAndBatchQueryVariables,
+  APITypes.ApplicationsByProcessedAndBatchQuery
+>;
+export const universitiesByIsExtendedAndName = /* GraphQL */ `query UniversitiesByIsExtendedAndName(
   $isExtended: Int!
   $name: ModelStringKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3078,11 +3055,10 @@ export const universitiesByIsExtendedAndName =
   }
 }
 ` as GeneratedQuery<
-    APITypes.UniversitiesByIsExtendedAndNameQueryVariables,
-    APITypes.UniversitiesByIsExtendedAndNameQuery
-  >;
-export const universitiesByIsException =
-  /* GraphQL */ `query UniversitiesByIsException(
+  APITypes.UniversitiesByIsExtendedAndNameQueryVariables,
+  APITypes.UniversitiesByIsExtendedAndNameQuery
+>;
+export const universitiesByIsException = /* GraphQL */ `query UniversitiesByIsException(
   $isException: Int!
   $sortDirection: ModelSortDirection
   $filter: ModelUniversityFilterInput
@@ -3119,11 +3095,10 @@ export const universitiesByIsException =
   }
 }
 ` as GeneratedQuery<
-    APITypes.UniversitiesByIsExceptionQueryVariables,
-    APITypes.UniversitiesByIsExceptionQuery
-  >;
-export const studentsByNationalityCategoryAndGraduationDate =
-  /* GraphQL */ `query StudentsByNationalityCategoryAndGraduationDate(
+  APITypes.UniversitiesByIsExceptionQueryVariables,
+  APITypes.UniversitiesByIsExceptionQuery
+>;
+export const studentsByNationalityCategoryAndGraduationDate = /* GraphQL */ `query StudentsByNationalityCategoryAndGraduationDate(
   $nationalityCategory: Nationality!
   $graduationDate: ModelStringKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3189,11 +3164,10 @@ export const studentsByNationalityCategoryAndGraduationDate =
   }
 }
 ` as GeneratedQuery<
-    APITypes.StudentsByNationalityCategoryAndGraduationDateQueryVariables,
-    APITypes.StudentsByNationalityCategoryAndGraduationDateQuery
-  >;
-export const studentsByM_universityID =
-  /* GraphQL */ `query StudentsByM_universityID(
+  APITypes.StudentsByNationalityCategoryAndGraduationDateQueryVariables,
+  APITypes.StudentsByNationalityCategoryAndGraduationDateQuery
+>;
+export const studentsByM_universityID = /* GraphQL */ `query StudentsByM_universityID(
   $m_universityID: ID!
   $sortDirection: ModelSortDirection
   $filter: ModelStudentFilterInput
@@ -3257,11 +3231,10 @@ export const studentsByM_universityID =
   }
 }
 ` as GeneratedQuery<
-    APITypes.StudentsByM_universityIDQueryVariables,
-    APITypes.StudentsByM_universityIDQuery
-  >;
-export const scholarshipsByApplicationID =
-  /* GraphQL */ `query ScholarshipsByApplicationID(
+  APITypes.StudentsByM_universityIDQueryVariables,
+  APITypes.StudentsByM_universityIDQuery
+>;
+export const scholarshipsByApplicationID = /* GraphQL */ `query ScholarshipsByApplicationID(
   $applicationID: ID!
   $sortDirection: ModelSortDirection
   $filter: ModelScholarshipFilterInput
@@ -3302,11 +3275,10 @@ export const scholarshipsByApplicationID =
   }
 }
 ` as GeneratedQuery<
-    APITypes.ScholarshipsByApplicationIDQueryVariables,
-    APITypes.ScholarshipsByApplicationIDQuery
-  >;
-export const scholarshipsByBatchAndStatus =
-  /* GraphQL */ `query ScholarshipsByBatchAndStatus(
+  APITypes.ScholarshipsByApplicationIDQueryVariables,
+  APITypes.ScholarshipsByApplicationIDQuery
+>;
+export const scholarshipsByBatchAndStatus = /* GraphQL */ `query ScholarshipsByBatchAndStatus(
   $batch: Int!
   $status: ModelStringKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3349,11 +3321,10 @@ export const scholarshipsByBatchAndStatus =
   }
 }
 ` as GeneratedQuery<
-    APITypes.ScholarshipsByBatchAndStatusQueryVariables,
-    APITypes.ScholarshipsByBatchAndStatusQuery
-  >;
-export const scholarshipsByStudentCPRAndStatus =
-  /* GraphQL */ `query ScholarshipsByStudentCPRAndStatus(
+  APITypes.ScholarshipsByBatchAndStatusQueryVariables,
+  APITypes.ScholarshipsByBatchAndStatusQuery
+>;
+export const scholarshipsByStudentCPRAndStatus = /* GraphQL */ `query ScholarshipsByStudentCPRAndStatus(
   $studentCPR: String!
   $status: ModelStringKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3396,11 +3367,10 @@ export const scholarshipsByStudentCPRAndStatus =
   }
 }
 ` as GeneratedQuery<
-    APITypes.ScholarshipsByStudentCPRAndStatusQueryVariables,
-    APITypes.ScholarshipsByStudentCPRAndStatusQuery
-  >;
-export const statisticsByBatchAndTotalApplications =
-  /* GraphQL */ `query StatisticsByBatchAndTotalApplications(
+  APITypes.ScholarshipsByStudentCPRAndStatusQueryVariables,
+  APITypes.ScholarshipsByStudentCPRAndStatusQuery
+>;
+export const statisticsByBatchAndTotalApplications = /* GraphQL */ `query StatisticsByBatchAndTotalApplications(
   $batch: Int!
   $totalApplications: ModelIntKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3444,11 +3414,10 @@ export const statisticsByBatchAndTotalApplications =
   }
 }
 ` as GeneratedQuery<
-    APITypes.StatisticsByBatchAndTotalApplicationsQueryVariables,
-    APITypes.StatisticsByBatchAndTotalApplicationsQuery
-  >;
-export const masterApplicationsByIdAndDateTime =
-  /* GraphQL */ `query MasterApplicationsByIdAndDateTime(
+  APITypes.StatisticsByBatchAndTotalApplicationsQueryVariables,
+  APITypes.StatisticsByBatchAndTotalApplicationsQuery
+>;
+export const masterApplicationsByIdAndDateTime = /* GraphQL */ `query MasterApplicationsByIdAndDateTime(
   $id: ID!
   $dateTime: ModelStringKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3499,11 +3468,10 @@ export const masterApplicationsByIdAndDateTime =
   }
 }
 ` as GeneratedQuery<
-    APITypes.MasterApplicationsByIdAndDateTimeQueryVariables,
-    APITypes.MasterApplicationsByIdAndDateTimeQuery
-  >;
-export const masterApplicationsByNationalityCategoryAndBatch =
-  /* GraphQL */ `query MasterApplicationsByNationalityCategoryAndBatch(
+  APITypes.MasterApplicationsByIdAndDateTimeQueryVariables,
+  APITypes.MasterApplicationsByIdAndDateTimeQuery
+>;
+export const masterApplicationsByNationalityCategoryAndBatch = /* GraphQL */ `query MasterApplicationsByNationalityCategoryAndBatch(
   $nationalityCategory: Nationality!
   $batch: ModelIntKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3554,11 +3522,10 @@ export const masterApplicationsByNationalityCategoryAndBatch =
   }
 }
 ` as GeneratedQuery<
-    APITypes.MasterApplicationsByNationalityCategoryAndBatchQueryVariables,
-    APITypes.MasterApplicationsByNationalityCategoryAndBatchQuery
-  >;
-export const masterApplicationsByStudentCPRAndGpa =
-  /* GraphQL */ `query MasterApplicationsByStudentCPRAndGpa(
+  APITypes.MasterApplicationsByNationalityCategoryAndBatchQueryVariables,
+  APITypes.MasterApplicationsByNationalityCategoryAndBatchQuery
+>;
+export const masterApplicationsByStudentCPRAndGpa = /* GraphQL */ `query MasterApplicationsByStudentCPRAndGpa(
   $studentCPR: String!
   $gpa: ModelFloatKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3609,11 +3576,10 @@ export const masterApplicationsByStudentCPRAndGpa =
   }
 }
 ` as GeneratedQuery<
-    APITypes.MasterApplicationsByStudentCPRAndGpaQueryVariables,
-    APITypes.MasterApplicationsByStudentCPRAndGpaQuery
-  >;
-export const masterApplicationsByBatchAndStatus =
-  /* GraphQL */ `query MasterApplicationsByBatchAndStatus(
+  APITypes.MasterApplicationsByStudentCPRAndGpaQueryVariables,
+  APITypes.MasterApplicationsByStudentCPRAndGpaQuery
+>;
+export const masterApplicationsByBatchAndStatus = /* GraphQL */ `query MasterApplicationsByBatchAndStatus(
   $batch: Int!
   $status: ModelStringKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3664,11 +3630,10 @@ export const masterApplicationsByBatchAndStatus =
   }
 }
 ` as GeneratedQuery<
-    APITypes.MasterApplicationsByBatchAndStatusQueryVariables,
-    APITypes.MasterApplicationsByBatchAndStatusQuery
-  >;
-export const masterApplicationsByScoreAndStatus =
-  /* GraphQL */ `query MasterApplicationsByScoreAndStatus(
+  APITypes.MasterApplicationsByBatchAndStatusQueryVariables,
+  APITypes.MasterApplicationsByBatchAndStatusQuery
+>;
+export const masterApplicationsByScoreAndStatus = /* GraphQL */ `query MasterApplicationsByScoreAndStatus(
   $score: Float!
   $status: ModelStringKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3719,11 +3684,10 @@ export const masterApplicationsByScoreAndStatus =
   }
 }
 ` as GeneratedQuery<
-    APITypes.MasterApplicationsByScoreAndStatusQueryVariables,
-    APITypes.MasterApplicationsByScoreAndStatusQuery
-  >;
-export const masterApplicationsByProcessedAndBatch =
-  /* GraphQL */ `query MasterApplicationsByProcessedAndBatch(
+  APITypes.MasterApplicationsByScoreAndStatusQueryVariables,
+  APITypes.MasterApplicationsByScoreAndStatusQuery
+>;
+export const masterApplicationsByProcessedAndBatch = /* GraphQL */ `query MasterApplicationsByProcessedAndBatch(
   $processed: Int!
   $batch: ModelIntKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3774,11 +3738,10 @@ export const masterApplicationsByProcessedAndBatch =
   }
 }
 ` as GeneratedQuery<
-    APITypes.MasterApplicationsByProcessedAndBatchQueryVariables,
-    APITypes.MasterApplicationsByProcessedAndBatchQuery
-  >;
-export const masterStatisticsByBatchAndTotalApplications =
-  /* GraphQL */ `query MasterStatisticsByBatchAndTotalApplications(
+  APITypes.MasterApplicationsByProcessedAndBatchQueryVariables,
+  APITypes.MasterApplicationsByProcessedAndBatchQuery
+>;
+export const masterStatisticsByBatchAndTotalApplications = /* GraphQL */ `query MasterStatisticsByBatchAndTotalApplications(
   $batch: Int!
   $totalApplications: ModelIntKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3822,18 +3785,17 @@ export const masterStatisticsByBatchAndTotalApplications =
   }
 }
 ` as GeneratedQuery<
-    APITypes.MasterStatisticsByBatchAndTotalApplicationsQueryVariables,
-    APITypes.MasterStatisticsByBatchAndTotalApplicationsQuery
-  >;
-export const MasterScholarshipsByApplicationID =
-  /* GraphQL */ `query MasterScholarshipsByApplicationID(
+  APITypes.MasterStatisticsByBatchAndTotalApplicationsQueryVariables,
+  APITypes.MasterStatisticsByBatchAndTotalApplicationsQuery
+>;
+export const masterScholarshipsByApplicationID = /* GraphQL */ `query MasterScholarshipsByApplicationID(
   $applicationID: ID!
   $sortDirection: ModelSortDirection
   $filter: ModelMasterScholarshipFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  MasterScholarshipsByApplicationID(
+  masterScholarshipsByApplicationID(
     applicationID: $applicationID
     sortDirection: $sortDirection
     filter: $filter
@@ -3867,11 +3829,10 @@ export const MasterScholarshipsByApplicationID =
   }
 }
 ` as GeneratedQuery<
-    APITypes.MasterScholarshipsByApplicationIDQueryVariables,
-    APITypes.MasterScholarshipsByApplicationIDQuery
-  >;
-export const MasterScholarshipsByBatchAndStatus =
-  /* GraphQL */ `query MasterScholarshipsByBatchAndStatus(
+  APITypes.MasterScholarshipsByApplicationIDQueryVariables,
+  APITypes.MasterScholarshipsByApplicationIDQuery
+>;
+export const masterScholarshipsByBatchAndStatus = /* GraphQL */ `query MasterScholarshipsByBatchAndStatus(
   $batch: Int!
   $status: ModelStringKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3879,7 +3840,7 @@ export const MasterScholarshipsByBatchAndStatus =
   $limit: Int
   $nextToken: String
 ) {
-  MasterScholarshipsByBatchAndStatus(
+  masterScholarshipsByBatchAndStatus(
     batch: $batch
     status: $status
     sortDirection: $sortDirection
@@ -3914,11 +3875,10 @@ export const MasterScholarshipsByBatchAndStatus =
   }
 }
 ` as GeneratedQuery<
-    APITypes.MasterScholarshipsByBatchAndStatusQueryVariables,
-    APITypes.MasterScholarshipsByBatchAndStatusQuery
-  >;
-export const MasterScholarshipsByStudentCPRAndStatus =
-  /* GraphQL */ `query MasterScholarshipsByStudentCPRAndStatus(
+  APITypes.MasterScholarshipsByBatchAndStatusQueryVariables,
+  APITypes.MasterScholarshipsByBatchAndStatusQuery
+>;
+export const masterScholarshipsByStudentCPRAndStatus = /* GraphQL */ `query MasterScholarshipsByStudentCPRAndStatus(
   $studentCPR: String!
   $status: ModelStringKeyConditionInput
   $sortDirection: ModelSortDirection
@@ -3926,7 +3886,7 @@ export const MasterScholarshipsByStudentCPRAndStatus =
   $limit: Int
   $nextToken: String
 ) {
-  MasterScholarshipsByStudentCPRAndStatus(
+  masterScholarshipsByStudentCPRAndStatus(
     studentCPR: $studentCPR
     status: $status
     sortDirection: $sortDirection
@@ -3961,6 +3921,6 @@ export const MasterScholarshipsByStudentCPRAndStatus =
   }
 }
 ` as GeneratedQuery<
-    APITypes.MasterScholarshipsByStudentCPRAndStatusQueryVariables,
-    APITypes.MasterScholarshipsByStudentCPRAndStatusQuery
-  >;
+  APITypes.MasterScholarshipsByStudentCPRAndStatusQueryVariables,
+  APITypes.MasterScholarshipsByStudentCPRAndStatusQuery
+>;

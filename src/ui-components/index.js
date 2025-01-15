@@ -12,14 +12,14 @@ export { default as BahrainUniversitiesCreateForm } from "./BahrainUniversitiesC
 export { default as BahrainUniversitiesUpdateForm } from "./BahrainUniversitiesUpdateForm";
 export { default as BatchCreateForm } from "./BatchCreateForm";
 export { default as BatchUpdateForm } from "./BatchUpdateForm";
+export { default as MasterAppliedUniversitiesCreateForm } from "./MasterAppliedUniversitiesCreateForm";
+export { default as MasterAppliedUniversitiesUpdateForm } from "./MasterAppliedUniversitiesUpdateForm";
 export { default as MasterAttachmentCreateForm } from "./MasterAttachmentCreateForm";
 export { default as MasterAttachmentUpdateForm } from "./MasterAttachmentUpdateForm";
 export { default as MasterBatchCreateForm } from "./MasterBatchCreateForm";
 export { default as MasterBatchUpdateForm } from "./MasterBatchUpdateForm";
 export { default as MasterStatisticsCreateForm } from "./MasterStatisticsCreateForm";
 export { default as MasterStatisticsUpdateForm } from "./MasterStatisticsUpdateForm";
-export { default as MasterUniversitiesCreateForm } from "./MasterUniversitiesCreateForm";
-export { default as MasterUniversitiesUpdateForm } from "./MasterUniversitiesUpdateForm";
 export { default as ParentInfoCreateForm } from "./ParentInfoCreateForm";
 export { default as ParentInfoUpdateForm } from "./ParentInfoUpdateForm";
 export { default as StatisticsCreateForm } from "./StatisticsCreateForm";

@@ -15,18 +15,6 @@
     },
     "s3Key": {
       "Type": "String"
-    },
-    "UserPoolId": {
-      "Type": "String"
-    },
-    "ClientId": {
-      "Type": "String"
-    },
-    "StudentTable": {
-      "Type": "String"
-    },
-    "ParentTable": {
-      "Type": "String"
     }
   },
   "Conditions": {
@@ -59,12 +47,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "signUpMaster",
+            "getApplicationsMaster",
             {
               "Fn::Join": [
                 "",
                 [
-                  "signUpMaster",
+                  "getApplicationsMaster",
                   "-",
                   {
                     "Ref": "env"
@@ -101,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "nccLambdaRoleab2d7ae0",
+            "nccLambdaRole5f784e70",
             {
               "Fn::Join": [
                 "",
                 [
-                  "nccLambdaRoleab2d7ae0",
+                  "nccLambdaRole5f784e70",
                   "-",
                   {
                     "Ref": "env"
@@ -176,6 +164,46 @@
           ]
         }
       }
+    },
+    "CustomLambdaExecutionPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "custom-lambda-execution-policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:UpdateItem",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:DescribeTable",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator"
+              ],
+              "Resource": [
+                "arn:aws:dynamodb:us-east-1:232269327483:table/Application-q4lah3ddkjdd3dwtif26jdkx6e-masterdev",
+                "arn:aws:dynamodb:us-east-1:232269327483:table/Application-q4lah3ddkjdd3dwtif26jdkx6e-masterdev/*",
+                "arn:aws:dynamodb:us-east-1:232269327483:table/AmplifyDataStore-q4lah3ddkjdd3dwtif26jdkx6e-masterdev",
+                "arn:aws:dynamodb:us-east-1:232269327483:table/AmplifyDataStore-q4lah3ddkjdd3dwtif26jdkx6e-masterdev/*"
+              ],
+              "Effect": "Allow"
+            }
+          ]
+        },
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ]
+      },
+      "DependsOn": "LambdaExecutionRole"
     }
   },
   "Outputs": {

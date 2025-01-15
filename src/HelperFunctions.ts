@@ -105,8 +105,41 @@ export interface ApplicationSnapshot {
     signedContract?: string;
   };
 }
+export interface MasterApplicationSnapshotInput {
+  gpa: number | undefined;
+  reason: string | undefined;
+  university?: string;
+  major?: string;
+  program?: string;
 
-// TODO make one for master application
+  // attachments: {
+  //   cpr?: string | undefined;
+  //   transcript?: string | undefined;
+  //   schoolCertificate?: string | undefined;
+  //   signedContract?: string | undefined;
+  // };
+  attachments: {
+    universityCertificate?: string | undefined;
+    transcript?: string | undefined;
+    acceptanceLetter?: string | undefined;
+    toeflIELTSCertificate?: string | undefined;
+  };
+}
+
+export interface MasterApplicationSnapshot {
+  gpa?: string;
+  reason?: string;
+  university?: string;
+  major?: string;
+  program?: string;
+  attachments?: {
+    universityCertificate?: string;
+    transcript?: string;
+    acceptanceLetter?: string;
+    toeflIELTSCertificate?: string;
+  };
+}
+
 export function getStudentApplicationSnapshot(inputData: {
   newApplication: ApplicationSnapshotInput;
   oldApplication?: ApplicationSnapshotInput;
@@ -159,6 +192,78 @@ export function getStudentApplicationSnapshot(inputData: {
           transcript: `Initial submit with transcript ${inputData.newApplication.attachments.transcript}`,
           schoolCertificate: `Initial submit with acceptance ${inputData.newApplication.attachments.schoolCertificate}`,
           signedContract: `Initial submit with signed contract ${inputData.newApplication.attachments.signedContract}`,
+        },
+      };
+
+  return JSON.stringify(snapshot);
+}
+
+export function getMasterStudentApplicationSnapshot(inputData: {
+  newApplication: MasterApplicationSnapshotInput;
+  oldApplication?: MasterApplicationSnapshotInput;
+}): string {
+  let snapshot: MasterApplicationSnapshot = inputData.oldApplication
+    ? {
+        gpa: isEqual(inputData.newApplication.gpa, inputData.oldApplication.gpa)
+          ? undefined
+          : `Changed ${inputData.oldApplication.gpa} to ${inputData.newApplication.gpa}`,
+        reason: isEqual(
+          inputData.newApplication.reason,
+          inputData.oldApplication.reason
+        )
+          ? undefined
+          : `Changed ${inputData.oldApplication.reason} to ${inputData.newApplication.reason}`,
+        university: isEqual(
+          inputData.newApplication.university,
+          inputData.oldApplication.university
+        )
+          ? undefined
+          : `Changed ${inputData.oldApplication.university} to ${inputData.newApplication.university}`,
+        major: isEqual(
+          inputData.newApplication.major,
+          inputData.oldApplication.major
+        )
+          ? undefined
+          : `Changed ${inputData.oldApplication.major} to ${inputData.newApplication.major}`,
+        program: isEqual(
+          inputData.newApplication.program,
+          inputData.oldApplication.program
+        )
+          ? undefined
+          : `Changed ${inputData.oldApplication.program} to ${inputData.newApplication.program}`,
+        attachments: isEqual(
+          inputData.newApplication.attachments,
+          inputData.oldApplication.attachments
+        )
+          ? undefined
+          : {
+              universityCertificate: inputData.newApplication?.attachments
+                ?.universityCertificate
+                ? `Changed ${inputData.oldApplication?.attachments.universityCertificate} to ${inputData.newApplication.attachments.universityCertificate}`
+                : undefined,
+              transcript: inputData.newApplication?.attachments?.transcript
+                ? `Changed ${inputData.oldApplication?.attachments.transcript} to ${inputData.newApplication.attachments.transcript}`
+                : undefined,
+              acceptanceLetter: inputData.newApplication?.attachments
+                ?.acceptanceLetter
+                ? `Changed ${inputData.oldApplication?.attachments.acceptanceLetter} to ${inputData.newApplication.attachments.acceptanceLetter}`
+                : undefined,
+              toeflIELTSCertificate: inputData.newApplication?.attachments
+                ?.toeflIELTSCertificate
+                ? `Changed ${inputData.oldApplication?.attachments.toeflIELTSCertificate} to ${inputData.newApplication.attachments.toeflIELTSCertificate}`
+                : undefined,
+            },
+      }
+    : {
+        gpa: `Initial submit with GPA ${inputData.newApplication.gpa}`,
+        university: `Initial submit with University ${inputData.newApplication.university}`,
+        major: `Initial submit with Major ${inputData.newApplication.major}`,
+        program: `Initial submit with Program ${inputData.newApplication.program}`,
+        attachments: {
+          universityCertificate: `Initial submit with University Certificate ${inputData.newApplication.attachments.universityCertificate}`,
+          transcript: `Initial submit with transcript ${inputData.newApplication.attachments.transcript}`,
+          acceptanceLetter: `Initial submit with acceptance ${inputData.newApplication.attachments.acceptanceLetter}`,
+          toeflIELTSCertificate: `Initial submit with TOEFL/IELTS Certificate ${inputData.newApplication.attachments.toeflIELTSCertificate}`,
         },
       };
 

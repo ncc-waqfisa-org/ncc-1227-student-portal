@@ -182,20 +182,14 @@ export default function MastersSignUpForm({
 
   const signUpMutation = useMutation({
     mutationFn: (values: MasterSignUpData) => {
-      // TODO: TEST
-      return fetch(
-        process.env.NEXT_PUBLIC_LAMBDA_POST_MASTERS_SIGN_UP ?? "",
-        // `https://4e5shhnddic6km63m5jiib7oru0hwcpl.lambda-url.us-east-1.on.aws`,
-        // `https://ciuxdqxmol.execute-api.us-east-1.amazonaws.com/default/masters-sign-up`,
-        {
-          method: "POST",
-          body: JSON.stringify(values),
-          headers: {
-            ...(router.locale && { "Accept-Language": router.locale }),
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      return fetch(process.env.NEXT_PUBLIC_LAMBDA_POST_MASTERS_SIGN_UP ?? "", {
+        method: "POST",
+        body: JSON.stringify(values),
+        headers: {
+          ...(router.locale && { "Accept-Language": router.locale }),
+          "Content-Type": "application/json",
+        },
+      });
     },
     async onSuccess(data) {
       if (data.ok) {

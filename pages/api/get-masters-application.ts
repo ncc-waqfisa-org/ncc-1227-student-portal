@@ -3,13 +3,13 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import {
   Application,
   MasterApplication,
-  MasterUniversities,
+  MasterAppliedUniversities,
   Program,
 } from "../../src/API";
 import {
   // getApplicationData,
   getMasterApplicationData,
-  listAllMasterUniversities,
+  listAllMasterAppliedUniversities,
   // listAllPrograms,
   listMasterScholarshipsOfApplicationId,
   // listScholarshipsOfApplicationId,
@@ -22,7 +22,7 @@ import config from "../../src/aws-exports";
 type Data = {
   application: MasterApplication | null;
   haveScholarship: boolean;
-  universities: MasterUniversities[];
+  universities: MasterAppliedUniversities[];
 };
 
 // Define the API handler function.
@@ -52,11 +52,8 @@ export default async function handler(
     });
   }
 
-  // TODO: use the correct method
   const { username: cpr } = await getCprFromToken(token ? `${token}` : null);
   // const cpr = true;
-
-  console.log(`cpr ${cpr}`);
 
   if (!cpr) {
     return res.status(422).json({
@@ -71,12 +68,11 @@ export default async function handler(
     getMasterApplicationData(`${id}`).then((app) => {
       // TODO: check CPR to verify the ownership of the application
 
-      console.log(app);
       // return app ?? null;
       return app ? (app.studentCPR === cpr ? app : null) : null;
     }),
     listMasterScholarshipsOfApplicationId({ applicationID: `${id}` }),
-    listAllMasterUniversities(),
+    listAllMasterAppliedUniversities(),
   ]);
 
   console.log(applicationData);

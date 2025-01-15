@@ -86,7 +86,7 @@ const Page: NextPageWithLayout = () => {
         bachelorContext.applications.length === 0 &&
         !bachelorContext.newApplicationsEnabled &&
         bachelorContext.batch && (
-          <div className="flex flex-wrap justify-center gap-10">
+          <div className=" flex flex-wrap justify-center gap-10">
             <CardInfoComponent
               icon={info}
               title={"الطلبات الجديدة"}

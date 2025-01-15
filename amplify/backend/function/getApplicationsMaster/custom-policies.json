@@ -1,0 +1,24 @@
+[
+  {
+    "Action": [
+      "dynamodb:BatchGetItem",
+      "dynamodb:BatchWriteItem",
+      "dynamodb:PutItem",
+      "dynamodb:DeleteItem",
+      "dynamodb:GetItem",
+      "dynamodb:Scan",
+      "dynamodb:Query",
+      "dynamodb:UpdateItem",
+      "dynamodb:ConditionCheckItem",
+      "dynamodb:DescribeTable",
+      "dynamodb:GetRecords",
+      "dynamodb:GetShardIterator"
+    ],
+    "Resource": [
+      "arn:aws:dynamodb:us-east-1:232269327483:table/Application-q4lah3ddkjdd3dwtif26jdkx6e-masterdev",
+      "arn:aws:dynamodb:us-east-1:232269327483:table/Application-q4lah3ddkjdd3dwtif26jdkx6e-masterdev/*",
+      "arn:aws:dynamodb:us-east-1:232269327483:table/AmplifyDataStore-q4lah3ddkjdd3dwtif26jdkx6e-masterdev",
+      "arn:aws:dynamodb:us-east-1:232269327483:table/AmplifyDataStore-q4lah3ddkjdd3dwtif26jdkx6e-masterdev/*"
+    ]
+  }
+]

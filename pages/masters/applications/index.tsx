@@ -70,13 +70,12 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <PageComponent title={"MApplications"} authRequired>
-      {mastersContext.isBatchPending ||
-        (isStudentPending && (
-          <div className=" container mx-auto grid grid-cols-1 gap-5 w-full md:grid-cols-2 [grid-auto-rows:1fr] py-8">
-            <SkeletonApplicationCard />
-            <SkeletonApplicationCard />
-          </div>
-        ))}
+      {(mastersContext.isBatchPending || isStudentPending) && (
+        <div className=" container mx-auto grid grid-cols-1 gap-5 w-full md:grid-cols-2 [grid-auto-rows:1fr] py-8">
+          <SkeletonApplicationCard />
+          <SkeletonApplicationCard />
+        </div>
+      )}
 
       {!mastersContext.batch && !mastersContext.isBatchPending && (
         <div className="flex justify-center py-4">

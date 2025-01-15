@@ -6,6 +6,11 @@ const s3 = new AWS.S3({
 const { PDFDocument } = require("pdf-lib");
 const cognito = new AWS.CognitoIdentityServiceProvider();
 
+const { ScholarshipTable: SCHOLARSHIP_TABLE, S3Bucket: S3_BUCKET } = {
+  ScholarshipTable: "Scholarship-q4lah3ddkjdd3dwtif26jdkx6e-masterdev",
+  S3Bucket: "ncc1227bucket2e2e0-masterdev",
+};
+
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
@@ -147,16 +152,15 @@ async function uploadToS3(pdf, studentCPR) {
     studentCPR +
     "#SIGNED_SCHOLARSHIP" +
     new Date().getTime() +
-    ".pdf"; // Set the key of the uploaded file
+    ".pdf";
 
   const params = {
-    Bucket: "ncc1227bucket65406-staging",
+    Bucket: S3_BUCKET,
     Key: `public/${pdfKey}`,
     Body: pdf,
   };
 
   await s3.upload(params).promise();
-  // return the URL of the uploaded file
   return {
     signedPdfUrl: s3.getSignedUrl("getObject", {
       Bucket: params.Bucket,
@@ -185,16 +189,16 @@ async function uploadSignaturesToS3(
   const guardianKey = `Student${studentCPR}/${studentCPR}#GUARDIAN_SIGNATURE${new Date().getTime()}.png`;
 
   const studentSignatureParams = {
-    Bucket: "ncc1227bucket65406-staging",
+    Bucket: S3_BUCKET,
     Key: `public/${studentKey}`,
     Body: studentSignatureData,
-    ContentType: "image/png", // Set content type explicitly
+    ContentType: "image/png",
   };
   const guardianSignatureParams = {
-    Bucket: "ncc1227bucket65406-staging",
+    Bucket: S3_BUCKET,
     Key: `public/${guardianKey}`,
     Body: guardianSignatureData,
-    ContentType: "image/png", // Set content type explicitly
+    ContentType: "image/png",
   };
 
   try {
@@ -228,7 +232,7 @@ async function updateScholarship(
   guardianSignature
 ) {
   const params = {
-    TableName: "Scholarship-cw7beg2perdtnl7onnneec4jfa-staging",
+    TableName: SCHOLARSHIP_TABLE,
     Key: {
       id: scholarshipId,
     },
@@ -254,7 +258,7 @@ async function fetchPdfAsUint8Array(link) {
 
 async function getScholarship(scholarshipId) {
   const params = {
-    TableName: "Scholarship-cw7beg2perdtnl7onnneec4jfa-staging",
+    TableName: SCHOLARSHIP_TABLE,
     Key: {
       id: scholarshipId,
     },

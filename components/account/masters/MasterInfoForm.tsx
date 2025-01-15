@@ -181,7 +181,7 @@ export default function MasterInfoForm({
       // guardian_full_name: string;
       // guardian_cpr_doc?: string;
 
-      //   TODO: update with graphql
+      //   TODO: Test
       let studentData: UpdateStudentMutationVariables = {
         input: {
           // prefilled
@@ -232,16 +232,6 @@ export default function MasterInfoForm({
     if (!student) {
       throw new Error(`CODE:00098 ${"Applicant data is missing"}`);
     }
-
-    // if (data.cpr_doc == undefined || docs.cpr_doc == undefined) {
-    // }
-    // if (data.income_doc == undefined || docs.income_doc == undefined) {
-    // }
-    // if (
-    //   data.guardian_cpr_doc == undefined ||
-    //   docs.guardian_cpr_doc == undefined
-    // ) {
-    // }
 
     // TODO test update doc
 
@@ -551,42 +541,6 @@ export default function MasterInfoForm({
                     value={student?.placeOfBirth}
                   />
                 </div>
-
-                {/* <div className="flex flex-col justify-start w-full">
-                  <div className="flex items-center">
-                    <label className="label">{t("nationality")}</label>
-                    <label className="text-error label">*</label>{" "}
-                  </div>
-                  <Field
-                    dir="ltr"
-                    as="select"
-                    name="nationality"
-                    title="nationality"
-                    placeholder={t("nationality")}
-                    disabled={!editingApplicationsEnabled}
-                    className={`input input-bordered input-primary ${
-                      errors.nationality && touched.nationality && "input-error"
-                    }`}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.nationality}
-                  >
-                    <option disabled value={undefined}>
-                      {t("select")}
-                    </option>
-                    <option value={Nationality.BAHRAINI}>
-                      {t(Nationality.BAHRAINI)}
-                    </option>
-                    <option value={Nationality.NON_BAHRAINI}>
-                      {t(Nationality.NON_BAHRAINI)}
-                    </option>
-                  </Field>
-                  <label className="pt-2 label-text-alt text-error">
-                    {errors.nationality &&
-                      touched.nationality &&
-                      errors.nationality}
-                  </label>
-                </div> */}
 
                 <div className="flex flex-col justify-start w-full">
                   <div className="flex items-center">

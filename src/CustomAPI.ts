@@ -30,7 +30,7 @@ import {
   MasterScholarshipsByApplicationIDQueryVariables,
   MasterScholarshipsByStudentCPRAndStatusQuery,
   MasterScholarshipsByStudentCPRAndStatusQueryVariables,
-  MasterUniversities,
+  MasterAppliedUniversities,
   Program,
   Scholarship,
   University,
@@ -76,8 +76,8 @@ import dayjs from "dayjs";
 import {
   // getMasterScholarship,
   getStudent,
-  MasterScholarshipsByApplicationID,
-  MasterScholarshipsByStudentCPRAndStatus,
+  masterScholarshipsByApplicationID,
+  masterScholarshipsByStudentCPRAndStatus,
 } from "./graphql/queries";
 
 /* -------------------------------------------------------------------------- */
@@ -630,7 +630,7 @@ query MasterScholarshipsByStudentCPRAndStatus {
     graphqlOperation(q)
   )) as GraphQLResult<MasterScholarshipsByStudentCPRAndStatusQuery>;
 
-  return (res.data?.MasterScholarshipsByStudentCPRAndStatus?.items ??
+  return (res.data?.masterScholarshipsByStudentCPRAndStatus?.items ??
     []) as MasterScholarship[];
 }
 
@@ -836,10 +836,10 @@ export async function listAllPrograms() {
   return programs;
 }
 
-export async function listAllMasterUniversities() {
+export async function listAllMasterAppliedUniversities() {
   let q = `
-  query ListAllMasterUniversities {
-    listMasterUniversities(limit: 9999999) {
+  query ListAllMasterAppliedUniversities {
+    listMasterAppliedUniversities(limit: 9999999) {
       items {
         id
         universityName
@@ -854,8 +854,8 @@ export async function listAllMasterUniversities() {
 
   let res = (await API.graphql(graphqlOperation(q))) as GraphQLResult<any>; // your fetch function here
 
-  let universities = res.data?.listMasterUniversities
-    .items as MasterUniversities[];
+  let universities = res.data?.listMasterAppliedUniversities
+    .items as MasterAppliedUniversities[];
   return universities;
 }
 
@@ -1161,11 +1161,11 @@ export async function listMasterScholarshipsOfApplicationId(
   queryVariables: MasterScholarshipsByApplicationIDQueryVariables
 ): Promise<MasterScholarship[]> {
   let res = (await API.graphql({
-    query: MasterScholarshipsByApplicationID,
+    query: masterScholarshipsByApplicationID,
     variables: queryVariables,
   })) as GraphQLResult<MasterScholarshipsByApplicationIDQuery>;
 
-  return (res.data?.MasterScholarshipsByApplicationID?.items ??
+  return (res.data?.masterScholarshipsByApplicationID?.items ??
     []) as MasterScholarship[];
 }
 

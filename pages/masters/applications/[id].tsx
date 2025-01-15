@@ -6,7 +6,7 @@ import {
   Batch,
   MasterApplication,
   MasterBatch,
-  MasterUniversities,
+  MasterAppliedUniversities,
   Program,
   Status,
   Student,
@@ -86,7 +86,7 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
 
   const { data, isPending } = useQuery<{
     application: MasterApplication | null;
-    universities: MasterUniversities[];
+    universities: MasterAppliedUniversities[];
     haveScholarship: boolean;
   }>({
     queryKey: ["masterApplicationData", token, id],
@@ -115,7 +115,7 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
 
   return (
     <PageComponent title={"MApplication"} authRequired>
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-3xl my-3">
         {(data?.application?.status === Status.REVIEW ||
           data?.application?.status === Status.NOT_COMPLETED ||
           data?.application?.status === Status.ELIGIBLE) &&

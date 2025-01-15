@@ -105,7 +105,7 @@ const SignUpPage: NextPageWithLayout<Props> = () => {
   return (
     <PageComponent title="SignUp">
       {showCards && (
-        <div className="grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto place-items-center md:grid-cols-2">
+        <div className=" my-3 grid w-full max-w-4xl grid-cols-1 gap-10 mx-auto place-items-center md:grid-cols-2">
           {signUpEnabled ? (
             <CardInfoComponent
               icon={logs}

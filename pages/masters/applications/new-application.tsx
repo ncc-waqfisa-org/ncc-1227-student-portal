@@ -1,8 +1,8 @@
 import React, { ReactElement } from "react";
 import { PageComponent } from "../../../components/PageComponent";
 import { GetServerSideProps } from "next";
-import { listAllMasterUniversities } from "../../../src/CustomAPI";
-import { ApplicantType, MasterUniversities } from "../../../src/API";
+import { listAllMasterAppliedUniversities } from "../../../src/CustomAPI";
+import { ApplicantType, MasterAppliedUniversities } from "../../../src/API";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
@@ -26,7 +26,7 @@ import { Skeleton } from "../../../components/Skeleton";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { locale } = ctx;
-  const universities = await listAllMasterUniversities();
+  const universities = await listAllMasterAppliedUniversities();
 
   return {
     props: {
@@ -45,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 };
 
 interface Props {
-  universities: MasterUniversities[];
+  universities: MasterAppliedUniversities[];
 }
 
 const NewApplicationPage: NextPageWithLayout<Props> = (props) => {
@@ -82,7 +82,7 @@ const NewApplicationPage: NextPageWithLayout<Props> = (props) => {
       )}
 
       {isMasterApplicant && !isStudentPending && (
-        <div>
+        <div className=" py-3">
           {newApplicationsEnabled ? (
             <div>
               {!haveActiveApplication && (
