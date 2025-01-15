@@ -203,7 +203,8 @@ export default function MastersSignUpForm({
         });
       } else {
         const { message } = await data.json();
-        throw new Error(message);
+        toast.error(message);
+        // throw new Error(message);
       }
     },
     async onError(error) {
@@ -728,15 +729,20 @@ export default function MastersSignUpForm({
                         "isEmployed",
                         v.currentTarget.value === "true"
                       );
+
+                      //TODO
+                      if (v.currentTarget.value && docs.income_doc) {
+                        values.income_doc = undefined;
+                      }
                     }}
                     onBlur={handleBlur}
                     value={values.isEmployed.toString()}
                   >
-                    <option disabled selected value={undefined}>
+                    <option disabled selected value={""}>
                       {t("select")}
                     </option>
-                    <option value={"true"}>{t("employed")}</option>
                     <option value={"false"}>{t("unemployed")}</option>
+                    <option value={"true"}>{t("employed")}</option>
                   </Field>
                   <label className="pt-2 label-text-alt text-error">
                     {errors.isEmployed &&
