@@ -9,6 +9,7 @@ type Data = {
 
 // TODO: scholarship id should be added
 type InputData = {
+  // id: string;
   link: string; //TODO this should be replaced by the id and have to be taken from the scholarship
   studentSignature: string;
   guardianSignature: string;
