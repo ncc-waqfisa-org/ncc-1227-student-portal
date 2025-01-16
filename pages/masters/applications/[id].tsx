@@ -2,24 +2,17 @@ import { GetServerSideProps } from "next";
 import React, { ReactElement, useState } from "react";
 import { PageComponent } from "../../../components/PageComponent";
 import {
-  Application,
-  Batch,
   MasterApplication,
-  MasterBatch,
   MasterAppliedUniversities,
-  Program,
   Status,
   Student,
 } from "../../../src/API";
-import ViewApplication from "../../../components/applications/ViewApplication";
-import { ApplicationForm } from "../../../components/applications/ApplicationForm";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import GetStorageLinkComponent from "../../../components/get-storage-link-component";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../../hooks/use-auth";
-import dayjs from "dayjs";
 import { NextPageWithLayout } from "../../_app";
 import { useAppContext } from "../../../contexts/AppContexts";
 import {
@@ -28,7 +21,6 @@ import {
 } from "../../../contexts/MastersContexts";
 import { MastersApplicationForm } from "../../../components/applications/MastersApplicationForm";
 import ViewMasterApplication from "../../../components/applications/ViewMasterApplication";
-import { stringify } from "querystring";
 
 interface Props {
   id: string | null;
@@ -76,6 +68,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 const Page: NextPageWithLayout<Props> = ({ id }) => {
   const { t } = useTranslation("applicationPage");
+  const { t: tToast } = useTranslation("toast");
   const [isEdit, setIsEdit] = useState(false);
   const { student: studentData } = useAppContext();
 
@@ -116,12 +109,15 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
   return (
     <PageComponent title={"MApplication"} authRequired>
       <div className="mx-auto max-w-3xl my-3">
-        {(data?.application?.status === Status.REVIEW ||
-          data?.application?.status === Status.NOT_COMPLETED ||
-          data?.application?.status === Status.ELIGIBLE) &&
-          (data?.application?.batch ?? -1) >= (batch?.batch ?? 0) &&
-          editingApplicationsEnabled && (
-            <div className="flex justify-end mb-3">
+        <div className="flex justify-between mb-3">
+          <div>
+            <p className="w-full text-xl stat-value">{t("applicationTitle")}</p>
+          </div>
+          {(data?.application?.status === Status.REVIEW ||
+            data?.application?.status === Status.NOT_COMPLETED ||
+            data?.application?.status === Status.ELIGIBLE) &&
+            (data?.application?.batch ?? -1) >= (batch?.batch ?? 0) &&
+            editingApplicationsEnabled && (
               <button
                 className="btn btn-sm btn-outline btn-primary"
                 onClick={() => setIsEdit(!isEdit)}
@@ -129,8 +125,8 @@ const Page: NextPageWithLayout<Props> = ({ id }) => {
               >
                 {isEdit ? t("view") : t("edit")}
               </button>
-            </div>
-          )}
+            )}
+        </div>
       </div>
       <div className="mx-auto max-w-3xl">
         {data?.application && !isEdit && (

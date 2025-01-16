@@ -4,16 +4,10 @@ import React, { FC, ReactNode, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
-import {
-  DocType,
-  updateMasterApplicationInDB,
-  updateStudentInDB,
-  uploadFile,
-} from "../../../src/CustomAPI";
+import { DocType, updateStudentInDB, uploadFile } from "../../../src/CustomAPI";
 
 import { useMutation } from "@tanstack/react-query";
 import {
-  ApplicantType,
   Income,
   MasterUpdateData,
   MasterUpdateFormSchema,
@@ -26,14 +20,12 @@ import { cn } from "../../../src/lib/utils";
 import { PhoneNumberInput } from "../../phone";
 import {
   BahrainUniversities,
-  Gender,
-  Nationality,
-  UpdateMasterApplicationMutationVariables,
   UpdateStudentMutationVariables,
 } from "../../../src/API";
 import { useAppContext } from "../../../contexts/AppContexts";
 import GetStorageLinkComponent from "../../get-storage-link-component";
 import { useMastersContext } from "../../../contexts/MastersContexts";
+import { checkIfFilesAreTooBig } from "../../../src/HelperFunctions";
 
 // Add an optional readOnly that will disable all fields and remove the update button
 export default function MasterInfoForm({
@@ -59,6 +51,7 @@ export default function MasterInfoForm({
   const [docs, setDocs] = useState<{ [key: string]: File | null }>({
     cpr_doc: null,
     income_doc: null,
+    guardian_cpr_doc: null,
   });
 
   const initialValues: MasterUpdateFormSchema = {
@@ -70,6 +63,8 @@ export default function MasterInfoForm({
     phone: student?.phone ?? "",
 
     number_of_family_member: student?.m_numberOfFamilyMembers ?? 1,
+
+    universityID: student?.m_universityID ?? "",
     graduation_year: student?.m_graduationYear ?? "",
     old_program: student?.m_oldProgram ?? "",
 
@@ -81,11 +76,6 @@ export default function MasterInfoForm({
     cpr_doc: undefined,
     income_doc: undefined,
     guardian_cpr_doc: undefined,
-
-    // gender: student?.gender ?? "",
-    // place_of_birth: student?.placeOfBirth ?? "",
-    // nationality: student?.nationalityCategory ?? "",
-    universityID: student?.m_universityID ?? "",
 
     guardian_cpr: student?.m_guardianCPR ?? "",
     guardian_full_name: student?.m_guardianFullName ?? "",
@@ -147,58 +137,24 @@ export default function MasterInfoForm({
 
   const updateMutation = useMutation({
     mutationFn: (values: MasterUpdateData) => {
-      // Personal data
-      // id: string;
-      // version: number;
-      // cpr_doc?: string;
-
-      // first_name: string;
-      // second_name: string;
-      // last_name: string;
-      // address: string;
-
-      // phone: string;
-      // // gender: string;
-      // // place_of_birth: string;
-      // // nationality: string;
-      // number_of_family_member: number;
-
-      // // Graduated from
-      // graduation_year: string;
-      // universityID: string;
-      // old_program: string;
-
-      // // Employment info
-      // isEmployed: boolean;
-      // place_of_employment: string | null;
-
-      // // Personal income or guardian income based on employment
-      // income: Income;
-      // income_doc?: string;
-
-      // // Guardian data
-      // guardian_cpr: string;
-      // guardian_full_name: string;
-      // guardian_cpr_doc?: string;
-
-      //   TODO: Test
       let studentData: UpdateStudentMutationVariables = {
         input: {
           // prefilled
           cpr: student?.cpr ?? "",
           _version: student?._version,
 
+          cprDoc: values.cpr_doc,
           m_firstName: values.first_name,
           m_secondName: values.second_name,
           m_lastName: values.last_name,
-          m_isEmployed: values.isEmployed,
           m_graduationYear: values.graduation_year,
           m_guardianCPR: values.guardian_cpr,
           m_guardianCPRDoc: values.guardian_cpr_doc,
           m_guardianFullName: values.guardian_full_name,
           address: values.address,
           m_income: values.income,
-          // m_incomeDoc: values.income_doc,
+          m_incomeDoc: values.income_doc,
+          m_isEmployed: values.isEmployed,
           m_numberOfFamilyMembers: values.number_of_family_member,
           m_oldProgram: values.old_program,
           m_placeOfEmployment: values.place_of_employment,
@@ -207,12 +163,18 @@ export default function MasterInfoForm({
       };
 
       let res = updateStudentInDB(studentData);
+      console.log(
+        `MasterInfoForm => updateMutation - updateStudentInDB = ${JSON.stringify(
+          res
+        )}`
+      );
 
       return res;
     },
     async onSuccess(data) {
       if (data?.updateStudent?.cpr) {
         syncStudent();
+        console.log("Successfully updated master student information");
         toast.success(`${tToast("processComplete")}`);
       } else {
         throw new Error(`${tErrors("somethingWentWrong")}`);
@@ -230,10 +192,9 @@ export default function MasterInfoForm({
     setIsLoading(true);
 
     if (!student) {
-      throw new Error(`CODE:00098 ${"Applicant data is missing"}`);
+      throw new Error(`CODE:00098 ${tErrors("applicantDataMissing")}`);
+      // throw new Error(`CODE:00098 ${"Applicant data is missing"}`);
     }
-
-    // TODO test update doc
 
     /**
      * Upload all documents to S3 with the applicant CPR
@@ -281,7 +242,11 @@ export default function MasterInfoForm({
       guardian_cpr_doc,
     };
 
+    console.log(`dataToSend ${JSON.stringify(dataToSend)}`);
+
     setMasterUpdateData(data);
+
+    console.log(`Master Update data = ${JSON.stringify(masterUpdateData)}`);
 
     await updateMutation.mutateAsync(dataToSend);
   }
@@ -385,6 +350,19 @@ export default function MasterInfoForm({
                       cpr_doc: file,
                     })
                   }
+                  // handleChange={(event: any) => {
+                  //   let file: File | undefined = event.currentTarget.files[0];
+
+                  //   let isValid = checkIfFilesAreTooBig(file);
+                  //   if (isValid) {
+                  //     handleChange(event);
+                  //   } else {
+                  //     setFieldError(
+                  //       "cprDoc",
+                  //       tToast("fileIsTooLarge") ?? "File is too large"
+                  //     );
+                  //   }
+                  // }}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
                   setFieldError={setFieldError}
@@ -607,7 +585,7 @@ export default function MasterInfoForm({
                     value={values.universityID}
                     disabled={!editingApplicationsEnabled}
                   >
-                    <option disabled selected value={undefined}>
+                    <option disabled selected value={""}>
                       {t("select")}
                     </option>
                     {universities?.map((uni, index) => (
@@ -690,7 +668,7 @@ export default function MasterInfoForm({
                     onBlur={handleBlur}
                     value={values.isEmployed.toString()}
                   >
-                    <option disabled selected value={undefined}>
+                    <option disabled selected value={""}>
                       {t("select")}
                     </option>
                     <option value={"true"}>{t("employed")}</option>
@@ -707,7 +685,9 @@ export default function MasterInfoForm({
                   <>
                     <LabelField
                       title={t("placeOfEmployment")}
-                      value={values.place_of_employment}
+                      value={
+                        values.isEmployed ? values.place_of_employment : ""
+                      }
                       errors={errors.place_of_employment}
                       touched={touched.place_of_employment}
                       fieldName={"place_of_employment"}
@@ -737,7 +717,7 @@ export default function MasterInfoForm({
                         onBlur={handleBlur}
                         value={values.income}
                       >
-                        <option disabled selected value={undefined}>
+                        <option disabled selected value={""}>
                           {t("select")}
                         </option>
                         <option value={Income.LESS_THAN_1500}>
@@ -806,7 +786,7 @@ export default function MasterInfoForm({
                   disabled={!editingApplicationsEnabled}
                 />
                 <LabelField
-                  value={values.guardian_cpr_doc}
+                  value={values.guardian_cpr_doc?.toString()}
                   errors={errors.guardian_cpr_doc}
                   touched={touched.guardian_cpr_doc}
                   title={t("guardianCprDoc")}
@@ -852,7 +832,7 @@ export default function MasterInfoForm({
                         onBlur={handleBlur}
                         value={values.income}
                       >
-                        <option disabled selected value={undefined}>
+                        <option disabled selected value={""}>
                           {t("select")}
                         </option>
                         <option value={Income.LESS_THAN_1500}>
@@ -873,14 +853,26 @@ export default function MasterInfoForm({
                       touched={touched.income_doc}
                       fieldName={"income_doc"}
                       type="file"
-                      onFile={(file) =>
-                        setDocs({
-                          ...docs,
-                          income_doc: file,
-                        })
+                      onFile={
+                        (file) =>
+                          setDocs({
+                            ...docs,
+                            income_doc: file,
+                          })
+
+                        // Update the docs state
+                        // {
+                        //   setDocs((prev) => ({
+                        //     ...prev,
+                        //     income_doc: file,
+                        //   }));
+
+                        //   // Update Formik's state
+                        //   setFieldValue("income_doc", file?.name || "");
+                        // }
                       }
                       disabled={!editingApplicationsEnabled}
-                      handleChange={handleChange}
+                      handleChange={() => {}}
                       handleBlur={handleBlur}
                       setFieldError={setFieldError}
                       setFieldValue={setFieldValue}
@@ -1090,6 +1082,118 @@ type TLabelField = {
   labelComponent?: ReactNode;
 };
 
+// const LabelField: FC<TLabelField> = ({
+//   errors,
+//   touched,
+//   value,
+//   handleChange,
+//   handleBlur,
+//   title,
+//   type = "text",
+//   fieldName,
+//   setFieldError,
+//   setFieldValue,
+//   onFile,
+//   labelComponent,
+//   disabled,
+// }) => {
+//   return (
+//     <div className="flex flex-col justify-start w-full">
+//       <div className="flex items-center">
+//         <label className="w-full h-10 label">
+//           <div className="flex gap-2 justify-between w-full">
+//             <p className="inline-flex gap-1">
+//               {title}
+
+//               {type !== "file" && <span className="text-error">*</span>}
+//             </p>
+//             <div className="text-end">{labelComponent}</div>
+//           </div>
+//         </label>
+//       </div>
+
+//       {type === "phone" && (
+//         <PhoneNumberInput
+//           type={type}
+//           name={fieldName}
+//           title={fieldName}
+//           placeholder={title}
+//           className={cn(
+//             "input input-bordered input-primary",
+//             errors && touched && "input-error"
+//           )}
+//           onChange={(val) => setFieldValue(fieldName, (val ?? "")?.toString())}
+//           onBlur={handleBlur}
+//           value={value}
+//           disabled={disabled}
+//         />
+//       )}
+//       {type !== "phone" && (
+//         <Field
+//           className={cn(
+//             type === "file"
+//               ? "file-input file-input-bordered file-input-primary"
+//               : "input input-bordered input-primary",
+
+//             errors && touched && "input-error"
+//           )}
+//           disabled={disabled}
+//           type={type}
+//           name={fieldName}
+//           title={fieldName}
+//           placeholder={title}
+//           onBlur={handleBlur}
+//           value={value}
+//           onChange={(e: any) => {
+//             if (type === "file") {
+//               const reader = new FileReader();
+//               const file: File = e.target.files[0];
+
+//               reader.onload = () => {
+//                 if (reader.readyState === 2) {
+//                   // Check file size (2MB = 2 * 1024 * 1024 bytes)
+//                   if (file.size > 2 * 1024 * 1024) {
+//                     setFieldError(fieldName, "File size must be less than 2MB");
+//                     return;
+//                   }
+
+//                   // Check file type
+//                   const allowedTypes = [
+//                     "image/jpeg", // Allow JPEG images
+//                     "image/png", // Allow PNG images
+//                     "application/pdf", // Allow PDFs
+//                     "application/msword", // Allow old Word documents (.doc)
+//                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // Allow modern Word documents (.docx)
+//                   ];
+
+//                   if (!allowedTypes.includes(file.type)) {
+//                     setFieldError(
+//                       fieldName,
+//                       "File must be an image, PDF or DOC"
+//                     );
+//                     return;
+//                   }
+
+//                   onFile && onFile(file);
+//                 }
+//               };
+
+//               if (file) {
+//                 reader.readAsDataURL(file);
+//               }
+//             }
+
+//             handleChange(e);
+//           }}
+//         />
+//       )}
+//       <label className="pt-2 label-text-alt text-error">
+//         {errors && touched && errors}
+//       </label>
+//     </div>
+//   );
+// };
+
 const LabelField: FC<TLabelField> = ({
   errors,
   touched,
@@ -1112,7 +1216,6 @@ const LabelField: FC<TLabelField> = ({
           <div className="flex gap-2 justify-between w-full">
             <p className="inline-flex gap-1">
               {title}
-
               {type !== "file" && <span className="text-error">*</span>}
             </p>
             <div className="text-end">{labelComponent}</div>
@@ -1120,7 +1223,53 @@ const LabelField: FC<TLabelField> = ({
         </label>
       </div>
 
-      {type === "phone" && (
+      {type === "file" ? (
+        // Separate handling for file input
+        <Field>
+          {({ form }: any) => (
+            <input
+              className={cn(
+                "file-input file-input-bordered file-input-primary",
+                errors && touched && "input-error"
+              )}
+              disabled={disabled}
+              type="file"
+              name={fieldName}
+              title={fieldName}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  // Check file size (2MB = 2 * 1024 * 1024 bytes)
+                  if (file.size > 2 * 1024 * 1024) {
+                    setFieldError(fieldName, "File size must be less than 2MB");
+                    return;
+                  }
+
+                  // Check file type
+                  const allowedTypes = [
+                    "image/jpeg",
+                    "image/png",
+                    "application/pdf",
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                  ];
+
+                  if (!allowedTypes.includes(file.type)) {
+                    setFieldError(
+                      fieldName,
+                      "File must be an image, PDF or DOC"
+                    );
+                    return;
+                  }
+
+                  onFile?.(file);
+                }
+              }}
+              onBlur={handleBlur}
+            />
+          )}
+        </Field>
+      ) : type === "phone" ? (
         <PhoneNumberInput
           type={type}
           name={fieldName}
@@ -1135,14 +1284,11 @@ const LabelField: FC<TLabelField> = ({
           value={value}
           disabled={disabled}
         />
-      )}
-      {type !== "phone" && (
+      ) : (
+        // Regular input handling
         <Field
           className={cn(
-            type === "file"
-              ? "file-input file-input-bordered file-input-primary"
-              : "input input-bordered input-primary",
-
+            "input input-bordered input-primary",
             errors && touched && "input-error"
           )}
           disabled={disabled}
@@ -1152,49 +1298,10 @@ const LabelField: FC<TLabelField> = ({
           placeholder={title}
           onBlur={handleBlur}
           value={value}
-          onChange={(e: any) => {
-            if (type === "file") {
-              const reader = new FileReader();
-              const file: File = e.target.files[0];
-
-              reader.onload = () => {
-                if (reader.readyState === 2) {
-                  // Check file size (2MB = 2 * 1024 * 1024 bytes)
-                  if (file.size > 2 * 1024 * 1024) {
-                    setFieldError(fieldName, "File size must be less than 2MB");
-                    return;
-                  }
-
-                  // Check file type
-                  const allowedTypes = [
-                    "image/jpeg", // Allow JPEG images
-                    "image/png", // Allow PNG images
-                    "application/pdf", // Allow PDFs
-                    "application/msword", // Allow old Word documents (.doc)
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // Allow modern Word documents (.docx)
-                  ];
-
-                  if (!allowedTypes.includes(file.type)) {
-                    setFieldError(
-                      fieldName,
-                      "File must be an image, PDF or DOC"
-                    );
-                    return;
-                  }
-
-                  onFile && onFile(file);
-                }
-              };
-
-              if (file) {
-                reader.readAsDataURL(file);
-              }
-            }
-
-            handleChange(e);
-          }}
+          onChange={handleChange}
         />
       )}
+
       <label className="pt-2 label-text-alt text-error">
         {errors && touched && errors}
       </label>

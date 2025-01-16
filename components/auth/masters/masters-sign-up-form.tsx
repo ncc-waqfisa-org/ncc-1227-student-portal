@@ -730,7 +730,6 @@ export default function MastersSignUpForm({
                         v.currentTarget.value === "true"
                       );
 
-                      //TODO
                       if (v.currentTarget.value && docs.income_doc) {
                         values.income_doc = undefined;
                       }

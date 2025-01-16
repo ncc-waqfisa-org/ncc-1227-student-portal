@@ -706,7 +706,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
           onSubmit={async (values, actions) => {
             await toast.promise(handleSubmit({ values, actions }), {
               loading: t("processing"),
-              success: t("proccessComplete"),
+              success: t("processComplete"),
               error: (error) =>
                 error.message
                   ? `${error.message}`
@@ -959,7 +959,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                       />
                     </div>
                   </div>
-                  {/* TODO: see if there is a minimumGPA for master universities */}
+
                   {/* {university?.minimumGPA && (
                     <div
                       className={cn(
@@ -988,7 +988,7 @@ export const MastersApplicationForm: FC<Props> = (props) => {
                       </label>
                     </div>
                   )} */}
-                  {/* TODO: see if there is requirements have to be met for master universities */}
+
                   {/* {(university?.requirements || university?.requirementsAr) && (
                     <div className="p-3 mt-2 rounded-md border border-gray-300">
                       <div className="stat-title">{t("requirements")}</div>

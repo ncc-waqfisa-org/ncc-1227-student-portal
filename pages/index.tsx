@@ -64,8 +64,6 @@ const Home = ({ type: initialType }: HomeProps) => {
         const isMasterApplicant =
           student?.m_applicantType.includes(ApplicantType.MASTER) ?? false;
 
-        console.log(`isMasterApplicant ${isMasterApplicant}`);
-
         if (isMasterApplicant) {
           setType("masters");
         } else {

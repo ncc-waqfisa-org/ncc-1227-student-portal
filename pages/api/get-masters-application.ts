@@ -66,8 +66,6 @@ export default async function handler(
   // Use Promise.all to execute multiple asynchronous operations in parallel.
   const [applicationData, scholarships, universities] = await Promise.all([
     getMasterApplicationData(`${id}`).then((app) => {
-      // TODO: check CPR to verify the ownership of the application
-
       // return app ?? null;
       return app ? (app.studentCPR === cpr ? app : null) : null;
     }),

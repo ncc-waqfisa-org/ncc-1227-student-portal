@@ -998,10 +998,17 @@ export async function updateMasterApplicationInDB(
 export async function updateStudentInDB(
   mutationVars: UpdateStudentMutationVariables
 ): Promise<UpdateStudentMutation | undefined> {
+  console.log(
+    `CustomAPI => updateStudentInDB => ${JSON.stringify(mutationVars)}`
+  );
   let res = (await API.graphql({
     query: updateStudent,
     variables: mutationVars,
   })) as GraphQLResult<UpdateStudentMutation>;
+
+  console.log(
+    `CustomAPI => updateStudentInDB => result ${JSON.stringify(res)}`
+  );
 
   return res.data;
 }

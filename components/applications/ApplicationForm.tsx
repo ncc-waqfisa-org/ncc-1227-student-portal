@@ -663,7 +663,7 @@ export const ApplicationForm: FC<Props> = (props) => {
         onSubmit={async (values, actions) => {
           await toast.promise(handleSubmit({ values, actions }), {
             loading: t("processing"),
-            success: t("proccessComplete"),
+            success: t("processComplete"),
             error: (error) =>
               error.message
                 ? `${error.message}`
